@@ -1,46 +1,31 @@
-# Getting Started with Create React App
+# **Project 혼자옵서예**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> 이 프로젝트는 `create-react-app --tempate typescript` 로 생성되었습니다.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## **개발 환경**
 
-### `npm start`
+- CRA 에서 제공하는 패키지 외에 다음과 같은 패키지들이 설치 및 설정되어 있습니다.
+  - ESLint
+  - Prettier
+    <br/>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## **사용하는 IDE 에 따라 다음을 설정하세요**
 
-### `npm test`
+### Visual Studio Code
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [설정] → [Editor: Default Formatter] → [Prettier - Code Formatter] 선택
+- [Preferences: Open User Settings(JSON)] <br />
+  → ` "editor.codeActionsOnSave": { "source.fixAll.eslint": true },` 추가하기
 
-### `npm run build`
+### WebStorm
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [설정] → [도구] → [저장 시 액션] 으로 이동 후 <br />
+  - `[eslint --fix 실행]` 및 `[Prettier 실행]` 체크박스에 체크하고 `[적용]` 버튼 클릭하기
+- [설정] → [언어 및 프레임워크] → [JavaScript] → [Prettier] 로 이동 후 <br />
+  - `[자동 Prettier 구성]` 클릭 → `[Run on save]` 체크 후 `[적용]` 버튼 클릭하기
+- `.prettierrc` 파일을 열었을 때 `이 프로젝트에 Prettier 기반의 코드 스타일을 사용하시겠어요?` 라고 <br/>
+  안내창이 뜬다면 `예` 누르기
