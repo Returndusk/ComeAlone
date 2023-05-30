@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Pagination from './Pagination';
+import DestinationDetails from './DestinationDetails';
 import Map from '../common/Map';
 import styles from './Destinations.module.scss';
 
@@ -27,12 +28,19 @@ function Destinations() {
   const [slicedDestinations, setSlicedDestinations] = useState<
     DestinationsType[]
   >([...DEFAULT_DESTINATIONS]);
+  const [clickedDestination, setClickedDestination] = useState({});
+
+  const handleDestinationClick = (destination: DestinationsType) => {
+    setClickedDestination(() => {
+      return destination;
+    });
+  };
 
   return (
     <>
       <section className={styles.destinationsContainer}>
-        {slicedDestinations.map((destination, index) => (
-          <div key={index}>
+        {slicedDestinations.map((destination: DestinationsType, index) => (
+          <div key={index} onClick={() => handleDestinationClick(destination)}>
             <p>{destination.name}</p>
           </div>
         ))}
@@ -42,6 +50,7 @@ function Destinations() {
           setSlicedDestinations={setSlicedDestinations}
         />
       </section>
+      <DestinationDetails clickedDestination={clickedDestination} />
       <Map markersLocations={destinations} />
     </>
   );
