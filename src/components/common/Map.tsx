@@ -16,6 +16,7 @@ type MapPropsType = {
   markersLocations: DestinationsType[];
 };
 
+//제주도 시청을 map의 default 위치로 설정함.
 const DEFAULT_LOCATION = {
   LATITUDE: 33.48907969999994,
   LONGITUDE: 126.49932809999973
