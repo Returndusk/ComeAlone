@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import Pagination from './Pagination';
 import Map from '../common/Map';
+import styles from './Destinations.module.scss';
 
 interface DestinationsType {
   name: string;
@@ -22,15 +24,23 @@ function Destinations() {
   const [destinations, setDestinations] = useState<DestinationsType[]>([
     ...DEFAULT_DESTINATIONS
   ]);
+  const [slicedDestinations, setSlicedDestinations] = useState<
+    DestinationsType[]
+  >([...DEFAULT_DESTINATIONS]);
 
   return (
     <>
-      <section>
-        {destinations.map((destination, index) => (
+      <section className={styles.destinationsContainer}>
+        {slicedDestinations.map((destination, index) => (
           <div key={index}>
             <p>{destination.name}</p>
           </div>
         ))}
+
+        <Pagination
+          destinations={destinations}
+          setSlicedDestinations={setSlicedDestinations}
+        />
       </section>
       <Map markersLocations={destinations} />
     </>
