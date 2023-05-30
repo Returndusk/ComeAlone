@@ -6,23 +6,50 @@ declare global {
   }
 }
 
+interface DestinationsType {
+  name: string;
+  lat: number;
+  lng: number;
+}
+
 type MapPropsType = {
-  latitude: number;
-  longitude: number;
+  markersLocations: DestinationsType[];
+};
+
+const DEFAULT_LOCATION = {
+  LATITUDE: 33.48907969999994,
+  LONGITUDE: 126.49932809999973
 };
 
 const { kakao } = window;
 
-function Map({ latitude, longitude }: MapPropsType) {
+function Map({ markersLocations }: MapPropsType) {
   useEffect(() => {
     const container = document.getElementById('map');
+
     const options = {
-      center: new kakao.maps.LatLng(latitude, longitude),
+      center: new kakao.maps.LatLng(
+        DEFAULT_LOCATION.LATITUDE,
+        DEFAULT_LOCATION.LONGITUDE
+      ),
       level: 3
     };
 
     const map = new kakao.maps.Map(container, options);
-  }, []);
+
+    const bounds = new kakao.maps.LatLngBounds();
+
+    markersLocations.forEach((marker) => {
+      const position = new kakao.maps.LatLng(marker.lat, marker.lng);
+      new kakao.maps.Marker({
+        title: marker.name,
+        position,
+        map
+      });
+      bounds.extend(position);
+    });
+    map.setBounds(bounds);
+  }, [markersLocations]);
 
   return (
     <>
