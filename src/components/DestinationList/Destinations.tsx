@@ -18,7 +18,7 @@ const DEFAULT_DESTINATIONS = [
   }
 ];
 
-function Destination() {
+function Destinations() {
   const [destinations, setDestinations] = useState<DestinationsType[]>([
     ...DEFAULT_DESTINATIONS
   ]);
@@ -36,4 +36,4 @@ function Destination() {
     </>
   );
 }
-export default Destination;
+export default Destinations;

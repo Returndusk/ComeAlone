@@ -1,11 +1,11 @@
 import React from 'react';
-import Destination from '../components/DestinationList/Destination';
+import Destinations from '../components/DestinationList/Destinations';
 
 function DestinationList() {
   return (
     <>
       <div>DestinationList</div>
-      <Destination />
+      <Destinations />
     </>
   );
 }
