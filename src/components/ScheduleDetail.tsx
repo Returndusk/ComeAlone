@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const destinations = [
   ['제주국제공항', '협재포구', '북촌 돌하르방공원'],
@@ -70,16 +70,49 @@ function DestinationListComponent() {
 function ScheduleReviewsComponent() {
   return (
     <>
-      {reviews.map((review, index) => {
-        return (
-          <div key={index} className='review'>
-            <span className='review-writer'>{review.writer}</span>
-            <span className='review-comment'>{review.comment}</span>
-          </div>
-        );
-      })}
+      <div className='reviews-title'>리뷰 리스트</div>
+      <div className='reviews-list'>
+        {reviews.map((review, index) => {
+          return (
+            <div key={index} className='review'>
+              <span className='review-writer'>{review.writer}</span>
+              <span className='review-comment'>{review.comment}</span>
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 }
 
-export { DestinationListComponent, ScheduleReviewsComponent };
+function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
+  const [reviewTyping, setReviewTyping] = useState('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setReviewTyping(event.target.value);
+  };
+
+  return (
+    <div>
+      <span className='reviews-input-writer'>사용자</span>
+      <textarea
+        className='reviews-input-text'
+        onChange={handleChange}
+      ></textarea>
+      <button
+        className='reviews-input-button'
+        onClick={() => {
+          onSubmit(reviewTyping);
+        }}
+      >
+        제출
+      </button>
+    </div>
+  );
+}
+
+export {
+  DestinationListComponent,
+  ScheduleReviewsComponent,
+  ScheduleReviewInputComponent
+};

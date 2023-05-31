@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../components/ScheduleDetail.scss';
 import { FaHeart, FaCommentAlt } from 'react-icons/fa';
 
 import {
   DestinationListComponent,
-  ScheduleReviewsComponent
+  ScheduleReviewsComponent,
+  ScheduleReviewInputComponent
 } from '../components/ScheduleDetail';
 
 function ScheduleDetail() {
+  const [reviewInput, setReviewInput] = useState('');
+
+  const onSubmit = (input: string) => {
+    setReviewInput(input);
+  };
+
   return (
     <>
       <div className='container'>
@@ -44,15 +51,11 @@ function ScheduleDetail() {
         </div>
         <div className='map'>지도</div>
         <div className='reviews-wrapper'>
-          <div className='reviews-title'>리뷰 리스트</div>
-          <div className='reviews-list'>
-            <ScheduleReviewsComponent />
-          </div>
-          <div className='reviews-input'>
-            <span className='reviews-input-writer'>사용자</span>
-            <textarea className='reviews-input-text'></textarea>
-            <button className='reviews-input-button'>제출</button>
-          </div>
+          <ScheduleReviewsComponent />
+        </div>
+        <div className='review-input-wrapper'>
+          <ScheduleReviewInputComponent onSubmit={onSubmit} />
+          {reviewInput}
         </div>
       </div>
     </>
