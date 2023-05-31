@@ -56,7 +56,11 @@ function Destinations() {
         setClickedDestination={setClickedDestination}
       />
 
-      <Map markersLocations={destinations} />
+      <Map
+        markersLocations={
+          clickedDestination !== null ? [clickedDestination] : destinations
+        }
+      />
 
       <MapWithWaypoints markersLocations={destinations} />
     </>
