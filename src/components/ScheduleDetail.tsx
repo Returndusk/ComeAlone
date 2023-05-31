@@ -12,6 +12,17 @@ function DestinationListComponent({
   return (
     <>
       <div className='destinations-title'>목적지 리스트</div>
+      <label>
+        <input
+          type='checkbox'
+          checked={checkedDayIndex === -1}
+          onChange={() => {
+            setCheckedDayIndex(-1);
+            onChecked(destinations.flat());
+          }}
+        />
+        전체 목적지 보기
+      </label>
       <div className='destinations-list'>
         {destinations.map((destOfDay, index) => {
           return (
@@ -27,7 +38,7 @@ function DestinationListComponent({
                   onChange={() => {
                     if (checkedDayIndex === index) {
                       setCheckedDayIndex(-1);
-                      onChecked([]);
+                      onChecked(destinations.flat());
                     } else {
                       setCheckedDayIndex(index);
                       onChecked(destOfDay);
