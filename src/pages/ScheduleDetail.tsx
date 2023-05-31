@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../components/ScheduleDetail.scss';
 import { FaHeart, FaCommentAlt } from 'react-icons/fa';
 
@@ -84,7 +85,9 @@ function ScheduleDetail() {
         </div>
         <div className='duration'>4일 일정</div>
         <div className='edit-button-wrapper'>
-          <button className='edit-button'>수정하기</button>
+          <Link to='/schedule/edit' className='edit-button'>
+            수정하기
+          </Link>
         </div>
         <h1 className='title'>혼자 떠나는 우도 여행</h1>
         <div className='icons-wrapper'>
