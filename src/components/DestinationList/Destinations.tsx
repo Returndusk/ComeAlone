@@ -9,7 +9,13 @@ import { DestinationsType } from './Types';
 //Dummy data
 const DEFAULT_DESTINATIONS = [
   { title: '제주도 시청', mapy: 33.48907969999994, mapx: 126.49932809999973 },
-  { title: '한라산', mapy: 33.37915262371278, mapx: 126.54626368383182 },
+  {
+    title: '한라산',
+    mapy: 33.37915262371278,
+    mapx: 126.54626368383182,
+    tel: '064-772-3366',
+    overview: '개요 설명입니다.'
+  },
   {
     title: '서귀포 해양 도립공원',
     mapy: 33.241570451808215,
@@ -37,7 +43,7 @@ function Destinations() {
       <section className={styles.destinationsContainer}>
         {slicedDestinations.map((destination: DestinationsType, index) => (
           <div key={index} onClick={() => handleDestinationClick(destination)}>
-            <p>{destination.title}</p>
+            <p>{destination?.title}</p>
           </div>
         ))}
 

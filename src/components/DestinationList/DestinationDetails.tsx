@@ -21,15 +21,19 @@ function DestinationDetails({
   };
 
   useEffect(() => {
-    if (clickedDestination !== null) {
+    if (destination !== null) {
       setIsOpen(() => true);
     }
   }, [clickedDestination]);
 
   return (
     <>
-      {isOpen && clickedDestination !== null && (
-        <section>{clickedDestination.title}</section>
+      {isOpen && destination !== null && (
+        <section>
+          <h3>{destination.title}</h3>
+          <p>전화번호:{destination?.tel}</p>
+          <div>{destination?.overview}</div>
+        </section>
       )}
       {isOpen && <button onClick={toggleDetailPage}>상세 페이지 닫기</button>}
     </>
