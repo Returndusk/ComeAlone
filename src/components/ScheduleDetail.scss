@@ -126,6 +126,7 @@
       list-style: none;
       padding-left: $spacer;
       counter-reset: circle-counter;
+      border-left: 2px solid $gray--lightest;
 
       li {
         font-size: 16px;
