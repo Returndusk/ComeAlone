@@ -53,16 +53,19 @@ const reviews = [
 function DestinationListComponent() {
   return (
     <>
-      {destinations.map((destOfDay, index) => {
-        return (
-          <ol className='destinations-day' key={index}>
-            Day {index + 1}
-            {destOfDay.map((dest, index) => (
-              <li key={index}>{dest}</li>
-            ))}
-          </ol>
-        );
-      })}
+      <div className='destinations-title'>목적지 리스트</div>
+      <div className='destinations-list'>
+        {destinations.map((destOfDay, index) => {
+          return (
+            <ol className='destinations-day' key={index}>
+              Day {index + 1}
+              {destOfDay.map((dest, index) => (
+                <li key={index}>{dest}</li>
+              ))}
+            </ol>
+          );
+        })}
+      </div>
     </>
   );
 }

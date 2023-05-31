@@ -11,7 +11,7 @@ import {
 function ScheduleDetail() {
   const [reviewInput, setReviewInput] = useState('');
 
-  const onSubmit = (input: string) => {
+  const onReviewSubmit = (input: string) => {
     setReviewInput(input);
   };
 
@@ -35,7 +35,7 @@ function ScheduleDetail() {
             <FaHeart id='likes-icon' />7
           </span>
           <span id='review-number'>
-            <FaCommentAlt id='review-number-icon' />3
+            <FaCommentAlt id='review-number-icon' />5
           </span>
         </div>
         <h3 className='writer'>제주123</h3>
@@ -44,17 +44,14 @@ function ScheduleDetail() {
           <p>혼자 떠나는 우도 여행 일정입니다.</p>
         </div>
         <div className='destinations-wrapper'>
-          <div className='destinations-title'>목적지 리스트</div>
-          <div className='destinations-list'>
-            <DestinationListComponent />
-          </div>
+          <DestinationListComponent />
         </div>
         <div className='map'>지도</div>
         <div className='reviews-wrapper'>
           <ScheduleReviewsComponent />
         </div>
         <div className='review-input-wrapper'>
-          <ScheduleReviewInputComponent onSubmit={onSubmit} />
+          <ScheduleReviewInputComponent onSubmit={onReviewSubmit} />
           {reviewInput}
         </div>
       </div>
