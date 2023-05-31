@@ -1,0 +1,43 @@
+.scheduleCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
+  padding: 30px;
+  border-radius: 10px;
+  color: white;
+  text-align: left;
+  text-decoration: none;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
+    url(https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg);
+  background-size: cover;
+  box-shadow: 1px 1px 32px 5px rgba(0, 0, 0, 0.11);
+
+  .scheduleContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .scheduleText {
+      div + div {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  .scheduleTitle {
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .scheduleDestination {
+    margin-bottom: 10px;
+  }
+
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-10px);
+    transition: 0.5s ease-in-out;
+  }
+}

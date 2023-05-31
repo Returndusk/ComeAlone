@@ -1,0 +1,55 @@
+.scheduleContainer {
+  width: 1000px;
+  margin: 20px auto;
+  text-align: center;
+
+  .scheduleListTitle {
+    margin: 20px;
+    text-align: left;
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  .scheduleCardContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 40px;
+    gap: 40px;
+
+    .scheduleAdd {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 300px;
+      padding: 30px;
+      border-radius: 10px;
+      background-color: lightgray;
+      font-size: 40px;
+
+      &:hover {
+        cursor: pointer;
+        transform: translateY(-10px);
+        transition: 0.5s ease-in-out;
+      }
+    }
+  }
+
+  .scheduleFilter {
+    margin: 20px;
+    text-align: left;
+  }
+}
+
+.sortButton {
+  height: 40px;
+  width: 90px;
+  border: 0;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.selected {
+  background-color: lightgray;
+}
