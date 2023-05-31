@@ -1,0 +1,85 @@
+@font-face {
+  font-family: 'WandohopeR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/WandohopeR.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.layout {
+  padding-left: 15%;
+  padding-right: 15%;
+  display: flex;
+
+  .layoutLeft {
+    display: flex;
+    width: 50%;
+    align-items: center;
+
+    .logo {
+      font-family: 'WandohopeR';
+      font-size: 50px;
+      font-weight: 700;
+      color: #ef6d00;
+      text-decoration: none;
+    }
+
+    nav {
+      ul {
+        display: flex;
+        list-style: none;
+        gap: 20px;
+
+        a {
+          color: black;
+          font-weight: bold;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .layoutRight {
+    display: flex;
+    width: 50%;
+    justify-content: flex-end;
+    align-items: center;
+
+    .weather {
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+
+    .calendar {
+      font-size: 50px;
+      color: #ef6d00;
+    }
+
+    .auth {
+      position: relative;
+      .userIcon {
+        font-size: 50px;
+      }
+      .dropdownMenu {
+        position: absolute;
+        top: 30px;
+        right: 0;
+        background-color: white;
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .open {
+        background-color: lightgray;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+  }
+}
