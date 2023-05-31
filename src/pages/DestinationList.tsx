@@ -5,7 +5,6 @@ import Destinations from '../components/DestinationList/Destinations';
 function DestinationList() {
   return (
     <Layout>
-      <div>DestinationList</div>
       <Destinations />
     </Layout>
   );
