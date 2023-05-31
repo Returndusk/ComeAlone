@@ -42,7 +42,11 @@ function Destinations() {
     <>
       <section className={styles.destinationsContainer}>
         {slicedDestinations.map((destination: DestinationsType, index) => (
-          <div key={index} onClick={() => handleDestinationClick(destination)}>
+          <div
+            key={index}
+            className={styles.destinations}
+            onClick={() => handleDestinationClick(destination)}
+          >
             <p>{destination?.title}</p>
           </div>
         ))}
@@ -56,14 +60,14 @@ function Destinations() {
         clickedDestination={clickedDestination}
         setClickedDestination={setClickedDestination}
       />
-
-      <Map
-        markersLocations={
-          clickedDestination !== null ? [clickedDestination] : destinations
-        }
-      />
-
-      <MapWithWaypoints markersLocations={destinations} />
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <Map
+          markersLocations={
+            clickedDestination !== null ? [clickedDestination] : destinations
+          }
+        />
+        <MapWithWaypoints markersLocations={destinations} />
+      </div>
     </>
   );
 }
