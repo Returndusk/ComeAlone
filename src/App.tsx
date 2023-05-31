@@ -10,6 +10,8 @@ import DestinationList from './pages/DestinationList';
 import ScheduleDetail from './pages/ScheduleDetail';
 import ScheduleEdit from './pages/ScheduleEdit';
 import ScheduleList from './pages/ScheduleList';
+import Header from './components/common/Header/Header';
+import Footer from './components/common/Footer/Footer';
 
 function App() {
   {
@@ -26,6 +28,7 @@ function App() {
   }
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/login' element={<Login />} />
@@ -37,6 +40,7 @@ function App() {
         <Route path='/schedule/edit' element={<ScheduleEdit />} />
         <Route path='/schedule/detail' element={<ScheduleDetail />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
