@@ -8,6 +8,56 @@ import {
   ScheduleReviewInputComponent
 } from '../components/ScheduleDetail';
 
+const destinations = [
+  ['제주국제공항', '협재포구', '북촌 돌하르방공원'],
+  ['두문포항', '우도', '지미봉'],
+  ['월정리 해수욕장', '김녕항', '세화해변', '제주국제공항'],
+  ['제주국제공항', '제주국제공항', '제주국제공항']
+];
+
+const reviews = [
+  {
+    writer: '아무개',
+    comment: '좋은 일정입니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '우도 잘 다녀왔습니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
+  },
+  {
+    writer: '아무개',
+    comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
+  }
+];
+
 function ScheduleDetail() {
   const [reviewInput, setReviewInput] = useState('');
 
@@ -44,11 +94,11 @@ function ScheduleDetail() {
           <p>혼자 떠나는 우도 여행 일정입니다.</p>
         </div>
         <div className='destinations-wrapper'>
-          <DestinationListComponent />
+          <DestinationListComponent destinations={destinations} />
         </div>
         <div className='map'>지도</div>
         <div className='reviews-wrapper'>
-          <ScheduleReviewsComponent />
+          <ScheduleReviewsComponent reviews={reviews} />
         </div>
         <div className='review-input-wrapper'>
           <ScheduleReviewInputComponent onSubmit={onReviewSubmit} />
