@@ -1,16 +1,11 @@
 import React, { useEffect } from 'react';
 import styles from './Map.module.scss';
+import { DestinationsType } from '../DestinationList/Types';
 
 declare global {
   interface Window {
     kakao: any;
   }
-}
-
-interface DestinationsType {
-  name: string;
-  lat: number;
-  lng: number;
 }
 
 type MapPropsType = {
@@ -42,9 +37,9 @@ function Map({ markersLocations }: MapPropsType) {
     const bounds = new kakao.maps.LatLngBounds();
 
     markersLocations.forEach((marker) => {
-      const position = new kakao.maps.LatLng(marker.lat, marker.lng);
+      const position = new kakao.maps.LatLng(marker.mapy, marker.mapx);
       const newMarker = new kakao.maps.Marker({
-        title: marker.name,
+        title: marker.title,
         position,
         map
       });

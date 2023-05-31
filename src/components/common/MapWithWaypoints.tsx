@@ -1,16 +1,11 @@
 import React, { useEffect } from 'react';
 import styles from './MapWithWaypoints.module.scss';
+import { DestinationsType } from '../DestinationList/Types';
 
 declare global {
   interface Window {
     kakao: any;
   }
-}
-
-interface DestinationsType {
-  name: string;
-  lat: number;
-  lng: number;
 }
 
 type MapPropsType = {
@@ -48,7 +43,7 @@ function MapWithWaypoints({ markersLocations }: MapPropsType) {
     const bounds = new kakao.maps.LatLngBounds();
     const polylinePath = Array.from(
       markersLocations.map(
-        (marker) => new kakao.maps.LatLng(marker.lat, marker.lng)
+        (marker) => new kakao.maps.LatLng(marker.mapy, marker.mapx)
       )
     );
     console.log(polylinePath);
@@ -64,7 +59,7 @@ function MapWithWaypoints({ markersLocations }: MapPropsType) {
     polyline.setMap(map);
 
     markersLocations.forEach((marker, index) => {
-      const position = new kakao.maps.LatLng(marker.lat, marker.lng);
+      const position = new kakao.maps.LatLng(marker.mapy, marker.mapx);
       let imageSrc = '';
       if (index <= MARKER_IMAGE_SRC.MAXIMUM_INDEX) {
         imageSrc = MARKER_IMAGE_SRC.NUMBERED_MARKER;
@@ -86,7 +81,7 @@ function MapWithWaypoints({ markersLocations }: MapPropsType) {
       );
 
       const newMarker = new kakao.maps.Marker({
-        title: marker.name,
+        title: marker.title,
         position,
         image: markerImage
       });

@@ -4,23 +4,18 @@ import DestinationDetails from './DestinationDetails';
 import Map from '../common/Map';
 import styles from './Destinations.module.scss';
 import MapWithWaypoints from '../common/MapWithWaypoints';
-
-interface DestinationsType {
-  name: string;
-  lat: number;
-  lng: number;
-}
+import { DestinationsType } from './Types';
 
 //Dummy data
 const DEFAULT_DESTINATIONS = [
-  { name: '제주도 시청', lat: 33.48907969999994, lng: 126.49932809999973 },
-  { name: '한라산', lat: 33.37915262371278, lng: 126.54626368383182 },
+  { title: '제주도 시청', mapy: 33.48907969999994, mapx: 126.49932809999973 },
+  { title: '한라산', mapy: 33.37915262371278, mapx: 126.54626368383182 },
   {
-    name: '서귀포 해양 도립공원',
-    lat: 33.241570451808215,
-    lng: 126.55770550692283
+    title: '서귀포 해양 도립공원',
+    mapy: 33.241570451808215,
+    mapx: 126.55770550692283
   },
-  { name: '금오름', lat: 33.35452764241429, lng: 126.30590904987518 }
+  { title: '금오름', mapy: 33.35452764241429, mapx: 126.30590904987518 }
 ];
 
 function Destinations() {
@@ -42,7 +37,7 @@ function Destinations() {
       <section className={styles.destinationsContainer}>
         {slicedDestinations.map((destination: DestinationsType, index) => (
           <div key={index} onClick={() => handleDestinationClick(destination)}>
-            <p>{destination.name}</p>
+            <p>{destination.title}</p>
           </div>
         ))}
 

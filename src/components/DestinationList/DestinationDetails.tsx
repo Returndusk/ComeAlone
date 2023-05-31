@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
-interface DestinationsType {
-  name: string;
-  lat: number;
-  lng: number;
-}
+import { DestinationsType } from './Types';
 
 type DestinationDetailsPropsType = {
   clickedDestination: DestinationsType | null;
@@ -34,7 +29,7 @@ function DestinationDetails({
   return (
     <>
       {isOpen && clickedDestination !== null && (
-        <section>{clickedDestination.name}</section>
+        <section>{clickedDestination.title}</section>
       )}
       {isOpen && <button onClick={toggleDetailPage}>상세 페이지 닫기</button>}
     </>

@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Pagination.module.scss';
+import { DestinationsType } from './Types';
 
-interface DestinationsType {
-  name: string;
-  lat: number;
-  lng: number;
-}
 type PaginationProps = {
   destinations: DestinationsType[];
   setSlicedDestinations: React.Dispatch<
