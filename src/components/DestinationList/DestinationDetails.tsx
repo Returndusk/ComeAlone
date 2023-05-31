@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface DestinationsType {
   name: string;
@@ -7,15 +7,38 @@ interface DestinationsType {
 }
 
 type DestinationDetailsPropsType = {
-  clickedDestination: DestinationsType;
+  clickedDestination: DestinationsType | null;
+  setClickedDestination: React.Dispatch<
+    React.SetStateAction<DestinationsType | null>
+  >;
 };
 
 function DestinationDetails({
-  clickedDestination
+  clickedDestination,
+  setClickedDestination
 }: DestinationDetailsPropsType) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const destination = clickedDestination;
 
-  return <section>{destination.name}</section>;
+  const toggleDetailPage = () => {
+    setIsOpen(() => false);
+    setClickedDestination(() => null);
+  };
+
+  useEffect(() => {
+    if (clickedDestination !== null) {
+      setIsOpen(() => true);
+    }
+  }, [clickedDestination]);
+
+  return (
+    <>
+      {isOpen && clickedDestination !== null && (
+        <section>{clickedDestination.name}</section>
+      )}
+      {isOpen && <button onClick={toggleDetailPage}>상세 페이지 닫기</button>}
+    </>
+  );
 }
 
 export default DestinationDetails;

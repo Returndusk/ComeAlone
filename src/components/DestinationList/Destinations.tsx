@@ -28,12 +28,11 @@ function Destinations() {
   const [slicedDestinations, setSlicedDestinations] = useState<
     DestinationsType[]
   >([...DEFAULT_DESTINATIONS]);
-  const [clickedDestination, setClickedDestination] = useState({});
+  const [clickedDestination, setClickedDestination] =
+    useState<DestinationsType | null>(null);
 
   const handleDestinationClick = (destination: DestinationsType) => {
-    setClickedDestination(() => {
-      return destination;
-    });
+    setClickedDestination(() => destination);
   };
 
   return (
@@ -50,7 +49,10 @@ function Destinations() {
           setSlicedDestinations={setSlicedDestinations}
         />
       </section>
-      <DestinationDetails clickedDestination={clickedDestination} />
+      <DestinationDetails
+        clickedDestination={clickedDestination}
+        setClickedDestination={setClickedDestination}
+      />
       <Map markersLocations={destinations} />
     </>
   );
