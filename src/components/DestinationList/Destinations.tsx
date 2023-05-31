@@ -3,6 +3,7 @@ import Pagination from './Pagination';
 import DestinationDetails from './DestinationDetails';
 import Map from '../common/Map';
 import styles from './Destinations.module.scss';
+import MapWithWaypoints from '../common/MapWithWaypoints';
 
 interface DestinationsType {
   name: string;
@@ -18,7 +19,8 @@ const DEFAULT_DESTINATIONS = [
     name: '서귀포 해양 도립공원',
     lat: 33.241570451808215,
     lng: 126.55770550692283
-  }
+  },
+  { name: '금오름', lat: 33.35452764241429, lng: 126.30590904987518 }
 ];
 
 function Destinations() {
@@ -53,7 +55,10 @@ function Destinations() {
         clickedDestination={clickedDestination}
         setClickedDestination={setClickedDestination}
       />
+
       <Map markersLocations={destinations} />
+
+      <MapWithWaypoints markersLocations={destinations} />
     </>
   );
 }
