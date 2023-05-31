@@ -17,43 +17,43 @@ const destinations = [
 
 const reviews = [
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '좋은 일정입니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '우도 잘 다녀왔습니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
   },
   {
-    writer: '아무개',
+    writer: 'A',
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.'
   }
 ];
@@ -82,7 +82,7 @@ function ScheduleDetail() {
             alt='representative-image'
           />
         </div>
-        <div className='duration'>3박 4일</div>
+        <div className='duration'>4일 일정</div>
         <div className='edit-button-wrapper'>
           <button className='edit-button'>수정하기</button>
         </div>

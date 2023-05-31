@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
 
 function DestinationListComponent({
   destinations,
@@ -70,7 +71,9 @@ function ScheduleReviewsComponent({
         {reviews.map((review, index) => {
           return (
             <div key={index} className='review'>
-              <span className='review-writer'>{review.writer}</span>
+              <span className='review-writer'>
+                <Avatar>{review.writer}</Avatar>
+              </span>
               <span className='review-comment'>{review.comment}</span>
             </div>
           );
@@ -89,7 +92,7 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
 
   return (
     <>
-      <span className='reviews-input-writer'>사용자</span>
+      <Avatar className='reviews-input-writer'>B</Avatar>
       <textarea
         className='reviews-input-text'
         onChange={handleChange}
