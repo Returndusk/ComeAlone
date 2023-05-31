@@ -7,7 +7,7 @@ function DestinationListComponent({
   destinations: string[][];
   onChecked: any;
 }) {
-  const [checkedDestinations, setCheckedDestinations] = useState<string[]>([]);
+  const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
   return (
     <>
@@ -23,8 +23,15 @@ function DestinationListComponent({
               <label>
                 <input
                   type='checkbox'
+                  checked={checkedDayIndex === index}
                   onChange={() => {
-                    onChecked(destOfDay);
+                    if (checkedDayIndex === index) {
+                      setCheckedDayIndex(-1);
+                      onChecked([]);
+                    } else {
+                      setCheckedDayIndex(index);
+                      onChecked(destOfDay);
+                    }
                   }}
                 />{' '}
                 Day {index + 1}
