@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import styles from './AddToScheduleModal.module.scss';
+import styles from './ModalDesign.module.scss';
 import ScheduleList from '../../pages/ScheduleList';
 
 function AddToScheduleModal() {
