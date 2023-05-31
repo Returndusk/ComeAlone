@@ -169,9 +169,9 @@
 }
 
 .reviews-wrapper {
-  height: 400px;
+  height: 300px;
   grid-column: 1 / 4;
-  margin: 40px 0 100px 0;
+  margin: 40px 0 20px 0;
 
   .reviews-title {
     font-size: 24px;
@@ -181,7 +181,7 @@
 
   .reviews-list {
     width: 80%;
-    height: 70%;
+    height: 80%;
     overflow-y: scroll;
 
     .review {
@@ -212,25 +212,26 @@
       background: #ffffff;
     }
   }
+}
 
-  .reviews-input {
-    margin: 20px 0 0 0;
+.review-input-wrapper {
+  grid-column: 1 / 4;
+  margin: 20px 0 0 0;
 
-    .reviews-input-writer {
-      margin: 0 20px 0 10px;
-      vertical-align: top;
-    }
+  .reviews-input-writer {
+    margin: 0 20px 0 10px;
+    vertical-align: top;
+  }
 
-    .reviews-input-text {
-      width: 70%;
-      height: 40px;
-    }
+  .reviews-input-text {
+    width: 70%;
+    height: 40px;
+  }
 
-    .reviews-input-button {
-      width: 10%;
-      height: 40px;
-      margin: 0 0 0 20px;
-      vertical-align: top;
-    }
+  .reviews-input-button {
+    width: 10%;
+    height: 40px;
+    margin: 0 0 0 20px;
+    vertical-align: top;
   }
 }
