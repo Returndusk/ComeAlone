@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../components/ScheduleDetail.scss';
+import '../components/ScheduleDetail/ScheduleDetail.scss';
 import { FaHeart, FaCommentAlt } from 'react-icons/fa';
 
 import {

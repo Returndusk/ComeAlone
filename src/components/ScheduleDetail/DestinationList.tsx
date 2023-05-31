@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
 
 function DestinationListComponent({
   destinations,
@@ -59,58 +58,4 @@ function DestinationListComponent({
   );
 }
 
-function ScheduleReviewsComponent({
-  reviews
-}: {
-  reviews: { writer: string; comment: string }[];
-}) {
-  return (
-    <>
-      <div className='reviews-title'>리뷰 리스트</div>
-      <div className='reviews-list'>
-        {reviews.map((review, index) => {
-          return (
-            <div key={index} className='review'>
-              <span className='review-writer'>
-                <Avatar>{review.writer}</Avatar>
-              </span>
-              <span className='review-comment'>{review.comment}</span>
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
-}
-
-function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
-  const [reviewTyping, setReviewTyping] = useState('');
-
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReviewTyping(event.target.value);
-  };
-
-  return (
-    <>
-      <Avatar className='reviews-input-writer'>B</Avatar>
-      <textarea
-        className='reviews-input-text'
-        onChange={handleChange}
-      ></textarea>
-      <button
-        className='reviews-input-button'
-        onClick={() => {
-          onSubmit(reviewTyping);
-        }}
-      >
-        제출
-      </button>
-    </>
-  );
-}
-
-export {
-  DestinationListComponent,
-  ScheduleReviewsComponent,
-  ScheduleReviewInputComponent
-};
+export default DestinationListComponent;
