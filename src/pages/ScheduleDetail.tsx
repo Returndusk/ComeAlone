@@ -60,6 +60,13 @@ const reviews = [
 
 function ScheduleDetail() {
   const [reviewInput, setReviewInput] = useState('');
+  const [checkedDestinations, setCheckedDestinations] = useState(
+    destinations.flat()
+  );
+
+  const onDestinationsChecked = (destinations: string[]) => {
+    setCheckedDestinations(destinations);
+  };
 
   const onReviewSubmit = (input: string) => {
     setReviewInput(input);
@@ -94,9 +101,16 @@ function ScheduleDetail() {
           <p>혼자 떠나는 우도 여행 일정입니다.</p>
         </div>
         <div className='destinations-wrapper'>
-          <DestinationListComponent destinations={destinations} />
+          <DestinationListComponent
+            destinations={destinations}
+            onChecked={onDestinationsChecked}
+          />
         </div>
-        <div className='map'>지도</div>
+        <div className='map'>
+          {checkedDestinations.map((dest, index) => (
+            <div key={index}>{dest}</div>
+          ))}
+        </div>
         <div className='reviews-wrapper'>
           <ScheduleReviewsComponent reviews={reviews} />
         </div>

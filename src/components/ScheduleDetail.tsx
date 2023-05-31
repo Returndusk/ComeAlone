@@ -1,18 +1,34 @@
 import React, { useState } from 'react';
 
 function DestinationListComponent({
-  destinations
+  destinations,
+  onChecked
 }: {
   destinations: string[][];
+  onChecked: any;
 }) {
+  const [checkedDestinations, setCheckedDestinations] = useState<string[]>([]);
+
   return (
     <>
       <div className='destinations-title'>목적지 리스트</div>
       <div className='destinations-list'>
         {destinations.map((destOfDay, index) => {
           return (
-            <ol className='destinations-day' key={index}>
-              Day {index + 1}
+            <ol
+              key={index}
+              className='destinations-day'
+              id={'day' + (index + 1).toString()}
+            >
+              <label>
+                <input
+                  type='checkbox'
+                  onChange={() => {
+                    onChecked(destOfDay);
+                  }}
+                />{' '}
+                Day {index + 1}
+              </label>
               {destOfDay.map((dest, index) => (
                 <li key={index}>{dest}</li>
               ))}
