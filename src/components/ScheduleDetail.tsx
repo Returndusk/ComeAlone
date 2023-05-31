@@ -88,7 +88,7 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
   };
 
   return (
-    <div>
+    <>
       <span className='reviews-input-writer'>사용자</span>
       <textarea
         className='reviews-input-text'
@@ -102,7 +102,7 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
       >
         제출
       </button>
-    </div>
+    </>
   );
 }
 
