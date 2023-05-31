@@ -1,0 +1,12 @@
+.image-button {
+  border: 0;
+  background-color: transparent;
+
+  .image {
+    :hover {
+      transform: scale(1.5);
+      transition: transform 1s;
+      filter: brightness(70%);
+    }
+  }
+}
