@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from './ScheduleDetail.module.scss';
 
 function DestinationListComponent({
   destinations,
@@ -11,7 +12,7 @@ function DestinationListComponent({
 
   return (
     <>
-      <div className='destinations-title'>목적지 리스트</div>
+      <div className={styles['destinations-title']}>목적지 리스트</div>
       <label>
         <input
           type='checkbox'
@@ -23,12 +24,12 @@ function DestinationListComponent({
         />
         전체 목적지 보기
       </label>
-      <div className='destinations-list'>
+      <div className={styles['destinations-list']}>
         {destinations.map((destOfDay, index) => {
           return (
             <ol
               key={index}
-              className='destinations-day'
+              className={styles['destinations-day']}
               id={'day' + (index + 1).toString()}
             >
               <label>

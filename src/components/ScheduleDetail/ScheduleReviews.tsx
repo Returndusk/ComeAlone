@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './ScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
 
 function ScheduleReviewsComponent({
@@ -8,15 +9,15 @@ function ScheduleReviewsComponent({
 }) {
   return (
     <>
-      <div className='reviews-title'>리뷰 리스트</div>
-      <div className='reviews-list'>
+      <div className={styles['reviews-title']}>리뷰 리스트</div>
+      <div className={styles['reviews-list']}>
         {reviews.map((review, index) => {
           return (
-            <div key={index} className='review'>
-              <span className='review-writer'>
+            <div key={index} className={styles.review}>
+              <span className={styles['review-writer']}>
                 <Avatar>{review.writer}</Avatar>
               </span>
-              <span className='review-comment'>{review.comment}</span>
+              <span className={styles['review-comment']}>{review.comment}</span>
             </div>
           );
         })}

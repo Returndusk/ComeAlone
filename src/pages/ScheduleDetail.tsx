@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../components/ScheduleDetail/ScheduleDetail.scss';
+import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import { FaHeart, FaCommentAlt } from 'react-icons/fa';
 
 import {
@@ -75,49 +75,49 @@ function ScheduleDetail() {
 
   return (
     <>
-      <div className='container'>
-        <div className='image-wrapper'>
+      <div className={styles.container}>
+        <div className={styles['image-wrapper']}>
           <img
-            className='image'
+            className={styles.image}
             src='https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80'
             alt='representative-image'
           />
         </div>
-        <div className='duration'>4일 일정</div>
-        <div className='edit-button-wrapper'>
-          <Link to='/schedule/edit' className='edit-button'>
+        <div className={styles.duration}>4일 일정</div>
+        <div className={styles['edit-button-wrapper']}>
+          <Link to='/schedule/edit' className={styles['edit-button']}>
             수정하기
           </Link>
         </div>
-        <h1 className='title'>혼자 떠나는 우도 여행</h1>
-        <div className='icons-wrapper'>
-          <span id='likes'>
-            <FaHeart id='likes-icon' />7
+        <h1 className={styles.title}>혼자 떠나는 우도 여행</h1>
+        <div className={styles['icons-wrapper']}>
+          <span id={styles.likes}>
+            <FaHeart id={styles['likes-icon']} />7
           </span>
-          <span id='review-number'>
-            <FaCommentAlt id='review-number-icon' />5
+          <span id={styles['review-number']}>
+            <FaCommentAlt id={styles['review-number-icon']} />5
           </span>
         </div>
-        <h3 className='writer'>제주123</h3>
-        <h4 className='date'>2023.04.01.</h4>
-        <div className='description-wrapper'>
+        <h3 className={styles.writer}>제주123</h3>
+        <h4 className={styles.date}>2023.04.01.</h4>
+        <div className={styles['description-wrapper']}>
           <p>혼자 떠나는 우도 여행 일정입니다.</p>
         </div>
-        <div className='destinations-wrapper'>
+        <div className={styles['destinations-wrapper']}>
           <DestinationListComponent
             destinations={destinations}
             onChecked={onDestinationsChecked}
           />
         </div>
-        <div className='map'>
+        <div className={styles.map}>
           {checkedDestinations.map((dest, index) => (
             <div key={index}>{dest}</div>
           ))}
         </div>
-        <div className='reviews-wrapper'>
+        <div className={styles['reviews-wrapper']}>
           <ScheduleReviewsComponent reviews={reviews} />
         </div>
-        <div className='review-input-wrapper'>
+        <div className={styles['review-input-wrapper']}>
           <ScheduleReviewInputComponent onSubmit={onReviewSubmit} />
           {reviewInput}
         </div>
