@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './ScheduleList.module.scss';
-import dummy from './ScheduleListDummy';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
+import axios from 'axios';
 
 export type ScheduleType = {
   id: string;
@@ -19,12 +19,28 @@ export type ScheduleType = {
 type ScheduleListType = ScheduleType[];
 
 function ScheduleLists() {
-  const [ScheduleList, setScheduleList] = useState<ScheduleListType>(dummy);
+  const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
+  const [error, setError] = useState<string>('');
+
+  const fetchData = useCallback(async () => {
+    const API_URL = 'http://localhost:9999/data';
+    try {
+      const reponse = await axios.get(API_URL);
+      setScheduleList(reponse.data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(error.message);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
-    console.log(sortOption);
     setScheduleSort(sortOption);
   }
 
@@ -56,7 +72,7 @@ function ScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {ScheduleList.map((schedule, index) => ScheduleCard(schedule, index))}
+        {scheduleList.map((schedule, index) => ScheduleCard(schedule, index))}
         <div className={styles.scheduleAdd}>일정 추가하기</div>
       </div>
     </div>
