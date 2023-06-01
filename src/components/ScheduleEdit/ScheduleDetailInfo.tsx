@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './ScheduleEdit.module.scss';
+import TextField from '@mui/material/TextField';
 
 function ScheduleDetailInfoComponent({
   duration,
@@ -23,10 +24,22 @@ function ScheduleDetailInfoComponent({
       <div className={styles.duration}>
         {`${startDate} ~ ${endDate} (${duration}일)`}
       </div>
-      <div className={styles.title}>{title}</div>
+      <TextField
+        className={styles.title}
+        required
+        label='제목'
+        defaultValue={title}
+      />
       <div className={styles.writer}>{writer}</div>
       <div className={styles.date}>{date}</div>
-      <p>{description}</p>
+      <TextField
+        className={styles.description}
+        required
+        label='일정 소개'
+        multiline
+        rows={3}
+        defaultValue={description}
+      />
     </div>
   );
 }
