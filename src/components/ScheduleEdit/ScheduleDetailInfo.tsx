@@ -2,28 +2,19 @@ import React from 'react';
 import styles from './ScheduleEdit.module.scss';
 import TextField from '@mui/material/TextField';
 
-function ScheduleDetailInfoComponent({
-  duration,
+function ScheduleEditInfoComponent({
   title,
   writer,
-  startDate,
-  endDate,
   date,
   description
 }: {
-  duration: string;
   title: string;
   writer: string;
-  startDate: string;
-  endDate: string;
   date: string;
   description: string;
 }) {
   return (
     <div className={styles['schedule-info-wrapper']}>
-      <div className={styles.duration}>
-        {`${startDate} ~ ${endDate} (${duration}일)`}
-      </div>
       <TextField
         className={styles.title}
         required
@@ -44,4 +35,4 @@ function ScheduleDetailInfoComponent({
   );
 }
 
-export default ScheduleDetailInfoComponent;
+export default ScheduleEditInfoComponent;

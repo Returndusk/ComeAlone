@@ -7,7 +7,8 @@ import Switch from '@mui/material/Switch';
 
 import {
   ScheduleEditImageComponent,
-  ScheduleDetailInfoComponent,
+  ScheduleEditDateComponent,
+  ScheduleEditInfoComponent,
   DestinationListComponent
 } from '../components/ScheduleEdit';
 
@@ -54,12 +55,14 @@ function ScheduleDetail() {
   return (
     <div className={styles.container}>
       <ScheduleEditImageComponent image={schedule.image} />
-      <ScheduleDetailInfoComponent
+      <ScheduleEditDateComponent
         duration={schedule.duration}
-        title={schedule.title}
-        writer={schedule.createdBy}
         startDate={schedule.startDate}
         endDate={schedule.endDate}
+      />
+      <ScheduleEditInfoComponent
+        title={schedule.title}
+        writer={schedule.createdBy}
         date={schedule.createdAt}
         description={schedule.summary}
       />
