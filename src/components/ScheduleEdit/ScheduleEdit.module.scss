@@ -81,7 +81,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 700px;
-  height: 470px;
+  height: 480px;
   padding: 20px;
   border-radius: 20px;
   background-color: #ffffff;
@@ -94,8 +94,10 @@
     margin: 20px 0;
   }
 
-  button {
-    float: right;
+  .duration-edit-confirm {
+    position: absolute;
+    top: 90%;
+    left: 90%;
   }
 }
 

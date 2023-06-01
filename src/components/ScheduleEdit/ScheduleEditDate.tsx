@@ -70,7 +70,12 @@ function ScheduleEditDateComponent({
             months={2}
             direction='horizontal'
           />
-          <button onClick={handleClose}>완료</button>
+          <button
+            className={styles['duration-edit-confirm']}
+            onClick={handleClose}
+          >
+            완료
+          </button>
         </Box>
       </Modal>
     </>
