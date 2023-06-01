@@ -49,8 +49,10 @@
 }
 
 .edit-button-wrapper {
+  justify-self: self-end;
+  align-self: self-start;
   margin-top: 20px;
-  text-align: end;
+  padding: 20px 0 0 0;
 
   .edit-button {
     width: 50%;
@@ -59,8 +61,8 @@
 }
 
 .icons-wrapper {
-  grid-column: 3;
-  text-align: end;
+  justify-self: self-end;
+  align-self: self-start;
   font-size: 26px;
 
   #likes {
