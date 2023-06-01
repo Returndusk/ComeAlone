@@ -54,17 +54,15 @@ function ScheduleDetail() {
   return (
     <div className={styles.container}>
       <ScheduleDetailImageComponent image={schedule.image} />
-      <div className={styles['schedule-info-wrapper']}>
-        <ScheduleDetailInfoComponent
-          duration={schedule.duration}
-          title={schedule.title}
-          writer={schedule.createdBy}
-          startDate={schedule.startDate}
-          endDate={schedule.endDate}
-          date={schedule.createdAt}
-          description={schedule.summary}
-        />
-      </div>
+      <ScheduleDetailInfoComponent
+        duration={schedule.duration}
+        title={schedule.title}
+        writer={schedule.createdBy}
+        startDate={schedule.startDate}
+        endDate={schedule.endDate}
+        date={schedule.createdAt}
+        description={schedule.summary}
+      />
       <div className={styles['public-status']}>
         <FormGroup>
           <FormControlLabel
@@ -79,12 +77,10 @@ function ScheduleDetail() {
         </FormGroup>
         <div>{isPublic ? '공개' : '비공개'}</div>
       </div>
-      <div className={styles['destinations-wrapper']}>
-        <DestinationListComponent
-          destinations={destinations}
-          onChecked={onDestinationsChecked}
-        />
-      </div>
+      <DestinationListComponent
+        destinations={destinations}
+        onChecked={onDestinationsChecked}
+      />
       <div className={styles.map}>
         {checkedDestinations.map((dest, index) => (
           <div key={index}>{dest}</div>
