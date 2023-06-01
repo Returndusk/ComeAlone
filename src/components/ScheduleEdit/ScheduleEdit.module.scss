@@ -74,6 +74,17 @@
   }
 }
 
+.duration-edit-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 400px;
+  border-radius: 20px;
+  background-color: #ffffff;
+}
+
 .schedule-info-wrapper {
   grid-column: 1 / 3;
   margin: 0 0 60px 0;
