@@ -18,6 +18,7 @@ type Schedule = {
   duration: string;
   startDate: Date;
   endDate: Date;
+  isPublic: boolean;
   image: string;
   createdAt: string;
 };
@@ -29,6 +30,7 @@ const schedule: Schedule = {
   duration: '3',
   startDate: new Date(2023, 5, 15),
   endDate: new Date(2023, 5, 17),
+  isPublic: true,
   image:
     'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80',
   createdAt: '2023.04.01.'
@@ -45,7 +47,7 @@ function ScheduleDetail() {
   const [startDate, setStartDate] = useState(schedule.startDate);
   const [endDate, setEndDate] = useState(schedule.endDate);
   const [duration, setDuration] = useState(schedule.duration);
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(schedule.isPublic);
   const [title, setTitle] = useState(schedule.title);
   const [description, setDescription] = useState(schedule.summary);
   const [checkedDestinations, setCheckedDestinations] = useState(
@@ -61,9 +63,10 @@ function ScheduleDetail() {
     description: string,
     startDate: Date,
     endDate: Date,
-    duration: string
+    duration: string,
+    isPublic: boolean
   ) => {
-    console.log({ title, description, startDate, endDate, duration });
+    console.log({ title, description, startDate, endDate, duration, isPublic });
   };
 
   return (
@@ -111,7 +114,7 @@ function ScheduleDetail() {
       <div className={styles['confirm-button-wrapper']}>
         <button
           onClick={() =>
-            onSubmit(title, description, startDate, endDate, duration)
+            onSubmit(title, description, startDate, endDate, duration, isPublic)
           }
         >
           수정완료
