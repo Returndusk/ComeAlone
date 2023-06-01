@@ -1,14 +1,32 @@
 import React from 'react';
 import styles from './ScheduleDetail.module.scss';
 
-function ScheduleDetailInfoComponent() {
+function ScheduleDetailInfoComponent({
+  duration,
+  title,
+  writer,
+  startDate,
+  endDate,
+  date,
+  description
+}: {
+  duration: string;
+  title: string;
+  writer: string;
+  startDate: string;
+  endDate: string;
+  date: string;
+  description: string;
+}) {
   return (
     <>
-      <div className={styles.duration}>2023.06.01. ~ 2023.06.03. (3일)</div>
-      <div className={styles.title}>혼자 떠나는 우도 여행</div>
-      <div className={styles.writer}>제주123</div>
-      <div className={styles.date}>2023.04.01.</div>
-      <p>혼자 떠나는 우도 여행 일정입니다.</p>
+      <div className={styles.duration}>
+        {`${startDate} ~ ${endDate} (${duration}일)`}
+      </div>
+      <div className={styles.title}>{title}</div>
+      <div className={styles.writer}>{writer}</div>
+      <div className={styles.date}>{date}</div>
+      <p>{description}</p>
     </>
   );
 }
