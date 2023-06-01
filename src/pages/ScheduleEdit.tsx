@@ -42,6 +42,7 @@ const destinations = [
 ];
 
 function ScheduleDetail() {
+  const [isPublic, setIsPublic] = useState(false);
   const [checkedDestinations, setCheckedDestinations] = useState(
     destinations.flat()
   );
@@ -66,8 +67,17 @@ function ScheduleDetail() {
       </div>
       <div className={styles['public-status']}>
         <FormGroup>
-          <FormControlLabel control={<Switch />} label='공개 여부' />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isPublic}
+                onClick={() => setIsPublic((prev) => !prev)}
+              />
+            }
+            label='공개 여부'
+          />
         </FormGroup>
+        <div>{isPublic ? '공개' : '비공개'}</div>
       </div>
       <div className={styles['destinations-wrapper']}>
         <DestinationListComponent
