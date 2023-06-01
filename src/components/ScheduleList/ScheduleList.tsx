@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ScheduleList.module.scss';
 import dummy from './ScheduleListDummy';
-import { ScheduleCard } from '../ScheduleCard/ScheduleCard';
+import ScheduleCard from '../ScheduleCard/ScheduleCard';
 
 export type ScheduleType = {
   id: string;
@@ -18,7 +18,7 @@ export type ScheduleType = {
 
 type ScheduleListType = ScheduleType[];
 
-export function ScheduleLists() {
+function ScheduleLists() {
   const [ScheduleList, setScheduleList] = useState<ScheduleListType>(dummy);
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
 
@@ -62,3 +62,5 @@ export function ScheduleLists() {
     </div>
   );
 }
+
+export default ScheduleLists;
