@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
 import {
-  ScheduleDetailImageComponent,
+  ScheduleEditImageComponent,
   ScheduleDetailInfoComponent,
   DestinationListComponent
 } from '../components/ScheduleEdit';
@@ -53,7 +53,7 @@ function ScheduleDetail() {
 
   return (
     <div className={styles.container}>
-      <ScheduleDetailImageComponent image={schedule.image} />
+      <ScheduleEditImageComponent image={schedule.image} />
       <ScheduleDetailInfoComponent
         duration={schedule.duration}
         title={schedule.title}
