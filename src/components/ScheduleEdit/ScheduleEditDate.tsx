@@ -53,7 +53,7 @@ function ScheduleEditDateComponent({
       const diffDay =
         (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) + 1;
 
-      handleDuration(diffDay);
+      handleDuration(diffDay.toString());
     }
   }, [selectedDate]);
 

@@ -6,12 +6,16 @@ function ScheduleEditInfoComponent({
   title,
   writer,
   date,
-  description
+  description,
+  handleTitle,
+  handleDescription
 }: {
   title: string;
   writer: string;
   date: string;
   description: string;
+  handleTitle: any;
+  handleDescription: any;
 }) {
   return (
     <div className={styles['schedule-info-wrapper']}>
@@ -20,6 +24,7 @@ function ScheduleEditInfoComponent({
         required
         label='제목'
         defaultValue={title}
+        onChange={(event) => handleTitle(event.target.value)}
       />
       <div className={styles.writer}>{writer}</div>
       <div className={styles.date}>{date}</div>
@@ -30,6 +35,7 @@ function ScheduleEditInfoComponent({
         multiline
         rows={3}
         defaultValue={description}
+        onChange={(event) => handleDescription(event.target.value)}
       />
     </div>
   );

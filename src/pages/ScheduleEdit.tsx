@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import FormGroup from '@mui/material/FormGroup';
@@ -46,12 +46,24 @@ function ScheduleDetail() {
   const [endDate, setEndDate] = useState(schedule.endDate);
   const [duration, setDuration] = useState(schedule.duration);
   const [isPublic, setIsPublic] = useState(false);
+  const [title, setTitle] = useState(schedule.title);
+  const [description, setDescription] = useState(schedule.summary);
   const [checkedDestinations, setCheckedDestinations] = useState(
     destinations.flat()
   );
 
   const onDestinationsChecked = (destinations: string[]) => {
     setCheckedDestinations(destinations);
+  };
+
+  const onSubmit = (
+    title: string,
+    description: string,
+    startDate: Date,
+    endDate: Date,
+    duration: string
+  ) => {
+    console.log({ title, description, startDate, endDate, duration });
   };
 
   return (
@@ -66,10 +78,12 @@ function ScheduleDetail() {
         handleDuration={setDuration}
       />
       <ScheduleEditInfoComponent
-        title={schedule.title}
+        title={title}
         writer={schedule.createdBy}
         date={schedule.createdAt}
-        description={schedule.summary}
+        description={description}
+        handleTitle={setTitle}
+        handleDescription={setDescription}
       />
       <div className={styles['public-status']}>
         <FormGroup>
@@ -95,7 +109,13 @@ function ScheduleDetail() {
         ))}
       </div>
       <div className={styles['confirm-button-wrapper']}>
-        <button>수정완료</button>
+        <button
+          onClick={() =>
+            onSubmit(title, description, startDate, endDate, duration)
+          }
+        >
+          수정완료
+        </button>
       </div>
     </div>
   );
