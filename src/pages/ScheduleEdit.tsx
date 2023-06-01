@@ -4,8 +4,6 @@ import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
 
 import {
   ScheduleEditImageComponent,
