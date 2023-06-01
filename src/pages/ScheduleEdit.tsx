@@ -52,9 +52,7 @@ function ScheduleDetail() {
 
   return (
     <div className={styles.container}>
-      <div className={styles['image-wrapper']}>
-        <ScheduleDetailImageComponent image={schedule.image} />
-      </div>
+      <ScheduleDetailImageComponent image={schedule.image} />
       <div className={styles['schedule-info-wrapper']}>
         <ScheduleDetailInfoComponent
           duration={schedule.duration}

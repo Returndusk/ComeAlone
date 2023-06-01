@@ -3,7 +3,10 @@ import styles from './ScheduleEdit.module.scss';
 
 function ScheduleDetailImageComponent({ image }: { image: string }) {
   return (
-    <img className={styles.image} src={image} alt='representative-image' />
+    <div className={styles['image-wrapper']}>
+      <img className={styles.image} src={image} alt='representative-image' />
+      <p>대표 이미지 수정하기</p>
+    </div>
   );
 }
 
