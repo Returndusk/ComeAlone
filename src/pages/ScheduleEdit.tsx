@@ -16,8 +16,8 @@ type Schedule = {
   title: string;
   summary: string;
   duration: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   image: string;
   createdAt: string;
 };
@@ -27,8 +27,8 @@ const schedule: Schedule = {
   title: '혼자 떠나는 우도 여행',
   summary: '혼자 떠나는 우도 여행 일정입니다.',
   duration: '3',
-  startDate: '2023.06.01.',
-  endDate: '2023.06.03.',
+  startDate: new Date(2023, 5, 15),
+  endDate: new Date(2023, 5, 17),
   image:
     'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80',
   createdAt: '2023.04.01.'
@@ -42,6 +42,9 @@ const destinations = [
 ];
 
 function ScheduleDetail() {
+  const [startDate, setStartDate] = useState(schedule.startDate);
+  const [endDate, setEndDate] = useState(schedule.endDate);
+  const [duration, setDuration] = useState(schedule.duration);
   const [isPublic, setIsPublic] = useState(false);
   const [checkedDestinations, setCheckedDestinations] = useState(
     destinations.flat()
@@ -55,9 +58,12 @@ function ScheduleDetail() {
     <div className={styles.container}>
       <ScheduleEditImageComponent image={schedule.image} />
       <ScheduleEditDateComponent
-        duration={schedule.duration}
-        startDate={schedule.startDate}
-        endDate={schedule.endDate}
+        duration={duration}
+        startDate={startDate}
+        endDate={endDate}
+        handleStartDate={setStartDate}
+        handleEndDate={setEndDate}
+        handleDuration={setDuration}
       />
       <ScheduleEditInfoComponent
         title={schedule.title}
