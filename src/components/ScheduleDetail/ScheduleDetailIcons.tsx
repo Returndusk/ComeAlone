@@ -10,7 +10,7 @@ function ScheduleDetailIconsComponent({
   reviewsAmount: number;
 }) {
   return (
-    <>
+    <div className={styles['icons-wrapper']}>
       <span id={styles.likes}>
         <FaHeart id={styles['likes-icon']} />
         {likesAmount}
@@ -19,7 +19,7 @@ function ScheduleDetailIconsComponent({
         <FaCommentAlt id={styles['review-number-icon']} />
         {reviewsAmount}
       </span>
-    </>
+    </div>
   );
 }
 

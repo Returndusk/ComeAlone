@@ -8,7 +8,7 @@ function ScheduleReviewsComponent({
   reviews: { writer: string; comment: string }[];
 }) {
   return (
-    <>
+    <div className={styles['reviews-wrapper']}>
       <div className={styles['reviews-title']}>리뷰 리스트</div>
       <div className={styles['reviews-list']}>
         {reviews.map((review, index) => {
@@ -22,7 +22,7 @@ function ScheduleReviewsComponent({
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
 

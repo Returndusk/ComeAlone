@@ -10,7 +10,7 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
   };
 
   return (
-    <>
+    <div className={styles['review-input-wrapper']}>
       <Avatar className={styles['reviews-input-writer']}>B</Avatar>
       <textarea
         className={styles['reviews-input-text']}
@@ -24,7 +24,7 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
       >
         제출
       </button>
-    </>
+    </div>
   );
 }
 

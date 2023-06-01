@@ -11,7 +11,7 @@ function DestinationListComponent({
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
   return (
-    <>
+    <div className={styles['destinations-wrapper']}>
       <div className={styles['destinations-title']}>목적지 리스트</div>
       <label>
         <input
@@ -55,7 +55,7 @@ function DestinationListComponent({
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
 

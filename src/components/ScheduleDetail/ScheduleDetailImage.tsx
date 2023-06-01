@@ -3,7 +3,9 @@ import styles from './ScheduleDetail.module.scss';
 
 function ScheduleDetailImageComponent({ image }: { image: string }) {
   return (
-    <img className={styles.image} src={image} alt='representative-image' />
+    <div className={styles['image-wrapper']}>
+      <img className={styles.image} src={image} alt='representative-image' />
+    </div>
   );
 }
 

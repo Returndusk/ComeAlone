@@ -103,53 +103,39 @@ function ScheduleDetail() {
   };
 
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles['image-wrapper']}>
-          <ScheduleDetailImageComponent image={schedule.image} />
-        </div>
-        <div className={styles['schedule-info-wrapper']}>
-          <ScheduleDetailInfoComponent
-            duration={schedule.duration}
-            title={schedule.title}
-            writer={schedule.createdBy}
-            startDate={schedule.startDate}
-            endDate={schedule.endDate}
-            date={schedule.createdAt}
-            description={schedule.summary}
-          />
-        </div>
-        <div className={styles['edit-button-wrapper']}>
-          <Link to='/schedule/edit' className={styles['edit-button']}>
-            수정하기
-          </Link>
-        </div>
-        <div className={styles['icons-wrapper']}>
-          <ScheduleDetailIconsComponent
-            likesAmount={likesAmount}
-            reviewsAmount={reviewsAmount}
-          />
-        </div>
-        <div className={styles['destinations-wrapper']}>
-          <DestinationListComponent
-            destinations={destinations}
-            onChecked={onDestinationsChecked}
-          />
-        </div>
-        <div className={styles.map}>
-          {checkedDestinations.map((dest, index) => (
-            <div key={index}>{dest}</div>
-          ))}
-        </div>
-        <div className={styles['reviews-wrapper']}>
-          <ScheduleReviewsComponent reviews={reviews} />
-        </div>
-        <div className={styles['review-input-wrapper']}>
-          <ScheduleReviewInputComponent onSubmit={onReviewSubmit} />
-          {reviewInput}
-        </div>
+    <div className={styles.container}>
+      <ScheduleDetailImageComponent image={schedule.image} />
+      <ScheduleDetailInfoComponent
+        duration={schedule.duration}
+        title={schedule.title}
+        writer={schedule.createdBy}
+        startDate={schedule.startDate}
+        endDate={schedule.endDate}
+        date={schedule.createdAt}
+        description={schedule.summary}
+      />
+      <div className={styles['edit-button-wrapper']}>
+        <Link to='/schedule/edit' className={styles['edit-button']}>
+          수정하기
+        </Link>
       </div>
-    </>
+      <ScheduleDetailIconsComponent
+        likesAmount={likesAmount}
+        reviewsAmount={reviewsAmount}
+      />
+      <DestinationListComponent
+        destinations={destinations}
+        onChecked={onDestinationsChecked}
+      />
+      <div className={styles.map}>
+        {checkedDestinations.map((dest, index) => (
+          <div key={index}>{dest}</div>
+        ))}
+      </div>
+      <ScheduleReviewsComponent reviews={reviews} />
+      <ScheduleReviewInputComponent onSubmit={onReviewSubmit} />
+      {reviewInput}
+    </div>
   );
 }
 
