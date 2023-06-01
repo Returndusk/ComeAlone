@@ -33,8 +33,9 @@
     p {
       display: block;
       position: absolute;
-      top: 190px;
-      left: 320px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       color: #fff;
       z-index: 20;
       font-weight: bold;
