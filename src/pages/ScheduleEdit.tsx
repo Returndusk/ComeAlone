@@ -43,7 +43,7 @@ const destinations = [
   ['제주국제공항', '제주국제공항', '제주국제공항']
 ];
 
-function ScheduleDetail() {
+function ScheduleEdit() {
   const [startDate, setStartDate] = useState(schedule.startDate);
   const [endDate, setEndDate] = useState(schedule.endDate);
   const [duration, setDuration] = useState(schedule.duration);
@@ -124,4 +124,4 @@ function ScheduleDetail() {
   );
 }
 
-export default ScheduleDetail;
+export default ScheduleEdit;
