@@ -14,7 +14,7 @@ function ScheduleEditDateComponent({
   endDate: string;
 }) {
   return (
-    <div>
+    <div className={styles['duration-wrapper']}>
       <span className={styles.duration}>
         {`${startDate} ~ ${endDate} (${duration}일)`}
       </span>
