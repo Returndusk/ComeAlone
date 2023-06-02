@@ -55,6 +55,7 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
             ? [clickedDestination]
             : filteredDestinations
         }
+        setClickedDestination={setClickedDestination}
       />
     </div>
   );
