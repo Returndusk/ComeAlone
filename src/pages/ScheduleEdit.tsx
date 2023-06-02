@@ -80,14 +80,6 @@ function ScheduleEdit() {
         handleEndDate={setEndDate}
         handleDuration={setDuration}
       />
-      <ScheduleEditInfoComponent
-        title={title}
-        writer={schedule.createdBy}
-        date={schedule.createdAt}
-        description={description}
-        handleTitle={setTitle}
-        handleDescription={setDescription}
-      />
       <div className={styles['public-status']}>
         <FormGroup>
           <FormControlLabel
@@ -97,11 +89,18 @@ function ScheduleEdit() {
                 onClick={() => setIsPublic((prev) => !prev)}
               />
             }
-            label='공개 여부'
+            label={isPublic ? '공개' : '비공개'}
           />
         </FormGroup>
-        <div>{isPublic ? '공개' : '비공개'}</div>
       </div>
+      <ScheduleEditInfoComponent
+        title={title}
+        writer={schedule.createdBy}
+        date={schedule.createdAt}
+        description={description}
+        handleTitle={setTitle}
+        handleDescription={setDescription}
+      />
       <DestinationListComponent
         destinations={destinations}
         onChecked={onDestinationsChecked}
