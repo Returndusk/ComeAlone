@@ -1,9 +1,12 @@
 import React from 'react';
 import styles from './ScheduleCard.module.scss';
-import { Link } from 'react-router-dom';
 import { ScheduleType } from '../ScheduleList/ScheduleList';
 
-function ScheduleCard(schedule: ScheduleType, index: number) {
+type ScheduleProps = {
+  schedule: ScheduleType;
+};
+
+function ScheduleCard({ schedule }: ScheduleProps) {
   const endDate = new Date(schedule.end_date);
   const startDate = new Date(schedule.start_date);
   const createdAt = schedule.createdAt;
@@ -11,7 +14,7 @@ function ScheduleCard(schedule: ScheduleType, index: number) {
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
 
   return (
-    <div key={index} className={styles.scheduleCard}>
+    <div className={styles.scheduleCard}>
       <div className={styles.scheduleCardContent}>
         <div className={styles.scheduleContent}>
           <div className={styles.scheduleText}>
