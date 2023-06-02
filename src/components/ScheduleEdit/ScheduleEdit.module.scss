@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-.image-wrapper {
+.imageWrapper {
   grid-column: 1 / 4;
   display: inline-block;
   position: relative;
@@ -61,7 +61,7 @@
   cursor: pointer;
 }
 
-.duration-wrapper {
+.durationWrapper {
   grid-column: 1 / 3;
   margin: 30px 0 0 0;
 
@@ -70,12 +70,12 @@
     font-size: 24px;
   }
 
-  .duration-edit {
+  .durationEdit {
     font-size: 28px;
   }
 }
 
-.duration-edit-modal {
+.durationEditModal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -90,19 +90,19 @@
     font-size: 20px;
   }
 
-  .duration-edit-date {
+  .durationEditDate {
     margin: 20px 0;
   }
 
-  .duration-edit-confirm {
+  .durationEditConfirm {
     position: absolute;
     top: 90%;
     left: 90%;
   }
 }
 
-.schedule-info-wrapper {
-  grid-column: 1 / 3;
+.ScheduleInfoWrapper {
+  grid-column: 1 / 4;
   margin: 0 0 60px 0;
 
   .title {
@@ -128,21 +128,22 @@
   }
 }
 
-.public-status {
-  justify-self: center;
+.publicStatus {
+  padding: 30px 0 0 0;
+  justify-self: self-end;
 }
 
-.destinations-wrapper {
+.destinationsWrapper {
   grid-column: 1 / 2;
   height: 500px;
 
-  .destinations-title {
+  .destinationsTitle {
     margin: 0 0 20px 0;
     font-weight: bold;
     font-size: 24px;
   }
 
-  .destinations-list {
+  .destinationsList {
     height: 85%;
     margin: 20px 0 0 0;
     overflow-x: hidden;
@@ -164,7 +165,7 @@
       background: #ffffff;
     }
 
-    .destinations-day {
+    .destinationsDay {
       $spacer: 1rem;
       $gray: #888;
       $gray--lightest: lighten($gray, 35%);
@@ -228,7 +229,7 @@
   }
 }
 
-.confirm-button-wrapper {
+.confirmButtonWrapper {
   grid-column: 1 / 2;
   padding: 50px 0 0 0;
   justify-self: self-start;

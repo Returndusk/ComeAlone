@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './ScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
 
-function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
+function InputReviewSchedule({ onSubmit }: { onSubmit: any }) {
   const [reviewTyping, setReviewTyping] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -10,14 +10,14 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
   };
 
   return (
-    <div className={styles['review-input-wrapper']}>
-      <Avatar className={styles['reviews-input-writer']}>B</Avatar>
+    <div className={styles.reviewInputWrapper}>
+      <Avatar className={styles.reviewsInputWriter}>B</Avatar>
       <textarea
-        className={styles['reviews-input-text']}
+        className={styles.reviewsInputText}
         onChange={handleChange}
       ></textarea>
       <button
-        className={styles['reviews-input-button']}
+        className={styles.reviewsInputButton}
         onClick={() => {
           onSubmit(reviewTyping);
         }}
@@ -28,4 +28,4 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
   );
 }
 
-export default ScheduleReviewInputComponent;
+export default InputReviewSchedule;
