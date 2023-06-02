@@ -1,0 +1,20 @@
+.profileImage {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    background-color: #bbb;
+    border-radius: 50%;
+
+    &::after {
+      content: 'Profile Image';
+      color: #fff;
+    }
+  }
+}

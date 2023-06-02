@@ -25,12 +25,14 @@
     }
 
     nav {
+      padding-left: 60px;
       ul {
         display: flex;
         list-style: none;
         gap: 20px;
 
         a {
+          padding: 0 10px 0 10px;
           color: black;
           font-weight: bold;
           text-decoration: none;
@@ -43,9 +45,9 @@
     display: flex;
     width: 50%;
     justify-content: flex-end;
-    align-items: center;
 
     .weather {
+      padding-right: 20px;
       a {
         text-decoration: none;
         color: inherit;
@@ -53,23 +55,28 @@
     }
 
     .calendar {
+      padding-right: 20px;
       font-size: 50px;
       color: #ef6d00;
     }
 
     .auth {
       position: relative;
+      display: flex;
+      align-items: center;
       .userIcon {
+        padding-right: 20px;
         font-size: 50px;
       }
       .dropdownMenu {
         position: absolute;
         top: 30px;
-        right: 0;
+        right: 100px;
         background-color: white;
         padding: 10px;
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 9;
       }
 
       .open {
@@ -77,6 +84,7 @@
       }
 
       a {
+        padding: 0 15px 0 15px;
         text-decoration: none;
         color: inherit;
       }

@@ -1,12 +1,14 @@
 import React from 'react';
 import AddToScheduleModal from '../components/Modals/AddToScheduleModal';
+import Layout from '../components/DestinationList/Layout';
+import Destinations from '../components/DestinationList/Destinations';
 
 function DestinationList() {
   return (
-    <div>
-      목적지 리스트
+    <Layout>
+      <Destinations />
       <AddToScheduleModal />
-    </div>
+    </Layout>
   );
 }
 
