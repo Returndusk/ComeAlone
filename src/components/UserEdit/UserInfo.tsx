@@ -42,13 +42,16 @@ function UserInfo({ values, handleChange }: UserInfoProps) {
       </li>
       <li>
         <label htmlFor='nickname'>닉네임</label>
-        <input
-          type='text'
-          name='nickname'
-          id='nickname'
-          value={values.nickname}
-          onChange={handleChange}
-        />
+        <div className={styles.nickname}>
+          <input
+            type='text'
+            name='nickname'
+            id='nickname'
+            value={values.nickname}
+            onChange={handleChange}
+          />
+          <button type='button'>중복확인</button>
+        </div>
       </li>
       <li>
         <label htmlFor='birthDate'>생년월일</label>

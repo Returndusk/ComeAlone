@@ -31,6 +31,29 @@
     }
   }
 
+  .nickname {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    input[type='text'] {
+      width: calc(100% - 80px - 10px);
+      margin-right: 10px;
+    }
+
+    button {
+      width: 80px;
+      height: 40px;
+      letter-spacing: 0;
+      border: 1px solid var(--main-color);
+      border-radius: 5px;
+      background-color: #fff;
+      font-weight: 500;
+      color: var(--main-color);
+      cursor: pointer;
+    }
+  }
+
   input[type='text'],
   input[type='password'] {
     width: 100%;
