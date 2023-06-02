@@ -22,20 +22,7 @@
     margin: 0 1rem;
   }
 
-  .slick-top {
-    .slick-arrow {
-      color: black;
-    }
-    .slick-prev {
-      // 좌측 화살표의 위치값을 넣어줍니다.
-      ::before {
-      }
-    }
-    .slick-next {
-      // 우측화살표의 위치값을 넣어줍니다.
-      &::before {
-        color: black;
-      }
-    }
+  button::before {
+    color: black !important;
   }
 }
