@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ModalScheduleCard.module.scss';
-import { ScheduleType } from '../ScheduleList/ScheduleList';
+import { ScheduleType } from '../../ScheduleList/ScheduleList';
 
 export default function ModalScheduleCard(
   schedule: ScheduleType,
