@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Pagination from './Pagination';
 import DestinationDetails from './DestinationDetails';
-import Map from '../common/Map';
+import Map from '../common/Map/Map';
 import styles from './Destinations.module.scss';
 import { DestinationsType } from './Types';
 
@@ -22,36 +22,40 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
 
   return (
     <div className={styles.destinationContentsContainer}>
-      <section className={styles.destinationsContainer}>
-        {slicedDestinations.length > 0 ? (
-          slicedDestinations.map((destination: DestinationsType, index) => (
-            <div
-              key={index}
-              className={styles.destinations}
-              onClick={() => handleDestinationClick(destination)}
-            >
-              <p>{destination?.title}</p>
-            </div>
-          ))
-        ) : (
-          <div>검색 결과가 없습니다.</div>
-        )}
-
-        <Pagination
-          destinations={filteredDestinations}
-          setSlicedDestinations={setSlicedDestinations}
-        />
-      </section>
-      <DestinationDetails
-        clickedDestination={clickedDestination}
-        setClickedDestination={setClickedDestination}
-      />
+      <div className={styles.destinationsInfoContainer}>
+        <section className={styles.destinationsContainer}>
+          {slicedDestinations.length > 0 ? (
+            slicedDestinations.map((destination: DestinationsType, index) => (
+              <div
+                key={index}
+                className={styles.destinations}
+                onClick={() => handleDestinationClick(destination)}
+              >
+                <p>{destination?.title}</p>
+              </div>
+            ))
+          ) : (
+            <div>검색 결과가 없습니다.</div>
+          )}
+          <Pagination
+            destinations={filteredDestinations}
+            setSlicedDestinations={setSlicedDestinations}
+          />
+        </section>
+        <section>
+          <DestinationDetails
+            clickedDestination={clickedDestination}
+            setClickedDestination={setClickedDestination}
+          />
+        </section>
+      </div>
       <Map
         markersLocations={
           clickedDestination !== null
             ? [clickedDestination]
             : filteredDestinations
         }
+        setClickedDestination={setClickedDestination}
       />
     </div>
   );

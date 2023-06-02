@@ -1,13 +1,33 @@
+.categoryContainer {
+  display: flex;
+  justify-content: center;
+  width: 300px;
+  flex-wrap: wrap;
+  z-index: 1000;
+  background-color: #fff;
+
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button + button {
+    margin-left: 10px;
+  }
+}
+
 .activeSelectedButton {
   text-decoration: underline;
   text-underline-offset: 0.3em;
   font-weight: 550;
-  color: #50bfd2;
+  color: var(--sub-1-color);
 }
 
 .activeSelectedAllButton {
   text-decoration: underline;
   text-underline-offset: 0.3em;
   font-weight: 550;
-  color: #ef467c;
+  color: var(--main-color);
 }
