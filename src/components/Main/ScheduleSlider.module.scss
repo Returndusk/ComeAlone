@@ -21,8 +21,8 @@
   .slick-slide {
     margin: 0 1rem;
   }
-  .slick-prev::before,
-  .slick-next::before {
-    color: black;
+
+  button::before {
+    color: black !important;
   }
 }
