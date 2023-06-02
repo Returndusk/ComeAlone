@@ -1,6 +1,6 @@
 import React from 'react';
 import ScheduleLists from '../components/ScheduleList/ScheduleList';
-import ScrollTop from '../components/ScrollTop/ScrollTop';
+import ScrollTop from '../components/common/ScrollTop/ScrollTop';
 import CreateScheduleModal from '../components/Modals/CreateScheduleModal';
 
 function ScheduleList() {
