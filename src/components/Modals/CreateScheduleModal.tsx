@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './ModalDesign.module.scss';
+import styles from './CommonModalDesign.module.scss';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
@@ -42,6 +42,8 @@ function CreateScheduleModal() {
     }
   ]);
 
+  // console.log(date);
+  // format해서 보내지 말기! 들어온 그대로 서버로 보내기
   const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd');
   const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd');
 

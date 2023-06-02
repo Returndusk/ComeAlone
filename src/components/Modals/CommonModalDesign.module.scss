@@ -16,8 +16,9 @@
   padding: 20px;
   border: 1px solid #888;
   width: auto;
-  height: auto;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: scroll;
 }
