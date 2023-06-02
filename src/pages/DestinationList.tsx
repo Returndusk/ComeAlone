@@ -1,12 +1,12 @@
 import React from 'react';
 import AddToScheduleModal from '../components/Modals/AddToScheduleModal';
 import Layout from '../components/DestinationList/Layout';
-import Destinations from '../components/DestinationList/Destinations';
+import Search from '../components/DestinationList/Search';
 
 function DestinationList() {
   return (
     <Layout>
-      <Destinations />
+      <Search />
       <AddToScheduleModal />
     </Layout>
   );

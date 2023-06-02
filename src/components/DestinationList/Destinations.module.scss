@@ -1,13 +1,25 @@
+.destinationContentsContainer {
+  display: flex;
+  flex-direction: row;
+}
+
 .destinationsContainer {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(20, 1fr) minmax(0, 10px);
   border: 1px solid #000;
-  width: 400px;
+  width: 300px;
   height: 500px;
   overflow-y: auto;
+  position: relative;
+  margin-right: 5%;
+  padding: 20px;
 
   .destinations {
     border-bottom: 1px solid #000;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
