@@ -3,34 +3,16 @@ import Pagination from './Pagination';
 import DestinationDetails from './DestinationDetails';
 import Map from '../common/Map';
 import styles from './Destinations.module.scss';
-import MapWithWaypoints from '../common/MapWithWaypoints';
 import { DestinationsType } from './Types';
 
-//Dummy data
-const DEFAULT_DESTINATIONS = [
-  { title: '제주도 시청', mapy: 33.48907969999994, mapx: 126.49932809999973 },
-  {
-    title: '한라산',
-    mapy: 33.37915262371278,
-    mapx: 126.54626368383182,
-    tel: '064-772-3366',
-    overview: '개요 설명입니다.'
-  },
-  {
-    title: '서귀포 해양 도립공원',
-    mapy: 33.241570451808215,
-    mapx: 126.55770550692283
-  },
-  { title: '금오름', mapy: 33.35452764241429, mapx: 126.30590904987518 }
-];
+type DestinationsPropsType = {
+  filteredDestinations: DestinationsType[] | [];
+};
 
-function Destinations() {
-  const [destinations, setDestinations] = useState<DestinationsType[]>([
-    ...DEFAULT_DESTINATIONS
-  ]);
+function Destinations({ filteredDestinations }: DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
-    DestinationsType[]
-  >([...DEFAULT_DESTINATIONS]);
+    DestinationsType[] | []
+  >(filteredDestinations);
   const [clickedDestination, setClickedDestination] =
     useState<DestinationsType | null>(null);
 
@@ -39,20 +21,24 @@ function Destinations() {
   };
 
   return (
-    <>
+    <div className={styles.destinationContentsContainer}>
       <section className={styles.destinationsContainer}>
-        {slicedDestinations.map((destination: DestinationsType, index) => (
-          <div
-            key={index}
-            className={styles.destinations}
-            onClick={() => handleDestinationClick(destination)}
-          >
-            <p>{destination?.title}</p>
-          </div>
-        ))}
+        {slicedDestinations.length > 0 ? (
+          slicedDestinations.map((destination: DestinationsType, index) => (
+            <div
+              key={index}
+              className={styles.destinations}
+              onClick={() => handleDestinationClick(destination)}
+            >
+              <p>{destination?.title}</p>
+            </div>
+          ))
+        ) : (
+          <div>검색 결과가 없습니다.</div>
+        )}
 
         <Pagination
-          destinations={destinations}
+          destinations={filteredDestinations}
           setSlicedDestinations={setSlicedDestinations}
         />
       </section>
@@ -60,15 +46,14 @@ function Destinations() {
         clickedDestination={clickedDestination}
         setClickedDestination={setClickedDestination}
       />
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <Map
-          markersLocations={
-            clickedDestination !== null ? [clickedDestination] : destinations
-          }
-        />
-        <MapWithWaypoints markersLocations={destinations} />
-      </div>
-    </>
+      <Map
+        markersLocations={
+          clickedDestination !== null
+            ? [clickedDestination]
+            : filteredDestinations
+        }
+      />
+    </div>
   );
 }
 export default Destinations;

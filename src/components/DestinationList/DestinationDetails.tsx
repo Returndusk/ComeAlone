@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DestinationsType } from './Types';
-import styles from './Destinations.module.scss';
+import styles from './DestinationDetails.module.scss';
 
 type DestinationDetailsPropsType = {
   clickedDestination: DestinationsType | null;
@@ -30,19 +30,23 @@ function DestinationDetails({
   return (
     <>
       {isOpen && destination !== null && (
-        <section className={styles.destinationDetailsContainer}>
-          <h3>{destination.title}</h3>
-          <p>전화번호:{destination?.tel}</p>
-          <div>{destination?.overview}</div>
-        </section>
-      )}
-      {isOpen && (
-        <button
-          className={styles.detailsButtonContainer}
-          onClick={toggleDetailPage}
-        >
-          상세 페이지 닫기
-        </button>
+        <div className={styles.destinationDetailsContainer}>
+          <section className={styles.destinationDetails}>
+            <h3>{destination.title}</h3>
+            <p>전화번호:{destination?.tel}</p>
+            <div>{destination?.overview}</div>
+            <div>
+              <button>내 일정에 추가</button>
+            </div>
+          </section>
+
+          <button
+            className={styles.detailsButtonContainer}
+            onClick={toggleDetailPage}
+          >
+            상세 페이지 닫기
+          </button>
+        </div>
       )}
     </>
   );

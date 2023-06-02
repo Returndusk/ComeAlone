@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Map.module.scss';
 import { DestinationsType } from '../DestinationList/Types';
 
@@ -21,6 +21,18 @@ const DEFAULT_LOCATION = {
 const { kakao } = window;
 
 function Map({ markersLocations }: MapPropsType) {
+  const [prevMarkersLocations, setPrevMarkersLocations] =
+    useState(markersLocations);
+  let markers = markersLocations;
+
+  useEffect(() => {
+    setPrevMarkersLocations(markersLocations);
+  }, [markersLocations]);
+
+  useEffect(() => {
+    markers = markersLocations.length > 0 ? markers : prevMarkersLocations;
+  }, [prevMarkersLocations]);
+
   useEffect(() => {
     const container = document.getElementById('map');
 
@@ -36,8 +48,11 @@ function Map({ markersLocations }: MapPropsType) {
 
     const bounds = new kakao.maps.LatLngBounds();
 
-    markersLocations.forEach((marker) => {
-      const position = new kakao.maps.LatLng(marker.mapy, marker.mapx);
+    markers?.forEach((marker) => {
+      const position = new kakao.maps.LatLng(
+        Number(marker?.mapy),
+        Number(marker?.mapx)
+      );
       const newMarker = new kakao.maps.Marker({
         title: marker.title,
         position,

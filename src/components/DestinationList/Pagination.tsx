@@ -39,7 +39,7 @@ function Pagination({ destinations, setSlicedDestinations }: PaginationProps) {
     setSlicedDestinations(() => {
       return destinations.slice(firstDestinationIdx, lastDestinationIdx);
     });
-  }, []);
+  }, [destinations]);
 
   useEffect(() => {
     setCurrentPage(() => pageNumber);
