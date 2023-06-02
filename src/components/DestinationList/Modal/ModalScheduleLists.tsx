@@ -1,6 +1,11 @@
+/**
+ * 지원님 카드 컴포넌트에서 필요한 부분만 빼서 사용하는걸로
+ * 일정명, 기간 정도만 알려주고 클릭하면 N일차 목적지들 나오게
+ */
+
 import React, { useState } from 'react';
 import styles from './ModalScheduleLists.module.scss';
-import dummy from '../ScheduleList/ScheduleListDummy';
+import dummy from '../../ScheduleList/ScheduleListDummy';
 import ModalScheduleCard from './ModalScheduleCard';
 
 export type ScheduleType = {
