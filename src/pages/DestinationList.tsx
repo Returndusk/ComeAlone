@@ -1,5 +1,5 @@
 import React from 'react';
-import AddToScheduleModal from '../components/Modals/AddToScheduleModal';
+// import AddToScheduleModal from '../components/Modals/AddToScheduleModal';
 import Layout from '../components/DestinationList/Layout';
 import Search from '../components/DestinationList/Search';
 
@@ -9,7 +9,7 @@ function DestinationList() {
       <Layout>
         <Search />
       </Layout>
-      <AddToScheduleModal />
+      {/* <AddToScheduleModal /> */}
     </>
   );
 }

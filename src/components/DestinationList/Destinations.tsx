@@ -22,30 +22,31 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
 
   return (
     <div className={styles.destinationContentsContainer}>
-      <section className={styles.destinationsContainer}>
-        {slicedDestinations.length > 0 ? (
-          slicedDestinations.map((destination: DestinationsType, index) => (
-            <div
-              key={index}
-              className={styles.destinations}
-              onClick={() => handleDestinationClick(destination)}
-            >
-              <p>{destination?.title}</p>
-            </div>
-          ))
-        ) : (
-          <div>검색 결과가 없습니다.</div>
-        )}
-
-        <Pagination
-          destinations={filteredDestinations}
-          setSlicedDestinations={setSlicedDestinations}
+      <div className={styles.destinationsInfoContainer}>
+        <section className={styles.destinationsContainer}>
+          {slicedDestinations.length > 0 ? (
+            slicedDestinations.map((destination: DestinationsType, index) => (
+              <div
+                key={index}
+                className={styles.destinations}
+                onClick={() => handleDestinationClick(destination)}
+              >
+                <p>{destination?.title}</p>
+              </div>
+            ))
+          ) : (
+            <div>검색 결과가 없습니다.</div>
+          )}
+          <Pagination
+            destinations={filteredDestinations}
+            setSlicedDestinations={setSlicedDestinations}
+          />
+        </section>
+        <DestinationDetails
+          clickedDestination={clickedDestination}
+          setClickedDestination={setClickedDestination}
         />
-      </section>
-      <DestinationDetails
-        clickedDestination={clickedDestination}
-        setClickedDestination={setClickedDestination}
-      />
+      </div>
       <Map
         markersLocations={
           clickedDestination !== null
