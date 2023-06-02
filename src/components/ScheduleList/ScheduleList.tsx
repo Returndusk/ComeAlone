@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import axios from 'axios';
+import ScheduleListDummy from './ScheduleListDummy';
 
 export type ScheduleType = {
   id: string;
@@ -31,6 +32,7 @@ function ScheduleLists() {
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setError(error.message);
+        setScheduleList(ScheduleListDummy);
       }
     }
   }, []);
