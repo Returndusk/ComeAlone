@@ -43,7 +43,8 @@ function MapWithWaypoints({ markersLocations }: MapPropsType) {
     const bounds = new kakao.maps.LatLngBounds();
     const polylinePath = Array.from(
       markersLocations.map(
-        (marker) => new kakao.maps.LatLng(marker.mapy, marker.mapx)
+        (marker) =>
+          new kakao.maps.LatLng(Number(marker?.mapy), Number(marker?.mapx))
       )
     );
     console.log(polylinePath);
@@ -59,7 +60,10 @@ function MapWithWaypoints({ markersLocations }: MapPropsType) {
     polyline.setMap(map);
 
     markersLocations.forEach((marker, index) => {
-      const position = new kakao.maps.LatLng(marker.mapy, marker.mapx);
+      const position = new kakao.maps.LatLng(
+        Number(marker?.mapy),
+        Number(marker?.mapx)
+      );
       let imageSrc = '';
       if (index <= MARKER_IMAGE_SRC.MAXIMUM_INDEX) {
         imageSrc = MARKER_IMAGE_SRC.NUMBERED_MARKER;
