@@ -61,7 +61,7 @@ function Map({ markersLocations }: MapPropsType) {
       newMarker.setMap(map);
       bounds.extend(position);
     });
-    map.setBounds(bounds);
+    map.setBounds(bounds, 32, 32, 32, 350);
   }, [markersLocations]);
 
   return (
