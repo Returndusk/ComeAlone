@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Map.module.scss';
-import { DestinationsType } from '../DestinationList/Types';
+import { DestinationsType } from '../../DestinationList/Types';
 
 declare global {
   interface Window {
@@ -10,6 +10,9 @@ declare global {
 
 type MapPropsType = {
   markersLocations: DestinationsType[];
+  setClickedDestination: React.Dispatch<
+    React.SetStateAction<DestinationsType | null>
+  >;
 };
 
 //제주도 시청을 map의 default 위치로 설정함.
@@ -20,10 +23,10 @@ const DEFAULT_LOCATION = {
 
 const { kakao } = window;
 
-function Map({ markersLocations }: MapPropsType) {
+function Map({ markersLocations, setClickedDestination }: MapPropsType) {
   const [prevMarkersLocations, setPrevMarkersLocations] =
     useState(markersLocations);
-  let markers = markersLocations;
+  let markers = [...markersLocations];
 
   useEffect(() => {
     setPrevMarkersLocations(markersLocations);
@@ -60,8 +63,12 @@ function Map({ markersLocations }: MapPropsType) {
       });
       newMarker.setMap(map);
       bounds.extend(position);
+
+      kakao.maps.event.addListener(newMarker, 'click', function () {
+        setClickedDestination(marker);
+      });
     });
-    map.setBounds(bounds);
+    map.setBounds(bounds, 36, 32, 32, 350);
   }, [markersLocations]);
 
   return (
