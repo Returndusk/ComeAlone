@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './ScheduleDetail.module.scss';
 import { FaHeart, FaCommentAlt } from 'react-icons/fa';
 
-function ScheduleDetailIconsComponent({
+function IconsScheduleDetail({
   likesAmount,
   reviewsAmount
 }: {
@@ -23,4 +23,4 @@ function ScheduleDetailIconsComponent({
   );
 }
 
-export default ScheduleDetailIconsComponent;
+export default IconsScheduleDetail;

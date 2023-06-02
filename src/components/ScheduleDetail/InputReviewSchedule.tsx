@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './ScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
 
-function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
+function InputReviewSchedule({ onSubmit }: { onSubmit: any }) {
   const [reviewTyping, setReviewTyping] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -28,4 +28,4 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
   );
 }
 
-export default ScheduleReviewInputComponent;
+export default InputReviewSchedule;

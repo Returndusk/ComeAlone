@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ScheduleDetail.module.scss';
 
-function ScheduleDetailInfoComponent({
+function InfoScheduleDetail({
   schedule
 }: {
   schedule: {
@@ -30,4 +30,4 @@ function ScheduleDetailInfoComponent({
   );
 }
 
-export default ScheduleDetailInfoComponent;
+export default InfoScheduleDetail;

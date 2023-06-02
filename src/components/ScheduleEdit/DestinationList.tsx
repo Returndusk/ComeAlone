@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ScheduleEdit.module.scss';
 
-function DestinationListComponent({
+function DestinationList({
   destinations,
   onChecked
 }: {
@@ -59,4 +59,4 @@ function DestinationListComponent({
   );
 }
 
-export default DestinationListComponent;
+export default DestinationList;

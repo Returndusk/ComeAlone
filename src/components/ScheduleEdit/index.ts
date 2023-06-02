@@ -1,11 +1,11 @@
-import ScheduleEditImageComponent from './ScheduleEditImage';
-import ScheduleEditDateComponent from './ScheduleEditDate';
-import ScheduleEditInfoComponent from './ScheduleDetailInfo';
-import DestinationListComponent from './DestinationList';
+import ImageScheduleEdit from './ImageScheduleEdit';
+import DateScheduleEdit from './DateScheduleEdit';
+import InfoScheduleEdit from './InfoScheduleEdit';
+import DestinationList from './DestinationList';
 
 export {
-  ScheduleEditImageComponent,
-  ScheduleEditDateComponent,
-  ScheduleEditInfoComponent,
-  DestinationListComponent
+  ImageScheduleEdit,
+  DateScheduleEdit,
+  InfoScheduleEdit,
+  DestinationList
 };

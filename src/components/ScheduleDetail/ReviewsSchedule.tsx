@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './ScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
 
-function ScheduleReviewsComponent({
+function ReviewsSchedule({
   reviews
 }: {
   reviews: { writer: string; comment: string }[];
@@ -26,4 +26,4 @@ function ScheduleReviewsComponent({
   );
 }
 
-export default ScheduleReviewsComponent;
+export default ReviewsSchedule;

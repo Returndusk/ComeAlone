@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ScheduleDetail.module.scss';
 
-function ScheduleDetailImageComponent({ image }: { image: string }) {
+function ImageScheduleDetail({ image }: { image: string }) {
   return (
     <div className={styles.imageWrapper}>
       <img className={styles.image} src={image} alt='representative-image' />
@@ -9,4 +9,4 @@ function ScheduleDetailImageComponent({ image }: { image: string }) {
   );
 }
 
-export default ScheduleDetailImageComponent;
+export default ImageScheduleDetail;

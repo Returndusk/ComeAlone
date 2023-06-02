@@ -10,7 +10,7 @@ import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 
-function ScheduleEditDateComponent({
+function DateScheduleEdit({
   duration,
   startDate,
   endDate,
@@ -103,4 +103,4 @@ function ScheduleEditDateComponent({
   );
 }
 
-export default ScheduleEditDateComponent;
+export default DateScheduleEdit;
