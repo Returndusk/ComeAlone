@@ -7,8 +7,8 @@ function ScheduleList() {
   return (
     <div>
       <CreateScheduleModal />
-      {ScheduleLists()}
-      {ScrollTop()}
+      <ScheduleLists />
+      <ScrollTop />
     </div>
   );
 }
