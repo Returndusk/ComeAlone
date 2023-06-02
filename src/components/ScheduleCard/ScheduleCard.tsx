@@ -3,7 +3,7 @@ import styles from './ScheduleCard.module.scss';
 import { Link } from 'react-router-dom';
 import { ScheduleType } from '../ScheduleList/ScheduleList';
 
-export function ScheduleCard(schedule: ScheduleType, index: number) {
+function ScheduleCard(schedule: ScheduleType, index: number) {
   const endDate = new Date(schedule.end_date);
   const startDate = new Date(schedule.start_date);
   const createdAt = schedule.createdAt;
@@ -34,3 +34,5 @@ export function ScheduleCard(schedule: ScheduleType, index: number) {
     </Link>
   );
 }
+
+export default ScheduleCard;

@@ -12,7 +12,7 @@
   padding-right: 15%;
   display: flex;
   position: relative;
-  transform: translateY(100%);
+  height: 140px;
 
   .layoutLeft {
     font-family: 'WandohopeR';
@@ -27,7 +27,10 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
     width: 50%;
-    line-height: 0;
+    p {
+      padding: 5px 5px;
+    }
   }
 }
