@@ -96,6 +96,7 @@ function Search() {
     }
   }, [search]);
 
+  // searchQuery가 undefined, null인 경우, 빈 문자열을 입력한 것으로 간주하고 처리
   useEffect(() => {
     if (searchQuery !== '') {
       const results = searchDestinations(searchQuery ?? '');
@@ -106,6 +107,7 @@ function Search() {
 
   return (
     <>
+      {/*searchQuery가 빈 문자열인 경우, 경고창 띄우기(추후 여유가 된다면 모달 창으로 리팩토링) */}
       {searchQuery === '' && alert('검색어를 입력해주세요.')}
       <div className={styles.filterContainer}>
         <div className={styles.searchContainer}>
