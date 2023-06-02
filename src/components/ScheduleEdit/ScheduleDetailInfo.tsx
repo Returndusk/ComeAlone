@@ -18,7 +18,7 @@ function ScheduleEditInfoComponent({
   handleDescription: any;
 }) {
   return (
-    <div className={styles['schedule-info-wrapper']}>
+    <div className={styles.ScheduleInfoWrapper}>
       <TextField
         className={styles.title}
         required

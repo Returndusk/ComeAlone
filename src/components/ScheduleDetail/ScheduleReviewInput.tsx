@@ -10,14 +10,14 @@ function ScheduleReviewInputComponent({ onSubmit }: { onSubmit: any }) {
   };
 
   return (
-    <div className={styles['review-input-wrapper']}>
-      <Avatar className={styles['reviews-input-writer']}>B</Avatar>
+    <div className={styles.reviewInputWrapper}>
+      <Avatar className={styles.reviewsInputWriter}>B</Avatar>
       <textarea
-        className={styles['reviews-input-text']}
+        className={styles.reviewsInputText}
         onChange={handleChange}
       ></textarea>
       <button
-        className={styles['reviews-input-button']}
+        className={styles.reviewsInputButton}
         onClick={() => {
           onSubmit(reviewTyping);
         }}

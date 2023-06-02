@@ -80,7 +80,7 @@ function ScheduleEdit() {
         handleEndDate={setEndDate}
         handleDuration={setDuration}
       />
-      <div className={styles['public-status']}>
+      <div className={styles.publicStatus}>
         <FormGroup>
           <FormControlLabel
             control={
@@ -110,7 +110,7 @@ function ScheduleEdit() {
           <div key={index}>{dest}</div>
         ))}
       </div>
-      <div className={styles['confirm-button-wrapper']}>
+      <div className={styles.confirmButtonWrapper}>
         <button
           onClick={() =>
             onSubmit(title, description, startDate, endDate, duration, isPublic)

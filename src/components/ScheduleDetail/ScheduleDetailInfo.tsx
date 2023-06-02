@@ -18,7 +18,7 @@ function ScheduleDetailInfoComponent({
     schedule;
 
   return (
-    <div className={styles['schedule-info-wrapper']}>
+    <div className={styles.scheduleInfoWrapper}>
       <div className={styles.duration}>
         {`${startDate} ~ ${endDate} (${duration}일)`}
       </div>

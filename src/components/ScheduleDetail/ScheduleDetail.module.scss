@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-.image-wrapper {
+.imageWrapper {
   width: 100%;
   height: 400px;
   grid-column: 1 / 4;
@@ -22,7 +22,7 @@
   border-radius: 10px;
 }
 
-.schedule-info-wrapper {
+.scheduleInfoWrapper {
   grid-column: 1 / 3;
   grid-row: 2 / 4;
   margin: 30px 0 40px 0;
@@ -48,19 +48,19 @@
   }
 }
 
-.edit-button-wrapper {
+.editButtonWrapper {
   justify-self: self-end;
   align-self: self-start;
   margin-top: 20px;
   padding: 20px 0 0 0;
 
-  .edit-button {
+  .editButton {
     width: 50%;
     height: 40px;
   }
 }
 
-.icons-wrapper {
+.iconsWrapper {
   justify-self: self-end;
   align-self: self-start;
   font-size: 26px;
@@ -69,33 +69,33 @@
     font-size: 26px;
     color: red;
 
-    #likes-icon {
+    #likesIcon {
       margin: 0 5px 0 0;
       font-size: 20px;
     }
   }
 
-  #review-number {
+  #reviewNumber {
     font-size: 26px;
 
-    #review-number-icon {
+    #reviewNumberIcon {
       margin: 0 5px 0 20px;
       font-size: 20px;
     }
   }
 }
 
-.destinations-wrapper {
+.destinationsWrapper {
   grid-column: 1 / 2;
   height: 500px;
 
-  .destinations-title {
+  .destinationsTitle {
     margin: 0 0 20px 0;
     font-weight: bold;
     font-size: 24px;
   }
 
-  .destinations-list {
+  .destinationsList {
     height: 85%;
     margin: 20px 0 0 0;
     overflow-x: hidden;
@@ -117,7 +117,7 @@
       background: #ffffff;
     }
 
-    .destinations-day {
+    .destinationsDay {
       $spacer: 1rem;
       $gray: #888;
       $gray--lightest: lighten($gray, 35%);
@@ -181,18 +181,18 @@
   }
 }
 
-.reviews-wrapper {
+.reviewsWrapper {
   height: 300px;
   grid-column: 1 / 4;
   margin: 60px 0 10px 0;
 
-  .reviews-title {
+  .reviewsTitle {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
   }
 
-  .reviews-list {
+  .reviewsList {
     width: 80%;
     height: 80%;
     overflow-y: scroll;
@@ -202,11 +202,8 @@
       flex-direction: row;
       margin: 20px 0;
 
-      .review-writer {
+      .reviewWriter {
         margin: 0 20px 0 10px;
-      }
-
-      .review-comment {
       }
     }
 
@@ -228,23 +225,23 @@
   }
 }
 
-.review-input-wrapper {
+.reviewInputWrapper {
   grid-column: 1 / 4;
   display: flex;
   flex-direction: row;
   margin: 20px 0 0 0;
 
-  .reviews-input-writer {
+  .reviewsInputWriter {
     margin: 0 20px 0 10px;
     vertical-align: top;
   }
 
-  .reviews-input-text {
+  .reviewsInputText {
     width: 70%;
     height: 40px;
   }
 
-  .reviews-input-button {
+  .reviewsInputButton {
     width: 10%;
     height: 40px;
     margin: 0 0 0 20px;

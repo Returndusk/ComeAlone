@@ -3,7 +3,7 @@ import styles from './ScheduleEdit.module.scss';
 
 function ScheduleEditImageComponent({ image }: { image: string }) {
   return (
-    <div className={styles['image-wrapper']}>
+    <div className={styles.imageWrapper}>
       <img
         className={styles.image}
         src={image}

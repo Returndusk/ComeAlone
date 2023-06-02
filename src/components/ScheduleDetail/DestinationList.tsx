@@ -11,8 +11,8 @@ function DestinationListComponent({
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
   return (
-    <div className={styles['destinations-wrapper']}>
-      <div className={styles['destinations-title']}>목적지 리스트</div>
+    <div className={styles.destinationsWrapper}>
+      <div className={styles.destinationsTitle}>목적지 리스트</div>
       <label>
         <input
           type='checkbox'
@@ -24,12 +24,12 @@ function DestinationListComponent({
         />
         전체 목적지 보기
       </label>
-      <div className={styles['destinations-list']}>
+      <div className={styles.destinationsList}>
         {destinations.map((destOfDay, index) => {
           return (
             <ol
               key={index}
-              className={styles['destinations-day']}
+              className={styles.destinationsDay}
               id={'day' + (index + 1).toString()}
             >
               <label>
