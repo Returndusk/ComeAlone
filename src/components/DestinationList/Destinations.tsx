@@ -42,10 +42,12 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
             setSlicedDestinations={setSlicedDestinations}
           />
         </section>
-        <DestinationDetails
-          clickedDestination={clickedDestination}
-          setClickedDestination={setClickedDestination}
-        />
+        <section>
+          <DestinationDetails
+            clickedDestination={clickedDestination}
+            setClickedDestination={setClickedDestination}
+          />
+        </section>
       </div>
       <Map
         markersLocations={

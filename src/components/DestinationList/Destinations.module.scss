@@ -7,8 +7,9 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(20, 1fr) minmax(0, 10px);
-  border: 1px solid #000;
-  width: 300px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  width: 300px; //search bar, category container와 동일
   height: 100%; // map-2px(border 너비)과 동일함.
   overflow-y: auto;
   position: relative;
