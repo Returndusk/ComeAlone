@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Map.module.scss';
-import { DestinationsType } from '../DestinationList/Types';
+import { DestinationsType } from '../../DestinationList/Types';
 
 declare global {
   interface Window {
@@ -23,7 +23,7 @@ const { kakao } = window;
 function Map({ markersLocations }: MapPropsType) {
   const [prevMarkersLocations, setPrevMarkersLocations] =
     useState(markersLocations);
-  let markers = markersLocations;
+  let markers = [...markersLocations];
 
   useEffect(() => {
     setPrevMarkersLocations(markersLocations);

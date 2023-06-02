@@ -5,10 +5,12 @@ import Search from '../components/DestinationList/Search';
 
 function DestinationList() {
   return (
-    <Layout>
-      <Search />
+    <>
+      <Layout>
+        <Search />
+      </Layout>
       <AddToScheduleModal />
-    </Layout>
+    </>
   );
 }
 

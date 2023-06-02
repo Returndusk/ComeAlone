@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Pagination from './Pagination';
 import DestinationDetails from './DestinationDetails';
-import Map from '../common/Map';
+import Map from '../common/Map/Map';
 import styles from './Destinations.module.scss';
 import { DestinationsType } from './Types';
 
