@@ -76,7 +76,11 @@ function ScheduleLists() {
       </div>
       <div className={styles.scheduleCardContainer}>
         {scheduleList.map((schedule: ScheduleType, index: number) => (
-          <ScheduleCard schedule={schedule} key={index} />
+          <ScheduleCard
+            schedule={schedule}
+            key={index}
+            link='/schedule/detail'
+          />
         ))}
         <div className={styles.scheduleAdd}>일정 추가하기</div>
       </div>

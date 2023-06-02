@@ -1,12 +1,14 @@
 import React from 'react';
 import styles from './ScheduleCard.module.scss';
 import { ScheduleType } from '../ScheduleList/ScheduleList';
+import { Link } from 'react-router-dom';
 
-type ScheduleProps = {
+type PropsType = {
   schedule: ScheduleType;
+  link: string;
 };
 
-function ScheduleCard({ schedule }: ScheduleProps) {
+function ScheduleCard({ schedule, link }: PropsType) {
   const endDate = new Date(schedule.end_date);
   const startDate = new Date(schedule.start_date);
   const createdAt = schedule.createdAt;
@@ -14,7 +16,7 @@ function ScheduleCard({ schedule }: ScheduleProps) {
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
 
   return (
-    <div className={styles.scheduleCard}>
+    <Link to={link} className={styles.scheduleCard}>
       <div className={styles.scheduleCardContent}>
         <div className={styles.scheduleContent}>
           <div className={styles.scheduleText}>
@@ -37,7 +39,7 @@ function ScheduleCard({ schedule }: ScheduleProps) {
         </div>
         <img src={schedule.image} className={styles.image} />
       </div>
-    </div>
+    </Link>
   );
 }
 
