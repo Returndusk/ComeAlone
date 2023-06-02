@@ -105,15 +105,7 @@ function ScheduleDetail() {
   return (
     <div className={styles.container}>
       <ScheduleDetailImageComponent image={schedule.image} />
-      <ScheduleDetailInfoComponent
-        duration={schedule.duration}
-        title={schedule.title}
-        writer={schedule.createdBy}
-        startDate={schedule.startDate}
-        endDate={schedule.endDate}
-        date={schedule.createdAt}
-        description={schedule.summary}
-      />
+      <ScheduleDetailInfoComponent schedule={schedule} />
       <div className={styles['edit-button-wrapper']}>
         <Link to='/schedule/edit' className={styles['edit-button']}>
           수정하기
