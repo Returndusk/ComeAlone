@@ -19,6 +19,7 @@ export type ScheduleType = {
   status: string;
   destinations: string[];
   likes: number;
+  image: string;
 };
 
 type ScheduleListType = ScheduleType[];

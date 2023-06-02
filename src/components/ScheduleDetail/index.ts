@@ -1,15 +1,15 @@
-import ScheduleDetailImageComponent from './ScheduleDetailImage';
-import ScheduleDetailInfoComponent from './ScheduleDetailInfo';
-import ScheduleDetailIconsComponent from './ScheduleDetailIcons';
-import DestinationListComponent from './DestinationList';
-import ScheduleReviewsComponent from './ScheduleReviews';
-import ScheduleReviewInputComponent from './ScheduleReviewInput';
+import ImageScheduleDetail from './ImageScheduleDetail';
+import InfoScheduleDetail from './InfoScheduleDetail';
+import IconsScheduleDetail from './IconsScheduleDetail';
+import DestinationList from './DestinationList';
+import ReviewsSchedule from './ReviewsSchedule';
+import InputReviewSchedule from './InputReviewSchedule';
 
 export {
-  ScheduleDetailImageComponent,
-  ScheduleDetailInfoComponent,
-  ScheduleDetailIconsComponent,
-  DestinationListComponent,
-  ScheduleReviewsComponent,
-  ScheduleReviewInputComponent
+  ImageScheduleDetail,
+  InfoScheduleDetail,
+  IconsScheduleDetail,
+  DestinationList,
+  ReviewsSchedule,
+  InputReviewSchedule
 };
