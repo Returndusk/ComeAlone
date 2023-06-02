@@ -113,7 +113,7 @@ function Category({ destinations }: CategoryPropsType) {
 
   return (
     <>
-      <div>
+      <div className={styles.categoryContainer}>
         <button
           onClick={handleAllClick}
           className={
