@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styles from './MapWithWaypoints.module.scss';
-import { DestinationsType } from '../DestinationList/Types';
+import { DestinationsType } from '../../DestinationList/Types';
 
 declare global {
   interface Window {

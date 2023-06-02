@@ -32,49 +32,51 @@ function Header() {
 
   return (
     <div className={styles.layout}>
-      <div className={styles.layoutLeft}>
-        <Link to='/' className={styles.logo}>
-          혼자옵서예
-        </Link>
-        <nav>
-          <ul>
-            <Link to='/destination/list'>목적지</Link>
-            <Link to='/schedule/list'>여행일정</Link>
-          </ul>
-        </nav>
-      </div>
-      <div className={styles.layoutRight}>
-        <Weather />
-        <Link to='/schedule/edit'>
-          <BiCalendar className={styles.calendar} />
-        </Link>
-        <div className={styles.auth}>
-          <BiUserCircle
-            className={`${styles.userIcon} ${
-              isDropdownOpen ? styles.open : ''
-            }`}
-            onClick={handleUserIconClick}
-          />
-
-          {isDropdownOpen && (
-            <div className={styles.dropdownMenu} ref={dropdownRef}>
-              <Link to='/mypage' onClick={() => setDropdownOpen(false)}>
-                마이페이지
-              </Link>
-              <br />
-              <Link to='/logout' onClick={() => setDropdownOpen(false)}>
-                로그아웃
-              </Link>
-            </div>
-          )}
-
-          <Link to='/login'>
-            <span>로그인</span>
+      <div className={styles.body}>
+        <div className={styles.layoutLeft}>
+          <Link to='/' className={styles.logo}>
+            혼자옵서예
           </Link>
-          {' | '}
-          <Link to='/register'>
-            <span>회원 가입</span>
+          <nav>
+            <ul>
+              <Link to='/destination/list'>목적지</Link>
+              <Link to='/schedule/list'>여행일정</Link>
+            </ul>
+          </nav>
+        </div>
+        <div className={styles.layoutRight}>
+          <Weather />
+          <Link to='/schedule/edit'>
+            <BiCalendar className={styles.calendar} />
           </Link>
+          <div className={styles.auth}>
+            <BiUserCircle
+              className={`${styles.userIcon} ${
+                isDropdownOpen ? styles.open : ''
+              }`}
+              onClick={handleUserIconClick}
+            />
+
+            {isDropdownOpen && (
+              <div className={styles.dropdownMenu} ref={dropdownRef}>
+                <Link to='/mypage' onClick={() => setDropdownOpen(false)}>
+                  마이페이지
+                </Link>
+                <br />
+                <Link to='/logout' onClick={() => setDropdownOpen(false)}>
+                  로그아웃
+                </Link>
+              </div>
+            )}
+
+            <Link to='/login'>
+              <span>로그인</span>
+            </Link>
+            {' | '}
+            <Link to='/register'>
+              <span>회원 가입</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
