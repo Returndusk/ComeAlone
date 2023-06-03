@@ -9,6 +9,7 @@ import {
   ReviewsSchedule,
   InputReviewSchedule
 } from '../components/ScheduleDetail';
+import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
   destinations,
   schedule,
@@ -16,6 +17,7 @@ import {
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
+import { DestinationsType } from '../components/DestinationList/Types';
 
 function ScheduleDetail() {
   const [reviewInput, setReviewInput] = useState('');
@@ -23,7 +25,7 @@ function ScheduleDetail() {
     destinations.flat()
   );
 
-  const onDestinationsChecked = (destinations: string[]) => {
+  const onDestinationsChecked = (destinations: DestinationsType[]) => {
     setCheckedDestinations(destinations);
   };
 
@@ -48,11 +50,14 @@ function ScheduleDetail() {
         destinations={destinations}
         onChecked={onDestinationsChecked}
       />
-      <div className={styles.map}>
+      <div className={styles.mapWrapper}>
+        <MapWithWaypoints markersLocations={checkedDestinations} />
+      </div>
+      {/* <div className={styles.map}>
         {checkedDestinations.map((dest, index) => (
           <div key={index}>{dest}</div>
         ))}
-      </div>
+      </div> */}
       <ReviewsSchedule reviews={reviews} />
       <InputReviewSchedule onSubmit={onReviewSubmit} />
       {reviewInput}

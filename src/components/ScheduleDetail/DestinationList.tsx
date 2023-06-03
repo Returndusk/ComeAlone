@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styles from './ScheduleDetail.module.scss';
+import { DestinationsType } from '../DestinationList/Types';
 
 function DestinationList({
   destinations,
   onChecked
 }: {
-  destinations: string[][];
+  destinations: DestinationsType[][];
   onChecked: any;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
@@ -49,7 +50,7 @@ function DestinationList({
                 Day {index + 1}
               </label>
               {destOfDay.map((dest, index) => (
-                <li key={index}>{dest}</li>
+                <li key={index}>{dest.title}</li>
               ))}
             </ol>
           );
