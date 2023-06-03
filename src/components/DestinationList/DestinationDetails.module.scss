@@ -5,12 +5,19 @@
   background-color: #fff;
   // padding: 20px;
   border: 1px solid #ccc;
+  border-radius: 20px;
+
   z-index: 100;
   overflow-y: auto;
 
-  width: 250px;
-  height: 100%;
+  width: 330px;
+  height: 123.5%;
+  bottom: 23.5%;
   // height: 500px;
+}
+
+.destinationDetails {
+  padding: 20px;
 }
 
 .detailsButtonContainer {

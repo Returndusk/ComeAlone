@@ -1,6 +1,8 @@
 .filterContainer {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  box-sizing: border-box;
 }
 
 .searchContainer {
@@ -9,4 +11,6 @@
   width: 420px;
   z-index: 1000;
   background-color: #fff;
+
+  padding: 15px 0; // categoryContainer의 padding과 동일
 }

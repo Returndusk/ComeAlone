@@ -15,8 +15,15 @@
   justify-content: flex-start;
   z-index: 1000;
 
+  /*
+  div:not(:last-child) {
+    box-sizing: border-box;
+    padding: 15px;
+  }
+  */
+
   .destinations {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #ccc;
 
     &:hover {
       cursor: pointer;
