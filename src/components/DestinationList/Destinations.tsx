@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Pagination from './Pagination';
 import DestinationDetails from './DestinationDetails';
 import Map from '../common/Map/Map';
@@ -15,6 +15,13 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
   >(filteredDestinations);
   const [clickedDestination, setClickedDestination] =
     useState<DestinationsType | null>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (clickedDestination !== null) {
+      setIsOpen(() => true);
+    }
+  }, [clickedDestination]);
 
   const handleDestinationClick = (destination: DestinationsType) => {
     setClickedDestination(() => destination);
@@ -33,7 +40,7 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
                     className={styles.destinations}
                     onClick={() => handleDestinationClick(destination)}
                   >
-                    <p>{destination?.title}</p>
+                    <h2>{destination?.title}</h2>
                     <p>{destination?.addr1}</p>
                   </div>
                 )
@@ -48,12 +55,15 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
           )}
         </section>
 
-        <section>
-          <DestinationDetails
-            clickedDestination={clickedDestination}
-            setClickedDestination={setClickedDestination}
-          />
-        </section>
+        {isOpen && filteredDestinations.length > 0 && (
+          <section>
+            <DestinationDetails
+              clickedDestination={clickedDestination}
+              setClickedDestination={setClickedDestination}
+              setIsOpen={setIsOpen}
+            />
+          </section>
+        )}
       </div>
       <Map
         markersLocations={
