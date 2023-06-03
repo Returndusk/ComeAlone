@@ -14,6 +14,11 @@
   bottom: 31.7%;
   box-sizing: border-box;
   box-shadow: 2px 0 0 0 rgba(96, 101, 105, 0.3);
+
+  button {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .destinationDetails {
@@ -21,8 +26,16 @@
 }
 
 .detailsButtonContainer {
-  button {
-    width: 5px;
-    height: 7px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.detailsLikesButton {
+  background-color: #fff;
+  border: none;
+  font-size: 24px;
+
+  .detailsLikesUpButton {
+    cursor: pointer;
   }
 }
