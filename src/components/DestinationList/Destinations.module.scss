@@ -10,7 +10,8 @@
   background-color: #fff;
   width: 420px; //search bar, category container와 동일
   height: 100%; // map-2px(border 너비)과 동일함.
-  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
   position: relative;
   justify-content: flex-start;
   z-index: 1000;
