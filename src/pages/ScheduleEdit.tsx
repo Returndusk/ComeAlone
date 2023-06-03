@@ -4,12 +4,10 @@ import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import {
-  ImageScheduleEdit,
-  DateScheduleEdit,
-  InfoScheduleEdit,
-  DestinationList
-} from '../components/ScheduleEdit';
+import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
+import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
+import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
+import DestinationList from '../components/ScheduleEdit/DestinationList';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
 
 function ScheduleEdit() {

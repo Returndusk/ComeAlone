@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
-import {
-  ImageScheduleDetail,
-  InfoScheduleDetail,
-  IconsScheduleDetail,
-  DestinationList,
-  ReviewsSchedule,
-  InputReviewSchedule
-} from '../components/ScheduleDetail';
+import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
+import InfoScheduleDetail from '../components/ScheduleDetail/InfoScheduleDetail';
+import IconsScheduleDetail from '../components/ScheduleDetail/IconsScheduleDetail';
+import DestinationList from '../components/ScheduleDetail/DestinationList';
+import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
+import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
   destinations,
