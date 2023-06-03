@@ -35,6 +35,7 @@ function DestinationList({
             >
               <label>
                 <input
+                  className={styles.dayCheckBox}
                   type='checkbox'
                   checked={checkedDayIndex === index}
                   onChange={() => {
