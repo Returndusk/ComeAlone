@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './ScheduleDetail.module.scss';
+import Avatar from '@mui/material/Avatar';
 
 function InfoScheduleDetail({
   schedule
@@ -23,7 +24,12 @@ function InfoScheduleDetail({
         {`${startDate} ~ ${endDate} (${duration}일)`}
       </div>
       <div className={styles.title}>{title}</div>
-      <div className={styles.writer}>{createdBy}</div>
+      <div className={styles.writer}>
+        <span className={styles.writerAvatar}>
+          <Avatar>{createdBy}</Avatar>
+        </span>
+        {createdBy}
+      </div>
       <div className={styles.date}>{createdAt}</div>
       <p>{summary}</p>
     </div>

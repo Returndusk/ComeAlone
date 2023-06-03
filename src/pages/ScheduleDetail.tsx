@@ -53,11 +53,6 @@ function ScheduleDetail() {
       <div className={styles.mapWrapper}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
       </div>
-      {/* <div className={styles.map}>
-        {checkedDestinations.map((dest, index) => (
-          <div key={index}>{dest}</div>
-        ))}
-      </div> */}
       <ReviewsSchedule reviews={reviews} />
       <InputReviewSchedule onSubmit={onReviewSubmit} />
       {reviewInput}
