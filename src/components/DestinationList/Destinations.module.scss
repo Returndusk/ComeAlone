@@ -35,3 +35,16 @@
 .destinationsInfoContainer {
   display: flex;
 }
+
+.alertContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #c1c1c1;
+
+  .alertIcon {
+    width: 100px;
+    height: 100px;
+  }
+}

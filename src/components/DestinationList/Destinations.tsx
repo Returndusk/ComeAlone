@@ -4,6 +4,7 @@ import DestinationDetails from './DestinationDetails';
 import Map from '../common/Map/Map';
 import styles from './Destinations.module.scss';
 import { DestinationsType } from './Types';
+import { CiCircleAlert } from 'react-icons/ci';
 
 type DestinationsPropsType = {
   filteredDestinations: DestinationsType[] | [];
@@ -57,7 +58,10 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
               />
             </>
           ) : (
-            <div>검색 결과가 없습니다.</div>
+            <div className={styles.alertContainer}>
+              <CiCircleAlert className={styles.alertIcon} />
+              <p>검색 결과가 없습니다.</p>
+            </div>
           )}
         </section>
 
