@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './ScheduleEdit.module.scss';
+import styles from './DateScheduleEdit.module.scss';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -59,7 +59,7 @@ function DateScheduleEdit({
 
   return (
     <>
-      <div className={styles.durationWrapper}>
+      <div className={styles.dateContainer}>
         <span className={styles.duration}>
           {`${startDate.toLocaleDateString(
             'ko-KR'
@@ -75,7 +75,7 @@ function DateScheduleEdit({
         <Box className={styles.durationEditModal}>
           <p>수정하실 날짜를 선택하세요.</p>
           <DateRange
-            className={styles.durationEditDate}
+            className={styles.durationEditModalDate}
             locale={ko}
             editableDateInputs={true}
             onChange={(range) => {
@@ -94,7 +94,10 @@ function DateScheduleEdit({
             months={2}
             direction='horizontal'
           />
-          <button className={styles.durationEditConfirm} onClick={handleClose}>
+          <button
+            className={styles.durationEditModalConfirm}
+            onClick={handleClose}
+          >
             완료
           </button>
         </Box>

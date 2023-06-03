@@ -1,0 +1,80 @@
+.destinationsContainer {
+  grid-column: 1 / 2;
+  height: 500px;
+
+  .destinationsTitle {
+    margin: 0 0 20px 0;
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+  .destinationsList {
+    height: 85%;
+    margin: 20px 0 0 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      background: #ffffff;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3.5px;
+      background-color: #ced4da;
+
+      &:hover {
+        background-color: #adb5bd;
+      }
+    }
+    &::-webkit-scrollbar-track {
+      background: #ffffff;
+    }
+
+    .destinationsDay {
+      $spacer: 1rem;
+      $gray: #888;
+      $gray--lightest: lighten($gray, 35%);
+      $font-size--base: 1rem;
+      $default-color: black;
+
+      margin: 0 0 30px 0;
+      font-size: 20px;
+      list-style: none;
+      padding-left: $spacer;
+      counter-reset: circle-counter;
+      border-left: 2px solid $gray--lightest;
+
+      li {
+        font-size: 16px;
+        margin: 10px 0 10px 0;
+
+        counter-increment: circle-counter;
+        margin-bottom: $spacer * 0.25;
+
+        &:before {
+          content: counter(circle-counter);
+          background-color: $gray--lightest;
+          width: $font-size--base * 1.5;
+          height: $font-size--base * 1.5;
+          border-radius: 50%;
+          display: inline-block;
+          font-size: $font-size--base * 0.75;
+          line-height: $font-size--base * 1.5;
+          color: $default-color;
+          text-align: center;
+          margin-right: $spacer * 0.5;
+          position: relative;
+          top: -2px;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .number-circle-list--list-item {
+          margin-left: $spacer * 0.25;
+        }
+      }
+    }
+  }
+}

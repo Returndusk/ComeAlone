@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './ScheduleEdit.module.scss';
+import styles from './DestinationList.module.scss';
 
 function DestinationList({
   destinations,
@@ -11,7 +11,7 @@ function DestinationList({
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
   return (
-    <div className={styles.destinationsWrapper}>
+    <div className={styles.destinationsContainer}>
       <div className={styles.destinationsTitle}>목적지 리스트</div>
       <label>
         <input
