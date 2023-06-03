@@ -16,6 +16,7 @@ import {
   reviews
 } from '../components/ScheduleDetail/Dummy';
 import { DestinationsType } from '../components/DestinationList/Types';
+import { FaArrowLeft } from 'react-icons/fa';
 
 function ScheduleDetail() {
   const [reviewInput, setReviewInput] = useState('');
@@ -33,6 +34,10 @@ function ScheduleDetail() {
 
   return (
     <div className={styles.container}>
+      <Link to='/schedule/list' className={styles.backButton}>
+        <FaArrowLeft />
+        돌아가기
+      </Link>
       <ImageScheduleDetail image={schedule.image} />
       <InfoScheduleDetail schedule={schedule} />
       <div className={styles.editButtonContainer}>

@@ -9,6 +9,7 @@ import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import DestinationList from '../components/ScheduleEdit/DestinationList';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
+import { FaArrowLeft } from 'react-icons/fa';
 
 function ScheduleEdit() {
   const [dateInfo, setDateInfo] = useState({
@@ -42,6 +43,10 @@ function ScheduleEdit() {
 
   return (
     <div className={styles.container}>
+      <Link to='/schedule/detail' className={styles.backButton}>
+        <FaArrowLeft />
+        돌아가기
+      </Link>
       <ImageScheduleEdit image={schedule.image} />
       <DateScheduleEdit dateInfo={dateInfo} handleDateInfo={setDateInfo} />
       <div className={styles.publicStatus}>
