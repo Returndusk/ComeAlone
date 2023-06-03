@@ -109,8 +109,12 @@ function RegisterForm() {
     const pattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
     const hasAllowedChars = /^[0-9-]*$/;
 
+    if (!phoneNumber.includes('-')) {
+      return (errMsgs.phoneNumber = '하이픈(-)을 포함하여 입력해주세요.');
+    }
+
     if (!pattern.test(phoneNumber) || !hasAllowedChars.test(phoneNumber)) {
-      return (errMsgs.phoneNumber = '유효한 전화번호가 아닙니다.');
+      return (errMsgs.phoneNumber = '유효한 전화번호 형식이 아닙니다.');
     }
   };
 
@@ -256,9 +260,7 @@ function RegisterForm() {
             value={values.phoneNumber}
             onChange={handleChange}
           />
-          {!errors.phoneNumber && (
-            <p className={styles.msg}>하이픈(-)을 포함하여 입력해 주세요.</p>
-          )}
+          {!errors.phoneNumber && <p className={styles.msg}>하이픈(-) 포함</p>}
           {errors.phoneNumber && (
             <p className={styles.errMsg}>{errors.phoneNumber}</p>
           )}
