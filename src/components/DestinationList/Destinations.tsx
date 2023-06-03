@@ -23,6 +23,12 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
     }
   }, [clickedDestination]);
 
+  useEffect(() => {
+    if (filteredDestinations.length === 0) {
+      setIsOpen(() => false);
+    }
+  }, [filteredDestinations]);
+
   const handleDestinationClick = (destination: DestinationsType) => {
     setClickedDestination(() => destination);
   };
