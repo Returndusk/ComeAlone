@@ -3,17 +3,17 @@
   flex-direction: column;
   position: relative;
   background-color: #fff;
-  // padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
+  padding: 20px;
+  // border-radius: 20px;
 
   z-index: 100;
   overflow-y: auto;
 
   width: 330px;
-  height: 123.5%;
-  bottom: 23.5%;
-  // height: 500px;
+  height: 131.7%;
+  bottom: 31.7%;
+  box-sizing: border-box;
+  box-shadow: 2px 0 0 0 rgba(96, 101, 105, 0.3);
 }
 
 .destinationDetails {
