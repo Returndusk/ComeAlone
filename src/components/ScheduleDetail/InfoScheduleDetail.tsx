@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './ScheduleDetail.module.scss';
+import styles from './InfoScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
 
 function InfoScheduleDetail({
@@ -19,7 +19,7 @@ function InfoScheduleDetail({
     schedule;
 
   return (
-    <div className={styles.scheduleInfoWrapper}>
+    <div className={styles.scheduleInfoContainer}>
       <div className={styles.duration}>
         {`${startDate} ~ ${endDate} (${duration}일)`}
       </div>

@@ -37,7 +37,7 @@ function ScheduleDetail() {
     <div className={styles.container}>
       <ImageScheduleDetail image={schedule.image} />
       <InfoScheduleDetail schedule={schedule} />
-      <div className={styles.editButtonWrapper}>
+      <div className={styles.editButtonContainer}>
         <Link to='/schedule/edit' className={styles.editButton}>
           수정하기
         </Link>
@@ -50,7 +50,7 @@ function ScheduleDetail() {
         destinations={destinations}
         onChecked={onDestinationsChecked}
       />
-      <div className={styles.mapWrapper}>
+      <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
       </div>
       <ReviewsSchedule reviews={reviews} />
