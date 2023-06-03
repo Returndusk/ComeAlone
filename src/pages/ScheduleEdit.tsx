@@ -65,6 +65,7 @@ function ScheduleEdit() {
         handleTitle={setTitle}
         handleDescription={setDescription}
       />
+      <Link to='/destination/list'>새로운 목적지 추가하기</Link>
       <DestinationList
         destinations={destinations}
         onChecked={onDestinationsChecked}
