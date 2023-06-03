@@ -3,6 +3,7 @@ import { DestinationsType } from './Types';
 import styles from './DestinationDetails.module.scss';
 import { RiThumbUpFill } from 'react-icons/ri';
 import { RiThumbUpLine } from 'react-icons/ri';
+import Review from './Review';
 
 type DestinationDetailsPropsType = {
   clickedDestination: DestinationsType | null;
@@ -59,7 +60,9 @@ function DestinationDetails({
             </button>
             <div>{/*<button>내 일정에 추가</button>*/}</div>
           </section>
-          <section className={styles.detailsReviewsContainer}></section>
+          <section className={styles.detailsReviewsContainer}>
+            <Review clickedDestination={clickedDestination} />
+          </section>
         </div>
       )}
     </>
