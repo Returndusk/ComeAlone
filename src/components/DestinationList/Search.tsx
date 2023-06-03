@@ -4,6 +4,7 @@ import styles from './Search.module.scss';
 // import axios from 'axios';
 import Category from './Category';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 // 사용자에게 쿼리 받음 -> 검색 함수 전달 -> 검색함수가 쿼리랑, 목적지 받아서 검색 수행 -> 검색 결과 Destinations 파일에 전달
 
@@ -116,10 +117,10 @@ function Search() {
               id={styles.inputBar}
               type='text'
               name='searchQuery'
-              placeholder='목적지명을 입력해주세요.'
+              placeholder='목적지를 입력해주세요.'
             />
             <button id={styles.searchButton} type='submit'>
-              검색
+              <AiOutlineSearch />
             </button>
           </form>
         </div>
