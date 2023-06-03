@@ -24,24 +24,30 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
     <div className={styles.destinationContentsContainer}>
       <div className={styles.destinationsInfoContainer}>
         <section className={styles.destinationsContainer}>
-          {slicedDestinations.length > 0 ? (
-            slicedDestinations.map((destination: DestinationsType, index) => (
-              <div
-                key={index}
-                className={styles.destinations}
-                onClick={() => handleDestinationClick(destination)}
-              >
-                <p>{destination?.title}</p>
-              </div>
-            ))
+          {filteredDestinations.length > 0 ? (
+            <>
+              {slicedDestinations.map(
+                (destination: DestinationsType, index) => (
+                  <div
+                    key={index}
+                    className={styles.destinations}
+                    onClick={() => handleDestinationClick(destination)}
+                  >
+                    <p>{destination?.title}</p>
+                    <p>{destination?.addr1}</p>
+                  </div>
+                )
+              )}
+              <Pagination
+                filteredDestinations={filteredDestinations}
+                setSlicedDestinations={setSlicedDestinations}
+              />
+            </>
           ) : (
             <div>검색 결과가 없습니다.</div>
           )}
-          <Pagination
-            destinations={filteredDestinations}
-            setSlicedDestinations={setSlicedDestinations}
-          />
         </section>
+
         <section>
           <DestinationDetails
             clickedDestination={clickedDestination}
