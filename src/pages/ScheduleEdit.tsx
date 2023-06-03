@@ -11,9 +11,11 @@ import DestinationList from '../components/ScheduleEdit/DestinationList';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
 
 function ScheduleEdit() {
-  const [startDate, setStartDate] = useState(schedule.startDate);
-  const [endDate, setEndDate] = useState(schedule.endDate);
-  const [duration, setDuration] = useState(schedule.duration);
+  const [dateInfo, setDateInfo] = useState({
+    startDate: schedule.startDate,
+    endDate: schedule.endDate,
+    duration: schedule.duration
+  });
   const [isPublic, setIsPublic] = useState(schedule.isPublic);
   const [title, setTitle] = useState(schedule.title);
   const [description, setDescription] = useState(schedule.summary);
@@ -28,25 +30,20 @@ function ScheduleEdit() {
   const onSubmit = (
     title: string,
     description: string,
-    startDate: Date,
-    endDate: Date,
-    duration: string,
+    dateInfo: {
+      startDate: Date;
+      endDate: Date;
+      duration: string;
+    },
     isPublic: boolean
   ) => {
-    console.log({ title, description, startDate, endDate, duration, isPublic });
+    console.log({ ...dateInfo, title, description, isPublic });
   };
 
   return (
     <div className={styles.container}>
       <ImageScheduleEdit image={schedule.image} />
-      <DateScheduleEdit
-        duration={duration}
-        startDate={startDate}
-        endDate={endDate}
-        handleStartDate={setStartDate}
-        handleEndDate={setEndDate}
-        handleDuration={setDuration}
-      />
+      <DateScheduleEdit dateInfo={dateInfo} handleDateInfo={setDateInfo} />
       <div className={styles.publicStatus}>
         <FormGroup>
           <FormControlLabel
@@ -79,9 +76,7 @@ function ScheduleEdit() {
       </div>
       <div className={styles.confirmButtonWrapper}>
         <button
-          onClick={() =>
-            onSubmit(title, description, startDate, endDate, duration, isPublic)
-          }
+          onClick={() => onSubmit(title, description, dateInfo, isPublic)}
         >
           수정완료
         </button>
