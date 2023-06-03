@@ -68,7 +68,7 @@ function Map({ markersLocations, setClickedDestination }: MapPropsType) {
         setClickedDestination(marker);
       });
     });
-    map.setBounds(bounds, 36, 32, 32, 350);
+    map.setBounds(bounds, 36, 32, 32, 650);
   }, [markersLocations]);
 
   return (
