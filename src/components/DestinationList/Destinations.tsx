@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Pagination from './Pagination';
 import DestinationDetails from './DestinationDetails';
 import Map from '../common/Map/Map';
@@ -18,9 +18,15 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
   const [clickedDestination, setClickedDestination] =
     useState<DestinationsType | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const DETAILS_DOM_ROOT = useMemo(() => {
-    return document.getElementById('main');
-  }, [isOpen]);
+  const [detailsDomRoot, setDetailsDomRoot] = useState<HTMLElement | null>(
+    null
+  );
+
+  useEffect(() => {
+    setDetailsDomRoot(() => document.getElementById('main'));
+  }, []);
+
+  console.log(detailsDomRoot);
 
   useEffect(() => {
     if (clickedDestination !== null) {
@@ -33,15 +39,11 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
       setIsOpen(() => false);
       return;
     }
-    setIsOpen(() => false);
   }, [filteredDestinations]);
 
   const handleDestinationClick = (destination: DestinationsType) => {
     setClickedDestination(() => destination);
   };
-  console.log(isOpen);
-  console.log(DETAILS_DOM_ROOT);
-  console.log(DETAILS_DOM_ROOT);
 
   return (
     <div className={styles.destinationContentsContainer}>
@@ -74,7 +76,7 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
           )}
         </section>
         {isOpen &&
-          DETAILS_DOM_ROOT !== null &&
+          detailsDomRoot !== null &&
           createPortal(
             <section>
               <DestinationDetails
@@ -83,7 +85,7 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
                 setIsOpen={setIsOpen}
               />
             </section>,
-            DETAILS_DOM_ROOT
+            detailsDomRoot
           )}
       </div>
       <Map
