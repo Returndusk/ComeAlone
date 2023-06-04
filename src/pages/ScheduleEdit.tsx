@@ -22,6 +22,7 @@ function ScheduleEdit() {
   const [isPublic, setIsPublic] = useState(schedule.isPublic);
   const [title, setTitle] = useState(schedule.title);
   const [description, setDescription] = useState(schedule.summary);
+  const [destinationList, setDestinationList] = useState(destinations);
   const [checkedDestinations, setCheckedDestinations] = useState(
     destinations.flat()
   );
@@ -42,6 +43,8 @@ function ScheduleEdit() {
   ) => {
     console.log({ ...dateInfo, title, description, isPublic });
   };
+
+  console.log(destinationList);
 
   return (
     <div className={styles.container}>
@@ -74,8 +77,9 @@ function ScheduleEdit() {
       />
       <Link to='/destination/list'>새로운 목적지 추가하기</Link>
       <EditDestinationList
-        destinations={destinations}
+        destinations={destinationList}
         onChecked={onDestinationsChecked}
+        handleDestinationList={setDestinationList}
       />
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
