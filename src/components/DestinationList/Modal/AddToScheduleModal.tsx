@@ -21,7 +21,9 @@ function AddToScheduleModal() {
 
   return (
     <>
-      <button onClick={openModal}>내 일정에 추가하기</button>
+      <button onClick={openModal} className={styles.addScheduleBtn}>
+        내 일정에 추가하기
+      </button>
       {isOpen && (
         <div className={styles.modalBackground}>
           <div className={styles.modalLayout}>

@@ -14,6 +14,7 @@ export type ScheduleType = {
   status: string;
   destinations: string[][];
   likes: number;
+  image: string;
 };
 
 type ScheduleListType = ScheduleType[];
@@ -21,13 +22,25 @@ type ScheduleListType = ScheduleType[];
 export default function ModalScheduleLists() {
   const [scheduleList, setScheduleList] = useState<ScheduleListType>(dummy);
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
-  // const [destinations, setDestinations] = useState<string[]>([]);
-  console.log(scheduleList);
+  // const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedCardIdx, setSelectedCardIdx] = useState<number | null>(null);
+  // console.log(scheduleList);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     // console.log(sortOption);
     setScheduleSort(sortOption);
+  }
+
+  function handleShowDestinations(day: number) {
+    // setSelectedDay(day);
+    setSelectedCardIdx(day);
+    console.log(scheduleList);
+  }
+
+  function handleCloseDestinations() {
+    // setSelectedDay(null);
+    setSelectedCardIdx(null);
   }
 
   return (
@@ -58,10 +71,18 @@ export default function ModalScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {scheduleList.map((schedule, index) => {
+        {scheduleList.map((schedule, index) => (
           // console.log(schedule);
-          return ModalScheduleCard(schedule, index);
-        })}
+          <ModalScheduleCard
+            key={schedule.id}
+            schedule={schedule}
+            index={index}
+            // selectedDay={selectedDay}
+            isSelected={selectedCardIdx === index}
+            onShowDestinations={handleShowDestinations}
+            onCloseDestinations={handleCloseDestinations}
+          />
+        ))}
         {/* <div className={styles.scheduleAdd}>일정 추가하기</div> */}
       </div>
     </div>
