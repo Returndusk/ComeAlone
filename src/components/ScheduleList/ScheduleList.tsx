@@ -3,6 +3,7 @@ import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import axios from 'axios';
 import ScheduleListDummy from './ScheduleListDummy';
+import ROUTER from '../../constants/Router';
 
 export type ScheduleType = {
   id: string;
@@ -18,7 +19,7 @@ export type ScheduleType = {
   image: string;
 };
 
-type ScheduleListType = ScheduleType[];
+export type ScheduleListType = ScheduleType[];
 
 function ScheduleLists() {
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
@@ -77,7 +78,7 @@ function ScheduleLists() {
           <ScheduleCard
             schedule={schedule}
             key={index}
-            link='/schedule/detail'
+            link={ROUTER.SCHEDULE_DETAIL}
           />
         ))}
         <div className={styles.scheduleAdd}>일정 추가하기</div>
