@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from './Map.module.scss';
 import { DestinationsType } from '../../DestinationList/Types';
 
