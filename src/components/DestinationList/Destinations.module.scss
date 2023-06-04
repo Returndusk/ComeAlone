@@ -6,12 +6,12 @@
 .destinationsContainer {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(20, 1fr) minmax(0, 10px);
   background-color: #fff;
   width: 420px; //search bar, category container와 동일
   height: 100%; // map-2px(border 너비)과 동일함.
+  min-height: 550px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   position: relative;
   justify-content: flex-start;
   z-index: 1000;
