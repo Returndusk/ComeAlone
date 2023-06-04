@@ -27,7 +27,9 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
   useEffect(() => {
     if (filteredDestinations.length === 0) {
       setIsOpen(() => false);
+      return;
     }
+    setIsOpen(() => false);
   }, [filteredDestinations]);
 
   const handleDestinationClick = (destination: DestinationsType) => {
@@ -65,7 +67,7 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
           )}
         </section>
 
-        {isOpen && filteredDestinations.length > 0 && (
+        {isOpen && (
           <section>
             <DestinationDetails
               clickedDestination={clickedDestination}
