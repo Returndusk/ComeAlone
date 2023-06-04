@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styles from './EditDestinationList.module.scss';
+import { DestinationsType } from '../DestinationList/Types';
 
 function EditDestinationList({
   destinations,
   onChecked
 }: {
-  destinations: string[][];
+  destinations: DestinationsType[][];
   onChecked: any;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
@@ -50,7 +51,7 @@ function EditDestinationList({
               </label>
               {destOfDay.map((dest, index) => (
                 <li key={index}>
-                  {dest}
+                  {dest.title}
                   <button>삭제</button>
                 </li>
               ))}

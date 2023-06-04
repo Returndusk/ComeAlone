@@ -8,7 +8,9 @@ import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
 import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
+import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
+import { DestinationsType } from '../components/DestinationList/Types';
 import { FaArrowLeft } from 'react-icons/fa';
 
 function ScheduleEdit() {
@@ -24,7 +26,7 @@ function ScheduleEdit() {
     destinations.flat()
   );
 
-  const onDestinationsChecked = (destinations: string[]) => {
+  const onDestinationsChecked = (destinations: DestinationsType[]) => {
     setCheckedDestinations(destinations);
   };
 
@@ -75,10 +77,8 @@ function ScheduleEdit() {
         destinations={destinations}
         onChecked={onDestinationsChecked}
       />
-      <div className={styles.map}>
-        {checkedDestinations.map((dest, index) => (
-          <div key={index}>{dest}</div>
-        ))}
+      <div className={styles.mapContainer}>
+        <MapWithWaypoints markersLocations={checkedDestinations} />
       </div>
       <div className={styles.confirmButtonWrapper}>
         <button
