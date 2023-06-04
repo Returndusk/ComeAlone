@@ -26,8 +26,6 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
     setDetailsDomRoot(() => document.getElementById('main'));
   }, []);
 
-  console.log(detailsDomRoot);
-
   useEffect(() => {
     if (clickedDestination !== null) {
       setIsOpen(() => true);
