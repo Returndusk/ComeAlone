@@ -5,10 +5,13 @@ import Map from '../common/Map/Map';
 import styles from './Destinations.module.scss';
 import { DestinationsType } from './Types';
 import { CiCircleAlert } from 'react-icons/ci';
+import { createPortal } from 'react-dom';
 
 type DestinationsPropsType = {
   filteredDestinations: DestinationsType[] | [];
 };
+
+const DETAILS_DOM_ROOT = document.getElementById('main');
 
 function Destinations({ filteredDestinations }: DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
@@ -67,15 +70,18 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
           )}
         </section>
 
-        {isOpen && (
-          <section>
-            <DestinationDetails
-              clickedDestination={clickedDestination}
-              setClickedDestination={setClickedDestination}
-              setIsOpen={setIsOpen}
-            />
-          </section>
-        )}
+        {isOpen &&
+          DETAILS_DOM_ROOT !== null &&
+          createPortal(
+            <section>
+              <DestinationDetails
+                clickedDestination={clickedDestination}
+                setClickedDestination={setClickedDestination}
+                setIsOpen={setIsOpen}
+              />
+            </section>,
+            DETAILS_DOM_ROOT
+          )}
       </div>
       <Map
         markersLocations={
