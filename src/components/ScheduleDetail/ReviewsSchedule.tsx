@@ -2,22 +2,22 @@ import React from 'react';
 import styles from './ScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
 
-function ScheduleReviewsComponent({
+function ReviewsSchedule({
   reviews
 }: {
   reviews: { writer: string; comment: string }[];
 }) {
   return (
-    <div className={styles['reviews-wrapper']}>
-      <div className={styles['reviews-title']}>리뷰 리스트</div>
-      <div className={styles['reviews-list']}>
+    <div className={styles.reviewsWrapper}>
+      <div className={styles.reviewsTitle}>리뷰 리스트</div>
+      <div className={styles.reviewsList}>
         {reviews.map((review, index) => {
           return (
             <div key={index} className={styles.review}>
-              <span className={styles['review-writer']}>
+              <span className={styles.reviewWriter}>
                 <Avatar>{review.writer}</Avatar>
               </span>
-              <span className={styles['review-comment']}>{review.comment}</span>
+              <span>{review.comment}</span>
             </div>
           );
         })}
@@ -26,4 +26,4 @@ function ScheduleReviewsComponent({
   );
 }
 
-export default ScheduleReviewsComponent;
+export default ReviewsSchedule;

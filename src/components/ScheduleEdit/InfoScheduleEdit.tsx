@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './ScheduleEdit.module.scss';
 import TextField from '@mui/material/TextField';
 
-function ScheduleEditInfoComponent({
+function InfoScheduleEdit({
   title,
   writer,
   date,
@@ -18,7 +18,7 @@ function ScheduleEditInfoComponent({
   handleDescription: any;
 }) {
   return (
-    <div className={styles['schedule-info-wrapper']}>
+    <div className={styles.ScheduleInfoWrapper}>
       <TextField
         className={styles.title}
         required
@@ -41,4 +41,4 @@ function ScheduleEditInfoComponent({
   );
 }
 
-export default ScheduleEditInfoComponent;
+export default InfoScheduleEdit;

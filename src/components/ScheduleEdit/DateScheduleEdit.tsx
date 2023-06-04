@@ -10,7 +10,7 @@ import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 
-function ScheduleEditDateComponent({
+function DateScheduleEdit({
   duration,
   startDate,
   endDate,
@@ -59,7 +59,7 @@ function ScheduleEditDateComponent({
 
   return (
     <>
-      <div className={styles['duration-wrapper']}>
+      <div className={styles.durationWrapper}>
         <span className={styles.duration}>
           {`${startDate.toLocaleDateString(
             'ko-KR'
@@ -67,15 +67,15 @@ function ScheduleEditDateComponent({
         </span>
         <Tooltip title='날짜 수정하기' placement='right'>
           <IconButton onClick={handleOpen}>
-            <FaCalendarAlt className={styles['duration-edit']} />
+            <FaCalendarAlt className={styles.durationEdit} />
           </IconButton>
         </Tooltip>
       </div>
       <Modal open={openModal} onClose={handleClose}>
-        <Box className={styles['duration-edit-modal']}>
+        <Box className={styles.durationEditModal}>
           <p>수정하실 날짜를 선택하세요.</p>
           <DateRange
-            className={styles['duration-edit-date']}
+            className={styles.durationEditDate}
             locale={ko}
             editableDateInputs={true}
             onChange={(range) => {
@@ -94,10 +94,7 @@ function ScheduleEditDateComponent({
             months={2}
             direction='horizontal'
           />
-          <button
-            className={styles['duration-edit-confirm']}
-            onClick={handleClose}
-          >
+          <button className={styles.durationEditConfirm} onClick={handleClose}>
             완료
           </button>
         </Box>
@@ -106,4 +103,4 @@ function ScheduleEditDateComponent({
   );
 }
 
-export default ScheduleEditDateComponent;
+export default DateScheduleEdit;
