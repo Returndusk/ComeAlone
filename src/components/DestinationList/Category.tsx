@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { DestinationsType } from './Types';
 import Destinations from './Destinations';
 import styles from './Category.module.scss';
@@ -18,82 +18,58 @@ const CATEGORIES_ID = new Map([
   [39, '음식점']
 ]);
 
+const CATEGORIES_ID_LIST = Array.from(CATEGORIES_ID.keys());
+
 function Category({ destinations }: CategoryPropsType) {
-  const totalCategoriesIdArray = Array.from(CATEGORIES_ID.keys());
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number[]>([
-    ...totalCategoriesIdArray
+  const [selectedCategory, setSelectedCategory] = useState<number[]>([
+    ...CATEGORIES_ID_LIST
   ]);
-  const [isSelectedAll, setIsSelectedAll] = useState<boolean>(true);
+
   const [filteredDestinations, setFilteredDestinations] =
     useState(destinations);
+
+  const isSelectedAll = useMemo(() => {
+    return selectedCategory.length === CATEGORIES_ID_LIST.length;
+  }, [selectedCategory]);
 
   useEffect(() => {
     setFilteredDestinations(() => destinations);
   }, [destinations]);
 
+  const removeCategoryFromSelectedCategoryList = (targetCategoryId: number) => {
+    const subSelectedCategory = selectedCategory.filter(
+      (categoryId) => categoryId !== targetCategoryId
+    );
+    setSelectedCategory([...subSelectedCategory]);
+  };
+
+  const addCategoryToSelectedCategoryList = (targetCategoryId: number) => {
+    setSelectedCategory([...selectedCategory, targetCategoryId]);
+  };
+
   const handleCategoryClick: React.MouseEventHandler<HTMLButtonElement> = (
     e
   ) => {
     const { value } = e.target as HTMLButtonElement;
-    const clickedCategoryId = Number(value);
-    switch (selectedCategoryId.includes(clickedCategoryId)) {
-      case true: {
-        const subClickedCategory = selectedCategoryId.filter(
-          (categoryId) => categoryId !== clickedCategoryId
-        );
-        setSelectedCategoryId(subClickedCategory);
-        break;
-      }
-      case false: {
-        const addClickedCategory = [...selectedCategoryId, clickedCategoryId];
-        setSelectedCategoryId(addClickedCategory);
-        break;
-      }
-    }
+    const targetCategoryId = Number(value);
+
+    selectedCategory.includes(targetCategoryId)
+      ? removeCategoryFromSelectedCategoryList(targetCategoryId)
+      : addCategoryToSelectedCategoryList(targetCategoryId);
   };
-
-  // 단일 카테고리을 선택하여 상태가 변경된 경우
-
-  useEffect(() => {
-    if (
-      isSelectedAll &&
-      selectedCategoryId.length === totalCategoriesIdArray.length - 1
-      // 1은 전체를 선택한 상태에서 단일 카테고리 하나(1)를 클릭하여 선택을 해제했을 경우를 의미함.
-    ) {
-      setIsSelectedAll(false);
-      //단일 카테고리 하나를 해제했기 때문에 전체 선택 = false가 됨.
-    }
-  }, [selectedCategoryId]);
 
   const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
-    setIsSelectedAll(!isSelectedAll);
+    isSelectedAll
+      ? setSelectedCategory([])
+      : setSelectedCategory(CATEGORIES_ID_LIST);
   };
-
-  //전체 카테고리를 선택하여 상태가 변경된 경우
-  useEffect(() => {
-    switch (isSelectedAll) {
-      case true: {
-        const newSelectedCategory =
-          selectedCategoryId.length !== totalCategoriesIdArray.length
-            ? totalCategoriesIdArray
-            : selectedCategoryId;
-        setSelectedCategoryId(newSelectedCategory);
-        break;
-      }
-      case false: {
-        if (selectedCategoryId.length === totalCategoriesIdArray.length)
-          return setSelectedCategoryId([]);
-        break;
-      }
-    }
-  }, [isSelectedAll]);
 
   useEffect(() => {
     const filteredDestinationsList = destinations.filter((destination) =>
-      selectedCategoryId.includes(Number(destination.contenttypeid))
+      selectedCategory.includes(Number(destination.contenttypeid))
     );
     setFilteredDestinations(() => filteredDestinationsList);
-  }, [selectedCategoryId]);
+  }, [selectedCategory]);
 
   return (
     <>
@@ -108,13 +84,13 @@ function Category({ destinations }: CategoryPropsType) {
         >
           전체
         </button>
-        {totalCategoriesIdArray.map((categoryId, index) => (
+        {CATEGORIES_ID_LIST.map((categoryId, index) => (
           <button
             key={index}
             value={categoryId}
             onClick={handleCategoryClick}
             className={
-              selectedCategoryId.includes(categoryId)
+              selectedCategory.includes(categoryId)
                 ? styles.activeSelectedButton
                 : styles.selectedButton
             }
