@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import styles from './RegisterForm.module.scss';
+import TextField from '@mui/material/TextField';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
 
 interface RegisterFormValues {
   email: string;
@@ -144,31 +150,51 @@ function RegisterForm() {
       setErrors(validationErrors);
     }
   };
+  console.log(values);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <ul className={styles.inputs}>
         <li>
-          <label htmlFor='email'>이메일</label>
+          <TextField
+            id='outlined-basic'
+            label='이메일'
+            variant='outlined'
+            name='email'
+            value={values.email}
+            onChange={handleChange}
+            size='small'
+            style={{ width: '100%' }}
+          />
+          {/* <label htmlFor='email'>이메일</label>
           <input
             type='text'
             id='email'
             name='email'
             value={values.email}
             onChange={handleChange}
-          />
+          /> */}
           {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
         </li>
         <li>
-          <label htmlFor='nickname'>닉네임</label>
+          {/* <label htmlFor='nickname'>닉네임</label> */}
           <div className={styles.nickname}>
-            <input
+            <TextField
+              id='outlined-basic'
+              label='닉네임'
+              variant='outlined'
+              name='nickname'
+              value={values.nickname}
+              onChange={handleChange}
+              size='small'
+            />
+            {/* <input
               type='text'
               name='nickname'
               id='nickname'
               value={values.nickname}
               onChange={handleChange}
-            />
+            /> */}
             <button type='button'>중복확인</button>
           </div>
           {!errors.nickname && (
@@ -181,14 +207,25 @@ function RegisterForm() {
           )}
         </li>
         <li>
-          <label htmlFor='password'>비밀번호</label>
+          <TextField
+            id='outlined-basic'
+            label='비밀번호'
+            type='password'
+            variant='outlined'
+            name='password'
+            value={values.password}
+            onChange={handleChange}
+            size='small'
+            style={{ width: '100%' }}
+          />
+          {/* <label htmlFor='password'>비밀번호</label>
           <input
             type='password'
             name='password'
             id='password'
             value={values.password}
             onChange={handleChange}
-          />
+          /> */}
           {!errors.password && (
             <p className={styles.msg}>
               8자 이상 (대소문자, 특수 문자, 숫자 포함)
@@ -199,20 +236,52 @@ function RegisterForm() {
           )}
         </li>
         <li>
-          <label htmlFor='passwordConfirm'>비밀번호 확인</label>
+          <TextField
+            id='outlined-basic'
+            label='비밀번호 확인'
+            type='password'
+            variant='outlined'
+            name='passwordConfirm'
+            value={values.passwordConfirm}
+            onChange={handleChange}
+            size='small'
+            style={{ width: '100%' }}
+          />
+          {/* <label htmlFor='passwordConfirm'>비밀번호 확인</label>
           <input
             type='password'
             name='passwordConfirm'
             id='passwordConfirm'
             value={values.passwordConfirm}
             onChange={handleChange}
-          />
+          /> */}
           {errors.passwordConfirm && (
             <p className={styles.errMsg}>{errors.passwordConfirm}</p>
           )}
         </li>
-        <li>
-          <label htmlFor='gender'>성별</label>
+        <li className={styles.radioGroup}>
+          <FormLabel id='demo-radio-buttons-group-label'>성별</FormLabel>
+          <RadioGroup
+            aria-labelledby='demo-radio-buttons-group-label'
+            defaultValue='male'
+            name='gender'
+            onChange={handleChange}
+            row
+          >
+            <FormControlLabel
+              value='male'
+              control={<Radio size='small' />}
+              label='남성'
+              checked={values.gender === 'male'}
+            />
+            <FormControlLabel
+              value='female'
+              control={<Radio size='small' />}
+              label='여성'
+              checked={values.gender === 'female'}
+            />
+          </RadioGroup>
+          {/* <label htmlFor='gender'>성별</label>
           <div className={styles.radioGroup}>
             <label>
               <input
@@ -233,33 +302,50 @@ function RegisterForm() {
                 onChange={handleChange}
               />
               여자
-            </label>
-          </div>
+            </label> 
+          </div>*/}
           {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
         </li>
         <li>
-          <label htmlFor='birthDate'>생년월일</label>
+          {/* <label htmlFor='birthDate'>생년월일</label>
           <input
             type='text'
             name='birthDate'
             id='birthDate'
             value={values.birthDate}
             onChange={handleChange}
-          />
-
+          /> */}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={['DatePicker']}>
+              <DatePicker
+                label='생년월일'
+                slotProps={{ textField: { size: 'small' } }}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
           {errors.birthDate && (
             <p className={styles.errMsg}>{errors.birthDate}</p>
           )}
         </li>
         <li>
-          <label htmlFor='phoneNumber'>연락처</label>
+          <TextField
+            id='outlined-basic'
+            label='연락처'
+            variant='outlined'
+            name='phoneNumber'
+            value={values.phoneNumber}
+            onChange={handleChange}
+            size='small'
+            style={{ width: '100%' }}
+          />
+          {/* <label htmlFor='phoneNumber'>연락처</label>
           <input
             type='text'
             name='phoneNumber'
             id='phoneNumber'
             value={values.phoneNumber}
             onChange={handleChange}
-          />
+          /> */}
           {!errors.phoneNumber && <p className={styles.msg}>하이픈(-) 포함</p>}
           {errors.phoneNumber && (
             <p className={styles.errMsg}>{errors.phoneNumber}</p>
