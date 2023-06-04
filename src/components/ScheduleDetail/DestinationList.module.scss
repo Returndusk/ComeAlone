@@ -43,6 +43,7 @@
       padding-left: $spacer;
       counter-reset: circle-counter;
       border-left: 2px solid $gray--lightest;
+      user-select: none;
 
       li {
         font-size: 16px;

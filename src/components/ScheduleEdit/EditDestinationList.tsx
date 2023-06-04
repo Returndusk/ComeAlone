@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styles from './DestinationList.module.scss';
+import styles from './EditDestinationList.module.scss';
 
-function DestinationList({
+function EditDestinationList({
   destinations,
   onChecked
 }: {
@@ -49,7 +49,10 @@ function DestinationList({
                 Day {index + 1}
               </label>
               {destOfDay.map((dest, index) => (
-                <li key={index}>{dest}</li>
+                <li key={index}>
+                  {dest}
+                  <button>삭제</button>
+                </li>
               ))}
             </ol>
           );
@@ -59,4 +62,4 @@ function DestinationList({
   );
 }
 
-export default DestinationList;
+export default EditDestinationList;

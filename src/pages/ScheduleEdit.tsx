@@ -7,7 +7,7 @@ import Switch from '@mui/material/Switch';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
 import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
-import DestinationList from '../components/ScheduleEdit/DestinationList';
+import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 
@@ -71,7 +71,7 @@ function ScheduleEdit() {
         handleDescription={setDescription}
       />
       <Link to='/destination/list'>새로운 목적지 추가하기</Link>
-      <DestinationList
+      <EditDestinationList
         destinations={destinations}
         onChecked={onDestinationsChecked}
       />

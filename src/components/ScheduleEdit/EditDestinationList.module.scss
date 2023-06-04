@@ -37,16 +37,20 @@
       $font-size--base: 1rem;
       $default-color: black;
 
+      flex-direction: column;
       margin: 0 0 30px 0;
       font-size: 20px;
       list-style: none;
       padding-left: $spacer;
       counter-reset: circle-counter;
       border-left: 2px solid $gray--lightest;
+      user-select: none;
 
       li {
+        display: flex;
+        flex-direction: row;
         font-size: 16px;
-        margin: 10px 0 10px 0;
+        margin: 20px 0 20px 0;
 
         counter-increment: circle-counter;
         margin-bottom: $spacer * 0.25;
@@ -73,6 +77,11 @@
 
         .number-circle-list--list-item {
           margin-left: $spacer * 0.25;
+        }
+
+        button {
+          margin: 0 10px 0 0;
+          margin-left: auto;
         }
       }
     }
