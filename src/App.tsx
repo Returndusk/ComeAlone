@@ -9,8 +9,10 @@ import DestinationList from './pages/DestinationList';
 import ScheduleDetail from './pages/ScheduleDetail';
 import ScheduleEdit from './pages/ScheduleEdit';
 import ScheduleList from './pages/ScheduleList';
+import MyScheduleList from './pages/MyScheduleList';
 import Header from './components/common/Header/Header';
 import Footer from './components/common/Footer/Footer';
+import ROUTER from './constants/Router';
 
 function App() {
   {
@@ -21,7 +23,8 @@ function App() {
     MyPage: 마이페이지 (회원정보 조회)
     UserEdit: 회원정보 수정
     ScheduleDetail: 일정 상세 페이지
-    ScheduleList: 일정 리스트 조회 페이지 (내꺼/남꺼)
+    ScheduleList: 일정 리스트 조회 페이지 (남꺼)
+    MyScheduleList: 일정 리스트 조회 페이지 (내꺼)
     DestinationList: 목적지 리스트
   */
   }
@@ -29,15 +32,16 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path='/' element={<Main />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/mypage' element={<MyPage />} />
-        <Route path='/mypage/edit' element={<UserEdit />} />
-        <Route path='/destination/list' element={<DestinationList />} />
-        <Route path='/schedule/list' element={<ScheduleList />} />
-        <Route path='/schedule/edit' element={<ScheduleEdit />} />
-        <Route path='/schedule/detail' element={<ScheduleDetail />} />
+        <Route path={ROUTER.MAIN} element={<Main />} />
+        <Route path={ROUTER.LOGIN} element={<Login />} />
+        <Route path={ROUTER.REGISTER} element={<Register />} />
+        <Route path={ROUTER.MYPAGE} element={<MyPage />} />
+        <Route path={ROUTER.MYPAGE_EDIT} element={<UserEdit />} />
+        <Route path={ROUTER.DESTINATION_LIST} element={<DestinationList />} />
+        <Route path={ROUTER.SCHEDULE_LIST} element={<ScheduleList />} />
+        <Route path={ROUTER.MYSCHEDULE_LIST} element={<MyScheduleList />} />
+        <Route path={ROUTER.SCHEDULE_EDIT} element={<ScheduleEdit />} />
+        <Route path={ROUTER.SCHEDULE_DETAIL} element={<ScheduleDetail />} />
       </Routes>
       <Footer />
     </BrowserRouter>
