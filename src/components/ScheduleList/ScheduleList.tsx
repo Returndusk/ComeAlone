@@ -23,7 +23,6 @@ type ScheduleListType = ScheduleType[];
 function ScheduleLists() {
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
-  const [error, setError] = useState<string>('');
 
   const fetchData = useCallback(async () => {
     const API_URL = 'http://localhost:9999/data';
@@ -32,7 +31,6 @@ function ScheduleLists() {
       setScheduleList(reponse.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        setError(error.message);
         setScheduleList(ScheduleListDummy);
       }
     }
@@ -75,7 +73,13 @@ function ScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {scheduleList.map((schedule, index) => ScheduleCard(schedule, index))}
+        {scheduleList.map((schedule: ScheduleType, index: number) => (
+          <ScheduleCard
+            schedule={schedule}
+            key={index}
+            link='/schedule/detail'
+          />
+        ))}
         <div className={styles.scheduleAdd}>일정 추가하기</div>
       </div>
     </div>
