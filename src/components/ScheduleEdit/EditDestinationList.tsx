@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import styles from './EditDestinationList.module.scss';
-import { DestinationsType } from '../DestinationList/Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 
 function EditDestinationList({
   destinations,
