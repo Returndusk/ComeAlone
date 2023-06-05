@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link } from 'react-router-dom';
 import { MyScheduleCardProps } from '../../types/ScheduleTypes';
 
 function ScheduleCard({ schedule, link }: MyScheduleCardProps) {
+  const [firstDestination, setFirstDestination] = useState<string>('');
+  const [lastDestination, setLastDestination] = useState<string>('');
+  const [destinationCount, setDestinationCount] = useState<number>(0);
+
+  useEffect(() => {
+    const destinations = schedule.destinations;
+    const destinationLength = destinations.length;
+    const lastDestinationLength = destinations[destinationLength - 1].length;
+    const firstDestination = destinations[0][0];
+    const lastDestination =
+      destinations[destinationLength - 1][lastDestinationLength - 1];
+    const destinationCount =
+      destinations.reduce((acc, cur) => acc + cur.length, 0) - 2;
+    setFirstDestination(firstDestination);
+    setLastDestination(lastDestination);
+    setDestinationCount(destinationCount < 0 ? 0 : destinationCount);
+  }, []);
   return (
     <Link to={link} className={styles.scheduleCard}>
       <div className={styles.scheduleCardContent}>
@@ -21,16 +38,11 @@ function ScheduleCard({ schedule, link }: MyScheduleCardProps) {
           <div>❤ 좋아요 수</div>
         </div>
         <div className={styles.scheduleDestination}>
-          <div>{schedule.destinations[0]}</div>
+          <div>{firstDestination}</div>
           <div>{'=>'}</div>
-          <div className={styles.destinationCount}>
-            경유{' '}
-            {schedule.destinations.length - 2 < 0
-              ? 0
-              : schedule.destinations.length - 2}
-          </div>
+          <div className={styles.destinationCount}>경유 {destinationCount}</div>
           <div>{'=>'}</div>
-          <div>{schedule.destinations[schedule.destinations.length - 1]}</div>
+          <div>{lastDestination}</div>
         </div>
         <img src={schedule.image} className={styles.image} />
       </div>

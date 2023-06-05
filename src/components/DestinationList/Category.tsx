@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { DestinationsType } from './Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
 import styles from './Category.module.scss';
 
@@ -25,16 +25,17 @@ function Category({ destinations }: CategoryPropsType) {
     ...CATEGORIES_ID_LIST
   ]);
 
-  const [filteredDestinations, setFilteredDestinations] =
-    useState(destinations);
+  const unCategorizedDestinations = useMemo(() => {
+    return destinations;
+  }, [destinations]);
+
+  const [filteredDestinations, setFilteredDestinations] = useState(
+    unCategorizedDestinations
+  );
 
   const isSelectedAll = useMemo(() => {
     return selectedCategory.length === CATEGORIES_ID_LIST.length;
   }, [selectedCategory]);
-
-  useEffect(() => {
-    setFilteredDestinations(() => destinations);
-  }, [destinations]);
 
   const removeCategoryFromSelectedCategoryList = (targetCategoryId: number) => {
     const subSelectedCategory = selectedCategory.filter(
@@ -65,8 +66,8 @@ function Category({ destinations }: CategoryPropsType) {
   };
 
   useEffect(() => {
-    const filteredDestinationsList = destinations.filter((destination) =>
-      selectedCategory.includes(Number(destination.contenttypeid))
+    const filteredDestinationsList = unCategorizedDestinations.filter(
+      (destination) => selectedCategory.includes(destination.category_id ?? 0) //Dummy 제거 후 ?? 체이닝 삭제 예정
     );
     setFilteredDestinations(() => filteredDestinationsList);
   }, [selectedCategory]);
