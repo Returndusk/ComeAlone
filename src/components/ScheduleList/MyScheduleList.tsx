@@ -12,9 +12,11 @@ import ROUTER from '../../constants/Router';
 function MyScheduleLists() {
   const [scheduleList, setScheduleList] = useState<MyScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
     const API_URL = 'http://localhost:9999/data';
+    setIsLoading(true);
     try {
       const reponse = await axios.get(API_URL);
       setScheduleList(reponse.data);
@@ -23,6 +25,7 @@ function MyScheduleLists() {
         setScheduleList(ScheduleListDummy);
       }
     }
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -72,6 +75,11 @@ function MyScheduleLists() {
           좋아요 한 일정
         </button>
       </div>
+      {isLoading ? (
+        <div className={styles.loading}>일정 불러오는중...</div>
+      ) : (
+        ''
+      )}
       <div className={styles.scheduleCardContainer}>
         {scheduleList.map((schedule: MyScheduleCardType, index: number) => (
           <MyScheduleCard
@@ -80,7 +88,12 @@ function MyScheduleLists() {
             link={ROUTER.SCHEDULE_DETAIL}
           />
         ))}
-        <div className={styles.scheduleAdd}>일정 추가하기</div>
+
+        {isLoading ? (
+          ''
+        ) : (
+          <div className={styles.scheduleAdd}>일정 추가하기</div>
+        )}
       </div>
     </div>
   );
