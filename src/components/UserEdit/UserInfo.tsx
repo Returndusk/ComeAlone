@@ -1,12 +1,6 @@
 import React from 'react';
 import styles from './UserEditForm.module.scss';
-import { UserInfoValues, Errors } from './UserEditForm';
-
-interface UserInfoProps {
-  values: UserInfoValues;
-  errors: Errors;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import { UserInfoProps } from '../../types/UserTypes';
 
 function UserInfo({ values, errors, handleChange }: UserInfoProps) {
   return (

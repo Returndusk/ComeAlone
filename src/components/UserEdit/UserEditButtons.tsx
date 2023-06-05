@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './Buttons.module.scss';
+import styles from './UserEditButtons.module.scss';
 
-function Buttons() {
+function UserEditButtons() {
   return (
     <ul className={styles.buttons}>
       <li>
@@ -16,4 +16,4 @@ function Buttons() {
   );
 }
 
-export default Buttons;
+export default UserEditButtons;

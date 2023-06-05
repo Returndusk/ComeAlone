@@ -1,25 +1,12 @@
 import React, { useState } from 'react';
 import styles from './RegisterForm.module.scss';
+import { Errors, RegisterFormValues } from '../../types/UserTypes';
 import TextField from '@mui/material/TextField';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
-
-interface RegisterFormValues {
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  nickname: string;
-  birthDate: string;
-  gender: 'male' | 'female';
-  phoneNumber: string;
-}
-
-type Errors = {
-  [key: string]: string;
-};
 
 function RegisterForm() {
   const initValues: RegisterFormValues = {
@@ -150,7 +137,6 @@ function RegisterForm() {
       setErrors(validationErrors);
     }
   };
-  console.log(values);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
