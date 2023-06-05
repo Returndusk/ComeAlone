@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import styles from './Map.module.scss';
-import { DestinationsType } from '../../../types/DestinationListTypes';
+import { MapPropsType } from '../../../types/DestinationListTypes';
 
 declare global {
   interface Window {
@@ -8,10 +8,10 @@ declare global {
   }
 }
 
-type MapPropsType = {
-  markersLocations: DestinationsType[];
+type MapPropsTypes = {
+  markersLocations: MapPropsType[];
   setClickedDestination: React.Dispatch<
-    React.SetStateAction<DestinationsType | null>
+    React.SetStateAction<MapPropsType | null>
   >;
 };
 
@@ -23,7 +23,7 @@ const DEFAULT_LOCATION = {
 
 const { kakao } = window;
 
-function Map({ markersLocations, setClickedDestination }: MapPropsType) {
+function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
   let markers = [...markersLocations];
 
   const prevMarkersLocations = useMemo(() => {

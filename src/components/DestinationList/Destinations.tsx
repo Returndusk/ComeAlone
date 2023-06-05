@@ -30,7 +30,7 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
 
   const handleDestinationClick = (destination: DestinationsType) => {
     setClickedDestination(() => destination);
-    navigate(`/destination/list/${destination.contentid}${search}`);
+    navigate(`/destination/list/${destination.id}${search}`);
     setIsOpen(() => true);
   };
 

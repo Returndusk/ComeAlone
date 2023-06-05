@@ -11,7 +11,7 @@ function DestinationDetails() {
   const { contentid } = useParams();
 
   const destination = useMemo(() => {
-    return DEFAULT_DESTINATIONS.find((des) => des.contentid === contentid);
+    return DEFAULT_DESTINATIONS.find((des) => des.id === Number(contentid));
   }, [contentid]);
 
   const handleLikesClick = () => {

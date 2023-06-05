@@ -65,8 +65,8 @@ function Category({ destinations }: CategoryPropsType) {
   };
 
   useEffect(() => {
-    const filteredDestinationsList = destinations.filter((destination) =>
-      selectedCategory.includes(Number(destination.contenttypeid))
+    const filteredDestinationsList = destinations.filter(
+      (destination) => selectedCategory.includes(destination.id ?? 0) //Dummy 제거 후 ?? 체이닝 삭제 예정
     );
     setFilteredDestinations(() => filteredDestinationsList);
   }, [selectedCategory]);
