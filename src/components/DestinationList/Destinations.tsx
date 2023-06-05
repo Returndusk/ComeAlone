@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Pagination from './Pagination';
 import Map from '../common/Map/Map';
 import styles from './Destinations.module.scss';
-import { DestinationsType } from './Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 import { CiCircleAlert } from 'react-icons/ci';
 import { createPortal } from 'react-dom';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { DestinationsType } from './Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
 import styles from './Category.module.scss';
 

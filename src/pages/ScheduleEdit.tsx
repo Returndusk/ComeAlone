@@ -10,7 +10,7 @@ import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
-import { DestinationsType } from '../components/DestinationList/Types';
+import { DestinationsType } from '../types/DestinationListTypes';
 import { FaArrowLeft } from 'react-icons/fa';
 
 function ScheduleEdit() {

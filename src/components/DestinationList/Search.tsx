@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { DestinationsType } from './Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 import styles from './Search.module.scss';
-// import axios from 'axios';
 import Category from './Category';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -16,19 +15,6 @@ function Search() {
   const searchQueryParam = useMemo(() => {
     return searchParams.get('search') ?? '';
   }, [searchParams]);
-
-  /* 백엔드 연결 후 수정
-  async function getAllDestinations() {
-    try {
-      const res = await axios.get(
-        'api/destinations'
-      );
-      return res.data;
-    } catch (err) {
-      throw new Error('목적지 리스트 데이터를 가져오는데 실패했습니다.');
-    }
-  }
-*/
 
   const searchResults = useMemo(() => {
     const searchResultDestinations = data.filter((destination) => {

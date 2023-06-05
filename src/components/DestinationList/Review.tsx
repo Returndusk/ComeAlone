@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Review.module.scss';
-import { DestinationsType } from './Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 
 type ReviewPropsType = {
   clickedDestination: DestinationsType | null;

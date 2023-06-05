@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import styles from './Map.module.scss';
-import { DestinationsType } from '../../DestinationList/Types';
+import { DestinationsType } from '../../../types/DestinationListTypes';
 
 declare global {
   interface Window {
