@@ -8,3 +8,10 @@ export interface DestinationsType {
   contenttypeid?: string;
   contentid?: string;
 }
+
+export type MapPropsType = Pick<DestinationsType, 'title' | 'mapx' | 'mapy'>;
+
+export type MapWithWaypoinsPropsType = Pick<
+  DestinationsType,
+  'title' | 'mapx' | 'mapy'
+>;
