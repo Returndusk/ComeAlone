@@ -13,7 +13,7 @@ export type ScheduleType = {
   start_date: string;
   end_date: string;
   status: string;
-  destinations: string[];
+  destinations: string[][];
   likes: number;
   image: string;
 };
