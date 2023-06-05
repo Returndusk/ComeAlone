@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './ScheduleEdit.module.scss';
+import styles from './InfoScheduleEdit.module.scss';
 import TextField from '@mui/material/TextField';
 
 function InfoScheduleEdit({
@@ -18,7 +18,7 @@ function InfoScheduleEdit({
   handleDescription: any;
 }) {
   return (
-    <div className={styles.ScheduleInfoWrapper}>
+    <div className={styles.ScheduleInfoContainer}>
       <TextField
         className={styles.title}
         required

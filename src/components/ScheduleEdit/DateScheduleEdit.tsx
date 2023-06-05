@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './ScheduleEdit.module.scss';
+import styles from './DateScheduleEdit.module.scss';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -11,19 +11,15 @@ import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 
 function DateScheduleEdit({
-  duration,
-  startDate,
-  endDate,
-  handleStartDate,
-  handleEndDate,
-  handleDuration
+  dateInfo,
+  handleDateInfo
 }: {
-  duration: string;
-  startDate: Date;
-  endDate: Date;
-  handleStartDate: any;
-  handleEndDate: any;
-  handleDuration: any;
+  dateInfo: {
+    startDate: Date;
+    endDate: Date;
+    duration: string;
+  };
+  handleDateInfo: any;
 }) {
   type selectionType = {
     startDate?: Date | undefined;
@@ -32,38 +28,36 @@ function DateScheduleEdit({
   };
 
   const dateNow: selectionType = {
-    startDate: startDate,
-    endDate: endDate,
+    startDate: dateInfo.startDate,
+    endDate: dateInfo.endDate,
     key: 'selection'
   };
 
-  const [openModal, setOpenModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState([dateNow]);
+  const [openModal, setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 
   useEffect(() => {
     const { startDate, endDate } = selectedDate[0];
 
-    handleStartDate(startDate);
-
-    handleEndDate(endDate);
-
     if (startDate && endDate) {
       const diffDay =
         (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) + 1;
 
-      handleDuration(diffDay.toString());
+      handleDateInfo({ startDate, endDate, duration: diffDay });
     }
   }, [selectedDate]);
 
   return (
     <>
-      <div className={styles.durationWrapper}>
+      <div className={styles.dateContainer}>
         <span className={styles.duration}>
-          {`${startDate.toLocaleDateString(
+          {`${dateInfo.startDate.toLocaleDateString(
             'ko-KR'
-          )} ~ ${endDate.toLocaleDateString('ko-KR')} (${duration}일)`}
+          )} ~ ${dateInfo.endDate.toLocaleDateString('ko-KR')} (${
+            dateInfo.duration
+          }일)`}
         </span>
         <Tooltip title='날짜 수정하기' placement='right'>
           <IconButton onClick={handleOpen}>
@@ -75,7 +69,7 @@ function DateScheduleEdit({
         <Box className={styles.durationEditModal}>
           <p>수정하실 날짜를 선택하세요.</p>
           <DateRange
-            className={styles.durationEditDate}
+            className={styles.durationEditModalDate}
             locale={ko}
             editableDateInputs={true}
             onChange={(range) => {
@@ -94,7 +88,10 @@ function DateScheduleEdit({
             months={2}
             direction='horizontal'
           />
-          <button className={styles.durationEditConfirm} onClick={handleClose}>
+          <button
+            className={styles.durationEditModalConfirm}
+            onClick={handleClose}
+          >
             완료
           </button>
         </Box>

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import styles from './DestinationList.module.scss';
+import styles from './EditDestinationList.module.scss';
 import { DestinationsType } from '../DestinationList/Types';
 
-function DestinationList({
+function EditDestinationList({
   destinations,
-  onChecked
+  onChecked,
+  handleDestinationList
 }: {
   destinations: DestinationsType[][];
   onChecked: any;
+  handleDestinationList: any;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
@@ -26,32 +28,44 @@ function DestinationList({
         전체 목적지 보기
       </label>
       <div className={styles.destinationsList}>
-        {destinations.map((destOfDay, index) => {
+        {destinations.map((destOfDay, dayIndex) => {
           return (
             <ol
-              key={index}
+              key={dayIndex}
               className={styles.destinationsDay}
-              id={'day' + (index + 1).toString()}
+              id={'day' + (dayIndex + 1).toString()}
             >
               <label>
                 <input
-                  className={styles.dayCheckBox}
                   type='checkbox'
-                  checked={checkedDayIndex === index}
+                  checked={checkedDayIndex === dayIndex}
                   onChange={() => {
-                    if (checkedDayIndex === index) {
+                    if (checkedDayIndex === dayIndex) {
                       setCheckedDayIndex(-1);
                       onChecked(destinations.flat());
                     } else {
-                      setCheckedDayIndex(index);
+                      setCheckedDayIndex(dayIndex);
                       onChecked(destOfDay);
                     }
                   }}
                 />{' '}
-                Day {index + 1}
+                Day {dayIndex + 1}
               </label>
-              {destOfDay.map((dest, index) => (
-                <li key={index}>{dest.title}</li>
+              {destOfDay.map((dest, destIndex) => (
+                <li key={destIndex}>
+                  {dest.title}
+                  <button
+                    onClick={() => {
+                      destinations[dayIndex].splice(destIndex, 1);
+
+                      const newDestinations = [...destinations];
+
+                      handleDestinationList(newDestinations);
+                    }}
+                  >
+                    삭제
+                  </button>
+                </li>
               ))}
             </ol>
           );
@@ -61,4 +75,4 @@ function DestinationList({
   );
 }
 
-export default DestinationList;
+export default EditDestinationList;
