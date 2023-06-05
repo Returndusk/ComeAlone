@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.scss';
+import axios from 'axios';
 
 interface LoginFormValues {
   email: string;
@@ -47,13 +48,26 @@ function LoginForm() {
     return errMsgs;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async () => {
+    const body = {
+      id: values.email,
+      password: values.password
+    };
+    const response = await axios.post(
+      'http://34.64.169.7:3000/api/auth/signin',
+      body
+    );
+    console.log(response);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = validateForm(values);
     if (Object.keys(validationErrors).length === 0) {
       alert('유효성 검사 통과!');
       //로그인 api 호출
+      await handleLogin();
     } else {
       setErrors(validationErrors);
     }
