@@ -137,7 +137,6 @@ function RegisterForm() {
       setErrors(validationErrors);
     }
   };
-  console.log(values);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
