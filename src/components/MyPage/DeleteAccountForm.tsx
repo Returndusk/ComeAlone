@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import styles from './DeleteAccountForm.module.scss';
-
-interface DeleteFormProps {
-  cancelDeleteAccount: () => void;
-}
+import { DeleteFormProps } from '../../types/UserTypes';
 
 function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
   const [password, setPassword] = useState('');

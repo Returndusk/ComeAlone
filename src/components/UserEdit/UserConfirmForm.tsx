@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
+import { UserConfirmFormProps } from '../../types/UserTypes';
 import styles from './UserConfirmForm.module.scss';
-
-interface UserConfirmFormProps {
-  confirmUser: () => void;
-}
 
 function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
   const [password, setPassword] = useState('');

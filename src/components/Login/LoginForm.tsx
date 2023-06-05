@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.scss';
+import { Errors, LoginFormValues } from '../../types/UserTypes';
 import axios from 'axios';
-
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
-
-interface Errors {
-  [key: string]: string;
-}
 
 function LoginForm() {
   const navigate = useNavigate();
