@@ -30,8 +30,9 @@ export default function ModalScheduleCard({
   /**
    * 해당 카드를 클릭했을 때 destinations N일차 별로 불러오는 함수
    * TODO:
-   * N일차 별로 분기하기
-   * 다른 카드 눌렀을 때 이전 카드내용은 숨기기
+   * 1. N일차 별로 분기하기
+   * 2. 다른 카드 눌렀을 때 이전 카드내용은 숨기기
+   * 3. N일차에 현재 목적지 추가하기
    */
 
   function handleToggleDestinations(dayIndex: number) {

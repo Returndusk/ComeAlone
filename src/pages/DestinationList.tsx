@@ -1,5 +1,5 @@
 import React from 'react';
-import AddToScheduleModal from '../components/DestinationList/Modal/AddToScheduleModal';
+import OpenModal from '../components/DestinationList/Modal/OpenModal';
 import Layout from '../components/DestinationList/Layout';
 import Search from '../components/DestinationList/Search';
 
@@ -7,7 +7,7 @@ function DestinationList() {
   return (
     <Layout>
       <Search />
-      <AddToScheduleModal />
+      <OpenModal />
     </Layout>
   );
 }
