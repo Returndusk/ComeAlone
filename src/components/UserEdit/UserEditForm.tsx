@@ -3,7 +3,7 @@ import styles from './UserEditForm.module.scss';
 import { Errors, UserInfoValues } from '../../types/UserTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
-import Buttons from './Buttons';
+import UserEditButtons from './UserEditButtons';
 
 const userInfo = {
   email: 'elice@test.com',
@@ -148,7 +148,7 @@ function UserEditForm() {
     <form className={styles.form} onSubmit={handleSubmit}>
       <ProfileImage url={userInfo.profileImage} />
       <UserInfo values={values} errors={errors} handleChange={handleChange} />
-      <Buttons />
+      <UserEditButtons />
     </form>
   );
 }

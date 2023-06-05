@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import styles from './Buttons.module.scss';
+import styles from './MyPageButtons.module.scss';
 import { MyPageButtonsProps } from '../../types/UserTypes';
 
-function Buttons({ attemptDeleteAccount }: MyPageButtonsProps) {
+function MyPageButtons({ attemptDeleteAccount }: MyPageButtonsProps) {
   const navigate = useNavigate();
   return (
     <ul className={styles.buttons}>
@@ -25,4 +25,4 @@ function Buttons({ attemptDeleteAccount }: MyPageButtonsProps) {
   );
 }
 
-export default Buttons;
+export default MyPageButtons;
