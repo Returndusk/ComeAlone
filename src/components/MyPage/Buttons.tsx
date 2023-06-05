@@ -1,12 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import styles from './Buttons.module.scss';
+import { MyPageButtonsProps } from '../../types/UserTypes';
 
-interface ButtonsProps {
-  attemptDeleteAccount: () => void;
-}
-
-function Buttons({ attemptDeleteAccount }: ButtonsProps) {
+function Buttons({ attemptDeleteAccount }: MyPageButtonsProps) {
   const navigate = useNavigate();
   return (
     <ul className={styles.buttons}>

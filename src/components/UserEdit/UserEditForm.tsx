@@ -1,23 +1,9 @@
 import React, { useState } from 'react';
 import styles from './UserEditForm.module.scss';
+import { Errors, UserInfoValues } from '../../types/UserTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
 import Buttons from './Buttons';
-
-export interface UserInfoValues {
-  email: string;
-  profileImage: string;
-  nickname: string;
-  newPassword: '';
-  passwordConfirm: '';
-  birthDate: string;
-  gender: string;
-  phoneNumber: string;
-}
-
-export interface Errors {
-  [key: string]: string;
-}
 
 const userInfo = {
   email: 'elice@test.com',
