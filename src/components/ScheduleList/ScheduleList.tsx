@@ -1,25 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import axios from 'axios';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
-import axios from 'axios';
 import ScheduleListDummy from './ScheduleListDummy';
 import ROUTER from '../../constants/Router';
-
-export type ScheduleType = {
-  id: string;
-  title: string;
-  description: string;
-  createdBy: string;
-  createdAt: string;
-  start_date: string;
-  end_date: string;
-  status: string;
-  destinations: string[][];
-  likes: number;
-  image: string;
-};
-
-export type ScheduleListType = ScheduleType[];
+import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 
 function ScheduleLists() {
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
@@ -74,7 +59,7 @@ function ScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {scheduleList.map((schedule: ScheduleType, index: number) => (
+        {scheduleList.map((schedule: ScheduleCardType, index: number) => (
           <ScheduleCard
             schedule={schedule}
             key={index}
