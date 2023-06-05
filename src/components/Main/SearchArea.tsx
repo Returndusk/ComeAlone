@@ -12,20 +12,30 @@ import { useNavigate } from 'react-router-dom';
 
 function SearchArea() {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [hasError, setHasError] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+    setHasError(false);
   };
 
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      navigate(`/destination/list?search=${searchTerm}`);
+      if (searchTerm.trim() === '') {
+        setHasError(true);
+      } else {
+        navigate(`/destination/list?search=${searchTerm}`);
+      }
     }
   };
 
   const handleIconClick = () => {
-    navigate(`/destination/list?search=${searchTerm}`);
+    if (searchTerm.trim() === '') {
+      setHasError(true);
+    } else {
+      navigate(`/destination/list?search=${searchTerm}`);
+    }
   };
 
   return (
@@ -38,11 +48,13 @@ function SearchArea() {
           <TextField
             id='search'
             type='search'
-            label='목정지명을 입력해 주세요.'
+            label='목적지명을 입력해 주세요.'
             value={searchTerm}
             onChange={handleChange}
             onKeyPress={handleSearch}
             sx={{ width: 600 }}
+            error={hasError}
+            helperText={hasError ? '빈 칸을 채워주세요.' : ''}
             InputProps={{
               endAdornment: (
                 <InputAdornment position='end'>
