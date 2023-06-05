@@ -17,7 +17,7 @@ function ScheduleCard({ schedule, link }: MyScheduleCardProps) {
             <div>{schedule.start_date}</div>
             <div>{schedule.end_date}</div>
             <div className={styles.scheduleCreated}>
-              등록 : {schedule.createdAt}
+              등록 : {schedule.created_at}
             </div>
           </div>
           <div className={styles.scheduleLike}>❤ 좋아요 수</div>

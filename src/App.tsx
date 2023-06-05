@@ -13,6 +13,7 @@ import MyScheduleList from './pages/MyScheduleList';
 import Header from './components/common/Header/Header';
 import Footer from './components/common/Footer/Footer';
 import ROUTER from './constants/Router';
+import DestinationDetails from './components/DestinationList/DestinationDetails';
 
 function App() {
   {
@@ -37,7 +38,12 @@ function App() {
         <Route path={ROUTER.REGISTER} element={<Register />} />
         <Route path={ROUTER.MYPAGE} element={<MyPage />} />
         <Route path={ROUTER.MYPAGE_EDIT} element={<UserEdit />} />
-        <Route path={ROUTER.DESTINATION_LIST} element={<DestinationList />} />
+        <Route path={ROUTER.DESTINATION_LIST} element={<DestinationList />}>
+          <Route
+            path={ROUTER.DESTINATION_LIST_DETAILS_PARAMS}
+            element={<DestinationDetails />}
+          />
+        </Route>
         <Route path={ROUTER.SCHEDULE_LIST} element={<ScheduleList />} />
         <Route path={ROUTER.MYSCHEDULE_LIST} element={<MyScheduleList />} />
         <Route path={ROUTER.SCHEDULE_EDIT} element={<ScheduleEdit />} />
