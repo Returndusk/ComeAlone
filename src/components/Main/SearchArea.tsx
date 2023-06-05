@@ -1,14 +1,41 @@
 import React, { useState, ChangeEvent } from 'react';
 import styles from './SearchArea.module.scss';
 import mainImage from './samplemain.jpg';
-import { Container, InputAdornment, TextField } from '@mui/material';
+import {
+  Container,
+  InputAdornment,
+  TextField,
+  IconButton
+} from '@mui/material';
 import { BiSearch } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 function SearchArea() {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [hasError, setHasError] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+    setHasError(false);
+  };
+
+  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (searchTerm.trim() === '') {
+        setHasError(true);
+      } else {
+        navigate(`/destination/list?search=${searchTerm}`);
+      }
+    }
+  };
+
+  const handleIconClick = () => {
+    if (searchTerm.trim() === '') {
+      setHasError(true);
+    } else {
+      navigate(`/destination/list?search=${searchTerm}`);
+    }
   };
 
   return (
@@ -21,14 +48,19 @@ function SearchArea() {
           <TextField
             id='search'
             type='search'
-            label='Search'
+            label='목적지명을 입력해 주세요.'
             value={searchTerm}
             onChange={handleChange}
+            onKeyPress={handleSearch}
             sx={{ width: 600 }}
+            error={hasError}
+            helperText={hasError ? '빈 칸을 채워주세요.' : ''}
             InputProps={{
               endAdornment: (
                 <InputAdornment position='end'>
-                  <BiSearch />
+                  <IconButton onClick={handleIconClick}>
+                    <BiSearch />
+                  </IconButton>
                 </InputAdornment>
               )
             }}
