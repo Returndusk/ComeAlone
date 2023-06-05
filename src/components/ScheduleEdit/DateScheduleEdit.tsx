@@ -9,18 +9,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
-
-type DateInfoType = {
-  startDate: Date;
-  endDate: Date;
-  duration: string;
-};
-
-type DateSelectionType = {
-  startDate?: Date | undefined;
-  endDate?: Date | undefined;
-  key?: string | undefined;
-};
+import { DateInfoType, DateSelectionType } from '../../types/ScheduleEdit';
 
 function DateScheduleEdit({
   dateInfo,

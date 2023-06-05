@@ -1,16 +1,7 @@
 import React from 'react';
 import styles from './InfoScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
-
-type InfoScheduleDetailType = {
-  duration: string;
-  title: string;
-  createdBy: string;
-  startDate: Date;
-  endDate: Date;
-  createdAt: string;
-  summary: string;
-};
+import { InfoScheduleDetailType } from '../../types/ScheduleDetail';
 
 function InfoScheduleDetail({
   schedule

@@ -1,15 +1,7 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import styles from './InfoScheduleEdit.module.scss';
 import TextField from '@mui/material/TextField';
-
-type InfoScheduleEditType = {
-  title: string;
-  writer: string;
-  date: string;
-  description: string;
-  handleTitle: Dispatch<SetStateAction<string>>;
-  handleDescription: Dispatch<SetStateAction<string>>;
-};
+import { InfoScheduleEditType } from '../../types/ScheduleEdit';
 
 function InfoScheduleEdit({
   title,

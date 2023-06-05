@@ -12,12 +12,7 @@ import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
 import { DestinationsType } from '../components/DestinationList/Types';
 import { FaArrowLeft } from 'react-icons/fa';
-
-type DateInfoType = {
-  startDate: Date;
-  endDate: Date;
-  duration: string;
-};
+import { DateInfoType } from '../types/ScheduleEdit';
 
 function ScheduleEdit() {
   const [dateInfo, setDateInfo] = useState({
