@@ -1,81 +1,64 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styles from './Header.module.scss';
-import Weather from './Weather';
+import React, { useState } from 'react';
 import { BiCalendar, BiUserCircle } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import { Menu, MenuItem, IconButton } from '@mui/material';
+import Weather from './Weather';
+import styles from './Header.module.scss';
 
 function Header() {
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setDropdownOpen(false);
-      }
-    };
+  const handleUserIconClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    document.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
-  const handleUserIconClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    setDropdownOpen(!isDropdownOpen);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
     <div className={styles.layout}>
       <div className={styles.body}>
         <div className={styles.layoutLeft}>
-          <Link to='/' className={styles.logo}>
+          <RouterLink to='/' className={styles.logo}>
             혼자옵서예
-          </Link>
+          </RouterLink>
           <nav>
             <ul>
-              <Link to='/destination/list'>목적지</Link>
-              <Link to='/schedule/list'>여행일정</Link>
+              <RouterLink to='/destination/list'>목적지</RouterLink>
+              <RouterLink to='/schedule/list'>여행일정</RouterLink>
             </ul>
           </nav>
         </div>
         <div className={styles.layoutRight}>
           <Weather />
-          <Link to='/myschedule/list'>
+          <RouterLink to='/myschedule/list'>
             <BiCalendar className={styles.calendar} />
-          </Link>
+          </RouterLink>
           <div className={styles.auth}>
-            <BiUserCircle
-              className={`${styles.userIcon} ${
-                isDropdownOpen ? styles.open : ''
-              }`}
-              onClick={handleUserIconClick}
-            />
+            <IconButton onClick={handleUserIconClick}>
+              <BiUserCircle className={styles.userIcon} />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>
+                <RouterLink to='/mypage'>마이페이지</RouterLink>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <RouterLink to='/logout'>로그아웃</RouterLink>
+              </MenuItem>
+            </Menu>
 
-            {isDropdownOpen && (
-              <div className={styles.dropdownMenu} ref={dropdownRef}>
-                <Link to='/mypage' onClick={() => setDropdownOpen(false)}>
-                  마이페이지
-                </Link>
-                <br />
-                <Link to='/logout' onClick={() => setDropdownOpen(false)}>
-                  로그아웃
-                </Link>
-              </div>
-            )}
-
-            <Link to='/login'>
+            <RouterLink to='/login'>
               <span>로그인</span>
-            </Link>
+            </RouterLink>
             {' | '}
-            <Link to='/register'>
+            <RouterLink to='/register'>
               <span>회원 가입</span>
-            </Link>
+            </RouterLink>
           </div>
         </div>
       </div>
