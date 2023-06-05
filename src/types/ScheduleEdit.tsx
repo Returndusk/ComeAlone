@@ -20,3 +20,10 @@ export type InfoScheduleEditType = {
   handleTitle: Dispatch<SetStateAction<string>>;
   handleDescription: Dispatch<SetStateAction<string>>;
 };
+
+export type ScheduleEditSubmitType = {
+  title: string;
+  description: string;
+  dateInfo: DateInfoType;
+  isPublic: boolean;
+};

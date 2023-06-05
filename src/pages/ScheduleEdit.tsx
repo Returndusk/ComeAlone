@@ -12,7 +12,7 @@ import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
 import { DestinationsType } from '../components/DestinationList/Types';
 import { FaArrowLeft } from 'react-icons/fa';
-import { DateInfoType } from '../types/ScheduleEdit';
+import { ScheduleEditSubmitType } from '../types/ScheduleEdit';
 
 function ScheduleEdit() {
   const [dateInfo, setDateInfo] = useState({
@@ -32,12 +32,12 @@ function ScheduleEdit() {
     setCheckedDestinations(destinations);
   };
 
-  const onSubmit = (
-    title: string,
-    description: string,
-    dateInfo: DateInfoType,
-    isPublic: boolean
-  ) => {
+  const onSubmit = ({
+    title,
+    description,
+    dateInfo,
+    isPublic
+  }: ScheduleEditSubmitType) => {
     console.log({ ...dateInfo, title, description, isPublic });
   };
 
@@ -83,7 +83,7 @@ function ScheduleEdit() {
       </div>
       <div className={styles.confirmButtonWrapper}>
         <button
-          onClick={() => onSubmit(title, description, dateInfo, isPublic)}
+          onClick={() => onSubmit({ title, description, dateInfo, isPublic })}
         >
           수정완료
         </button>
