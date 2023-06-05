@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './DestinationList.module.scss';
-import { DestinationsType } from '../DestinationList/Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 
 function DestinationList({
   destinations,

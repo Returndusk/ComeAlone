@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import styles from './Map.module.scss';
-import { DestinationsType } from '../../DestinationList/Types';
+import { MapPropsType } from '../../../types/DestinationListTypes';
 
 declare global {
   interface Window {
@@ -8,10 +8,10 @@ declare global {
   }
 }
 
-type MapPropsType = {
-  markersLocations: DestinationsType[];
+type MapPropsTypes = {
+  markersLocations: MapPropsType[];
   setClickedDestination: React.Dispatch<
-    React.SetStateAction<DestinationsType | null>
+    React.SetStateAction<MapPropsType | null>
   >;
 };
 
@@ -23,17 +23,21 @@ const DEFAULT_LOCATION = {
 
 const { kakao } = window;
 
-function Map({ markersLocations, setClickedDestination }: MapPropsType) {
-  let markers = [...markersLocations];
+function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
+  const markers = [...markersLocations];
 
-  const prevMarkersLocations = useMemo(() => {
+  // const prevMarkersLocations = useMemo(() => {
+  //   return markersLocations;
+  // }, [markersLocations]);
+
+  const cachingMarkers = useMemo(() => {
     return markersLocations;
   }, [markersLocations]);
 
-  useEffect(() => {
-    markers =
-      markersLocations.length > 0 ? markersLocations : prevMarkersLocations;
-  }, [markersLocations]);
+  // useEffect(() => {
+  //   markers =
+  //     markersLocations.length > 0 ? markersLocations : prevMarkersLocations;
+  // }, [markersLocations]);
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -50,7 +54,7 @@ function Map({ markersLocations, setClickedDestination }: MapPropsType) {
 
     const bounds = new kakao.maps.LatLngBounds();
 
-    markers?.forEach((marker) => {
+    cachingMarkers?.forEach((marker) => {
       const position = new kakao.maps.LatLng(
         Number(marker?.mapy),
         Number(marker?.mapx)
@@ -68,7 +72,7 @@ function Map({ markersLocations, setClickedDestination }: MapPropsType) {
       });
     });
     map.setBounds(bounds, 36, 32, 32, 650);
-  }, [markersLocations]);
+  }, [cachingMarkers]);
 
   return (
     <>
