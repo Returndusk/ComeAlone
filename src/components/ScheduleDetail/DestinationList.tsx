@@ -7,7 +7,7 @@ function DestinationList({
   onChecked
 }: {
   destinations: DestinationsType[][];
-  onChecked: any;
+  onChecked: (destination: DestinationsType[]) => void;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 

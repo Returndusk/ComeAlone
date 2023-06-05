@@ -10,17 +10,15 @@ function ScheduleCard({ schedule, link }: MyScheduleCardProps) {
         <div className={styles.scheduleContent}>
           <div className={styles.scheduleText}>
             <div className={styles.scheduleTitle}>{schedule.title}</div>
-            <div className={styles.scheduleDescription}>{schedule.summary}</div>
-            <div className={styles.scheduleDate}>
+            <div>{schedule.summary}</div>
+            <div>
               {schedule.duration - 1}박 {schedule.duration}일
             </div>
             <div>{schedule.start_date}</div>
             <div>{schedule.end_date}</div>
-            <div className={styles.scheduleCreated}>
-              등록 : {schedule.created_at}
-            </div>
+            <div>등록 : {schedule.created_at}</div>
           </div>
-          <div className={styles.scheduleLike}>❤ 좋아요 수</div>
+          <div>❤ 좋아요 수</div>
         </div>
         <div className={styles.scheduleDestination}>
           <div>{schedule.destinations[0]}</div>

@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styles from './EditDestinationList.module.scss';
 import { DestinationsType } from '../../types/DestinationListTypes';
 
 function EditDestinationList({
   destinations,
-  onChecked,
-  handleDestinationList
+  checkedDayIndex,
+  handleDestinationList,
+  handleCheckedDayIndex
 }: {
   destinations: DestinationsType[][];
-  onChecked: any;
-  handleDestinationList: any;
+  checkedDayIndex: number;
+  handleDestinationList: Dispatch<SetStateAction<DestinationsType[][]>>;
+  handleCheckedDayIndex: Dispatch<SetStateAction<number>>;
 }) {
-  const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
-
   return (
     <div className={styles.destinationsContainer}>
       <div className={styles.destinationsTitle}>목적지 리스트</div>
@@ -21,8 +21,7 @@ function EditDestinationList({
           type='checkbox'
           checked={checkedDayIndex === -1}
           onChange={() => {
-            setCheckedDayIndex(-1);
-            onChecked(destinations.flat());
+            handleCheckedDayIndex(-1);
           }}
         />
         전체 목적지 보기
@@ -41,11 +40,9 @@ function EditDestinationList({
                   checked={checkedDayIndex === dayIndex}
                   onChange={() => {
                     if (checkedDayIndex === dayIndex) {
-                      setCheckedDayIndex(-1);
-                      onChecked(destinations.flat());
+                      handleCheckedDayIndex(-1);
                     } else {
-                      setCheckedDayIndex(dayIndex);
-                      onChecked(destOfDay);
+                      handleCheckedDayIndex(dayIndex);
                     }
                   }}
                 />{' '}
