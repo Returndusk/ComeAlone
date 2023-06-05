@@ -24,8 +24,6 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
   const { search } = useLocation();
   const navigate = useNavigate();
 
-  console.log(filteredDestinations, '데스티네이션 filteredDestinations');
-
   useEffect(() => {
     setDetailsDomRoot(() => document.getElementById('main'));
   }, []);
