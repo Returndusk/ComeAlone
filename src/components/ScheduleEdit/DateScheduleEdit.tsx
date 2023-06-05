@@ -34,7 +34,7 @@ function DateScheduleEdit({
 
     if (startDate && endDate) {
       const diffDay =
-        endDate.getTime() - startDate.getTime() / (1000 * 60 * 60 * 24) + 1;
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) + 1;
 
       handleDateInfo({ startDate, endDate, duration: diffDay.toString() });
     }
