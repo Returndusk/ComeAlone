@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import styles from './InputReviewSchedule.module.scss';
 import Avatar from '@mui/material/Avatar';
 
-function InputReviewSchedule({ onSubmit }: { onSubmit: any }) {
+function InputReviewSchedule({
+  onSubmit
+}: {
+  onSubmit: (input: string) => void;
+}) {
   const [reviewTyping, setReviewTyping] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {

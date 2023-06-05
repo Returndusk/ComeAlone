@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './InfoScheduleEdit.module.scss';
 import TextField from '@mui/material/TextField';
+import { InfoScheduleEditType } from '../../types/ScheduleEdit';
 
 function InfoScheduleEdit({
   title,
@@ -9,14 +10,7 @@ function InfoScheduleEdit({
   description,
   handleTitle,
   handleDescription
-}: {
-  title: string;
-  writer: string;
-  date: string;
-  description: string;
-  handleTitle: any;
-  handleDescription: any;
-}) {
+}: InfoScheduleEditType) {
   return (
     <div className={styles.ScheduleInfoContainer}>
       <TextField
