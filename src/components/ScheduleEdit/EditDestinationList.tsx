@@ -35,7 +35,10 @@ function EditDestinationList({
         <div className={styles.destinationsList}>
           {destinations.map((destOfDay, dayIndex) => {
             return (
-              <Droppable droppableId='destinationList' key={dayIndex}>
+              <Droppable
+                droppableId={`destinationList ${dayIndex}`}
+                key={`destinationList ${dayIndex}`}
+              >
                 {(droppableProvided) => (
                   <ol className={styles.destinationsDay}>
                     <label
@@ -57,8 +60,8 @@ function EditDestinationList({
                     </label>
                     {destOfDay.map((dest, destIndex) => (
                       <Draggable
-                        key={dest.title}
-                        draggableId={dayIndex.toString() + destIndex.toString()}
+                        key={`${dayIndex} ${destIndex}`}
+                        draggableId={`${dayIndex} ${destIndex}`}
                         index={destIndex}
                       >
                         {(draggableProvided) => (
