@@ -3,7 +3,7 @@ import styles from './DestinationDetails.module.scss';
 import { RiThumbUpFill } from 'react-icons/ri';
 import { RiThumbUpLine } from 'react-icons/ri';
 import Review from './Review';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const DEFAULT_DESTINATIONS = [
   {
@@ -46,33 +46,11 @@ const DEFAULT_DESTINATIONS = [
 
 function DestinationDetails() {
   const [likes, setLikes] = useState<boolean>(false);
-  const navigate = useNavigate();
   const { contentid } = useParams();
-  const { search } = useLocation();
-  // const search = location.search ?? '';
 
   const destination = useMemo(() => {
     return DEFAULT_DESTINATIONS.find((des) => des.contentid === contentid);
   }, [contentid]);
-
-  const searchQuery = useMemo(() => {
-    return search;
-  }, [search]);
-
-  // const removePathParam = (search: string) => {
-  //   const searchParams = new URLSearchParams(search);
-  //   // console.log(searchParams, 'searchParams');
-  //   // searchParams.delete(`${contentid}`);
-  //   // return `?${searchParams.toString()}`;
-  //   return searchParams.toString();
-  // };
-
-  const closeDetailPage = () => {
-    const newUrl = searchQuery
-      ? `/destination/list?search=${searchQuery}`
-      : `/destination/list`;
-    navigate(newUrl, { replace: true });
-  };
 
   const handleLikesClick = () => {
     /*좋아요 요청(백엔드 요청)*/
@@ -83,14 +61,6 @@ function DestinationDetails() {
     <>
       {destination !== null && (
         <div className={styles.destinationDetailsContainer}>
-          <div className={styles.detailsButtonContainer}>
-            <button
-              className={styles.detailsCloseButton}
-              onClick={closeDetailPage}
-            >
-              X
-            </button>
-          </div>
           <section className={styles.destinationDetails}>
             <h2>{destination?.title}</h2>
             <p>전화번호:{destination?.tel}</p>
@@ -109,7 +79,6 @@ function DestinationDetails() {
             <div>{/*<button>내 일정에 추가</button>*/}</div>
           </section>
           <section className={styles.detailsReviewsContainer}>
-            {/* <Review clickedDestination={clickedDestination} /> */}
             <Review clickedDestination={destination ?? null} />
           </section>
         </div>
