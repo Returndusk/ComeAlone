@@ -46,7 +46,7 @@ function Header() {
         </div>
         <div className={styles.layoutRight}>
           <Weather />
-          <Link to='/schedule/edit'>
+          <Link to='/myschedule/list'>
             <BiCalendar className={styles.calendar} />
           </Link>
           <div className={styles.auth}>

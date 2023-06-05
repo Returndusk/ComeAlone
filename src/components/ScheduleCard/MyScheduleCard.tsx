@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link } from 'react-router-dom';
-import { ScheduleCardProps } from '../../types/ScheduleTypes';
+import { MyScheduleCardProps } from '../../types/ScheduleTypes';
 
-function ScheduleCard({ schedule, link }: ScheduleCardProps) {
+function ScheduleCard({ schedule, link }: MyScheduleCardProps) {
   return (
     <Link to={link} className={styles.scheduleCard}>
       <div className={styles.scheduleCardContent}>
@@ -14,9 +14,8 @@ function ScheduleCard({ schedule, link }: ScheduleCardProps) {
             <div className={styles.scheduleDate}>
               {schedule.duration - 1}박 {schedule.duration}일
             </div>
-            <div className={styles.scheduleAuthor}>
-              작성자 : {schedule.nickname}
-            </div>
+            <div>{schedule.start_date}</div>
+            <div>{schedule.end_date}</div>
             <div className={styles.scheduleCreated}>
               등록 : {schedule.createdAt}
             </div>
