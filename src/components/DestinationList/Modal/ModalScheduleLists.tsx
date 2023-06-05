@@ -2,29 +2,12 @@ import React, { useState } from 'react';
 import styles from './ModalScheduleLists.module.scss';
 import dummy from '../../ScheduleList/ScheduleListDummy';
 import ModalScheduleCard from './ModalScheduleCard';
-
-export type ScheduleType = {
-  id: string;
-  title: string;
-  description: string;
-  createdBy: string;
-  createdAt: string;
-  start_date: string;
-  end_date: string;
-  status: string;
-  destinations: string[][];
-  likes: number;
-  image: string;
-};
-
-type ScheduleListType = ScheduleType[];
+import { MyScheduleListType } from '../../../types/ScheduleTypes';
 
 export default function ModalScheduleLists() {
-  const [scheduleList, setScheduleList] = useState<ScheduleListType>(dummy);
+  const [scheduleList, setScheduleList] = useState<MyScheduleListType>(dummy);
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
-  // const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedCardIdx, setSelectedCardIdx] = useState<number | null>(null);
-  // console.log(scheduleList);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
@@ -33,15 +16,14 @@ export default function ModalScheduleLists() {
   }
 
   function handleShowDestinations(day: number) {
-    // setSelectedDay(day);
     setSelectedCardIdx(day);
-    console.log(scheduleList);
   }
+  // console.log(selectedCardIdx);
 
   function handleCloseDestinations() {
-    // setSelectedDay(null);
     setSelectedCardIdx(null);
   }
+  // console.log(scheduleList);
 
   return (
     <div className={styles.scheduleContainer}>
@@ -72,7 +54,6 @@ export default function ModalScheduleLists() {
       </div>
       <div className={styles.scheduleCardContainer}>
         {scheduleList.map((schedule, index) => (
-          // console.log(schedule);
           <ModalScheduleCard
             key={schedule.id}
             schedule={schedule}
