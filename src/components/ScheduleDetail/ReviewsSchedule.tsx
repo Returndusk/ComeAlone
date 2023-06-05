@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './ScheduleDetail.module.scss';
+import styles from './ReviewsSchedule.module.scss';
 import Avatar from '@mui/material/Avatar';
 
 function ReviewsSchedule({
@@ -8,7 +8,7 @@ function ReviewsSchedule({
   reviews: { writer: string; comment: string }[];
 }) {
   return (
-    <div className={styles.reviewsWrapper}>
+    <div className={styles.reviewsContainer}>
       <div className={styles.reviewsTitle}>리뷰 리스트</div>
       <div className={styles.reviewsList}>
         {reviews.map((review, index) => {

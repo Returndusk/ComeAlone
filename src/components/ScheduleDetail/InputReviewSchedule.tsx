@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './ScheduleDetail.module.scss';
+import styles from './InputReviewSchedule.module.scss';
 import Avatar from '@mui/material/Avatar';
 
 function InputReviewSchedule({ onSubmit }: { onSubmit: any }) {
@@ -10,7 +10,7 @@ function InputReviewSchedule({ onSubmit }: { onSubmit: any }) {
   };
 
   return (
-    <div className={styles.reviewInputWrapper}>
+    <div className={styles.reviewInputContainer}>
       <Avatar className={styles.reviewsInputWriter}>B</Avatar>
       <textarea
         className={styles.reviewsInputText}
