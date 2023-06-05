@@ -4,7 +4,7 @@ import styles from './Pagination.module.scss';
 import { DestinationsType } from './Types';
 
 type PaginationProps = {
-  destinations: DestinationsType[];
+  filteredDestinations: DestinationsType[];
   setSlicedDestinations: React.Dispatch<
     React.SetStateAction<DestinationsType[]>
   >;
@@ -18,7 +18,10 @@ const PAGES = {
   PAGES_TO_SHOW_IN_NAVBAR: 5
 };
 
-function Pagination({ destinations, setSlicedDestinations }: PaginationProps) {
+function Pagination({
+  filteredDestinations,
+  setSlicedDestinations
+}: PaginationProps) {
   const [currentPage, setCurrentPage] = useState<number>(
     PAGES.START_INDEX_OF_PAGE
   );
@@ -30,16 +33,21 @@ function Pagination({ destinations, setSlicedDestinations }: PaginationProps) {
     queryParams.get(PAGES.QUERY_OF_URL) || PAGES.START_INDEX_OF_PAGE.toString()
   );
 
-  const totalPages = Math.ceil(destinations.length / PAGES.ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(
+    filteredDestinations.length / PAGES.ITEMS_PER_PAGE
+  );
   const firstDestinationIdx =
     (currentPage - PAGES.PAGES_TO_SKIP) * PAGES.ITEMS_PER_PAGE;
   const lastDestinationIdx = firstDestinationIdx + PAGES.ITEMS_PER_PAGE;
 
   useEffect(() => {
     setSlicedDestinations(() => {
-      return destinations.slice(firstDestinationIdx, lastDestinationIdx);
+      return filteredDestinations.slice(
+        firstDestinationIdx,
+        lastDestinationIdx
+      );
     });
-  }, [destinations]);
+  }, [filteredDestinations]);
 
   useEffect(() => {
     setCurrentPage(() => pageNumber);

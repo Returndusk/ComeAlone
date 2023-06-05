@@ -6,18 +6,25 @@
 .destinationsContainer {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(20, 1fr) minmax(0, 10px);
   background-color: #fff;
-  border: 1px solid #ccc;
-  width: 300px; //search bar, category container와 동일
+  width: 420px; //search bar, category container와 동일
   height: 100%; // map-2px(border 너비)과 동일함.
+  min-height: 550px;
+  overflow-x: hidden;
   overflow-y: auto;
   position: relative;
   justify-content: flex-start;
   z-index: 1000;
 
+  /*
+  div:not(:last-child) {
+    box-sizing: border-box;
+    padding: 15px;
+  }
+  */
+
   .destinations {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #ccc;
 
     &:hover {
       cursor: pointer;
@@ -27,4 +34,17 @@
 
 .destinationsInfoContainer {
   display: flex;
+}
+
+.alertContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #c1c1c1;
+
+  .alertIcon {
+    width: 100px;
+    height: 100px;
+  }
 }
