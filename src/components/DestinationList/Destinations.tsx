@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Pagination from './Pagination';
 import Map from '../common/Map/Map';
 import styles from './Destinations.module.scss';
-import { DestinationsType } from './Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 import { CiCircleAlert } from 'react-icons/ci';
 import { createPortal } from 'react-dom';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -21,7 +21,6 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
   const [detailsDomRoot, setDetailsDomRoot] = useState<HTMLElement | null>(
     null
   );
-
   const { search } = useLocation();
   const navigate = useNavigate();
 
@@ -29,22 +28,16 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
     setDetailsDomRoot(() => document.getElementById('main'));
   }, []);
 
-  useEffect(() => {
-    if (clickedDestination !== null) {
-      setIsOpen(() => true);
-    }
-  }, [clickedDestination]);
-
-  useEffect(() => {
-    if (filteredDestinations.length === 0) {
-      setIsOpen(() => false);
-      return;
-    }
-  }, [filteredDestinations]);
-
   const handleDestinationClick = (destination: DestinationsType) => {
     setClickedDestination(() => destination);
-    navigate(`/destination/list/${destination.contentid}`);
+    navigate(`/destination/list/${destination.id}${search}`);
+    setIsOpen(() => true);
+  };
+
+  const closeDetailPage = () => {
+    setIsOpen(() => false);
+    setClickedDestination(() => null);
+    navigate(`/destination/list${search}`);
   };
 
   return (
@@ -80,8 +73,16 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
         {isOpen &&
           detailsDomRoot !== null &&
           createPortal(
-            <section>
+            <section className={styles.detailsContainer}>
               <Outlet />
+              <div className={styles.detailsButtonContainer}>
+                <button
+                  className={styles.detailsCloseButton}
+                  onClick={closeDetailPage}
+                >
+                  X
+                </button>
+              </div>
             </section>,
             detailsDomRoot
           )}
