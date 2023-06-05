@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import FormGroup from '@mui/material/FormGroup';
@@ -12,6 +12,12 @@ import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
 import { DestinationsType } from '../components/DestinationList/Types';
 import { FaArrowLeft } from 'react-icons/fa';
+
+type DateInfoType = {
+  startDate: Date;
+  endDate: Date;
+  duration: string;
+};
 
 function ScheduleEdit() {
   const [dateInfo, setDateInfo] = useState({
@@ -34,11 +40,7 @@ function ScheduleEdit() {
   const onSubmit = (
     title: string,
     description: string,
-    dateInfo: {
-      startDate: Date;
-      endDate: Date;
-      duration: string;
-    },
+    dateInfo: DateInfoType,
     isPublic: boolean
   ) => {
     console.log({ ...dateInfo, title, description, isPublic });

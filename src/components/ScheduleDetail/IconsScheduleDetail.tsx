@@ -2,13 +2,15 @@ import React from 'react';
 import styles from './IconsScheduleDetail.module.scss';
 import { FaHeart, FaCommentAlt } from 'react-icons/fa';
 
+type IconsScheduleDetailType = {
+  likesAmount: number;
+  reviewsAmount: number;
+};
+
 function IconsScheduleDetail({
   likesAmount,
   reviewsAmount
-}: {
-  likesAmount: number;
-  reviewsAmount: number;
-}) {
+}: IconsScheduleDetailType) {
   return (
     <div className={styles.iconsContainer}>
       <span id={styles.likes}>

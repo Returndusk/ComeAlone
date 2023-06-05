@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import styles from './DateScheduleEdit.module.scss';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Tooltip from '@mui/material/Tooltip';
@@ -10,24 +10,26 @@ import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 
+type DateInfoType = {
+  startDate: Date;
+  endDate: Date;
+  duration: string;
+};
+
+type DateSelectionType = {
+  startDate?: Date | undefined;
+  endDate?: Date | undefined;
+  key?: string | undefined;
+};
+
 function DateScheduleEdit({
   dateInfo,
   handleDateInfo
 }: {
-  dateInfo: {
-    startDate: Date;
-    endDate: Date;
-    duration: string;
-  };
-  handleDateInfo: any;
+  dateInfo: DateInfoType;
+  handleDateInfo: Dispatch<SetStateAction<DateInfoType>>;
 }) {
-  type selectionType = {
-    startDate?: Date | undefined;
-    endDate?: Date | undefined;
-    key?: string | undefined;
-  };
-
-  const dateNow: selectionType = {
+  const dateNow: DateSelectionType = {
     startDate: dateInfo.startDate,
     endDate: dateInfo.endDate,
     key: 'selection'
@@ -43,9 +45,9 @@ function DateScheduleEdit({
 
     if (startDate && endDate) {
       const diffDay =
-        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) + 1;
+        endDate.getTime() - startDate.getTime() / (1000 * 60 * 60 * 24) + 1;
 
-      handleDateInfo({ startDate, endDate, duration: diffDay });
+      handleDateInfo({ startDate, endDate, duration: diffDay.toString() });
     }
   }, [selectedDate]);
 

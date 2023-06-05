@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import styles from './EditDestinationList.module.scss';
 import { DestinationsType } from '../DestinationList/Types';
 
@@ -8,8 +8,8 @@ function EditDestinationList({
   handleDestinationList
 }: {
   destinations: DestinationsType[][];
-  onChecked: any;
-  handleDestinationList: any;
+  onChecked: (destinations: DestinationsType[]) => void;
+  handleDestinationList: Dispatch<SetStateAction<DestinationsType[][]>>;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
