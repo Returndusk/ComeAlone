@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import UserInfo from '../components/MyPage/UserInfo';
 import ProfileImage from '../components/MyPage/ProfileImage';
 import styles from '../components/MyPage/MyPage.module.scss';
-import Buttons from '../components/MyPage/Buttons';
+import MyPageButtons from '../components/MyPage/MyPageButtons';
 import DeleteAccountForm from '../components/MyPage/DeleteAccountForm';
 
 function MyPage() {
@@ -16,7 +16,7 @@ function MyPage() {
           <>
             <ProfileImage />
             <UserInfo />
-            <Buttons
+            <MyPageButtons
               attemptDeleteAccount={() => {
                 setDeleteAccountAttempt(true);
               }}
