@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from './Map.module.scss';
 import { DestinationsType } from '../../DestinationList/Types';
 
@@ -24,17 +24,16 @@ const DEFAULT_LOCATION = {
 const { kakao } = window;
 
 function Map({ markersLocations, setClickedDestination }: MapPropsType) {
-  const [prevMarkersLocations, setPrevMarkersLocations] =
-    useState(markersLocations);
   let markers = [...markersLocations];
 
-  useEffect(() => {
-    setPrevMarkersLocations(markersLocations);
+  const prevMarkersLocations = useMemo(() => {
+    return markersLocations;
   }, [markersLocations]);
 
   useEffect(() => {
-    markers = markersLocations.length > 0 ? markers : prevMarkersLocations;
-  }, [prevMarkersLocations]);
+    markers =
+      markersLocations.length > 0 ? markersLocations : prevMarkersLocations;
+  }, [markersLocations]);
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -68,7 +67,7 @@ function Map({ markersLocations, setClickedDestination }: MapPropsType) {
         setClickedDestination(marker);
       });
     });
-    map.setBounds(bounds, 36, 32, 32, 350);
+    map.setBounds(bounds, 36, 32, 32, 650);
   }, [markersLocations]);
 
   return (

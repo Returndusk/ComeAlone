@@ -1,0 +1,24 @@
+.iconsContainer {
+  justify-self: self-end;
+  align-self: self-start;
+  font-size: 26px;
+
+  #likes {
+    font-size: 26px;
+    color: red;
+
+    #likesIcon {
+      margin: 0 5px 0 0;
+      font-size: 20px;
+    }
+  }
+
+  #reviewNumber {
+    font-size: 26px;
+
+    #reviewNumberIcon {
+      margin: 0 5px 0 20px;
+      font-size: 20px;
+    }
+  }
+}

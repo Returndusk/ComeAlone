@@ -3,7 +3,8 @@ export interface DestinationsType {
   mapx: number;
   mapy: number;
   addr1?: string;
-  tel?: string;
-  overview?: string;
+  tel: string;
+  overview: string;
   contenttypeid?: string;
+  contentid: string;
 }

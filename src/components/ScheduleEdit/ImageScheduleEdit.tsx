@@ -1,9 +1,9 @@
 import React from 'react';
-import styles from './ScheduleEdit.module.scss';
+import styles from './ImageScheduleEdit.module.scss';
 
 function ImageScheduleEdit({ image }: { image: string }) {
   return (
-    <div className={styles.imageWrapper}>
+    <div className={styles.imageContainer}>
       <img
         className={styles.image}
         src={image}

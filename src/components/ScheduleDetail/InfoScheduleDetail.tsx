@@ -1,5 +1,6 @@
 import React from 'react';
-import styles from './ScheduleDetail.module.scss';
+import styles from './InfoScheduleDetail.module.scss';
+import Avatar from '@mui/material/Avatar';
 
 function InfoScheduleDetail({
   schedule
@@ -8,8 +9,8 @@ function InfoScheduleDetail({
     duration: string;
     title: string;
     createdBy: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     createdAt: string;
     summary: string;
   };
@@ -18,12 +19,19 @@ function InfoScheduleDetail({
     schedule;
 
   return (
-    <div className={styles.scheduleInfoWrapper}>
+    <div className={styles.scheduleInfoContainer}>
       <div className={styles.duration}>
-        {`${startDate} ~ ${endDate} (${duration}일)`}
+        {`${startDate.toLocaleDateString(
+          'ko-KR'
+        )} ~ ${endDate.toLocaleDateString('ko-KR')} (${duration}일)`}
       </div>
       <div className={styles.title}>{title}</div>
-      <div className={styles.writer}>{createdBy}</div>
+      <div className={styles.writer}>
+        <span className={styles.writerAvatar}>
+          <Avatar>{createdBy}</Avatar>
+        </span>
+        {createdBy}
+      </div>
       <div className={styles.date}>{createdAt}</div>
       <p>{summary}</p>
     </div>

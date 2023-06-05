@@ -1,13 +1,65 @@
 .filterContainer {
   display: flex;
   flex-direction: column;
-  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .searchContainer {
   display: flex;
+  position: relative;
   justify-content: center;
-  width: 300px;
+  width: 420px;
   z-index: 1000;
   background-color: #fff;
+
+  padding: 15px 0; // categoryContainer의 padding과 동일
+}
+
+#inputBar {
+  display: flex;
+  flex-grow: 1;
+  border-radius: 12px;
+  border: 1px solid #c6cfe0;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 50px;
+
+  min-height: 15px;
+  width: 240px;
+  max-width: 420px;
+  background: #fff;
+
+  font-size: 15px;
+  z-index: 1;
+
+  & ::placeholder {
+    font: 20px #ecf2ff;
+    text-align: center;
+    padding-right: 20px;
+  }
+
+  &:focus {
+    border: 1px solid #82878f;
+    outline: none;
+  }
+}
+
+#searchButton {
+  z-index: 2;
+  position: absolute;
+  transform: translate(50%, 50%);
+  top: 6%;
+  left: 75%;
+
+  border: none;
+  background: none;
+  padding: 0;
+  color: #82878f;
+  font-size: 26px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    color: #535455;
+  }
 }

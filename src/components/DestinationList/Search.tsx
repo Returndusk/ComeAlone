@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { DestinationsType } from './Types';
 import styles from './Search.module.scss';
 // import axios from 'axios';
 import Category from './Category';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 // 사용자에게 쿼리 받음 -> 검색 함수 전달 -> 검색함수가 쿼리랑, 목적지 받아서 검색 수행 -> 검색 결과 Destinations 파일에 전달
 
@@ -13,7 +14,10 @@ const DEFAULT_DESTINATIONS = [
     title: '제주도 시청',
     mapy: 33.48907969999994,
     mapx: 126.49932809999973,
-    contenttypeid: '32'
+    tel: '064-772-3366',
+    overview: '개요 설명입니다.',
+    contenttypeid: '32',
+    contentid: '0'
   },
   {
     title: '한라산',
@@ -21,35 +25,36 @@ const DEFAULT_DESTINATIONS = [
     mapx: 126.54626368383182,
     tel: '064-772-3366',
     overview: '개요 설명입니다.',
-    contenttypeid: '12'
+    contenttypeid: '12',
+    contentid: '1'
   },
   {
     title: '서귀포 해양 도립공원',
     mapy: 33.241570451808215,
     mapx: 126.55770550692283,
-    contenttypeid: '25'
+    tel: '064-772-3366',
+    overview: '개요 설명입니다.',
+    contenttypeid: '25',
+    contentid: '2'
   },
   {
     title: '금오름',
     mapy: 33.35452764241429,
     mapx: 126.30590904987518,
-    contenttypeid: '12'
+    tel: '064-772-3366',
+    overview: '개요 설명입니다.',
+    contenttypeid: '12',
+    contentid: '3'
   }
 ];
 
 function Search() {
   const [data, setData] = useState<DestinationsType[]>(DEFAULT_DESTINATIONS);
-  const [searchQuery, setSearchQuery] = useState<string | null>(null);
-  const [destinations, setDestinations] = useState<DestinationsType[] | []>(
-    data
-  );
-  const navigate = useNavigate();
-  const queryParams = new URLSearchParams(location.search);
-  const search = queryParams.get('search');
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    console.log(destinations, 'destinations 변경');
-  }, [destinations]);
+  const searchQueryParam = useMemo(() => {
+    return searchParams.get('search') ?? '';
+  }, [searchParams]);
 
   /* 백엔드 연결 후 수정
   async function getAllDestinations() {
@@ -64,49 +69,35 @@ function Search() {
   }
 */
 
-  //searchQuery 디버깅
-  useEffect(() => {
-    console.log(searchQuery, 'searchQuery 변경');
-  }, [searchQuery]);
-
-  const searchDestinations = (searchQuery: string) => {
+  const searchResults = useMemo(() => {
     const searchResultDestinations = data.filter((destination) => {
       const destinationTitle = destination?.title?.trim();
       const destinationAddress = destination?.addr1?.trim();
       return (
-        destinationTitle?.includes(searchQuery.trim()) ||
-        destinationAddress?.includes(searchQuery.trim())
+        destinationTitle?.includes(searchQueryParam.trim()) ||
+        destinationAddress?.includes(searchQueryParam.trim())
       );
     });
-    return searchResultDestinations;
+    return searchResultDestinations ?? [];
+  }, [searchQueryParam]);
+
+  const isNullishSearchInput = (input: string) => {
+    return input === '';
   };
 
   const handleSubmitQuery = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     const submittedQuery = e.target.searchQuery.value;
-    const searchQueryString = `${encodeURIComponent(submittedQuery)}`;
-    navigate(`/destination/list?search=${searchQueryString}`);
-    setSearchQuery(() => submittedQuery);
+    if (isNullishSearchInput(submittedQuery)) {
+      alert('검색어를 입력해주세요.');
+    }
+    const searchQueryString = encodeURIComponent(submittedQuery);
+    setSearchParams(`?search=${searchQueryString}`);
     return;
   };
 
-  useEffect(() => {
-    if (search !== '' && search !== null && search !== undefined) {
-      setSearchQuery(search);
-    }
-  }, [search]);
-
-  useEffect(() => {
-    if (searchQuery !== '') {
-      const results = searchDestinations(searchQuery ?? '');
-      setDestinations(() => results ?? []);
-      return;
-    }
-  }, [searchQuery]);
-
   return (
     <>
-      {searchQuery === '' && alert('검색어를 입력해주세요.')}
       <div className={styles.filterContainer}>
         <div className={styles.searchContainer}>
           <form className={styles.searchBar} onSubmit={handleSubmitQuery}>
@@ -114,14 +105,15 @@ function Search() {
               id={styles.inputBar}
               type='text'
               name='searchQuery'
-              placeholder='목적지명을 입력해주세요.'
+              placeholder='목적지를 입력해주세요.'
+              defaultValue={searchQueryParam}
             />
             <button id={styles.searchButton} type='submit'>
-              검색
+              <AiOutlineSearch />
             </button>
           </form>
         </div>
-        <Category destinations={destinations} />
+        <Category destinations={searchResults} />
       </div>
     </>
   );

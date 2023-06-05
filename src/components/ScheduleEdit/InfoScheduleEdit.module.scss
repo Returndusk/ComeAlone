@@ -1,0 +1,26 @@
+.ScheduleInfoContainer {
+  grid-column: 1 / 4;
+  margin: 0 0 60px 0;
+
+  .title {
+    width: 100%;
+    margin: 20px 0 30px 0;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .writer {
+    margin: 0 0 30px 0;
+    font-size: 24px;
+  }
+
+  .date {
+    margin: 0 0 40px 0;
+    font-size: 18px;
+  }
+
+  .description {
+    width: 100%;
+    height: 80px;
+  }
+}
