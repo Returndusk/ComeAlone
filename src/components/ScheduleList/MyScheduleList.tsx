@@ -3,27 +3,12 @@ import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import axios from 'axios';
 import ScheduleListDummy from './ScheduleListDummy';
+import { ScheduleType, ScheduleListType } from './ScheduleList';
 import ROUTER from '../../constants/Router';
 
-export type ScheduleType = {
-  id: string;
-  title: string;
-  description: string;
-  createdBy: string;
-  createdAt: string;
-  start_date: string;
-  end_date: string;
-  status: string;
-  destinations: string[][];
-  likes: number;
-  image: string;
-};
-
-export type ScheduleListType = ScheduleType[];
-
-function ScheduleLists() {
+function MyScheduleLists() {
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
-  const [scheduleSort, setScheduleSort] = useState<string>('likes');
+  const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
 
   const fetchData = useCallback(async () => {
     const API_URL = 'http://localhost:9999/data';
@@ -48,29 +33,40 @@ function ScheduleLists() {
 
   return (
     <div className={styles.scheduleContainer}>
-      <div className={styles.scheduleListTitle}>여행 일정</div>
+      <div className={styles.scheduleListTitle}>나의 여행 일정</div>
       <div className={styles.scheduleFilter}>
         <button
           className={`${styles.sortButton} ${
-            scheduleSort === 'likes' ? styles.selected : ''
+            scheduleSort === 'upcoming' ? styles.selected : ''
           }`}
           onClick={(e) => {
             handleSort(e);
           }}
-          value='likes'
+          value='upcoming'
         >
-          인기순
+          다가오는 일정
         </button>
         <button
           className={`${styles.sortButton} ${
-            scheduleSort === 'recent' ? styles.selected : ''
+            scheduleSort === 'past' ? styles.selected : ''
           }`}
           onClick={(e) => {
             handleSort(e);
           }}
-          value='recent'
+          value='past'
         >
-          최신순
+          지난 일정
+        </button>
+        <button
+          className={`${styles.sortButton} ${
+            scheduleSort === 'like' ? styles.selected : ''
+          }`}
+          onClick={(e) => {
+            handleSort(e);
+          }}
+          value='like'
+        >
+          좋아요 한 일정
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
@@ -87,4 +83,4 @@ function ScheduleLists() {
   );
 }
 
-export default ScheduleLists;
+export default MyScheduleLists;
