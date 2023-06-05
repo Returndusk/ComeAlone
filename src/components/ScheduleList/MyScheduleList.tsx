@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './ScheduleList.module.scss';
-import ScheduleCard from '../ScheduleCard/ScheduleCard';
+import MyScheduleCard from '../ScheduleCard/MyScheduleCard';
 import axios from 'axios';
 import ScheduleListDummy from './ScheduleListDummy';
-import { ScheduleType, ScheduleListType } from './ScheduleList';
+import {
+  MyScheduleCardType,
+  MyScheduleListType
+} from '../../types/ScheduleTypes';
 import ROUTER from '../../constants/Router';
 
 function MyScheduleLists() {
-  const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
+  const [scheduleList, setScheduleList] = useState<MyScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
 
   const fetchData = useCallback(async () => {
@@ -70,8 +73,8 @@ function MyScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {scheduleList.map((schedule: ScheduleType, index: number) => (
-          <ScheduleCard
+        {scheduleList.map((schedule: MyScheduleCardType, index: number) => (
+          <MyScheduleCard
             schedule={schedule}
             key={index}
             link={ROUTER.SCHEDULE_DETAIL}
