@@ -1,7 +1,7 @@
 //dummy data 제거 후 옵션 -> 필수로 변경 예정
 export interface DestinationsType {
   id?: number; // 구 contentid
-  category_id?: string; // 구 contenttypeid
+  category_id?: number; // 구 contenttypeid
   title: string;
   homepage?: string;
   tel?: string;

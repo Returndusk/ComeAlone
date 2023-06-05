@@ -41,7 +41,7 @@ function DestinationDetails() {
             <div>{/*<button>내 일정에 추가</button>*/}</div>
           </section>
           <section className={styles.detailsReviewsContainer}>
-            <Review clickedDestination={destination ?? null} />
+            <Review />
           </section>
         </div>
       )}

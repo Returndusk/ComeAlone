@@ -5,7 +5,6 @@ export default {
   MYPAGE: '/mypage',
   MYPAGE_EDIT: '/mypage/edit',
   DESTINATION_LIST: '/destination/list',
-  DESTINATION_LIST_DETAILS_PARAMS: ':contentid',
   SCHEDULE_LIST: '/schedule/list',
   MYSCHEDULE_LIST: '/myschedule/list',
   SCHEDULE_EDIT: '/schedule/edit',

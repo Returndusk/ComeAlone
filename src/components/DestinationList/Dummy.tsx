@@ -7,7 +7,7 @@ export const DEFAULT_DESTINATIONS = [
     addr1: '시청 주소',
     tel: '064-772-3366',
     overview: '개요 설명입니다.',
-    category_id: '32',
+    category_id: 32,
     id: 0
   },
   {
@@ -17,7 +17,7 @@ export const DEFAULT_DESTINATIONS = [
     addr1: '한라산 위치',
     tel: '064-772-3366',
     overview: '개요 설명입니다.',
-    category_id: '12',
+    category_id: 12,
     id: 1
   },
   {
@@ -27,7 +27,7 @@ export const DEFAULT_DESTINATIONS = [
     addr1: '도립공원 위치',
     tel: '064-772-3366',
     overview: '개요 설명입니다.',
-    category_id: '25',
+    category_id: 25,
     id: 2
   },
   {
@@ -37,7 +37,7 @@ export const DEFAULT_DESTINATIONS = [
     addr1: '금오름 위치',
     tel: '064-772-3366',
     overview: '개요 설명입니다.',
-    category_id: '12',
+    category_id: 12,
     id: 3
   }
 ];
