@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styles from './MapWithWaypoints.module.scss';
-import { DestinationsType } from '../../DestinationList/Types';
+import { MapWithWaypointsPropsType } from '../../../types/DestinationListTypes';
 
 declare global {
   interface Window {
@@ -9,7 +9,7 @@ declare global {
 }
 
 type MapPropsType = {
-  markersLocations: DestinationsType[];
+  markersLocations: MapWithWaypointsPropsType[];
 };
 
 // 제주도 시청을 map의 default 위치로 설정함.
