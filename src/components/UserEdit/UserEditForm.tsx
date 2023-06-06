@@ -9,7 +9,11 @@ const userInfo = {
   email: 'elice@test.com',
   profileImage: '',
   nickname: '엘리스',
-  birthDate: '1999/01/01',
+  birthDate: {
+    year: 1999,
+    month: 12,
+    day: 5
+  },
   gender: 'female',
   phoneNumber: '010-1234-1234'
 };
@@ -21,7 +25,11 @@ function UserEditForm() {
     nickname: userInfo.nickname,
     newPassword: '',
     passwordConfirm: '',
-    birthDate: userInfo.birthDate,
+    birthDate: {
+      year: userInfo.birthDate.year,
+      month: userInfo.birthDate.month,
+      day: userInfo.birthDate.day
+    },
     gender: userInfo.gender,
     phoneNumber: userInfo.phoneNumber
   };
@@ -30,6 +38,23 @@ function UserEditForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBirthDateChange = (
+    e:
+      | React.ChangeEvent<{ name: string; value: unknown }>
+      | { target: { name: string; value: number } }
+  ) => {
+    const { name, value } = e.target;
+    setValues((prev) => {
+      return {
+        ...prev,
+        birthDate: {
+          ...prev.birthDate,
+          [name]: Number(value as string)
+        }
+      };
+    });
   };
 
   const checkEmptyInputFields = (values: UserInfoValues, errMsgs: Errors) => {
@@ -147,7 +172,12 @@ function UserEditForm() {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <ProfileImage url={userInfo.profileImage} />
-      <UserInfo values={values} errors={errors} handleChange={handleChange} />
+      <UserInfo
+        values={values}
+        errors={errors}
+        handleChange={handleChange}
+        handleBirthDateChange={handleBirthDateChange}
+      />
       <UserEditButtons />
     </form>
   );
