@@ -41,7 +41,9 @@ function Pagination({
     return (currentPage - PAGES.PAGES_TO_SKIP) * PAGES.ITEMS_PER_PAGE;
   }, [currentPage]);
 
-  const lastDestinationIdx = firstDestinationIdx + PAGES.ITEMS_PER_PAGE;
+  const lastDestinationIdx = useMemo(() => {
+    return firstDestinationIdx + PAGES.ITEMS_PER_PAGE;
+  }, [firstDestinationIdx]);
 
   useEffect(() => {
     setSlicedDestinations(() => {
@@ -50,7 +52,7 @@ function Pagination({
         lastDestinationIdx
       );
     });
-  }, [filteredDestinations]);
+  }, [filteredDestinations, firstDestinationIdx, lastDestinationIdx]);
 
   useEffect(() => {
     setCurrentPage(() => pageNumber);
