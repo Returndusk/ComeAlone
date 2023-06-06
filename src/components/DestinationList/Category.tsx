@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import { DestinationsType } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
 import styles from './Category.module.scss';
@@ -24,6 +30,7 @@ function Category({ destinations }: CategoryPropsType) {
   const [selectedCategory, setSelectedCategory] = useState<number[]>([
     ...CATEGORIES_ID_LIST
   ]);
+  const deferredSelectedCategory = useDeferredValue(selectedCategory);
 
   const unCategorizedDestinations = useMemo(() => {
     return destinations;
@@ -32,6 +39,8 @@ function Category({ destinations }: CategoryPropsType) {
   const [filteredDestinations, setFilteredDestinations] = useState<
     DestinationsType[] | []
   >(unCategorizedDestinations);
+  const deferredFilteredDestinations = useDeferredValue(filteredDestinations);
+  const isStale = filteredDestinations !== deferredFilteredDestinations;
 
   const isSelectedAll = useMemo(() => {
     return selectedCategory.length === CATEGORIES_ID_LIST.length;
@@ -92,7 +101,7 @@ function Category({ destinations }: CategoryPropsType) {
             value={categoryId}
             onClick={handleCategoryClick}
             className={
-              selectedCategory.includes(categoryId)
+              deferredSelectedCategory.includes(categoryId)
                 ? styles.activeSelectedButton
                 : styles.selectedButton
             }
@@ -101,7 +110,10 @@ function Category({ destinations }: CategoryPropsType) {
           </button>
         ))}
       </div>
-      <Destinations filteredDestinations={filteredDestinations} />
+      <Destinations
+        filteredDestinations={deferredFilteredDestinations}
+        isStale={isStale}
+      />
     </>
   );
 }

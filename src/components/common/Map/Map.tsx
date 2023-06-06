@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useDeferredValue, useEffect, useMemo } from 'react';
 import styles from './Map.module.scss';
 import { MapPropsType } from '../../../types/DestinationListTypes';
 
@@ -24,15 +24,16 @@ const DEFAULT_LOCATION = {
 const { kakao } = window;
 
 function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
-  const markers = [...markersLocations];
+  // const markers = [...markersLocations];
 
   // const prevMarkersLocations = useMemo(() => {
   //   return markersLocations;
   // }, [markersLocations]);
+  const deferredMarkersLocations = useDeferredValue(markersLocations);
 
   const cachingMarkers = useMemo(() => {
-    return markersLocations;
-  }, [markersLocations]);
+    return deferredMarkersLocations;
+  }, [deferredMarkersLocations]);
 
   // useEffect(() => {
   //   markers =

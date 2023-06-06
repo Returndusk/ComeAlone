@@ -32,6 +32,33 @@
   }
 }
 
+.staleDestinationsContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: #e1e1e1; //위랑 차이점
+  width: 420px; //search bar, category container와 동일
+  height: 100%; // map-2px(border 너비)과 동일함.
+  min-height: 550px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  justify-content: flex-start;
+  z-index: 1000;
+
+  /*
+  div:not(:last-child) {
+    box-sizing: border-box;
+    padding: 15px;
+  }
+  */
+
+  transition: background-color 0.2s 0.2s linear; //위랑 차이점
+
+  .destinations {
+    border-bottom: 1px solid #ccc;
+  }
+}
+
 .destinationsInfoContainer {
   display: flex;
 }

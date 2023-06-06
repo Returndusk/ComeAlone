@@ -9,9 +9,13 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 type DestinationsPropsType = {
   filteredDestinations: DestinationsType[] | [];
+  isStale: boolean;
 };
 
-function Destinations({ filteredDestinations }: DestinationsPropsType) {
+function Destinations({
+  filteredDestinations,
+  isStale
+}: DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
     DestinationsType[] | []
   >(filteredDestinations);
@@ -43,7 +47,13 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
   return (
     <div className={styles.destinationContentsContainer}>
       <div className={styles.destinationsInfoContainer}>
-        <section className={styles.destinationsContainer}>
+        <section
+          className={
+            isStale
+              ? styles.staleDestinationsContainer
+              : styles.destinationsContainer
+          }
+        >
           {filteredDestinations.length > 0 ? (
             <>
               {slicedDestinations.map(
