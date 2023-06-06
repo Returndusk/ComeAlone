@@ -7,9 +7,9 @@ export default function ModalScheduleCard({
   schedule,
   index,
   isSelected,
-  onShowDestinations,
-  onCloseDestinations
-}: ModalScheduleCardType) {
+  onShowDestinations
+}: // onCloseDestinations
+ModalScheduleCardType) {
   const endDate = new Date(schedule.end_date);
   const startDate = new Date(schedule.start_date);
   const createdAt = schedule.created_at;
@@ -17,14 +17,16 @@ export default function ModalScheduleCard({
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
   // N일차
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  // const [updatedDestination, setUpdatedDestination] = useState<string[]>([]);
 
   function handleToggleDestinations(dayIndex: number) {
     // 선택시점에는 dayIndex !== selectedDay
     setSelectedDay(selectedDay === dayIndex ? null : dayIndex);
   }
-  // console.log('selectedDay', selectedDay);
-  // console.log('dayIndex', dayIndex);
-  // console.log(schedule.destinations[selectedDay]);
+
+  // function handleDestinationUpdate(updatedDestination: string[]) {
+  //   setUpdatedDestination(updatedDestination);
+  // }
 
   return (
     <>
@@ -37,15 +39,9 @@ export default function ModalScheduleCard({
         <div className={styles.scheduleContent}>
           <div className={styles.scheduleText}>
             <div className={styles.scheduleTitle}>{schedule.title}</div>
-            {/* <div className={styles.scheduleDescription}>
-            {schedule.description}
-          </div> */}
             <div className={styles.scheduleDate}>
               {diffDate}박 {diffDate + 1}일
             </div>
-            {/* <div className={styles.scheduleAuthor}>
-            작성자 : {schedule.createdBy}
-          </div> */}
             <div className={styles.scheduleCreated}>등록 : {createdAt}</div>
           </div>
           <div className={styles.scheduleLike}>❤ 좋아요 수</div>
@@ -65,17 +61,10 @@ export default function ModalScheduleCard({
         </div>
       )}
       {isSelected && selectedDay !== null && (
-        <div className={styles.scheduleDestination}>
-          {/* <button className={styles.closeBtn} onClick={onCloseDestinations}>
-            닫기
-          </button> */}
-          <div className={styles.destinationList}>
-            {schedule.destinations[selectedDay].map((destination, idx) => (
-              <div key={idx}>{destination}</div>
-            ))}
-          </div>
-          <AddToScheduleModal />
-        </div>
+        <AddToScheduleModal
+          destinations={schedule.destinations[selectedDay]}
+          // onDestinationUpdate={handleDestinationUpdate}
+        />
       )}
     </>
   );

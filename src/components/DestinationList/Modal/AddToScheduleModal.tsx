@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ModalScheduleLists from './ModalScheduleLists';
-import ModalScheduleCard from './ModalScheduleCard';
-import DestinationDetails from '../DestinationDetails';
 import styles from './CommonModalDesign.module.scss';
-import dummy from '../../ScheduleList/ScheduleListDummy';
+import { AddToScheduleModalType } from '../../../types/ModalScheduleTypes';
+
+/**
+ * TODO
+ * 1. 추가는 됐지만 N일차로 넘어갔을 때 reset되는 문제
+ * 2. 추가한 목적지라면 더 이상 추가 안 되도록
+ */
 
 const DEFAULT_DESTINATIONS = [
   {
@@ -45,11 +48,6 @@ const DEFAULT_DESTINATIONS = [
   }
 ];
 
-/**
- * 현재 params(id)와 contentid가 일치하는지 확인(반복문?)
- * 일치하면 해당 contentid를 가진 data의 title 반환
- * 기존 일정 배열에 push
- */
 function getDestinationTitle(id: number) {
   const destination = DEFAULT_DESTINATIONS.find(
     (destination) => Number(destination.contentid) === id
@@ -61,26 +59,38 @@ function getDestinationTitle(id: number) {
  * @param id /destination/list/:id
  * @returns 현재 URL에서 id따와서 title 반환해서 해당 N일차에 추가
  */
-function AddToScheduleModal() {
+function AddToScheduleModal({
+  destinations
+}: // onDestinationUpdate
+AddToScheduleModalType) {
   const { contentid } = useParams();
-  const [selectedDay, setSelectedDay] = useState(1);
+  const [updatedDestination, setUpdatedDestination] = useState(destinations);
 
-  function addToSchedule() {
+  useEffect(() => {
+    setUpdatedDestination(destinations);
+  }, [destinations]);
+
+  function addToSelectedDay() {
     const title = getDestinationTitle(Number(contentid));
-    console.log(selectedDay);
 
     if (title) {
-      const updatedDestinations = [...dummy];
-      const destinationIdx = selectedDay - 1;
-      // updatedDestinations[destinationIdx].destinations.push(title);
-      console.log(updatedDestinations[destinationIdx].destinations);
+      const copiedDestinations = [...updatedDestination];
+      copiedDestinations.push(title);
+      setUpdatedDestination(copiedDestinations);
+      // onDestinationUpdate(copiedDestinations);
     }
   }
+  // console.log(updatedDestination);
 
   return (
-    <>
-      <button onClick={addToSchedule}>스케쥴 추가하기</button>
-    </>
+    <div className={styles.scheduleDestination}>
+      <div className={styles.destinationList}>
+        {updatedDestination.map((destination, idx) => (
+          <div key={idx}>{destination}</div>
+        ))}
+        <button onClick={addToSelectedDay}>목적지 추가하기</button>
+      </div>
+    </div>
   );
 }
 

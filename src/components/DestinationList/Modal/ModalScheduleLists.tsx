@@ -20,9 +20,9 @@ export default function ModalScheduleLists() {
   }
   // console.log(selectedCardIdx);
 
-  function handleCloseDestinations() {
-    setSelectedCardIdx(null);
-  }
+  // function handleCloseDestinations() {
+  //   setSelectedCardIdx(null);
+  // }
   // console.log(scheduleList);
 
   return (
@@ -58,10 +58,9 @@ export default function ModalScheduleLists() {
             key={schedule.id}
             schedule={schedule}
             index={index}
-            // selectedDay={selectedDay}
             isSelected={selectedCardIdx === index}
             onShowDestinations={handleShowDestinations}
-            onCloseDestinations={handleCloseDestinations}
+            // onCloseDestinations={handleCloseDestinations}
           />
         ))}
         {/* <div className={styles.scheduleAdd}>일정 추가하기</div> */}
