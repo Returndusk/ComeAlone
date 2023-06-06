@@ -1,7 +1,12 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import styles from './EditDestinationList.module.scss';
 import { ScheduleEditDestinationListType } from '../../types/ScheduleEdit';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult
+} from '@hello-pangea/dnd';
 import { FaGripVertical } from 'react-icons/fa';
 
 function EditDestinationList({
@@ -10,19 +15,13 @@ function EditDestinationList({
   onDestinationListUpdate,
   onCheckedDayIndexUpdate
 }: ScheduleEditDestinationListType) {
-  const handleDragEnd = ({
-    source,
-    destination
-  }: {
-    source: any;
-    destination: any;
-  }) => {
+  const handleDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) {
       return;
     }
 
     if (source.droppableId === destination.droppableId) {
-      const dayIndex = source.droppableId.split(' ')[1];
+      const dayIndex = Number(source.droppableId.split(' ')[1]);
       const prevDestIndex = source.index;
       const curDestIndex = destination.index;
       const [removed] = updatedDestinationList[dayIndex].splice(
@@ -36,9 +35,9 @@ function EditDestinationList({
 
       onDestinationListUpdate(newDestinationList);
     } else {
-      const prevDayIndex = source.droppableId.split(' ')[1];
+      const prevDayIndex = Number(source.droppableId.split(' ')[1]);
       const prevDestIndex = source.index;
-      const curDayIndex = destination.droppableId.split(' ')[1];
+      const curDayIndex = Number(destination.droppableId.split(' ')[1]);
       const curDestIndex = destination.index;
       const [removed] = updatedDestinationList[prevDayIndex].splice(
         prevDestIndex,
