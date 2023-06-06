@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DestinationsType } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
 import styles from './Category.module.scss';
@@ -29,9 +29,9 @@ function Category({ destinations }: CategoryPropsType) {
     return destinations;
   }, [destinations]);
 
-  const [filteredDestinations, setFilteredDestinations] = useState(
-    unCategorizedDestinations
-  );
+  const [filteredDestinations, setFilteredDestinations] = useState<
+    DestinationsType[] | []
+  >(unCategorizedDestinations);
 
   const isSelectedAll = useMemo(() => {
     return selectedCategory.length === CATEGORIES_ID_LIST.length;
@@ -59,18 +59,19 @@ function Category({ destinations }: CategoryPropsType) {
       : addCategoryToSelectedCategoryList(targetCategoryId);
   };
 
-  const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
-    isSelectedAll
-      ? setSelectedCategory([])
-      : setSelectedCategory(CATEGORIES_ID_LIST);
-  };
+  const handleAllClick: React.MouseEventHandler<HTMLButtonElement> =
+    useCallback(() => {
+      isSelectedAll
+        ? setSelectedCategory([])
+        : setSelectedCategory(CATEGORIES_ID_LIST);
+    }, [isSelectedAll]);
 
   useEffect(() => {
     const filteredDestinationsList = unCategorizedDestinations.filter(
       (destination) => selectedCategory.includes(destination.category_id ?? 0) //Dummy 제거 후 ?? 체이닝 삭제 예정
     );
     setFilteredDestinations(() => filteredDestinationsList);
-  }, [selectedCategory]);
+  }, [selectedCategory, unCategorizedDestinations]);
 
   return (
     <>
