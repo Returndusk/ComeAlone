@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Pagination.module.scss';
 import { DestinationsType } from '../../types/DestinationListTypes';
@@ -33,11 +33,14 @@ function Pagination({
     queryParams.get(PAGES.QUERY_OF_URL) || PAGES.START_INDEX_OF_PAGE.toString()
   );
 
-  const totalPages = Math.ceil(
-    filteredDestinations.length / PAGES.ITEMS_PER_PAGE
-  );
-  const firstDestinationIdx =
-    (currentPage - PAGES.PAGES_TO_SKIP) * PAGES.ITEMS_PER_PAGE;
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredDestinations.length / PAGES.ITEMS_PER_PAGE);
+  }, [filteredDestinations]);
+
+  const firstDestinationIdx = useMemo(() => {
+    return (currentPage - PAGES.PAGES_TO_SKIP) * PAGES.ITEMS_PER_PAGE;
+  }, [currentPage]);
+
   const lastDestinationIdx = firstDestinationIdx + PAGES.ITEMS_PER_PAGE;
 
   useEffect(() => {
@@ -64,12 +67,16 @@ function Pagination({
     (_, index) => index + PAGES.START_INDEX_OF_PAGE
   );
 
-  const slicePageIdx =
-    Math.floor(
-      (currentPage - PAGES.START_INDEX_OF_PAGE) / PAGES.PAGES_TO_SHOW_IN_NAVBAR
-    ) *
-      PAGES.PAGES_TO_SHOW_IN_NAVBAR +
-    PAGES.START_INDEX_OF_PAGE;
+  const slicePageIdx = useMemo(() => {
+    return (
+      Math.floor(
+        (currentPage - PAGES.START_INDEX_OF_PAGE) /
+          PAGES.PAGES_TO_SHOW_IN_NAVBAR
+      ) *
+        PAGES.PAGES_TO_SHOW_IN_NAVBAR +
+      PAGES.START_INDEX_OF_PAGE
+    );
+  }, [currentPage]);
 
   const handlePreviousPageClick = () => {
     if (currentPage > 1) {

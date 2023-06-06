@@ -7,7 +7,7 @@ export const getAllDestinationsList = async () => {
   return response;
 };
 
-export const getDestinationsListByCategoryId = async (categoryId: string) => {
+export const getDestinationsListByCategoryId = async (categoryId: number) => {
   const response = await axios.get(
     `${baseUrl}/categories/${categoryId}/destinations`
   );
@@ -15,7 +15,7 @@ export const getDestinationsListByCategoryId = async (categoryId: string) => {
 };
 
 export const getDestinationDetailsByDestinationId = async (
-  destinationId: string
+  destinationId: number
 ) => {
   const response = await axios.get(`${baseUrl}/destinations/${destinationId}`);
   return response;
