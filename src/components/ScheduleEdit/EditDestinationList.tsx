@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import styles from './EditDestinationList.module.scss';
-import { DestinationsType } from '../DestinationList/Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { FaGripVertical } from 'react-icons/fa';
 

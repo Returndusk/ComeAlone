@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-areas:
+    'leftBanner topArea rightBanner'
+    'leftBanner bottomArea rightBanner';
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+}
+
+.leftBanner {
+  grid-area: leftBanner;
+}
+
+.rightBanner {
+  grid-area: rightBanner;
+}
+
+.topArea {
+  grid-area: topArea;
+}
+
+.bottomArea {
+  grid-area: bottomArea;
+}

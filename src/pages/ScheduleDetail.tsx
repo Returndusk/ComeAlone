@@ -15,7 +15,7 @@ import {
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
-import { DestinationsType } from '../components/DestinationList/Types';
+import { DestinationsType } from '../types/DestinationListTypes';
 import { FaArrowLeft } from 'react-icons/fa';
 
 function ScheduleDetail() {

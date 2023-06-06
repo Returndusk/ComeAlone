@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ModalScheduleCard.module.scss';
-import { MyScheduleCardType } from '../../../types/ScheduleTypes';
+import { ModalScheduleCardType } from '../../../types/ModalScheduleTypes';
 import AddToScheduleModal from './AddToScheduleModal';
-
-type ModalScheduleCardProps = {
-  schedule: MyScheduleCardType;
-  index: number;
-  isSelected: boolean;
-  onShowDestinations: (index: number) => void;
-  onCloseDestinations: () => void;
-};
 
 export default function ModalScheduleCard({
   schedule,
@@ -17,7 +9,7 @@ export default function ModalScheduleCard({
   isSelected,
   onShowDestinations,
   onCloseDestinations
-}: ModalScheduleCardProps) {
+}: ModalScheduleCardType) {
   const endDate = new Date(schedule.end_date);
   const startDate = new Date(schedule.start_date);
   const createdAt = schedule.created_at;
@@ -27,6 +19,7 @@ export default function ModalScheduleCard({
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   function handleToggleDestinations(dayIndex: number) {
+    // 선택시점에는 dayIndex !== selectedDay
     setSelectedDay(selectedDay === dayIndex ? null : dayIndex);
   }
   // console.log('selectedDay', selectedDay);
@@ -71,7 +64,6 @@ export default function ModalScheduleCard({
           ))}
         </div>
       )}
-      {/* {selectedDay !== null && selectedDay === index && ( */}
       {isSelected && selectedDay !== null && (
         <div className={styles.scheduleDestination}>
           {/* <button className={styles.closeBtn} onClick={onCloseDestinations}>
