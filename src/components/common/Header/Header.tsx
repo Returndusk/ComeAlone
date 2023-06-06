@@ -6,9 +6,11 @@ import Weather from './Weather';
 import styles from './Header.module.scss';
 
 function Header() {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLElement) | null>(
+    null
+  );
 
-  const handleUserIconClick = (event) => {
+  const handleUserIconClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -44,11 +46,19 @@ function Header() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>
-                <RouterLink to='/mypage'>마이페이지</RouterLink>
+              <MenuItem
+                onClick={handleClose}
+                component={RouterLink}
+                to='/mypage'
+              >
+                마이페이지
               </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <RouterLink to='/logout'>로그아웃</RouterLink>
+              <MenuItem
+                onClick={handleClose}
+                component={RouterLink}
+                to='/logout'
+              >
+                로그아웃
               </MenuItem>
             </Menu>
 
