@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import FormGroup from '@mui/material/FormGroup';
@@ -33,6 +33,17 @@ function ScheduleEdit() {
   }: ScheduleEditSubmitType) => {
     console.log({ ...dateInfo, title, description, isPublic });
   };
+
+  const markersLocations = useMemo(() => {
+    const data =
+      checkedDayIndex === -1
+        ? destinationList.flat()
+        : destinationList[checkedDayIndex];
+
+    console.log('@@', data);
+
+    return JSON.parse(JSON.stringify(data));
+  }, [checkedDayIndex, destinationList]);
 
   return (
     <div className={styles.container}>
@@ -71,13 +82,7 @@ function ScheduleEdit() {
         handleCheckedDayIndex={setCheckedDayIndex}
       />
       <div className={styles.mapContainer}>
-        <MapWithWaypoints
-          markersLocations={
-            checkedDayIndex === -1
-              ? destinationList.flat()
-              : destinationList[checkedDayIndex]
-          }
-        />
+        <MapWithWaypoints markersLocations={markersLocations} />
       </div>
       <div className={styles.confirmButtonWrapper}>
         <button
