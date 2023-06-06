@@ -27,6 +27,7 @@ export default function ModalScheduleCard({
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   function handleToggleDestinations(dayIndex: number) {
+    // 선택시점에는 dayIndex !== selectedDay
     setSelectedDay(selectedDay === dayIndex ? null : dayIndex);
   }
   // console.log('selectedDay', selectedDay);
@@ -71,7 +72,6 @@ export default function ModalScheduleCard({
           ))}
         </div>
       )}
-      {/* {selectedDay !== null && selectedDay === index && ( */}
       {isSelected && selectedDay !== null && (
         <div className={styles.scheduleDestination}>
           {/* <button className={styles.closeBtn} onClick={onCloseDestinations}>
