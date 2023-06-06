@@ -5,18 +5,51 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { FaGripVertical } from 'react-icons/fa';
 
 function EditDestinationList({
-  destinations,
+  destinationList,
   checkedDayIndex,
   handleDestinationList,
   handleCheckedDayIndex
 }: {
-  destinations: DestinationsType[][];
+  destinationList: DestinationsType[][];
   checkedDayIndex: number;
   handleDestinationList: Dispatch<SetStateAction<DestinationsType[][]>>;
   handleCheckedDayIndex: Dispatch<SetStateAction<number>>;
 }) {
-  const handleDragEnd = (result: any) => {
-    console.log(result);
+  const handleDragEnd = ({
+    source,
+    destination
+  }: {
+    source: any;
+    destination: any;
+  }) => {
+    if (!destination) {
+      return;
+    }
+
+    if (source.droppableId === destination.droppableId) {
+      const dayIndex = source.droppableId.split(' ')[1];
+      const prevDestIndex = source.index;
+      const curDestIndex = destination.index;
+      const [removed] = destinationList[dayIndex].splice(prevDestIndex, 1);
+
+      destinationList[dayIndex].splice(curDestIndex, 0, removed);
+
+      const newDestinationList = [...destinationList];
+
+      handleDestinationList(newDestinationList);
+    } else {
+      const prevDayIndex = source.droppableId.split(' ')[1];
+      const prevDestIndex = source.index;
+      const curDayIndex = destination.droppableId.split(' ')[1];
+      const curDestIndex = destination.index;
+      const [removed] = destinationList[prevDayIndex].splice(prevDestIndex, 1);
+
+      destinationList[curDayIndex].splice(curDestIndex, 0, removed);
+
+      const newDestinationList = [...destinationList];
+
+      handleDestinationList(newDestinationList);
+    }
   };
 
   return (
@@ -34,7 +67,7 @@ function EditDestinationList({
       </label>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className={styles.destinationsList}>
-          {destinations.map((destOfDay, dayIndex) => {
+          {destinationList.map((destOfDay, dayIndex) => {
             return (
               <Droppable
                 droppableId={`destinationList ${dayIndex}`}
@@ -76,8 +109,8 @@ function EditDestinationList({
                             {dest.title}
                             <button
                               onClick={() => {
-                                destinations[dayIndex].splice(destIndex, 1);
-                                const newDestinations = [...destinations];
+                                destinationList[dayIndex].splice(destIndex, 1);
+                                const newDestinations = [...destinationList];
                                 handleDestinationList(newDestinations);
                               }}
                             >
