@@ -9,7 +9,11 @@ const userInfo = {
   email: 'elice@test.com',
   profileImage: '',
   nickname: '엘리스',
-  birthDate: '1999/01/01',
+  birthDate: {
+    year: 1999,
+    month: 12,
+    day: 5
+  },
   gender: 'female',
   phoneNumber: '010-1234-1234'
 };
@@ -21,7 +25,11 @@ function UserEditForm() {
     nickname: userInfo.nickname,
     newPassword: '',
     passwordConfirm: '',
-    birthDate: userInfo.birthDate,
+    birthDate: {
+      year: userInfo.birthDate.year,
+      month: userInfo.birthDate.month,
+      day: userInfo.birthDate.day
+    },
     gender: userInfo.gender,
     phoneNumber: userInfo.phoneNumber
   };
@@ -30,6 +38,23 @@ function UserEditForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBirthDateChange = (
+    e:
+      | React.ChangeEvent<{ name: string; value: unknown }>
+      | { target: { name: string; value: number } }
+  ) => {
+    const { name, value } = e.target;
+    setValues((prev) => {
+      return {
+        ...prev,
+        birthDate: {
+          ...prev.birthDate,
+          [name]: Number(value as string)
+        }
+      };
+    });
   };
 
   const checkEmptyInputFields = (values: UserInfoValues, errMsgs: Errors) => {
@@ -113,6 +138,20 @@ function UserEditForm() {
     }
   };
 
+  const validateBirthDate = (
+    { year, month, day }: UserInfoValues['birthDate'],
+    errMsgs: Errors
+  ) => {
+    const birthDate = new Date(year, month - 1, day);
+    const isYearValid = birthDate.getFullYear() === year;
+    const isMonthValid = birthDate.getMonth() + 1 === month;
+    const isDayValid = birthDate.getDate() === day;
+
+    if (!isYearValid || !isMonthValid || !isDayValid) {
+      return (errMsgs.birthDate = '유효한 날짜를 입력해주세요.');
+    }
+  };
+
   const validateForm = (values: UserInfoValues) => {
     const errMsgs: Errors = {};
 
@@ -127,7 +166,7 @@ function UserEditForm() {
         errMsgs
       );
     if (!errMsgs.phoneNumber) validatePhoneNumber(values.phoneNumber, errMsgs);
-    //생년월일 유효성 검사 추가 예정
+    if (!errMsgs.birthDate) validateBirthDate(values.birthDate, errMsgs);
 
     return errMsgs;
   };
@@ -147,7 +186,12 @@ function UserEditForm() {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <ProfileImage url={userInfo.profileImage} />
-      <UserInfo values={values} errors={errors} handleChange={handleChange} />
+      <UserInfo
+        values={values}
+        errors={errors}
+        handleChange={handleChange}
+        handleBirthDateChange={handleBirthDateChange}
+      />
       <UserEditButtons />
     </form>
   );

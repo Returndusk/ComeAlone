@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './DeleteAccountForm.module.scss';
 import { DeleteFormProps } from '../../types/UserTypes';
+import { TextField } from '@mui/material';
 
 function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
   const [password, setPassword] = useState('');
@@ -11,7 +12,7 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
 
   const validateForm = (password: string) => {
     let errMsg = '';
-    if (!password) errMsg = '비밀번호를 입력해주세요.';
+    if (!password) errMsg = '빈칸을 입력해주세요.';
     return errMsg;
   };
 
@@ -30,14 +31,22 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.input}>
-        <label htmlFor='passwordConfirm'>비밀번호 확인</label>
-        <input
+        <TextField
+          id='outlined-basic'
+          label='비밀번호 확인'
           type='password'
+          variant='outlined'
           name='password'
-          id='password'
           value={password}
           onChange={handleChange}
+          size='small'
+          style={{ width: '100%' }}
         />
+        {!error && (
+          <p className={styles.msg}>
+            본인 확인을 위해 비밀번호를 입력해주세요.
+          </p>
+        )}
         {error && <p className={styles.errMsg}>{error}</p>}
       </div>
       <ul className={styles.buttons}>
