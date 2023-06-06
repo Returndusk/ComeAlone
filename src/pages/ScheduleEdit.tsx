@@ -65,7 +65,7 @@ function ScheduleEdit() {
       />
       <Link to='/destination/list'>새로운 목적지 추가하기</Link>
       <EditDestinationList
-        destinations={destinationList}
+        destinationList={destinationList}
         checkedDayIndex={checkedDayIndex}
         handleDestinationList={setDestinationList}
         handleCheckedDayIndex={setCheckedDayIndex}

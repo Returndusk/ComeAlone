@@ -31,56 +31,26 @@
     }
 
     .destinationsDay {
-      $spacer: 1rem;
-      $gray: #888;
-      $gray--lightest: lighten($gray, 35%);
-      $font-size--base: 1rem;
-      $default-color: black;
-
       flex-direction: column;
       margin: 0 0 30px 0;
       font-size: 20px;
       list-style: none;
-      padding-left: $spacer;
-      counter-reset: circle-counter;
-      border-left: 2px solid $gray--lightest;
       user-select: none;
 
-      li {
+      div {
         display: flex;
         flex-direction: row;
+        width: 90%;
         font-size: 16px;
-        margin: 20px 0 20px 0;
+        margin: 10px 0 10px 0;
+        padding: 10px;
+        border: 1px solid black;
 
-        counter-increment: circle-counter;
-        margin-bottom: $spacer * 0.25;
-
-        &:before {
-          content: counter(circle-counter);
-          background-color: $gray--lightest;
-          width: $font-size--base * 1.5;
-          height: $font-size--base * 1.5;
-          border-radius: 50%;
-          display: inline-block;
-          font-size: $font-size--base * 0.75;
-          line-height: $font-size--base * 1.5;
-          color: $default-color;
-          text-align: center;
-          margin-right: $spacer * 0.5;
-          position: relative;
-          top: -2px;
-        }
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-
-        .number-circle-list--list-item {
-          margin-left: $spacer * 0.25;
+        .gripIcon {
+          margin: 0 10px 0 0;
         }
 
         button {
-          margin: 0 10px 0 0;
           margin-left: auto;
         }
       }
