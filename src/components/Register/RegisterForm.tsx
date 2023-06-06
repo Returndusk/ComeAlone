@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './RegisterForm.module.scss';
 import { Errors, RegisterFormValues } from '../../types/UserTypes';
 import TextField from '@mui/material/TextField';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
+import {
+  FormControlLabel,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  InputLabel,
+  Select,
+  MenuItem
+} from '@mui/material';
 
 function RegisterForm() {
   const initValues: RegisterFormValues = {
@@ -14,7 +18,11 @@ function RegisterForm() {
     password: '',
     passwordConfirm: '',
     nickname: '',
-    birthDate: '',
+    birthDate: {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      day: new Date().getDate()
+    },
     gender: 'male',
     phoneNumber: ''
   };
@@ -24,6 +32,48 @@ function RegisterForm() {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleBirthDateChange = (
+    e:
+      | React.ChangeEvent<{ name: string; value: unknown }>
+      | { target: { name: string; value: number } }
+  ) => {
+    const { name, value } = e.target;
+    setValues((prev) => {
+      return {
+        ...prev,
+        birthDate: {
+          ...prev.birthDate,
+          [name]: Number(value as string)
+        }
+      };
+    });
+  };
+
+  const birthDateOptions = useMemo(() => {
+    const getYears = () => {
+      const currentYear = new Date().getFullYear();
+      const years = [];
+      for (let i = currentYear; i >= 1900; i--) {
+        years.push(i);
+      }
+      return years.reverse();
+    };
+
+    const getMonths = () => {
+      return Array.from({ length: 12 }, (_, i) => i + 1);
+    };
+
+    const getDays = () => {
+      return Array.from({ length: 31 }, (_, i) => i + 1);
+    };
+
+    return {
+      years: getYears(),
+      months: getMonths(),
+      days: getDays()
+    };
+  }, []);
 
   const checkEmptyInputFields = (
     values: RegisterFormValues,
@@ -111,6 +161,20 @@ function RegisterForm() {
     }
   };
 
+  const validateBirthDate = (
+    { year, month, day }: RegisterFormValues['birthDate'],
+    errMsgs: Errors
+  ) => {
+    const birthDate = new Date(year, month - 1, day);
+    const isYearValid = birthDate.getFullYear() === year;
+    const isMonthValid = birthDate.getMonth() + 1 === month;
+    const isDayValid = birthDate.getDate() === day;
+
+    if (!isYearValid || !isMonthValid || !isDayValid) {
+      return (errMsgs.birthDate = '유효한 날짜를 입력해주세요.');
+    }
+  };
+
   const validateForm = (values: RegisterFormValues) => {
     const errMsgs: Errors = {};
 
@@ -121,7 +185,7 @@ function RegisterForm() {
     if (!errMsgs.passwordConfirm)
       validatePasswordConfirm(values.password, values.passwordConfirm, errMsgs);
     if (!errMsgs.phoneNumber) validatePhoneNumber(values.phoneNumber, errMsgs);
-    //생년월일 유효성 검사는 추가 예정입니다.
+    if (!errMsgs.birthDate) validateBirthDate(values.birthDate, errMsgs);
 
     return errMsgs;
   };
@@ -152,18 +216,9 @@ function RegisterForm() {
             size='small'
             style={{ width: '100%' }}
           />
-          {/* <label htmlFor='email'>이메일</label>
-          <input
-            type='text'
-            id='email'
-            name='email'
-            value={values.email}
-            onChange={handleChange}
-          /> */}
           {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
         </li>
         <li>
-          {/* <label htmlFor='nickname'>닉네임</label> */}
           <div className={styles.nickname}>
             <TextField
               id='outlined-basic'
@@ -174,13 +229,6 @@ function RegisterForm() {
               onChange={handleChange}
               size='small'
             />
-            {/* <input
-              type='text'
-              name='nickname'
-              id='nickname'
-              value={values.nickname}
-              onChange={handleChange}
-            /> */}
             <button type='button'>중복확인</button>
           </div>
           {!errors.nickname && (
@@ -204,14 +252,6 @@ function RegisterForm() {
             size='small'
             style={{ width: '100%' }}
           />
-          {/* <label htmlFor='password'>비밀번호</label>
-          <input
-            type='password'
-            name='password'
-            id='password'
-            value={values.password}
-            onChange={handleChange}
-          /> */}
           {!errors.password && (
             <p className={styles.msg}>
               8자 이상 (대소문자, 특수 문자, 숫자 포함)
@@ -233,14 +273,6 @@ function RegisterForm() {
             size='small'
             style={{ width: '100%' }}
           />
-          {/* <label htmlFor='passwordConfirm'>비밀번호 확인</label>
-          <input
-            type='password'
-            name='passwordConfirm'
-            id='passwordConfirm'
-            value={values.passwordConfirm}
-            onChange={handleChange}
-          /> */}
           {errors.passwordConfirm && (
             <p className={styles.errMsg}>{errors.passwordConfirm}</p>
           )}
@@ -267,48 +299,66 @@ function RegisterForm() {
               checked={values.gender === 'female'}
             />
           </RadioGroup>
-          {/* <label htmlFor='gender'>성별</label>
-          <div className={styles.radioGroup}>
-            <label>
-              <input
-                type='radio'
-                name='gender'
-                value='male'
-                checked={values.gender === 'male'}
-                onChange={handleChange}
-              />
-              남자
-            </label>
-            <label>
-              <input
-                type='radio'
-                name='gender'
-                value='female'
-                checked={values.gender === 'female'}
-                onChange={handleChange}
-              />
-              여자
-            </label> 
-          </div>*/}
           {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
         </li>
-        <li>
-          {/* <label htmlFor='birthDate'>생년월일</label>
-          <input
-            type='text'
-            name='birthDate'
-            id='birthDate'
-            value={values.birthDate}
-            onChange={handleChange}
-          /> */}
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
-              <DatePicker
-                label='생년월일'
-                slotProps={{ textField: { size: 'small' } }}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
+        <li className={styles.birthDate}>
+          <InputLabel id='birthDate-select-label'>생년월일</InputLabel>
+          <Select
+            labelId='birthDate-select-label'
+            id='demo-simple-select'
+            value={values.birthDate.year}
+            name='year'
+            label='연도'
+            size='small'
+            onChange={handleBirthDateChange}
+            style={{
+              width: 'calc(100% / 3)'
+            }}
+          >
+            {birthDateOptions.years.map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
+            ))}
+          </Select>
+          <Select
+            labelId='birthDate-select-label'
+            id='demo-simple-select'
+            value={values.birthDate.month}
+            name='month'
+            label='월'
+            size='small'
+            onChange={handleBirthDateChange}
+            style={{
+              width: 'calc(100% / 3 - 5px)',
+              marginLeft: '5px'
+            }}
+          >
+            {birthDateOptions.months.map((month) => (
+              <MenuItem key={month} value={month}>
+                {month}
+              </MenuItem>
+            ))}
+          </Select>
+          <Select
+            labelId='birthDate-select-label'
+            id='demo-simple-select'
+            value={values.birthDate.day}
+            name='day'
+            label='일'
+            size='small'
+            onChange={handleBirthDateChange}
+            style={{
+              width: 'calc(100% / 3 - 5px)',
+              marginLeft: '5px'
+            }}
+          >
+            {birthDateOptions.days.map((day) => (
+              <MenuItem key={day} value={day}>
+                {day}
+              </MenuItem>
+            ))}
+          </Select>
           {errors.birthDate && (
             <p className={styles.errMsg}>{errors.birthDate}</p>
           )}
@@ -324,14 +374,6 @@ function RegisterForm() {
             size='small'
             style={{ width: '100%' }}
           />
-          {/* <label htmlFor='phoneNumber'>연락처</label>
-          <input
-            type='text'
-            name='phoneNumber'
-            id='phoneNumber'
-            value={values.phoneNumber}
-            onChange={handleChange}
-          /> */}
           {!errors.phoneNumber && <p className={styles.msg}>하이픈(-) 포함</p>}
           {errors.phoneNumber && (
             <p className={styles.errMsg}>{errors.phoneNumber}</p>

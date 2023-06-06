@@ -1,29 +1,73 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styles from './UserEditForm.module.scss';
 import { UserInfoProps } from '../../types/UserTypes';
+import TextField from '@mui/material/TextField';
+import {
+  FormControlLabel,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  Select,
+  MenuItem,
+  InputLabel
+} from '@mui/material';
 
-function UserInfo({ values, errors, handleChange }: UserInfoProps) {
+function UserInfo({
+  values,
+  errors,
+  handleChange,
+  handleBirthDateChange
+}: UserInfoProps) {
+  const birthDateOptions = useMemo(() => {
+    const getYears = () => {
+      const currentYear = new Date().getFullYear();
+      const years = [];
+      for (let i = currentYear; i >= 1900; i--) {
+        years.push(i);
+      }
+      return years.reverse();
+    };
+
+    const getMonths = () => {
+      return Array.from({ length: 12 }, (_, i) => i + 1);
+    };
+
+    const getDays = () => {
+      return Array.from({ length: 31 }, (_, i) => i + 1);
+    };
+
+    return {
+      years: getYears(),
+      months: getMonths(),
+      days: getDays()
+    };
+  }, []);
+
   return (
     <ul className={styles.inputs}>
       <li>
-        <label htmlFor='email'>이메일</label>
-        <input
-          type='text'
-          id='email'
+        <TextField
+          id='outlined-basic'
+          label='이메일'
+          variant='outlined'
           name='email'
           value={values.email}
+          onChange={handleChange}
+          size='small'
+          style={{ width: '100%' }}
           disabled
         />
       </li>
       <li>
-        <label htmlFor='nickname'>닉네임</label>
         <div className={styles.nickname}>
-          <input
-            type='text'
+          <TextField
+            id='outlined-basic'
+            label='닉네임'
+            variant='outlined'
             name='nickname'
-            id='nickname'
             value={values.nickname}
             onChange={handleChange}
+            size='small'
           />
           <button type='button'>중복확인</button>
         </div>
@@ -35,13 +79,16 @@ function UserInfo({ values, errors, handleChange }: UserInfoProps) {
         {errors.nickname && <p className={styles.errMsg}>{errors.nickname}</p>}
       </li>
       <li>
-        <label htmlFor='password'>비밀번호 변경</label>
-        <input
+        <TextField
+          id='outlined-basic'
+          label='비밀번호 변경'
           type='password'
-          id='newPassword'
+          variant='outlined'
           name='newPassword'
           value={values.newPassword}
           onChange={handleChange}
+          size='small'
+          style={{ width: '100%' }}
         />
         {!errors.newPassword && (
           <p className={styles.msg}>
@@ -53,64 +100,117 @@ function UserInfo({ values, errors, handleChange }: UserInfoProps) {
         )}
       </li>
       <li>
-        <label htmlFor='passwordConfirm'>비밀번호 확인</label>
-        <input
+        <TextField
+          id='outlined-basic'
+          label='비밀번호 확인'
           type='password'
+          variant='outlined'
           name='passwordConfirm'
-          id='passwordConfirm'
           value={values.passwordConfirm}
           onChange={handleChange}
+          size='small'
+          style={{ width: '100%' }}
         />
         {errors.passwordConfirm && (
           <p className={styles.errMsg}>{errors.passwordConfirm}</p>
         )}
       </li>
-      <li>
-        <label htmlFor='birthDate'>생년월일</label>
-        <input
-          type='text'
-          name='birthDate'
-          id='birthDate'
-          value={values.birthDate}
+      <li className={styles.radioGroup}>
+        <FormLabel id='demo-radio-buttons-group-label'>성별</FormLabel>
+        <RadioGroup
+          aria-labelledby='demo-radio-buttons-group-label'
+          defaultValue='male'
+          name='gender'
           onChange={handleChange}
-        />
+          row
+        >
+          <FormControlLabel
+            value='male'
+            control={<Radio size='small' />}
+            label='남성'
+            checked={values.gender === 'male'}
+          />
+          <FormControlLabel
+            value='female'
+            control={<Radio size='small' />}
+            label='여성'
+            checked={values.gender === 'female'}
+          />
+        </RadioGroup>
+        {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
+      </li>
+      <li className={styles.birthDate}>
+        <InputLabel id='birthDate-select-label'>생년월일</InputLabel>
+        <Select
+          labelId='birthDate-select-label'
+          id='demo-simple-select'
+          value={values.birthDate.year}
+          name='year'
+          label='연도'
+          size='small'
+          onChange={handleBirthDateChange}
+          style={{
+            width: 'calc(100% / 3)'
+          }}
+        >
+          {birthDateOptions.years.map((year) => (
+            <MenuItem key={year} value={year}>
+              {year}
+            </MenuItem>
+          ))}
+        </Select>
+        <Select
+          labelId='birthDate-select-label'
+          id='demo-simple-select'
+          value={values.birthDate.month}
+          name='month'
+          label='월'
+          size='small'
+          onChange={handleBirthDateChange}
+          style={{
+            width: 'calc(100% / 3 - 5px)',
+            marginLeft: '5px'
+          }}
+        >
+          {birthDateOptions.months.map((month) => (
+            <MenuItem key={month} value={month}>
+              {month}
+            </MenuItem>
+          ))}
+        </Select>
+        <Select
+          labelId='birthDate-select-label'
+          id='demo-simple-select'
+          value={values.birthDate.day}
+          name='day'
+          label='일'
+          size='small'
+          onChange={handleBirthDateChange}
+          style={{
+            width: 'calc(100% / 3 - 5px)',
+            marginLeft: '5px'
+          }}
+        >
+          {birthDateOptions.days.map((day) => (
+            <MenuItem key={day} value={day}>
+              {day}
+            </MenuItem>
+          ))}
+        </Select>
         {errors.birthDate && (
           <p className={styles.errMsg}>{errors.birthDate}</p>
         )}
       </li>
       <li>
-        <label htmlFor='gender'>성별</label>
-        <div className={styles.radioGroup}>
-          <label>
-            <input
-              type='radio'
-              name='gender'
-              value='male'
-              checked={values.gender === 'male'}
-              onChange={handleChange}
-            />
-            남자
-          </label>
-          <label>
-            <input
-              type='radio'
-              name='gender'
-              value='female'
-              checked={values.gender === 'female'}
-              onChange={handleChange}
-            />
-            여자
-          </label>
-        </div>
-      </li>
-      <li>
-        <label htmlFor='phoneNumber'>연락처</label>
-        <input
-          type='text'
+        <TextField
+          id='outlined-basic'
+          label='연락처'
+          variant='outlined'
           name='phoneNumber'
-          id='phoneNumber'
           value={values.phoneNumber}
           onChange={handleChange}
+          size='small'
+          style={{ width: '100%' }}
         />
         {!errors.phoneNumber && <p className={styles.msg}>하이픈(-) 포함</p>}
         {errors.phoneNumber && (

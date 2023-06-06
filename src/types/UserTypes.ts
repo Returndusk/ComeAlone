@@ -8,7 +8,11 @@ export type RegisterFormValues = {
   password: string;
   passwordConfirm: string;
   nickname: string;
-  birthDate: string;
+  birthDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
   gender: 'male' | 'female';
   phoneNumber: string;
 };
@@ -34,6 +38,11 @@ export type UserInfoProps = {
   values: UserInfoValues;
   errors: Errors;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBirthDateChange: (
+    e:
+      | React.ChangeEvent<{ name: string; value: unknown }>
+      | { target: { name: string; value: number } }
+  ) => void;
 };
 
 //UserEdit/UserInfoValues
@@ -43,7 +52,11 @@ export type UserInfoValues = {
   nickname: string;
   newPassword: '';
   passwordConfirm: '';
-  birthDate: string;
+  birthDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
   gender: string;
   phoneNumber: string;
 };
