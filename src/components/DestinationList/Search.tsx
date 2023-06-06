@@ -25,6 +25,7 @@ function Search() {
         destinationAddress?.includes(searchQueryParam.trim())
       );
     });
+
     return searchResultDestinations ?? [];
   }, [searchQueryParam]);
 
