@@ -1,0 +1,52 @@
+.categoryContainer {
+  display: flex;
+  justify-content: center;
+  width: 420px;
+  flex-wrap: wrap;
+  z-index: 1000;
+  background-color: #fff;
+
+  padding-bottom: 15px;
+
+  button {
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 16px;
+    margin: 2px;
+    //font-weight: 550;
+    min-width: 65px;
+  }
+  button + button {
+    margin-left: 10px;
+  }
+}
+
+.activeSelectedButton {
+  border: none;
+  background-color: var(--sub-1-color);
+  color: #fff;
+  padding: 6px;
+}
+
+.activeSelectedAllButton {
+  border: none;
+  background-color: var(--main-color);
+  color: #fff;
+  padding: 6px;
+}
+
+.selectedButton {
+  border: 2px solid;
+  padding: 4px;
+  border-color: var(--sub-1-color);
+  color: var(--sub-1-color);
+  background-color: #fff;
+}
+
+.selectedAllButton {
+  border: 2px solid;
+  padding: 4px;
+  border-color: var(--main-color);
+  color: var(--main-color);
+  background-color: #fff;
+}

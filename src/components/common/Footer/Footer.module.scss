@@ -1,0 +1,34 @@
+.layout {
+  background-color: #eeeeee;
+  position: relative;
+  width: 100%;
+  height: 140px;
+  min-width: 1280px;
+
+  .body {
+    margin: 0 auto;
+    width: 1280px;
+    height: 100%;
+    display: flex;
+  }
+
+  .layoutLeft {
+    font-family: 'WandohopeR';
+    font-size: 50px;
+    display: flex;
+    width: 50%;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 100px;
+  }
+  .layoutRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 50%;
+    p {
+      padding: 5px 5px;
+    }
+  }
+}
