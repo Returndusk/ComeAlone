@@ -1,0 +1,70 @@
+.destinationContentsContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.destinationsContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: #fff;
+  width: 420px; //search bar, category container와 동일
+  height: 100%; // map-2px(border 너비)과 동일함.
+  min-height: 550px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  justify-content: flex-start;
+  z-index: 1000;
+
+  /*
+  div:not(:last-child) {
+    box-sizing: border-box;
+    padding: 15px;
+  }
+  */
+
+  .destinations {
+    border-bottom: 1px solid #ccc;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.destinationsInfoContainer {
+  display: flex;
+}
+
+.alertContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #c1c1c1;
+
+  .alertIcon {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1000;
+
+  .detailsButtonContainer {
+    display: flex;
+
+    .detailsCloseButton {
+      position: absolute;
+      top: 3%;
+      right: 12%;
+      width: 30px;
+      height: 30px;
+      z-index: 1000;
+    }
+  }
+}

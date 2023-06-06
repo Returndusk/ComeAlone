@@ -1,0 +1,83 @@
+.form {
+  ul {
+    width: 100%;
+
+    &.inputs {
+      margin-bottom: 25px;
+      li {
+        margin-bottom: 20px;
+      }
+    }
+
+    &.buttons {
+      li {
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .radioGroup {
+    margin-bottom: 15px !important;
+
+    > label {
+      font-size: 12px !important;
+      margin-right: 15px;
+    }
+  }
+
+  .nickname {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .MuiFormControl-root {
+      width: calc(100% - 100px - 10px);
+    }
+
+    button {
+      width: 100px;
+      height: 40px;
+      margin-left: 10px;
+      letter-spacing: 0;
+      border: 1px solid var(--main-color);
+      border-radius: 3px;
+      background-color: #fff;
+      font-weight: 500;
+      color: var(--main-color);
+      cursor: pointer;
+    }
+  }
+
+  .birthDate {
+    > label {
+      font-size: 12px !important;
+      margin-bottom: 5px;
+    }
+  }
+
+  > button {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    border: 0;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background-color: var(--main-color);
+    cursor: pointer;
+  }
+
+  p.msg {
+    font-size: 12px;
+    line-height: 1.3;
+    color: #333;
+    padding: 5px 0px;
+  }
+
+  p.errMsg {
+    font-size: 12px;
+    line-height: 1.3;
+    color: red;
+    padding: 5px 0px;
+  }
+}
