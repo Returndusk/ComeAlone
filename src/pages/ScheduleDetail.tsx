@@ -34,11 +34,13 @@ function ScheduleDetail() {
     destinations.flat()
   );
 
-  const onDestinationsChecked = (destinations: MapWithWaypointsPropsType[]) => {
+  const handleDestinationsCheck = (
+    destinations: MapWithWaypointsPropsType[]
+  ) => {
     setCheckedDestinations(destinations);
   };
 
-  const onReviewSubmit = (input: string) => {
+  const handleReviewSubmit = (input: string) => {
     setReviewInput(input);
     console.log(reviewInput);
   };
@@ -70,13 +72,13 @@ function ScheduleDetail() {
       />
       <DestinationList
         destinations={destinations}
-        onChecked={onDestinationsChecked}
+        onDestinationsChecked={handleDestinationsCheck}
       />
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
       </div>
       <ReviewsSchedule reviews={reviews} />
-      <InputReviewSchedule onSubmit={onReviewSubmit} />
+      <InputReviewSchedule onReviewSubmit={handleReviewSubmit} />
     </div>
   );
 }

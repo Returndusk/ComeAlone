@@ -4,10 +4,10 @@ import { DestinationsType } from '../../types/DestinationListTypes';
 
 function DestinationList({
   destinations,
-  onChecked
+  onDestinationsChecked
 }: {
   destinations: DestinationsType[][];
-  onChecked: (destination: DestinationsType[]) => void;
+  onDestinationsChecked: (destination: DestinationsType[]) => void;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
@@ -20,7 +20,7 @@ function DestinationList({
           checked={checkedDayIndex === -1}
           onChange={() => {
             setCheckedDayIndex(-1);
-            onChecked(destinations.flat());
+            onDestinationsChecked(destinations.flat());
           }}
         />
         전체 목적지 보기
@@ -41,10 +41,10 @@ function DestinationList({
                   onChange={() => {
                     if (checkedDayIndex === index) {
                       setCheckedDayIndex(-1);
-                      onChecked(destinations.flat());
+                      onDestinationsChecked(destinations.flat());
                     } else {
                       setCheckedDayIndex(index);
-                      onChecked(destOfDay);
+                      onDestinationsChecked(destOfDay);
                     }
                   }}
                 />{' '}
