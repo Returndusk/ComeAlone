@@ -1,4 +1,4 @@
-import React, { useDeferredValue, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from './Map.module.scss';
 import { MapPropsType } from '../../../types/DestinationListTypes';
 
@@ -24,21 +24,9 @@ const DEFAULT_LOCATION = {
 const { kakao } = window;
 
 function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
-  // const markers = [...markersLocations];
-
-  // const prevMarkersLocations = useMemo(() => {
-  //   return markersLocations;
-  // }, [markersLocations]);
-  const deferredMarkersLocations = useDeferredValue(markersLocations);
-
   const cachingMarkers = useMemo(() => {
-    return deferredMarkersLocations;
-  }, [deferredMarkersLocations]);
-
-  // useEffect(() => {
-  //   markers =
-  //     markersLocations.length > 0 ? markersLocations : prevMarkersLocations;
-  // }, [markersLocations]);
+    return markersLocations;
+  }, [markersLocations]);
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -52,7 +40,6 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
     };
 
     const map = new kakao.maps.Map(container, options);
-
     const bounds = new kakao.maps.LatLngBounds();
 
     cachingMarkers?.forEach((marker) => {
@@ -67,12 +54,12 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
       });
       newMarker.setMap(map);
       bounds.extend(position);
+      map.setBounds(bounds, 36, 32, 32, 650);
 
       kakao.maps.event.addListener(newMarker, 'click', function () {
         setClickedDestination(marker);
       });
     });
-    map.setBounds(bounds, 36, 32, 32, 650);
   }, [cachingMarkers]);
 
   return (
