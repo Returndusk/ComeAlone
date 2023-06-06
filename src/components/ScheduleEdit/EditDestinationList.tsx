@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import styles from './EditDestinationList.module.scss';
 import { DestinationsType } from '../DestinationList/Types';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { FaGripVertical } from 'react-icons/fa';
 
 function EditDestinationList({
   destinations,
@@ -40,7 +41,7 @@ function EditDestinationList({
                 key={`destinationList ${dayIndex}`}
               >
                 {(droppableProvided) => (
-                  <ol
+                  <div
                     className={styles.destinationsDay}
                     ref={droppableProvided.innerRef}
                     {...droppableProvided.droppableProps}
@@ -66,11 +67,12 @@ function EditDestinationList({
                         index={destIndex}
                       >
                         {(draggableProvided) => (
-                          <li
+                          <div
                             ref={draggableProvided.innerRef}
                             {...draggableProvided.draggableProps}
                             {...draggableProvided.dragHandleProps}
                           >
+                            <FaGripVertical className={styles.gripIcon} />
                             {dest.title}
                             <button
                               onClick={() => {
@@ -81,12 +83,12 @@ function EditDestinationList({
                             >
                               삭제
                             </button>
-                          </li>
+                          </div>
                         )}
                       </Draggable>
                     ))}
                     {droppableProvided.placeholder}
-                  </ol>
+                  </div>
                 )}
               </Droppable>
             );
