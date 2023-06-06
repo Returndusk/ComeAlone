@@ -1,16 +1,17 @@
 import React from 'react';
 import styles from './InfoScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
-import { InfoScheduleDetailType } from '../../types/ScheduleDetail';
+import { ScheduleDetailInfoType } from '../../types/ScheduleDetail';
 
 function InfoScheduleDetail({
-  schedule
-}: {
-  schedule: InfoScheduleDetailType;
-}) {
-  const { duration, title, createdBy, createdAt, startDate, endDate, summary } =
-    schedule;
-
+  nickname,
+  title,
+  summary,
+  duration,
+  startDate,
+  endDate,
+  createdAt
+}: ScheduleDetailInfoType) {
   return (
     <div className={styles.scheduleInfoContainer}>
       <div className={styles.duration}>
@@ -21,9 +22,9 @@ function InfoScheduleDetail({
       <div className={styles.title}>{title}</div>
       <div className={styles.writer}>
         <span className={styles.writerAvatar}>
-          <Avatar>{createdBy}</Avatar>
+          <Avatar>{nickname[0]}</Avatar>
         </span>
-        {createdBy}
+        {nickname}
       </div>
       <div className={styles.date}>{createdAt}</div>
       <p>{summary}</p>

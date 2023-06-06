@@ -9,27 +9,38 @@ import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
-  destinations,
-  schedule,
+  scheduleFetched,
   likesAmount,
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
-import { DestinationsType } from '../types/DestinationListTypes';
+import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { FaArrowLeft } from 'react-icons/fa';
 
 function ScheduleDetail() {
+  const {
+    nickname,
+    title,
+    summary,
+    duration,
+    startDate,
+    endDate,
+    image,
+    createdAt,
+    destinations
+  } = scheduleFetched;
   const [reviewInput, setReviewInput] = useState('');
   const [checkedDestinations, setCheckedDestinations] = useState(
     destinations.flat()
   );
 
-  const onDestinationsChecked = (destinations: DestinationsType[]) => {
+  const onDestinationsChecked = (destinations: MapWithWaypointsPropsType[]) => {
     setCheckedDestinations(destinations);
   };
 
   const onReviewSubmit = (input: string) => {
     setReviewInput(input);
+    console.log(reviewInput);
   };
 
   return (
@@ -38,8 +49,16 @@ function ScheduleDetail() {
         <FaArrowLeft />
         돌아가기
       </Link>
-      <ImageScheduleDetail image={schedule.image} />
-      <InfoScheduleDetail schedule={schedule} />
+      <ImageScheduleDetail image={image} />
+      <InfoScheduleDetail
+        nickname={nickname}
+        title={title}
+        summary={summary}
+        duration={duration}
+        startDate={startDate}
+        endDate={endDate}
+        createdAt={createdAt}
+      />
       <div className={styles.editButtonContainer}>
         <Link to='/schedule/edit' className={styles.editButton}>
           수정하기
@@ -58,7 +77,6 @@ function ScheduleDetail() {
       </div>
       <ReviewsSchedule reviews={reviews} />
       <InputReviewSchedule onSubmit={onReviewSubmit} />
-      {reviewInput}
     </div>
   );
 }
