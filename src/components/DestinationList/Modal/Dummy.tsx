@@ -1,7 +1,7 @@
 export default [
   {
     user_id: '0hee@example.com',
-    title: '영희의 여행 일정 #2',
+    title: '영희의 여행 일정 #1',
     summary: '더미테스트 더미테스트',
     duration: 3,
     start_date: '2023-06-05',
