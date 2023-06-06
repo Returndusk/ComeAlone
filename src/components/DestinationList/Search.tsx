@@ -1,32 +1,45 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DestinationsType } from '../../types/DestinationListTypes';
 import styles from './Search.module.scss';
 import Category from './Category';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { DEFAULT_DESTINATIONS } from './Dummy';
+// import { DEFAULT_DESTINATIONS } from './Dummy';
+import { getAllDestinationsList } from '../../apis/DestinationListAPI';
 
 // 사용자에게 쿼리 받음 -> 검색 함수 전달 -> 검색함수가 쿼리랑, 목적지 받아서 검색 수행 -> 검색 결과 Destinations 파일에 전달
 
 function Search() {
-  const [data, setData] = useState<DestinationsType[]>(DEFAULT_DESTINATIONS);
+  const [data, setData] = useState<DestinationsType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const getAllDestinationsData = useCallback(async () => {
+    const res = await getAllDestinationsList();
+    const allDestinationsList = res.data;
+    setData(() => allDestinationsList);
+  }, []);
+
+  useEffect(() => {
+    getAllDestinationsData();
+  }, [getAllDestinationsData]);
 
   const searchQueryParam = useMemo(() => {
     return searchParams.get('search') ?? '';
   }, [searchParams]);
 
   const searchResults = useMemo(() => {
-    const searchResultDestinations = data.filter((destination) => {
-      const destinationTitle = destination?.title?.trim();
-      const destinationAddress = destination?.addr1?.trim();
-      return (
-        destinationTitle?.includes(searchQueryParam.trim()) ||
-        destinationAddress?.includes(searchQueryParam.trim())
-      );
-    });
+    const searchResultDestinations = data.filter(
+      (destination: DestinationsType) => {
+        const destinationTitle = destination?.title?.trim();
+        const destinationAddress = destination?.addr1?.trim();
+        return (
+          destinationTitle?.includes(searchQueryParam.trim()) ||
+          destinationAddress?.includes(searchQueryParam.trim())
+        );
+      }
+    );
 
-    return searchResultDestinations ?? [];
+    return searchResultDestinations;
   }, [searchQueryParam]);
 
   const isNullishSearchInput = (input: string) => {
@@ -61,7 +74,7 @@ function Search() {
             </button>
           </form>
         </div>
-        <Category destinations={searchResults} />
+        <Category searchResults={searchResults} />
       </div>
     </>
   );

@@ -91,7 +91,7 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
         markersLocations={
           clickedDestination !== null
             ? [clickedDestination]
-            : filteredDestinations
+            : slicedDestinations
         }
         setClickedDestination={setClickedDestination}
       />
