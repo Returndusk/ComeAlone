@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styles from './DestinationList.module.scss';
-import { DestinationsType } from '../DestinationList/Types';
+import { DestinationsType } from '../../types/DestinationListTypes';
 
 function DestinationList({
   destinations,
   onChecked
 }: {
   destinations: DestinationsType[][];
-  onChecked: any;
+  onChecked: (destination: DestinationsType[]) => void;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 

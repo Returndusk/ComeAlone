@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Review.module.scss';
-import { DestinationsType } from './Types';
-
-type ReviewPropsType = {
-  clickedDestination: DestinationsType | null;
-};
 
 const REVIEWS_DUMMY_DATA = [
   '여기 재밌었어요.',
@@ -12,7 +7,7 @@ const REVIEWS_DUMMY_DATA = [
   '또 가고 싶어요~'
 ];
 
-function Review({ clickedDestination }: ReviewPropsType) {
+function Review() {
   const [submittedReview, setSubmittedReview] = useState<string>('');
 
   const handleReviewSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {

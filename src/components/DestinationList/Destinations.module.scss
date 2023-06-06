@@ -48,3 +48,23 @@
     height: 100px;
   }
 }
+
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1000;
+
+  .detailsButtonContainer {
+    display: flex;
+
+    .detailsCloseButton {
+      position: absolute;
+      top: 3%;
+      right: 12%;
+      width: 30px;
+      height: 30px;
+      z-index: 1000;
+    }
+  }
+}

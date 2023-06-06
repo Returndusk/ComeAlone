@@ -10,8 +10,8 @@ import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
-import { DestinationsType } from '../components/DestinationList/Types';
 import { FaArrowLeft } from 'react-icons/fa';
+import { ScheduleEditSubmitType } from '../types/ScheduleEdit';
 
 function ScheduleEdit() {
   const [dateInfo, setDateInfo] = useState({
@@ -23,28 +23,16 @@ function ScheduleEdit() {
   const [title, setTitle] = useState(schedule.title);
   const [description, setDescription] = useState(schedule.summary);
   const [destinationList, setDestinationList] = useState(destinations);
-  const [checkedDestinations, setCheckedDestinations] = useState(
-    destinations.flat()
-  );
+  const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
-  const onDestinationsChecked = (destinations: DestinationsType[]) => {
-    setCheckedDestinations(destinations);
-  };
-
-  const onSubmit = (
-    title: string,
-    description: string,
-    dateInfo: {
-      startDate: Date;
-      endDate: Date;
-      duration: string;
-    },
-    isPublic: boolean
-  ) => {
+  const onSubmit = ({
+    title,
+    description,
+    dateInfo,
+    isPublic
+  }: ScheduleEditSubmitType) => {
     console.log({ ...dateInfo, title, description, isPublic });
   };
-
-  console.log(destinationList);
 
   return (
     <div className={styles.container}>
@@ -78,15 +66,22 @@ function ScheduleEdit() {
       <Link to='/destination/list'>새로운 목적지 추가하기</Link>
       <EditDestinationList
         destinations={destinationList}
-        onChecked={onDestinationsChecked}
+        checkedDayIndex={checkedDayIndex}
         handleDestinationList={setDestinationList}
+        handleCheckedDayIndex={setCheckedDayIndex}
       />
       <div className={styles.mapContainer}>
-        <MapWithWaypoints markersLocations={checkedDestinations} />
+        <MapWithWaypoints
+          markersLocations={
+            checkedDayIndex === -1
+              ? destinationList.flat()
+              : destinationList[checkedDayIndex]
+          }
+        />
       </div>
       <div className={styles.confirmButtonWrapper}>
         <button
-          onClick={() => onSubmit(title, description, dateInfo, isPublic)}
+          onClick={() => onSubmit({ title, description, dateInfo, isPublic })}
         >
           수정완료
         </button>
