@@ -40,11 +40,12 @@ function EditDestinationList({
                 key={`destinationList ${dayIndex}`}
               >
                 {(droppableProvided) => (
-                  <ol className={styles.destinationsDay}>
-                    <label
-                      ref={droppableProvided.innerRef}
-                      {...droppableProvided.droppableProps}
-                    >
+                  <ol
+                    className={styles.destinationsDay}
+                    ref={droppableProvided.innerRef}
+                    {...droppableProvided.droppableProps}
+                  >
+                    <label>
                       <input
                         type='checkbox'
                         checked={checkedDayIndex === dayIndex}
