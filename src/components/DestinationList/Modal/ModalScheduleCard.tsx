@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styles from './ModalScheduleCard.module.scss';
-import { ScheduleType } from '../../ScheduleList/ScheduleList';
+import { MyScheduleCardType } from '../../../types/ScheduleTypes';
+import AddToScheduleModal from './AddToScheduleModal';
 
 type ModalScheduleCardProps = {
-  schedule: ScheduleType;
+  schedule: MyScheduleCardType;
   index: number;
-  // selectedDay: number | null;
   isSelected: boolean;
   onShowDestinations: (index: number) => void;
   onCloseDestinations: () => void;
@@ -14,32 +14,24 @@ type ModalScheduleCardProps = {
 export default function ModalScheduleCard({
   schedule,
   index,
-  // selectedDay,
   isSelected,
   onShowDestinations,
   onCloseDestinations
 }: ModalScheduleCardProps) {
   const endDate = new Date(schedule.end_date);
   const startDate = new Date(schedule.start_date);
-  const createdAt = schedule.createdAt;
+  const createdAt = schedule.created_at;
   const diffTime = endDate.getTime() - startDate.getTime();
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
-  // const [isOpen, setIsOpen] = useState(false);
+  // N일차
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
-  /**
-   * 해당 카드를 클릭했을 때 destinations N일차 별로 불러오는 함수
-   * TODO:
-   * 1. N일차 별로 분기하기
-   * 2. 다른 카드 눌렀을 때 이전 카드내용은 숨기기
-   * 3. N일차에 현재 목적지 추가하기
-   */
-
   function handleToggleDestinations(dayIndex: number) {
-    // setIsOpen(!isOpen);
-    console.log('destinationList', schedule.destinations);
     setSelectedDay(selectedDay === dayIndex ? null : dayIndex);
   }
+  // console.log('selectedDay', selectedDay);
+  // console.log('dayIndex', dayIndex);
+  // console.log(schedule.destinations[selectedDay]);
 
   return (
     <>
@@ -63,7 +55,7 @@ export default function ModalScheduleCard({
           </div> */}
             <div className={styles.scheduleCreated}>등록 : {createdAt}</div>
           </div>
-          <div className={styles.scheduleLike}>❤ {schedule.likes}</div>
+          <div className={styles.scheduleLike}>❤ 좋아요 수</div>
         </div>
       </div>
       {isSelected && (
@@ -90,6 +82,7 @@ export default function ModalScheduleCard({
               <div key={idx}>{destination}</div>
             ))}
           </div>
+          <AddToScheduleModal />
         </div>
       )}
     </>

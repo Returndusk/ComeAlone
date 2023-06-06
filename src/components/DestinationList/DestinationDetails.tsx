@@ -1,30 +1,18 @@
-import React, { useState } from 'react';
-import { DestinationsType } from './Types';
+import React, { useMemo, useState } from 'react';
 import styles from './DestinationDetails.module.scss';
 import { RiThumbUpFill } from 'react-icons/ri';
 import { RiThumbUpLine } from 'react-icons/ri';
 import Review from './Review';
+import { useParams } from 'react-router-dom';
+import { DEFAULT_DESTINATIONS } from './Dummy';
 
-type DestinationDetailsPropsType = {
-  clickedDestination: DestinationsType | null;
-  setClickedDestination: React.Dispatch<
-    React.SetStateAction<DestinationsType | null>
-  >;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-function DestinationDetails({
-  clickedDestination,
-  setClickedDestination,
-  setIsOpen
-}: DestinationDetailsPropsType) {
+function DestinationDetails() {
   const [likes, setLikes] = useState<boolean>(false);
-  const destination = clickedDestination;
+  const { contentid } = useParams();
 
-  const toggleDetailPage = () => {
-    setIsOpen(() => false);
-    setClickedDestination(() => null);
-  };
+  const destination = useMemo(() => {
+    return DEFAULT_DESTINATIONS.find((des) => des.id === Number(contentid));
+  }, [contentid]);
 
   const handleLikesClick = () => {
     /*좋아요 요청(백엔드 요청)*/
@@ -35,16 +23,8 @@ function DestinationDetails({
     <>
       {destination !== null && (
         <div className={styles.destinationDetailsContainer}>
-          <div className={styles.detailsButtonContainer}>
-            <button
-              className={styles.detailsCloseButton}
-              onClick={toggleDetailPage}
-            >
-              X
-            </button>
-          </div>
           <section className={styles.destinationDetails}>
-            <h2>{destination.title}</h2>
+            <h2>{destination?.title}</h2>
             <p>전화번호:{destination?.tel}</p>
             <div>{destination?.overview}</div>
 
@@ -61,7 +41,7 @@ function DestinationDetails({
             <div>{/*<button>내 일정에 추가</button>*/}</div>
           </section>
           <section className={styles.detailsReviewsContainer}>
-            <Review clickedDestination={clickedDestination} />
+            <Review />
           </section>
         </div>
       )}

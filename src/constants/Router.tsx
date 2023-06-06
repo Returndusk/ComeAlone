@@ -8,5 +8,6 @@ export default {
   SCHEDULE_LIST: '/schedule/list',
   MYSCHEDULE_LIST: '/myschedule/list',
   SCHEDULE_EDIT: '/schedule/edit',
-  SCHEDULE_DETAIL: '/schedule/detail'
+  SCHEDULE_DETAIL: '/schedule/detail',
+  DESTINATION_LIST_DETAILS_PARAMS: ':contentid'
 };

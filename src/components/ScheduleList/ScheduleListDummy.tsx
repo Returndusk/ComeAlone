@@ -2,11 +2,13 @@ export default [
   {
     id: '1',
     title: '제주 올레길 걸어요',
-    description: '제주 올레길을 다같이 걸어보아요',
+    nickname: 'Test1',
+    summary: '제주 올레길을 다같이 걸어보아요',
     createdBy: '사용자1',
-    createdAt: '2023-05-29 (월) 11:12',
+    created_at: '2023-05-29 (월) 11:12',
     start_date: '2023-06-01',
     end_date: '2023-06-05',
+    duration: 3,
     status: 'PRIVATE',
     destinations: [
       ['제주국제공항', '협재포구', '북촌 돌하르방공원'],
@@ -20,11 +22,13 @@ export default [
   {
     id: '2',
     title: '한라산 등반해요',
-    description: '한라산을 다같이 올라보아요',
+    nickname: 'Test2',
+    summary: '한라산을 다같이 올라보아요',
     createdBy: '사용자2',
-    createdAt: '2023-05-30 (화) 11:12',
+    created_at: '2023-05-30 (화) 11:12',
     start_date: '2023-06-06',
     end_date: '2023-06-07',
+    duration: 3,
     status: 'PRIVATE',
     destinations: [
       ['첫째날1', '첫째날2', '첫째날3'],
