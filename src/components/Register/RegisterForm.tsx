@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import styles from './RegisterForm.module.scss';
 import { Errors, RegisterFormValues } from '../../types/UserTypes';
 import TextField from '@mui/material/TextField';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
 
 function RegisterForm() {
@@ -152,18 +148,9 @@ function RegisterForm() {
             size='small'
             style={{ width: '100%' }}
           />
-          {/* <label htmlFor='email'>이메일</label>
-          <input
-            type='text'
-            id='email'
-            name='email'
-            value={values.email}
-            onChange={handleChange}
-          /> */}
           {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
         </li>
         <li>
-          {/* <label htmlFor='nickname'>닉네임</label> */}
           <div className={styles.nickname}>
             <TextField
               id='outlined-basic'
@@ -174,13 +161,6 @@ function RegisterForm() {
               onChange={handleChange}
               size='small'
             />
-            {/* <input
-              type='text'
-              name='nickname'
-              id='nickname'
-              value={values.nickname}
-              onChange={handleChange}
-            /> */}
             <button type='button'>중복확인</button>
           </div>
           {!errors.nickname && (
@@ -204,14 +184,6 @@ function RegisterForm() {
             size='small'
             style={{ width: '100%' }}
           />
-          {/* <label htmlFor='password'>비밀번호</label>
-          <input
-            type='password'
-            name='password'
-            id='password'
-            value={values.password}
-            onChange={handleChange}
-          /> */}
           {!errors.password && (
             <p className={styles.msg}>
               8자 이상 (대소문자, 특수 문자, 숫자 포함)
@@ -233,14 +205,6 @@ function RegisterForm() {
             size='small'
             style={{ width: '100%' }}
           />
-          {/* <label htmlFor='passwordConfirm'>비밀번호 확인</label>
-          <input
-            type='password'
-            name='passwordConfirm'
-            id='passwordConfirm'
-            value={values.passwordConfirm}
-            onChange={handleChange}
-          /> */}
           {errors.passwordConfirm && (
             <p className={styles.errMsg}>{errors.passwordConfirm}</p>
           )}
@@ -267,48 +231,19 @@ function RegisterForm() {
               checked={values.gender === 'female'}
             />
           </RadioGroup>
-          {/* <label htmlFor='gender'>성별</label>
-          <div className={styles.radioGroup}>
-            <label>
-              <input
-                type='radio'
-                name='gender'
-                value='male'
-                checked={values.gender === 'male'}
-                onChange={handleChange}
-              />
-              남자
-            </label>
-            <label>
-              <input
-                type='radio'
-                name='gender'
-                value='female'
-                checked={values.gender === 'female'}
-                onChange={handleChange}
-              />
-              여자
-            </label> 
-          </div>*/}
           {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
         </li>
         <li>
-          {/* <label htmlFor='birthDate'>생년월일</label>
-          <input
-            type='text'
+          <TextField
+            id='outlined-basic'
+            label='생년월일'
+            variant='outlined'
             name='birthDate'
-            id='birthDate'
             value={values.birthDate}
             onChange={handleChange}
-          /> */}
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
-              <DatePicker
-                label='생년월일'
-                slotProps={{ textField: { size: 'small' } }}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
+            size='small'
+            style={{ width: '100%' }}
+          />
           {errors.birthDate && (
             <p className={styles.errMsg}>{errors.birthDate}</p>
           )}
@@ -324,14 +259,6 @@ function RegisterForm() {
             size='small'
             style={{ width: '100%' }}
           />
-          {/* <label htmlFor='phoneNumber'>연락처</label>
-          <input
-            type='text'
-            name='phoneNumber'
-            id='phoneNumber'
-            value={values.phoneNumber}
-            onChange={handleChange}
-          /> */}
           {!errors.phoneNumber && <p className={styles.msg}>하이픈(-) 포함</p>}
           {errors.phoneNumber && (
             <p className={styles.errMsg}>{errors.phoneNumber}</p>
