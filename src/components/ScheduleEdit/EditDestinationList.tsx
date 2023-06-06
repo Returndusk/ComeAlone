@@ -101,6 +101,7 @@ function EditDestinationList({
                       >
                         {(draggableProvided) => (
                           <div
+                            className={styles.destination}
                             ref={draggableProvided.innerRef}
                             {...draggableProvided.draggableProps}
                             {...draggableProvided.dragHandleProps}
