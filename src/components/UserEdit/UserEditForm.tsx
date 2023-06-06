@@ -138,6 +138,20 @@ function UserEditForm() {
     }
   };
 
+  const validateBirthDate = (
+    { year, month, day }: UserInfoValues['birthDate'],
+    errMsgs: Errors
+  ) => {
+    const birthDate = new Date(year, month - 1, day);
+    const isYearValid = birthDate.getFullYear() === year;
+    const isMonthValid = birthDate.getMonth() + 1 === month;
+    const isDayValid = birthDate.getDate() === day;
+
+    if (!isYearValid || !isMonthValid || !isDayValid) {
+      return (errMsgs.birthDate = '유효한 날짜를 입력해주세요.');
+    }
+  };
+
   const validateForm = (values: UserInfoValues) => {
     const errMsgs: Errors = {};
 
@@ -152,7 +166,7 @@ function UserEditForm() {
         errMsgs
       );
     if (!errMsgs.phoneNumber) validatePhoneNumber(values.phoneNumber, errMsgs);
-    //생년월일 유효성 검사 추가 예정
+    if (!errMsgs.birthDate) validateBirthDate(values.birthDate, errMsgs);
 
     return errMsgs;
   };
