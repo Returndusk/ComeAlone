@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styles from './DestinationList.module.scss';
-import { DestinationsType } from '../../types/DestinationListTypes';
+import { MapWithWaypointsPropsType } from '../../types/DestinationListTypes';
 
 function DestinationList({
   destinations,
   onDestinationsChecked
 }: {
-  destinations: DestinationsType[][];
-  onDestinationsChecked: (destination: DestinationsType[]) => void;
+  destinations: MapWithWaypointsPropsType[][];
+  onDestinationsChecked: (destination: MapWithWaypointsPropsType[]) => void;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
