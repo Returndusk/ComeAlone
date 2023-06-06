@@ -46,9 +46,11 @@ function LoginForm() {
       id: values.email,
       password: values.password
     };
+
     const response = await axios.post(
-      'http://34.64.169.7:3000/api/auth/signin',
-      body
+      'https://vvhooping.com/api/auth/signin',
+      body,
+      { withCredentials: true }
     );
     console.log(response);
   };
