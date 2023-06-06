@@ -1,12 +1,10 @@
 main.container {
   width: 100%;
+  min-width: 1280px;
   min-height: 100vh;
   background-color: #f8f8f8;
   padding: 100px 0px;
-
-  * {
-    box-sizing: border-box;
-  }
+  box-sizing: border-box;
 
   .wrapper {
     width: 400px;
@@ -15,6 +13,7 @@ main.container {
     border: 1px solid #ddd;
     border-radius: 5px;
     margin: 0 auto;
+    box-sizing: border-box;
   }
 
   h1 {
