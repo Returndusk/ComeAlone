@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './RegisterForm.module.scss';
 import { Errors, RegisterFormValues } from '../../types/UserTypes';
 import TextField from '@mui/material/TextField';
-import { FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
+import {
+  FormControlLabel,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  InputLabel,
+  Select,
+  MenuItem
+} from '@mui/material';
 
 function RegisterForm() {
   const initValues: RegisterFormValues = {
@@ -10,7 +18,11 @@ function RegisterForm() {
     password: '',
     passwordConfirm: '',
     nickname: '',
-    birthDate: '',
+    birthDate: {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      day: new Date().getDate()
+    },
     gender: 'male',
     phoneNumber: ''
   };
@@ -20,6 +32,48 @@ function RegisterForm() {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleBirthDateChange = (
+    e:
+      | React.ChangeEvent<{ name: string; value: unknown }>
+      | { target: { name: string; value: number } }
+  ) => {
+    const { name, value } = e.target;
+    setValues((prev) => {
+      return {
+        ...prev,
+        birthDate: {
+          ...prev.birthDate,
+          [name]: Number(value as string)
+        }
+      };
+    });
+  };
+
+  const birthDateOptions = useMemo(() => {
+    const getYears = () => {
+      const currentYear = new Date().getFullYear();
+      const years = [];
+      for (let i = currentYear; i >= 1900; i--) {
+        years.push(i);
+      }
+      return years.reverse();
+    };
+
+    const getMonths = () => {
+      return Array.from({ length: 12 }, (_, i) => i + 1);
+    };
+
+    const getDays = () => {
+      return Array.from({ length: 31 }, (_, i) => i + 1);
+    };
+
+    return {
+      years: getYears(),
+      months: getMonths(),
+      days: getDays()
+    };
+  }, []);
 
   const checkEmptyInputFields = (
     values: RegisterFormValues,
@@ -117,7 +171,6 @@ function RegisterForm() {
     if (!errMsgs.passwordConfirm)
       validatePasswordConfirm(values.password, values.passwordConfirm, errMsgs);
     if (!errMsgs.phoneNumber) validatePhoneNumber(values.phoneNumber, errMsgs);
-    //생년월일 유효성 검사는 추가 예정입니다.
 
     return errMsgs;
   };
@@ -233,17 +286,64 @@ function RegisterForm() {
           </RadioGroup>
           {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
         </li>
-        <li>
-          <TextField
-            id='outlined-basic'
-            label='생년월일'
-            variant='outlined'
-            name='birthDate'
-            value={values.birthDate}
-            onChange={handleChange}
+        <li className={styles.birthDate}>
+          <InputLabel id='birthDate-select-label'>생년월일</InputLabel>
+          <Select
+            labelId='birthDate-select-label'
+            id='demo-simple-select'
+            value={values.birthDate.year}
+            name='year'
+            label='연도'
             size='small'
-            style={{ width: '100%' }}
-          />
+            onChange={handleBirthDateChange}
+            style={{
+              width: 'calc(100% / 3)'
+            }}
+          >
+            {birthDateOptions.years.map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
+            ))}
+          </Select>
+          <Select
+            labelId='birthDate-select-label'
+            id='demo-simple-select'
+            value={values.birthDate.month}
+            name='month'
+            label='월'
+            size='small'
+            onChange={handleBirthDateChange}
+            style={{
+              width: 'calc(100% / 3 - 5px)',
+              marginLeft: '5px'
+            }}
+          >
+            {birthDateOptions.months.map((month) => (
+              <MenuItem key={month} value={month}>
+                {month}
+              </MenuItem>
+            ))}
+          </Select>
+          <Select
+            labelId='birthDate-select-label'
+            id='demo-simple-select'
+            value={values.birthDate.day}
+            name='day'
+            label='일'
+            size='small'
+            onChange={handleBirthDateChange}
+            style={{
+              width: 'calc(100% / 3 - 5px)',
+              marginLeft: '5px'
+            }}
+          >
+            {birthDateOptions.days.map((day) => (
+              <MenuItem key={day} value={day}>
+                {day}
+              </MenuItem>
+            ))}
+          </Select>
           {errors.birthDate && (
             <p className={styles.errMsg}>{errors.birthDate}</p>
           )}

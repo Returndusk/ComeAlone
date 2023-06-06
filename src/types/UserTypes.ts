@@ -8,7 +8,11 @@ export type RegisterFormValues = {
   password: string;
   passwordConfirm: string;
   nickname: string;
-  birthDate: string;
+  birthDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
   gender: 'male' | 'female';
   phoneNumber: string;
 };
