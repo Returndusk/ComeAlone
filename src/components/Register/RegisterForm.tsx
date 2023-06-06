@@ -161,6 +161,20 @@ function RegisterForm() {
     }
   };
 
+  const validateBirthDate = (
+    { year, month, day }: RegisterFormValues['birthDate'],
+    errMsgs: Errors
+  ) => {
+    const birthDate = new Date(year, month - 1, day);
+    const isYearValid = birthDate.getFullYear() === year;
+    const isMonthValid = birthDate.getMonth() + 1 === month;
+    const isDayValid = birthDate.getDate() === day;
+
+    if (!isYearValid || !isMonthValid || !isDayValid) {
+      return (errMsgs.birthDate = '유효한 날짜를 입력해주세요.');
+    }
+  };
+
   const validateForm = (values: RegisterFormValues) => {
     const errMsgs: Errors = {};
 
@@ -171,6 +185,7 @@ function RegisterForm() {
     if (!errMsgs.passwordConfirm)
       validatePasswordConfirm(values.password, values.passwordConfirm, errMsgs);
     if (!errMsgs.phoneNumber) validatePhoneNumber(values.phoneNumber, errMsgs);
+    if (!errMsgs.birthDate) validateBirthDate(values.birthDate, errMsgs);
 
     return errMsgs;
   };
