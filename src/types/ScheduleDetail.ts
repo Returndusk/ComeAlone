@@ -1,4 +1,5 @@
 import { MapWithWaypointsPropsType } from './DestinationListTypes';
+
 export interface ScheduleDetailType {
   id: string;
   title: string;

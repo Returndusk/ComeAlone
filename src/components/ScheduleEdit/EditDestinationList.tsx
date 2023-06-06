@@ -1,20 +1,15 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import styles from './EditDestinationList.module.scss';
-import { DestinationsType } from '../../types/DestinationListTypes';
+import { ScheduleEditDestinationListType } from '../../types/ScheduleEdit';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { FaGripVertical } from 'react-icons/fa';
 
 function EditDestinationList({
-  destinationList,
+  updatedDestinationList,
   checkedDayIndex,
-  handleDestinationList,
-  handleCheckedDayIndex
-}: {
-  destinationList: DestinationsType[][];
-  checkedDayIndex: number;
-  handleDestinationList: Dispatch<SetStateAction<DestinationsType[][]>>;
-  handleCheckedDayIndex: Dispatch<SetStateAction<number>>;
-}) {
+  onDestinationListUpdate,
+  onCheckedDayIndexUpdate
+}: ScheduleEditDestinationListType) {
   const handleDragEnd = ({
     source,
     destination
@@ -30,25 +25,31 @@ function EditDestinationList({
       const dayIndex = source.droppableId.split(' ')[1];
       const prevDestIndex = source.index;
       const curDestIndex = destination.index;
-      const [removed] = destinationList[dayIndex].splice(prevDestIndex, 1);
+      const [removed] = updatedDestinationList[dayIndex].splice(
+        prevDestIndex,
+        1
+      );
 
-      destinationList[dayIndex].splice(curDestIndex, 0, removed);
+      updatedDestinationList[dayIndex].splice(curDestIndex, 0, removed);
 
-      const newDestinationList = [...destinationList];
+      const newDestinationList = [...updatedDestinationList];
 
-      handleDestinationList(newDestinationList);
+      onDestinationListUpdate(newDestinationList);
     } else {
       const prevDayIndex = source.droppableId.split(' ')[1];
       const prevDestIndex = source.index;
       const curDayIndex = destination.droppableId.split(' ')[1];
       const curDestIndex = destination.index;
-      const [removed] = destinationList[prevDayIndex].splice(prevDestIndex, 1);
+      const [removed] = updatedDestinationList[prevDayIndex].splice(
+        prevDestIndex,
+        1
+      );
 
-      destinationList[curDayIndex].splice(curDestIndex, 0, removed);
+      updatedDestinationList[curDayIndex].splice(curDestIndex, 0, removed);
 
-      const newDestinationList = [...destinationList];
+      const newDestinationList = [...updatedDestinationList];
 
-      handleDestinationList(newDestinationList);
+      onDestinationListUpdate(newDestinationList);
     }
   };
 
@@ -60,14 +61,14 @@ function EditDestinationList({
           type='checkbox'
           checked={checkedDayIndex === -1}
           onChange={() => {
-            handleCheckedDayIndex(-1);
+            onCheckedDayIndexUpdate(-1);
           }}
         />
         전체 목적지 보기
       </label>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className={styles.destinationsList}>
-          {destinationList.map((destOfDay, dayIndex) => {
+          {updatedDestinationList.map((destOfDay, dayIndex) => {
             return (
               <Droppable
                 droppableId={`destinationList ${dayIndex}`}
@@ -85,9 +86,9 @@ function EditDestinationList({
                         checked={checkedDayIndex === dayIndex}
                         onChange={() => {
                           if (checkedDayIndex === dayIndex) {
-                            handleCheckedDayIndex(-1);
+                            onCheckedDayIndexUpdate(-1);
                           } else {
-                            handleCheckedDayIndex(dayIndex);
+                            onCheckedDayIndexUpdate(dayIndex);
                           }
                         }}
                       />{' '}
@@ -110,9 +111,14 @@ function EditDestinationList({
                             {dest.title}
                             <button
                               onClick={() => {
-                                destinationList[dayIndex].splice(destIndex, 1);
-                                const newDestinations = [...destinationList];
-                                handleDestinationList(newDestinations);
+                                updatedDestinationList[dayIndex].splice(
+                                  destIndex,
+                                  1
+                                );
+                                const newDestinations = [
+                                  ...updatedDestinationList
+                                ];
+                                onDestinationListUpdate(newDestinations);
                               }}
                             >
                               삭제

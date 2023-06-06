@@ -9,41 +9,54 @@ import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import { schedule, destinations } from '../components/ScheduleEdit/Dummy';
+import { scheduleFetched } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 import { ScheduleEditSubmitType } from '../types/ScheduleEdit';
 
 function ScheduleEdit() {
+  const {
+    nickname,
+    title,
+    summary,
+    duration,
+    startDate,
+    endDate,
+    image,
+    createdAt,
+    status,
+    destinations
+  } = scheduleFetched;
   const [dateInfo, setDateInfo] = useState({
-    startDate: schedule.startDate,
-    endDate: schedule.endDate,
-    duration: schedule.duration
+    startDate,
+    endDate,
+    duration
   });
-  const [isPublic, setIsPublic] = useState(schedule.isPublic);
-  const [title, setTitle] = useState(schedule.title);
-  const [description, setDescription] = useState(schedule.summary);
-  const [destinationList, setDestinationList] = useState(destinations);
+  const [isPublic, setIsPublic] = useState(status);
+  const [updatedTitle, setUpdatedTitle] = useState(title);
+  const [updatedSummary, setUpdatedSummary] = useState(summary);
+  const [updatedDestinationList, setUpdatedDestinationList] =
+    useState(destinations);
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
   const onSubmit = ({
-    title,
-    description,
+    updatedTitle,
+    updatedSummary,
     dateInfo,
     isPublic
   }: ScheduleEditSubmitType) => {
-    console.log({ ...dateInfo, title, description, isPublic });
+    console.log({ ...dateInfo, updatedTitle, updatedSummary, isPublic });
   };
 
   const markersLocations = useMemo(() => {
     const data =
       checkedDayIndex === -1
-        ? destinationList.flat()
-        : destinationList[checkedDayIndex];
+        ? updatedDestinationList.flat()
+        : updatedDestinationList[checkedDayIndex];
 
     console.log('@@', data);
 
     return JSON.parse(JSON.stringify(data));
-  }, [checkedDayIndex, destinationList]);
+  }, [checkedDayIndex, updatedDestinationList]);
 
   return (
     <div className={styles.container}>
@@ -51,7 +64,7 @@ function ScheduleEdit() {
         <FaArrowLeft />
         돌아가기
       </Link>
-      <ImageScheduleEdit image={schedule.image} />
+      <ImageScheduleEdit image={image} />
       <DateScheduleEdit dateInfo={dateInfo} handleDateInfo={setDateInfo} />
       <div className={styles.publicStatus}>
         <FormGroup>
@@ -67,26 +80,28 @@ function ScheduleEdit() {
         </FormGroup>
       </div>
       <InfoScheduleEdit
-        title={title}
-        writer={schedule.createdBy}
-        date={schedule.createdAt}
-        description={description}
-        handleTitle={setTitle}
-        handleDescription={setDescription}
+        updatedTitle={updatedTitle}
+        nickname={nickname}
+        createdAt={createdAt}
+        updatedSummary={updatedSummary}
+        onTitleUpdate={setUpdatedTitle}
+        onSummaryUpdate={setUpdatedSummary}
       />
       <Link to='/destination/list'>새로운 목적지 추가하기</Link>
       <EditDestinationList
-        destinationList={destinationList}
+        updatedDestinationList={updatedDestinationList}
         checkedDayIndex={checkedDayIndex}
-        handleDestinationList={setDestinationList}
-        handleCheckedDayIndex={setCheckedDayIndex}
+        onDestinationListUpdate={setUpdatedDestinationList}
+        onCheckedDayIndexUpdate={setCheckedDayIndex}
       />
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={markersLocations} />
       </div>
       <div className={styles.confirmButtonWrapper}>
         <button
-          onClick={() => onSubmit({ title, description, dateInfo, isPublic })}
+          onClick={() =>
+            onSubmit({ updatedTitle, updatedSummary, dateInfo, isPublic })
+          }
         >
           수정완료
         </button>
