@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import FormGroup from '@mui/material/FormGroup';
@@ -57,6 +57,25 @@ function ScheduleEdit() {
     }
   }, [checkedDayIndex, updatedDestinationList]);
 
+  useEffect(() => {
+    const prevDuration = updatedDestinationList.length;
+    const updatedDuration = Number(dateInfo.duration);
+
+    if (prevDuration < updatedDuration) {
+      const newUpdatedDestinationList = [...updatedDestinationList];
+
+      for (let i = 0; i < updatedDuration - prevDuration; i++) {
+        newUpdatedDestinationList.push([]);
+      }
+
+      setUpdatedDestinationList(newUpdatedDestinationList);
+    } else if (prevDuration > updatedDuration) {
+      setUpdatedDestinationList(
+        updatedDestinationList.slice(0, updatedDuration)
+      );
+    }
+  }, [dateInfo.duration]);
+
   return (
     <div className={styles.container}>
       <Link to='/schedule/detail' className={styles.backButton}>
@@ -64,7 +83,7 @@ function ScheduleEdit() {
         돌아가기
       </Link>
       <ImageScheduleEdit image={image} />
-      <DateScheduleEdit dateInfo={dateInfo} handleDateInfo={setDateInfo} />
+      <DateScheduleEdit dateInfo={dateInfo} onDateInfoUpdate={setDateInfo} />
       <div className={styles.publicStatus}>
         <FormGroup>
           <FormControlLabel
