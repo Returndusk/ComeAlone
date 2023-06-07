@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import styles from './CommonModalDesign.module.scss';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRangePicker } from 'react-date-range';
+import { DateRange } from 'react-date-range';
+import ko from 'date-fns/locale/ko';
 import { addDays, format } from 'date-fns';
 
-function CreateScheduleModal() {
-  const [isOpen, setIsOpen] = useState(false);
+function CreateScheduleModal(props: { closeModal: () => void }) {
+  // const [isOpen, setIsOpen] = useState(false);
 
-  function openModal() {
-    setIsOpen(true);
-  }
+  // function openModal() {
+  //   setIsOpen(true);
+  // }
 
-  function closeModal() {
-    setIsOpen(false);
-  }
+  // function closeModal() {
+  //   setIsOpen(false);
+  // }
 
   /**
    * TODO: 모달 창 밖을 클릭해도 닫히도록
@@ -43,7 +44,6 @@ function CreateScheduleModal() {
   ]);
 
   // console.log(date);
-  // format해서 보내지 말기! 들어온 그대로 서버로 보내기
   const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd');
   const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd');
 
@@ -54,13 +54,19 @@ function CreateScheduleModal() {
   function handleDateRange(ranges: any) {
     // console.log(ranges);
     setDate([ranges.selection]);
+
+    setFormData((prev) => ({
+      ...prev,
+      start_date: String(ranges.selection.startDate),
+      end_date: String(ranges.selection.endDate)
+    }));
   }
 
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
-    startDate: startDateFormatted,
-    endDate: endDateFormatted
+    summary: '',
+    start_date: '',
+    end_date: ''
   });
 
   function handleFormData(e: any) {
@@ -77,55 +83,51 @@ function CreateScheduleModal() {
   function handleSubmit(e: any) {
     e.preventDefault();
     console.log('formData', formData);
-    closeModal();
+    // 여기에 득열님 alert 활용
+    props.closeModal();
   }
 
   return (
-    <>
-      <button onClick={openModal}>일정 추가하기</button>
-      {isOpen && (
-        <div className={styles.modalBackground}>
-          <div className={styles.modalLayout}>
-            <form
-              action=''
-              method='post'
-              name='schedule_input'
-              onSubmit={handleSubmit}
-            >
-              <label>여행 제목 : </label>
-              <input
-                type='text'
-                name='title'
-                value={formData.title}
-                onChange={handleFormData}
-              />
-              <br />
-              <label>한 줄 소개 : </label>
-              <input
-                type='text'
-                name='description'
-                value={formData.description}
-                onChange={handleFormData}
-              />
-              <div>여행 날짜</div>
-              <DateRangePicker
-                // onChange={(item) => setDate([item.selection])}
-                onChange={handleDateRange}
-                // showSelectionPreview={true}
-                moveRangeOnFirstSelection={false}
-                months={2}
-                ranges={date}
-                direction='horizontal'
-              />
-              <p>여행 첫 날 : {startDateFormatted}</p>
-              <p>여행 마지막 날 : {endDateFormatted}</p>
-              <input type='submit' value='일정 추가하기' id='submitButton' />
-            </form>
-            <button onClick={closeModal}>창 닫기</button>
-          </div>
-        </div>
-      )}
-    </>
+    <div className={styles.modalBackground}>
+      <div className={styles.modalLayout}>
+        <form
+          action=''
+          method='post'
+          name='schedule_input'
+          onSubmit={handleSubmit}
+        >
+          <label>여행 제목 : </label>
+          <input
+            type='text'
+            name='title'
+            value={formData.title}
+            onChange={handleFormData}
+          />
+          <br />
+          <label>한 줄 소개 : </label>
+          <input
+            type='text'
+            name='summary'
+            value={formData.summary}
+            onChange={handleFormData}
+          />
+          <div>여행 날짜</div>
+          <DateRange
+            locale={ko}
+            editableDateInputs={true}
+            onChange={handleDateRange}
+            moveRangeOnFirstSelection={false}
+            months={2}
+            ranges={date}
+            direction='horizontal'
+          />
+          <p>여행 첫 날 : {startDateFormatted}</p>
+          <p>여행 마지막 날 : {endDateFormatted}</p>
+          <input type='submit' value='일정 추가하기' id='submitButton' />
+        </form>
+        <button onClick={props.closeModal}>창 닫기</button>
+      </div>
+    </div>
   );
 }
 
