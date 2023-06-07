@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DestinationsType } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
-import { getDestinationsListByCategoryId } from '../../apis/DestinationListAPI';
+import { getDestinationsListByCategoryId } from '../../apis/destinationList';
 import styles from './Category.module.scss';
 
 type CategoryPropsTypes = {
