@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Errors, LoginFormValues } from '../../types/UserTypes';
-import axios from 'axios';
+import { AxiosError } from 'axios';
+import { Cookies } from 'react-cookie';
+import { Errors, LoginFormData, LoginFormValues } from '../../types/UserTypes';
 import { TextField } from '@mui/material';
 import styles from './LoginForm.module.scss';
+import { loginUser } from '../../apis/user';
+import { AuthStateType, useAuthState } from '../../contexts/AuthContext';
 
 function LoginForm() {
+  const cookies = new Cookies();
+  const { setAuthState } = useAuthState();
+
   const navigate = useNavigate();
   const initValues: LoginFormValues = {
     email: '',
@@ -41,30 +47,60 @@ function LoginForm() {
     return errMsgs;
   };
 
-  const handleLogin = async () => {
-    const body = {
-      id: values.email,
-      password: values.password
-    };
+  const handleSuccess = (
+    accessToken: string,
+    refreshToken: string,
+    userData: any //추후 수정 예정
+  ) => {
+    //쿠키에 토큰 저장
+    cookies.set('accessToken', accessToken);
+    cookies.set('refreshToken', refreshToken);
 
-    const response = await axios.post(
-      'https://vvhooping.com/api/auth/signin',
-      body,
-      { withCredentials: true }
-    );
-    console.log(response);
+    //전역으로 상태 관리
+    setAuthState((prev: AuthStateType) => ({
+      ...prev,
+      isLoggedIn: true,
+      user: userData
+    }));
+
+    alert('로그인에 성공하였습니다!');
+  };
+
+  const handleLogin = async () => {
+    try {
+      const data: LoginFormData = {
+        id: values.email,
+        password: values.password
+      };
+
+      const response = await loginUser(data);
+      // console.log(response);
+
+      if (response.status === 201) {
+        const { accessToken, refreshToken, user } = response.data;
+        handleSuccess(accessToken, refreshToken, user);
+      }
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 400) {
+          const errMsg = err.response.data.message;
+          return setErrors((prev) => ({ ...prev, password: errMsg }));
+        }
+      }
+
+      console.log(err);
+      alert('로그인에 실패하였습니다.');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = validateForm(values);
+    setErrors(validationErrors);
+
     if (Object.keys(validationErrors).length === 0) {
-      alert('유효성 검사 통과!');
-      //로그인 api 호출
       await handleLogin();
-    } else {
-      setErrors(validationErrors);
     }
   };
 
