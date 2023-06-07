@@ -28,6 +28,10 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
     setDetailsDomRoot(() => document.getElementById('main'));
   }, []);
 
+  // useEffect(() => {
+  //   setSlicedDestinations(() => filteredDestinations);
+  // }, [filteredDestinations]);
+
   const handleDestinationClick = (destination: DestinationsType) => {
     setClickedDestination(() => destination);
     navigate(`/destination/list/${destination.id}${search}`);
@@ -55,6 +59,11 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
                   >
                     <h3>{destination?.title}</h3>
                     <p>{destination?.addr1}</p>
+                    <p>{destination?.category_id}</p>
+                    <img
+                      id={styles.destinationImage}
+                      src={destination?.image1}
+                    />
                   </div>
                 )
               )}

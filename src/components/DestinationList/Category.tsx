@@ -72,7 +72,7 @@ function Category({ searchResults }: CategoryPropsTypes) {
   useEffect(() => {
     const debouncer = setTimeout(() => {
       console.log('로딩 중입니다.');
-    }, 300);
+    }, 4000);
 
     return () => {
       clearTimeout(debouncer);
