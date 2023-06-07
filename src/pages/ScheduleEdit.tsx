@@ -12,6 +12,7 @@ import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import { scheduleFetched } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 import { ScheduleEditSubmitType } from '../types/ScheduleEdit';
+import ROUTER from '../constants/Router';
 
 function ScheduleEdit() {
   const {
@@ -85,7 +86,7 @@ function ScheduleEdit() {
 
   return (
     <div className={styles.container}>
-      <Link to='/schedule/detail' className={styles.backButton}>
+      <Link to={ROUTER.SCHEDULE_DETAIL} className={styles.backButton}>
         <FaArrowLeft />
         돌아가기
       </Link>
@@ -115,7 +116,7 @@ function ScheduleEdit() {
         onTitleUpdate={setUpdatedTitle}
         onSummaryUpdate={setUpdatedSummary}
       />
-      <Link to='/destination/list'>새로운 목적지 추가하기</Link>
+      <Link to={ROUTER.DESTINATION_LIST}>새로운 목적지 추가하기</Link>
       <EditDestinationList
         updatedDestinationList={updatedDestinationList}
         checkedDayIndex={checkedDayIndex}

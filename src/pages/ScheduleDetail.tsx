@@ -16,6 +16,7 @@ import {
 } from '../components/ScheduleDetail/Dummy';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { FaArrowLeft } from 'react-icons/fa';
+import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
   const {
@@ -47,7 +48,7 @@ function ScheduleDetail() {
 
   return (
     <div className={styles.container}>
-      <Link to='/schedule/list' className={styles.backButton}>
+      <Link to={ROUTER.SCHEDULE_LIST} className={styles.backButton}>
         <FaArrowLeft />
         돌아가기
       </Link>
@@ -62,7 +63,7 @@ function ScheduleDetail() {
         createdAt={createdAt}
       />
       <div className={styles.editButtonContainer}>
-        <Link to='/schedule/edit' className={styles.editButton}>
+        <Link to={ROUTER.SCHEDULE_EDIT} className={styles.editButton}>
           수정하기
         </Link>
       </div>
