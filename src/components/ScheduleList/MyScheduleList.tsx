@@ -8,11 +8,13 @@ import {
   MyScheduleListType
 } from '../../types/ScheduleTypes';
 import ROUTER from '../../constants/Router';
+import CreateScheduleModal from './Modal/CreateScheduleModal';
 
 function MyScheduleLists() {
   const [scheduleList, setScheduleList] = useState<MyScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
     const API_URL = 'http://localhost:9999/data';
@@ -35,6 +37,10 @@ function MyScheduleLists() {
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     setScheduleSort(sortOption);
+  }
+
+  function openModal() {
+    setIsModalOpen(true);
   }
 
   return (
@@ -92,9 +98,14 @@ function MyScheduleLists() {
         {isLoading ? (
           ''
         ) : (
-          <div className={styles.scheduleAdd}>일정 추가하기</div>
+          <button className={styles.scheduleAdd} onClick={openModal}>
+            일정 추가하기
+          </button>
         )}
       </div>
+      {isModalOpen && (
+        <CreateScheduleModal closeModal={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 }
