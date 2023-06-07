@@ -39,5 +39,15 @@ export const DEFAULT_DESTINATIONS = [
     overview: '개요 설명입니다.',
     category_id: 12,
     id: 3
+  },
+  {
+    title: '금오름 옆',
+    mapy: 33.35452764241429,
+    mapx: 126.40590904987518,
+    addr1: '금오름 옆 위치',
+    tel: '064-772-33661',
+    overview: '개요 설명입니다.',
+    category_id: 12,
+    id: 3
   }
 ];
