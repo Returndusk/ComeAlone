@@ -4,8 +4,6 @@ autoplaySpeed: 3000, // 간격시간
 dots: false, // 동그라미버튼
 speed: 600, // 바뀌는시간(생략가능)
 slidesToShow: 3, // 보여질슬라이드수(생략가능)
-centerMode: true,
-centerPadding: "80px",
 slidesToScroll: 1, // 이동슬라이드수(생략가능)
 pauseOnHover: true, // 마우스오버시 멈춤여부(생략가능)
 pauseOnDotsHover: true, // 동그라미번호버튼에 호버시 멈춤여부(생략가능)
@@ -16,7 +14,8 @@ fade: false, // 슬라이드가 수평으로 이동하지 않고, 제자리에�
 arrows: true, // 좌우화살표 사용여부(생략가능)
 */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -33,43 +32,85 @@ interface SliderComponentProps {
     autoplay?: boolean;
     autoplaySpeed?: number;
   };
+  api: string;
+  urlTemplate?: string;
 }
 
-function SliderBanner({ settings }: SliderComponentProps) {
+interface Destination {
+  id: number;
+  title: string;
+  image1: string;
+  overview: string;
+}
+
+function SliderBanner({
+  settings,
+  api,
+  urlTemplate
+}: SliderComponentProps): JSX.Element {
   const defaultSettings = {
     arrows: true,
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
     autoplay: true,
     autoplaySpeed: 5000
   };
 
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const res = await axios.get<Destination[]>(api);
+        setDestinations(res.data);
+      } catch (error) {
+        console.error('Failed to fetch destinations', error);
+      }
+    };
+    fetchDestinations();
+  }, [api]);
+
   const finalSettings = { ...defaultSettings, ...settings };
+
+  const handleBannerClick = (title: string): void => {
+    if (urlTemplate) {
+      const searchParam = encodeURIComponent(title);
+      const url = urlTemplate.replace('{title}', searchParam);
+      window.location.href = url;
+    }
+  };
 
   return (
     <div className={styles.container}>
       <Slider {...finalSettings}>
-        <div className={styles.box}>
-          <h3>1</h3>
-        </div>
-        <div className={styles.box}>
-          <h3>2</h3>
-        </div>
-        <div className={styles.box}>
-          <h3>3</h3>
-        </div>
-        <div className={styles.box}>
-          <h3>4</h3>
-        </div>
-        <div className={styles.box}>
-          <h3>5</h3>
-        </div>
-        <div className={styles.box}>
-          <h3>6</h3>
-        </div>
+        {destinations.map((destination) => (
+          <div
+            key={destination.id}
+            className={styles.box}
+            onClick={() => handleBannerClick(destination.title)}
+          >
+            <div className={styles.imageContainer}>
+              <img
+                src={
+                  destination.image1 ||
+                  'https://image.utoimage.com/preview/cp872655/2021/05/202105029544_500.jpg'
+                }
+                alt={destination.title}
+              />
+              <div className={styles.text}>
+                <h3>{destination.title}</h3>
+                <p>
+                  {destination.overview && destination.overview.length > 20
+                    ? destination.overview.slice(0, 62) + '...'
+                    : destination.overview}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
       </Slider>
     </div>
   );

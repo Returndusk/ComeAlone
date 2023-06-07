@@ -21,13 +21,12 @@ function Weather() {
   useEffect(() => {
     const cityName = 'Jeju';
     const apiKey = process.env.REACT_APP_WEATHER_KEY;
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
 
     axios
       .get<WeatherData>(url)
       .then((res) => {
         const data = res.data;
-        console.log(data);
         const tempInCelsius = Math.round(data.main.temp - 273.15);
         setTemp(tempInCelsius);
         setIcon(getWeatherIcon(data.weather[0].id));

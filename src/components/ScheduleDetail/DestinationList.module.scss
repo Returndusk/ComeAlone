@@ -9,7 +9,7 @@
   }
 
   .destinationsList {
-    height: 85%;
+    height: 95%;
     margin: 20px 0 0 0;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -45,6 +45,10 @@
       border-left: 2px solid $gray--lightest;
       user-select: none;
 
+      .destinationDayTitle {
+        margin: 0 0 20px 0px;
+      }
+
       li {
         font-size: 16px;
         margin: 10px 0 10px 0;
@@ -75,10 +79,6 @@
         .number-circle-list--list-item {
           margin-left: $spacer * 0.25;
         }
-      }
-
-      .dayCheckBox {
-        margin: 0 10px 10px 5px;
       }
     }
   }

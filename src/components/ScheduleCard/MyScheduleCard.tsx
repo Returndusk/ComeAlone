@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link } from 'react-router-dom';
 import { MyScheduleCardProps } from '../../types/ScheduleTypes';
+import { FaTrashAlt } from 'react-icons/fa';
 
 function ScheduleCard({ schedule, link }: MyScheduleCardProps) {
   const [firstDestination, setFirstDestination] = useState<string>('');
@@ -21,6 +22,12 @@ function ScheduleCard({ schedule, link }: MyScheduleCardProps) {
     setLastDestination(lastDestination);
     setDestinationCount(destinationCount < 0 ? 0 : destinationCount);
   }, []);
+
+  function handleDelete(e: React.MouseEvent<SVGElement>) {
+    e.preventDefault();
+    confirm('일정을 삭제하시겠습니까?');
+  }
+
   return (
     <Link to={link} className={styles.scheduleCard}>
       <div className={styles.scheduleCardContent}>
@@ -35,7 +42,14 @@ function ScheduleCard({ schedule, link }: MyScheduleCardProps) {
             <div>{schedule.end_date}</div>
             <div>등록 : {schedule.created_at}</div>
           </div>
-          <div>❤ 좋아요 수</div>
+          <div className={styles.like}>
+            <FaTrashAlt
+              className={styles.trashIcon}
+              onClick={(e) => {
+                handleDelete(e);
+              }}
+            />
+          </div>
         </div>
         <div className={styles.scheduleDestination}>
           <div>{firstDestination}</div>

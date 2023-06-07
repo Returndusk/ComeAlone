@@ -8,14 +8,9 @@ declare global {
   }
 }
 
-type MapPropsType = {
-  markersLocations: MapWithWaypointsPropsType[];
-};
-
-// 제주도 시청을 map의 default 위치로 설정함.
 const DEFAULT_LOCATION = {
-  LATITUDE: 33.48907969999994,
-  LONGITUDE: 126.49932809999973
+  LATITUDE: 33.37930616373528,
+  LONGITUDE: 126.5986957523883
 };
 
 const MARKER_IMAGE_SRC = {
@@ -26,74 +21,77 @@ const MARKER_IMAGE_SRC = {
 
 const { kakao } = window;
 
-function MapWithWaypoints({ markersLocations }: MapPropsType) {
+function MapWithWaypoints({
+  markersLocations
+}: {
+  markersLocations: MapWithWaypointsPropsType[];
+}) {
   useEffect(() => {
     const container = document.getElementById('mapWithWaypoints');
-
     const options = {
       center: new kakao.maps.LatLng(
         DEFAULT_LOCATION.LATITUDE,
         DEFAULT_LOCATION.LONGITUDE
       ),
-      level: 3
+      level: 10
     };
-
     const map = new kakao.maps.Map(container, options);
 
-    const bounds = new kakao.maps.LatLngBounds();
-    const polylinePath = Array.from(
-      markersLocations.map(
-        (marker) =>
-          new kakao.maps.LatLng(Number(marker?.mapy), Number(marker?.mapx))
-      )
-    );
-    console.log(polylinePath);
-
-    const polyline = new kakao.maps.Polyline({
-      path: polylinePath,
-      strokeWeight: 3,
-      strokeColor: '#654E92',
-      strokeOpacity: 0.7,
-      strokeStyle: 'solid'
-    });
-
-    polyline.setMap(map);
-
-    markersLocations.forEach((marker, index) => {
-      const position = new kakao.maps.LatLng(
-        Number(marker?.mapy),
-        Number(marker?.mapx)
+    if (Array.isArray(markersLocations) && markersLocations.length > 0) {
+      const bounds = new kakao.maps.LatLngBounds();
+      const polylinePath = Array.from(
+        markersLocations.map(
+          (marker) =>
+            new kakao.maps.LatLng(Number(marker?.mapy), Number(marker?.mapx))
+        )
       );
-      let imageSrc = '';
-      if (index <= MARKER_IMAGE_SRC.MAXIMUM_INDEX) {
-        imageSrc = MARKER_IMAGE_SRC.NUMBERED_MARKER;
-      } else {
-        imageSrc = MARKER_IMAGE_SRC.DEFAULT_MARKER;
-      }
-
-      //Marker 이미지 파일 크기 설정
-      const imageSize = new kakao.maps.Size(36, 37);
-      const imageOptions = {
-        spriteSize: new kakao.maps.Size(36, 691),
-        spriteOrigin: new kakao.maps.Point(0, index * 46 + 10),
-        offset: new kakao.maps.Point(13, 37)
-      };
-      const markerImage = new kakao.maps.MarkerImage(
-        imageSrc,
-        imageSize,
-        imageOptions
-      );
-
-      const newMarker = new kakao.maps.Marker({
-        title: marker.title,
-        position,
-        image: markerImage
+      const polyline = new kakao.maps.Polyline({
+        path: polylinePath,
+        strokeWeight: 3,
+        strokeColor: '#654E92',
+        strokeOpacity: 0.7,
+        strokeStyle: 'solid'
       });
-      newMarker.setMap(map);
-      bounds.extend(position);
-    });
 
-    map.setBounds(bounds);
+      polyline.setMap(map);
+
+      markersLocations.forEach((marker, index) => {
+        const position = new kakao.maps.LatLng(
+          Number(marker?.mapy),
+          Number(marker?.mapx)
+        );
+        let imageSrc = '';
+        if (index <= MARKER_IMAGE_SRC.MAXIMUM_INDEX) {
+          imageSrc = MARKER_IMAGE_SRC.NUMBERED_MARKER;
+        } else {
+          imageSrc = MARKER_IMAGE_SRC.DEFAULT_MARKER;
+        }
+
+        //Marker 이미지 파일 크기 설정
+        const imageSize = new kakao.maps.Size(36, 37);
+        const imageOptions = {
+          spriteSize: new kakao.maps.Size(36, 691),
+          spriteOrigin: new kakao.maps.Point(0, index * 46 + 10),
+          offset: new kakao.maps.Point(13, 37)
+        };
+        const markerImage = new kakao.maps.MarkerImage(
+          imageSrc,
+          imageSize,
+          imageOptions
+        );
+        const newMarker = new kakao.maps.Marker({
+          title: marker.title,
+          position,
+          image: markerImage
+        });
+
+        newMarker.setMap(map);
+
+        bounds.extend(position);
+
+        map.setBounds(bounds);
+      });
+    }
   }, [markersLocations]);
 
   return <div className={styles.mapWithWaypoints} id='mapWithWaypoints'></div>;
