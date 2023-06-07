@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import styles from './DateScheduleEdit.module.scss';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Tooltip from '@mui/material/Tooltip';
@@ -13,10 +13,10 @@ import { DateInfoType, DateSelectionType } from '../../types/ScheduleEdit';
 
 function DateScheduleEdit({
   dateInfo,
-  handleDateInfo
+  onDateInfoUpdate
 }: {
   dateInfo: DateInfoType;
-  handleDateInfo: Dispatch<SetStateAction<DateInfoType>>;
+  onDateInfoUpdate: Dispatch<SetStateAction<DateInfoType>>;
 }) {
   const dateNow: DateSelectionType = {
     startDate: dateInfo.startDate,
@@ -29,16 +29,16 @@ function DateScheduleEdit({
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 
-  useEffect(() => {
+  const handleDateInfoUpdate = () => {
     const { startDate, endDate } = selectedDate[0];
 
     if (startDate && endDate) {
       const diffDay =
         (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) + 1;
 
-      handleDateInfo({ startDate, endDate, duration: diffDay.toString() });
+      onDateInfoUpdate({ startDate, endDate, duration: diffDay.toString() });
     }
-  }, [selectedDate]);
+  };
 
   return (
     <>
@@ -81,7 +81,10 @@ function DateScheduleEdit({
           />
           <button
             className={styles.durationEditModalConfirm}
-            onClick={handleClose}
+            onClick={() => {
+              handleDateInfoUpdate();
+              handleClose();
+            }}
           >
             완료
           </button>
