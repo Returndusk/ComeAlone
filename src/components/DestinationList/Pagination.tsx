@@ -13,7 +13,7 @@ type PaginationProps = {
 const PAGES = {
   START_INDEX_OF_PAGE: 1,
   PAGES_TO_SKIP: 1,
-  ITEMS_PER_PAGE: 20,
+  ITEMS_PER_PAGE: 10,
   QUERY_OF_URL: 'page',
   PAGES_TO_SHOW_IN_NAVBAR: 5
 };
@@ -26,7 +26,11 @@ function Pagination({
   const [page, setPage] = useState<number>(PAGES.START_INDEX_OF_PAGE);
 
   const pageQueryParam = useMemo(() => {
-    return searchParams.get('page') ?? '1';
+    return searchParams.get('page');
+  }, [searchParams]);
+
+  const searchQueryParam = useMemo(() => {
+    return searchParams.get('search');
   }, [searchParams]);
 
   const pageNumber = parseInt(
@@ -61,7 +65,7 @@ function Pagination({
   const handlePageQueryChange = (targetPageNumber: number) => {
     setPage(() => targetPageNumber);
     // pageQueryParam.set(PAGES.QUERY_OF_URL, targetPageNumber.toString());
-    setSearchParams(`?page=${page}`);
+    setSearchParams(`?page=${targetPageNumber}&search=${searchQueryParam}`);
   };
 
   const pageNumbers = Array.from(
