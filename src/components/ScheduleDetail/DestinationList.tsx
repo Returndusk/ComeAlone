@@ -34,21 +34,22 @@ function DestinationList({
               id={'day' + (index + 1).toString()}
             >
               <label>
-                <input
-                  className={styles.dayCheckBox}
-                  type='checkbox'
-                  checked={checkedDayIndex === index}
-                  onChange={() => {
-                    if (checkedDayIndex === index) {
-                      setCheckedDayIndex(-1);
-                      onDestinationsChecked(destinations.flat());
-                    } else {
-                      setCheckedDayIndex(index);
-                      onDestinationsChecked(destOfDay);
-                    }
-                  }}
-                />{' '}
-                Day {index + 1}
+                <div className={styles.destinationDayTitle}>
+                  <input
+                    type='checkbox'
+                    checked={checkedDayIndex === index}
+                    onChange={() => {
+                      if (checkedDayIndex === index) {
+                        setCheckedDayIndex(-1);
+                        onDestinationsChecked(destinations.flat());
+                      } else {
+                        setCheckedDayIndex(index);
+                        onDestinationsChecked(destOfDay);
+                      }
+                    }}
+                  />{' '}
+                  Day {index + 1}
+                </div>
               </label>
               {destOfDay.map((dest, index) => (
                 <li key={index}>{dest.title}</li>
