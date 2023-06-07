@@ -38,7 +38,7 @@ function ScheduleEdit() {
     useState(destinations);
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
-  const onSubmit = ({
+  const handleSubmit = ({
     updatedTitle,
     updatedSummary,
     dateInfo,
@@ -48,14 +48,13 @@ function ScheduleEdit() {
   };
 
   const markersLocations = useMemo(() => {
-    const data =
-      checkedDayIndex === -1
-        ? updatedDestinationList.flat()
-        : updatedDestinationList[checkedDayIndex];
-
-    console.log('@@', data);
-
-    return JSON.parse(JSON.stringify(data));
+    if (checkedDayIndex === -1) {
+      return updatedDestinationList.flat();
+    } else {
+      return JSON.parse(JSON.stringify(updatedDestinationList))[
+        checkedDayIndex
+      ];
+    }
   }, [checkedDayIndex, updatedDestinationList]);
 
   return (
@@ -100,7 +99,7 @@ function ScheduleEdit() {
       <div className={styles.confirmButtonWrapper}>
         <button
           onClick={() =>
-            onSubmit({ updatedTitle, updatedSummary, dateInfo, isPublic })
+            handleSubmit({ updatedTitle, updatedSummary, dateInfo, isPublic })
           }
         >
           수정완료
