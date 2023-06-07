@@ -56,12 +56,11 @@ function Category({ searchResults }: CategoryPropsTypes) {
       : addCategoryToSelectedCategoryList(targetCategoryId);
   };
 
-  const handleAllClick: React.MouseEventHandler<HTMLButtonElement> =
-    useCallback(() => {
-      isSelectedAll
-        ? setSelectedCategory([])
-        : setSelectedCategory(CATEGORIES_ID_LIST);
-    }, [isSelectedAll]);
+  const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
+    return isSelectedAll
+      ? setSelectedCategory([])
+      : setSelectedCategory(CATEGORIES_ID_LIST);
+  };
 
   const getCategorizedDestinationsData = useCallback(async () => {
     const res = await getDestinationsListByCategoryId(selectedCategory);

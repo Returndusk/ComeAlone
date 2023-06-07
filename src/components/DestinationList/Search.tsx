@@ -4,7 +4,6 @@ import styles from './Search.module.scss';
 import Category from './Category';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
-// import { DEFAULT_DESTINATIONS } from './Dummy';
 import { getAllDestinationsList } from '../../apis/DestinationListAPI';
 
 // 사용자에게 쿼리 받음 -> 검색 함수 전달 -> 검색함수가 쿼리랑, 목적지 받아서 검색 수행 -> 검색 결과 Destinations 파일에 전달
@@ -15,7 +14,7 @@ function Search() {
 
   const getAllDestinationsData = useCallback(async () => {
     const res = await getAllDestinationsList();
-    const allDestinationsList = res.data;
+    const allDestinationsList = res?.data;
     setData(() => allDestinationsList);
   }, []);
 
