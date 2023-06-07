@@ -1,73 +1,80 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './EditDestinationList.module.scss';
-import { DestinationsType } from '../../types/DestinationListTypes';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { ScheduleEditDestinationListType } from '../../types/ScheduleEdit';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult
+} from '@hello-pangea/dnd';
 import { FaGripVertical } from 'react-icons/fa';
+import ROUTER from '../../constants/Router';
 
 function EditDestinationList({
-  destinationList,
+  updatedDestinationList,
   checkedDayIndex,
-  handleDestinationList,
-  handleCheckedDayIndex
-}: {
-  destinationList: DestinationsType[][];
-  checkedDayIndex: number;
-  handleDestinationList: Dispatch<SetStateAction<DestinationsType[][]>>;
-  handleCheckedDayIndex: Dispatch<SetStateAction<number>>;
-}) {
-  const handleDragEnd = ({
-    source,
-    destination
-  }: {
-    source: any;
-    destination: any;
-  }) => {
+  onDestinationListUpdate,
+  onCheckedDayIndexUpdate
+}: ScheduleEditDestinationListType) {
+  const handleDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) {
       return;
     }
 
     if (source.droppableId === destination.droppableId) {
-      const dayIndex = source.droppableId.split(' ')[1];
+      const dayIndex = Number(source.droppableId.split(' ')[1]);
       const prevDestIndex = source.index;
       const curDestIndex = destination.index;
-      const [removed] = destinationList[dayIndex].splice(prevDestIndex, 1);
+      const [removed] = updatedDestinationList[dayIndex].splice(
+        prevDestIndex,
+        1
+      );
 
-      destinationList[dayIndex].splice(curDestIndex, 0, removed);
+      updatedDestinationList[dayIndex].splice(curDestIndex, 0, removed);
 
-      const newDestinationList = [...destinationList];
+      const newDestinationList = [...updatedDestinationList];
 
-      handleDestinationList(newDestinationList);
+      onDestinationListUpdate(newDestinationList);
     } else {
-      const prevDayIndex = source.droppableId.split(' ')[1];
+      const prevDayIndex = Number(source.droppableId.split(' ')[1]);
       const prevDestIndex = source.index;
-      const curDayIndex = destination.droppableId.split(' ')[1];
+      const curDayIndex = Number(destination.droppableId.split(' ')[1]);
       const curDestIndex = destination.index;
-      const [removed] = destinationList[prevDayIndex].splice(prevDestIndex, 1);
+      const [removed] = updatedDestinationList[prevDayIndex].splice(
+        prevDestIndex,
+        1
+      );
 
-      destinationList[curDayIndex].splice(curDestIndex, 0, removed);
+      updatedDestinationList[curDayIndex].splice(curDestIndex, 0, removed);
 
-      const newDestinationList = [...destinationList];
+      const newDestinationList = [...updatedDestinationList];
 
-      handleDestinationList(newDestinationList);
+      onDestinationListUpdate(newDestinationList);
     }
   };
 
   return (
     <div className={styles.destinationsContainer}>
       <div className={styles.destinationsTitle}>목적지 리스트</div>
+      <Link to={ROUTER.DESTINATION_LIST}>
+        <div className={styles.addDestinationButton}>
+          + 새로운 목적지 추가하기
+        </div>
+      </Link>
       <label>
         <input
           type='checkbox'
           checked={checkedDayIndex === -1}
           onChange={() => {
-            handleCheckedDayIndex(-1);
+            onCheckedDayIndexUpdate(-1);
           }}
         />
         전체 목적지 보기
       </label>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className={styles.destinationsList}>
-          {destinationList.map((destOfDay, dayIndex) => {
+          {updatedDestinationList.map((destOfDay, dayIndex) => {
             return (
               <Droppable
                 droppableId={`destinationList ${dayIndex}`}
@@ -80,18 +87,20 @@ function EditDestinationList({
                     {...droppableProvided.droppableProps}
                   >
                     <label>
-                      <input
-                        type='checkbox'
-                        checked={checkedDayIndex === dayIndex}
-                        onChange={() => {
-                          if (checkedDayIndex === dayIndex) {
-                            handleCheckedDayIndex(-1);
-                          } else {
-                            handleCheckedDayIndex(dayIndex);
-                          }
-                        }}
-                      />{' '}
-                      Day {dayIndex + 1}
+                      <div className={styles.destinationDayTitle}>
+                        <input
+                          type='checkbox'
+                          checked={checkedDayIndex === dayIndex}
+                          onChange={() => {
+                            if (checkedDayIndex === dayIndex) {
+                              onCheckedDayIndexUpdate(-1);
+                            } else {
+                              onCheckedDayIndexUpdate(dayIndex);
+                            }
+                          }}
+                        />{' '}
+                        Day {dayIndex + 1}
+                      </div>
                     </label>
                     {destOfDay.map((dest, destIndex) => (
                       <Draggable
@@ -101,6 +110,7 @@ function EditDestinationList({
                       >
                         {(draggableProvided) => (
                           <div
+                            className={styles.destination}
                             ref={draggableProvided.innerRef}
                             {...draggableProvided.draggableProps}
                             {...draggableProvided.dragHandleProps}
@@ -109,9 +119,14 @@ function EditDestinationList({
                             {dest.title}
                             <button
                               onClick={() => {
-                                destinationList[dayIndex].splice(destIndex, 1);
-                                const newDestinations = [...destinationList];
-                                handleDestinationList(newDestinations);
+                                updatedDestinationList[dayIndex].splice(
+                                  destIndex,
+                                  1
+                                );
+                                const newDestinations = [
+                                  ...updatedDestinationList
+                                ];
+                                onDestinationListUpdate(newDestinations);
                               }}
                             >
                               삭제

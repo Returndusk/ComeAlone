@@ -8,6 +8,10 @@
     font-size: 24px;
   }
 
+  .addDestinationButton {
+    margin: 30px 0;
+  }
+
   .destinationsList {
     height: 85%;
     margin: 20px 0 0 0;
@@ -34,20 +38,26 @@
       flex-direction: column;
       margin: 0 0 30px 0;
       font-size: 20px;
-      list-style: none;
       user-select: none;
 
-      div {
+      .destinationDayTitle {
+        margin: 0 0 20px 0;
+      }
+
+      .destination {
         display: flex;
         flex-direction: row;
+        align-items: center;
         width: 90%;
         font-size: 16px;
         margin: 10px 0 10px 0;
         padding: 10px;
-        border: 1px solid black;
+        border: 1px solid gray;
+        box-shadow: 1px 1px 5px 1px gray;
 
         .gripIcon {
           margin: 0 10px 0 0;
+          color: gray;
         }
 
         button {
