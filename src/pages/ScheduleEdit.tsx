@@ -26,7 +26,7 @@ function ScheduleEdit() {
     status,
     destinations
   } = scheduleFetched;
-  const [dateInfo, setDateInfo] = useState({
+  const [updatedDateInfo, setUpdatedDateInfo] = useState({
     startDate,
     endDate,
     duration
@@ -41,10 +41,17 @@ function ScheduleEdit() {
   const handleSubmit = ({
     updatedTitle,
     updatedSummary,
-    dateInfo,
+    updatedDateInfo,
+    updatedDestinationList,
     isPublic
   }: ScheduleEditSubmitType) => {
-    console.log({ ...dateInfo, updatedTitle, updatedSummary, isPublic });
+    console.log({
+      ...updatedDateInfo,
+      updatedTitle,
+      updatedSummary,
+      updatedDestinationList,
+      isPublic
+    });
   };
 
   const markersLocations = useMemo(() => {
@@ -59,7 +66,7 @@ function ScheduleEdit() {
 
   useEffect(() => {
     const prevDuration = updatedDestinationList.length;
-    const updatedDuration = Number(dateInfo.duration);
+    const updatedDuration = Number(updatedDateInfo.duration);
 
     if (prevDuration < updatedDuration) {
       const newUpdatedDestinationList = [...updatedDestinationList];
@@ -74,7 +81,7 @@ function ScheduleEdit() {
         updatedDestinationList.slice(0, updatedDuration)
       );
     }
-  }, [dateInfo.duration]);
+  }, [updatedDateInfo.duration]);
 
   return (
     <div className={styles.container}>
@@ -83,7 +90,10 @@ function ScheduleEdit() {
         돌아가기
       </Link>
       <ImageScheduleEdit image={image} />
-      <DateScheduleEdit dateInfo={dateInfo} onDateInfoUpdate={setDateInfo} />
+      <DateScheduleEdit
+        dateInfo={updatedDateInfo}
+        onDateInfoUpdate={setUpdatedDateInfo}
+      />
       <div className={styles.publicStatus}>
         <FormGroup>
           <FormControlLabel
@@ -118,7 +128,13 @@ function ScheduleEdit() {
       <div className={styles.confirmButtonWrapper}>
         <button
           onClick={() =>
-            handleSubmit({ updatedTitle, updatedSummary, dateInfo, isPublic })
+            handleSubmit({
+              updatedTitle,
+              updatedSummary,
+              updatedDateInfo,
+              updatedDestinationList,
+              isPublic
+            })
           }
         >
           수정완료

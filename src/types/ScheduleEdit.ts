@@ -35,6 +35,7 @@ export type ScheduleEditDestinationListType = {
 export type ScheduleEditSubmitType = {
   updatedTitle: string;
   updatedSummary: string;
-  dateInfo: DateInfoType;
+  updatedDateInfo: DateInfoType;
+  updatedDestinationList: MapWithWaypointsPropsType[][];
   isPublic: boolean;
 };
