@@ -20,8 +20,8 @@ function InfoScheduleDetail({
         )} ~ ${endDate.toLocaleDateString('ko-KR')} (${duration}일)`}
       </div>
       <div className={styles.title}>{title}</div>
-      <div className={styles.writer}>
-        <span className={styles.writerAvatar}>
+      <div className={styles.nickname}>
+        <span className={styles.avatar}>
           <Avatar>{nickname[0]}</Avatar>
         </span>
         {nickname}
