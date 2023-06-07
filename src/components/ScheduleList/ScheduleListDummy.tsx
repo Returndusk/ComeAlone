@@ -1,6 +1,6 @@
 export default [
   {
-    id: '1',
+    schedule_id: 1,
     title: '제주 올레길 걸어요',
     nickname: 'Test1',
     summary: '제주 올레길을 다같이 걸어보아요',
@@ -17,10 +17,13 @@ export default [
     ],
     likes: 150,
     image:
-      'https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg'
+      'https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg',
+    first_destination: '제주국제공항',
+    last_destination: '제주국제공항',
+    destination_count: 10
   },
   {
-    id: '2',
+    schedule_id: 2,
     title: '한라산 등반해요',
     nickname: 'Test2',
     summary: '한라산을 다같이 올라보아요',
@@ -37,7 +40,10 @@ export default [
     ],
     likes: 200,
     image:
-      'https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg'
+      'https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg',
+    first_destination: '첫째날1',
+    last_destination: '둘째날2',
+    destination_count: 5
   }
 
   // {
