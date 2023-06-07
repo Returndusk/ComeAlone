@@ -4,11 +4,14 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Menu, MenuItem, IconButton } from '@mui/material';
 import Weather from './Weather';
 import styles from './Header.module.scss';
+import { useAuthState } from '../../../contexts/AuthContext';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLElement) | null>(
     null
   );
+
+  const { authState } = useAuthState();
 
   const handleUserIconClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -17,8 +20,6 @@ function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const isLoggedIn = false; // 로그인 상태에 대한 임시 처리
 
   return (
     <div className={styles.layout}>
@@ -36,7 +37,7 @@ function Header() {
         </div>
         <div className={styles.layoutRight}>
           <Weather />
-          {isLoggedIn ? (
+          {authState.isLoggedIn ? (
             <>
               <RouterLink to='/myschedule/list'>
                 <BiCalendar className={styles.calendar} />
