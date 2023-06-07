@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
-import ScheduleListDummy from './ScheduleListDummy';
 import ROUTER from '../../constants/Router';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 
@@ -12,14 +11,14 @@ function ScheduleLists() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
-    const API_URL = 'http://localhost:9999/data';
+    const API_URL = 'https://vvhooping.com/api/schedules';
     setIsLoading(true);
     try {
-      const reponse = await axios.get(API_URL);
-      setScheduleList(reponse.data);
+      const response = await axios.get(API_URL);
+      setScheduleList(response.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        setScheduleList(ScheduleListDummy);
+        alert('여행 일정을 불러올 수 없습니다.');
       }
     }
     setIsLoading(false);
