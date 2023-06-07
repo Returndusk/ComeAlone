@@ -9,39 +9,61 @@ import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
-  destinations,
-  schedule,
+  scheduleFetched,
   likesAmount,
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
-import { DestinationsType } from '../types/DestinationListTypes';
+import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { FaArrowLeft } from 'react-icons/fa';
+import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
+  const {
+    nickname,
+    title,
+    summary,
+    duration,
+    startDate,
+    endDate,
+    image,
+    createdAt,
+    destinations
+  } = scheduleFetched;
   const [reviewInput, setReviewInput] = useState('');
   const [checkedDestinations, setCheckedDestinations] = useState(
     destinations.flat()
   );
 
-  const onDestinationsChecked = (destinations: DestinationsType[]) => {
+  const handleDestinationsCheck = (
+    destinations: MapWithWaypointsPropsType[]
+  ) => {
     setCheckedDestinations(destinations);
   };
 
-  const onReviewSubmit = (input: string) => {
+  const handleReviewSubmit = (input: string) => {
     setReviewInput(input);
+    console.log(reviewInput);
   };
 
   return (
     <div className={styles.container}>
-      <Link to='/schedule/list' className={styles.backButton}>
+      <Link to={ROUTER.SCHEDULE_LIST} className={styles.backButton}>
         <FaArrowLeft />
         돌아가기
       </Link>
-      <ImageScheduleDetail image={schedule.image} />
-      <InfoScheduleDetail schedule={schedule} />
+      <ImageScheduleDetail image={image} />
+      <InfoScheduleDetail
+        nickname={nickname}
+        title={title}
+        summary={summary}
+        duration={duration}
+        startDate={startDate}
+        endDate={endDate}
+        createdAt={createdAt}
+      />
       <div className={styles.editButtonContainer}>
-        <Link to='/schedule/edit' className={styles.editButton}>
+        <Link to={ROUTER.SCHEDULE_EDIT} className={styles.editButton}>
           수정하기
         </Link>
       </div>
@@ -51,14 +73,13 @@ function ScheduleDetail() {
       />
       <DestinationList
         destinations={destinations}
-        onChecked={onDestinationsChecked}
+        onDestinationsChecked={handleDestinationsCheck}
       />
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
       </div>
       <ReviewsSchedule reviews={reviews} />
-      <InputReviewSchedule onSubmit={onReviewSubmit} />
-      {reviewInput}
+      <InputReviewSchedule onReviewSubmit={handleReviewSubmit} />
     </div>
   );
 }

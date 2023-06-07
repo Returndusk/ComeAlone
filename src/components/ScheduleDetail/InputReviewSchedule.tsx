@@ -3,9 +3,9 @@ import styles from './InputReviewSchedule.module.scss';
 import Avatar from '@mui/material/Avatar';
 
 function InputReviewSchedule({
-  onSubmit
+  onReviewSubmit
 }: {
-  onSubmit: (input: string) => void;
+  onReviewSubmit: (input: string) => void;
 }) {
   const [reviewTyping, setReviewTyping] = useState('');
 
@@ -23,7 +23,7 @@ function InputReviewSchedule({
       <button
         className={styles.reviewsInputButton}
         onClick={() => {
-          onSubmit(reviewTyping);
+          onReviewSubmit(reviewTyping);
         }}
       >
         제출
