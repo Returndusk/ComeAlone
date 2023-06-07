@@ -80,20 +80,7 @@ function MyScheduleLists() {
           좋아요 한 일정
         </button>
       </div>
-      {isLoading ? (
-        <div className={styles.loading}>일정 불러오는중...</div>
-      ) : (
-        ''
-      )}
       <div className={styles.scheduleCardContainer}>
-        {scheduleList.map((schedule: MyScheduleCardType, index: number) => (
-          <MyScheduleCard
-            schedule={schedule}
-            key={index}
-            link={ROUTER.SCHEDULE_DETAIL}
-          />
-        ))}
-
         {isLoading ? (
           ''
         ) : (
@@ -101,10 +88,22 @@ function MyScheduleLists() {
             일정 추가하기
           </button>
         )}
+        {isModalOpen && (
+          <CreateScheduleModal closeModal={() => setIsModalOpen(false)} />
+        )}
+        {isLoading ? (
+          <div className={styles.loading}>일정 불러오는중...</div>
+        ) : (
+          ''
+        )}
+        {scheduleList.map((schedule: MyScheduleCardType, index: number) => (
+          <MyScheduleCard
+            schedule={schedule}
+            key={index}
+            link={ROUTER.SCHEDULE_DETAIL}
+          />
+        ))}
       </div>
-      {isModalOpen && (
-        <CreateScheduleModal closeModal={() => setIsModalOpen(false)} />
-      )}
     </div>
   );
 }

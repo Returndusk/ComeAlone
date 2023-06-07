@@ -55,7 +55,7 @@ export default function ModalScheduleLists() {
       <div className={styles.scheduleCardContainer}>
         {scheduleList.map((schedule, index) => (
           <ModalScheduleCard
-            key={schedule.id}
+            key={schedule.schedule_id}
             schedule={schedule}
             index={index}
             isSelected={selectedCardIdx === index}
@@ -63,7 +63,6 @@ export default function ModalScheduleLists() {
             // onCloseDestinations={handleCloseDestinations}
           />
         ))}
-        {/* <div className={styles.scheduleAdd}>일정 추가하기</div> */}
       </div>
     </div>
   );
