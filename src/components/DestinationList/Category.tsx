@@ -96,10 +96,9 @@ function Category({ searchResults }: CategoryPropsTypes) {
   useEffect(() => {
     if (searchResults.length > 0) {
       const searchResultsTitles = searchResults.map((result) => result.title);
-      const newDestinations = filteredDestinations.filter((destination) =>
+      const newDestinations = searchResults.filter((destination) =>
         searchResultsTitles.includes(destination.title)
       );
-      console.log(newDestinations, 'newDestinations');
       setFilteredDestinations(() => newDestinations);
     }
   }, [selectedCategory, searchResults]);

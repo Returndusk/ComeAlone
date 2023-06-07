@@ -64,8 +64,12 @@ function Pagination({
 
   const handlePageQueryChange = (targetPageNumber: number) => {
     setPage(() => targetPageNumber);
-    // pageQueryParam.set(PAGES.QUERY_OF_URL, targetPageNumber.toString());
-    setSearchParams(`?page=${targetPageNumber}&search=${searchQueryParam}`);
+    if (searchQueryParam !== null) {
+      setSearchParams(`?page=${targetPageNumber}&search=${searchQueryParam}`);
+    } else {
+      setSearchParams(`?page=${targetPageNumber}`);
+    }
+    return;
   };
 
   const pageNumbers = Array.from(
@@ -130,7 +134,7 @@ function Pagination({
             </span>
           ) : (
             <NavLink
-              to={`?page=${pageNumber}`}
+              to={`?page=${pageNumber}&search=${searchQueryParam}`}
               className={styles.pageNumber}
               key={pageNumber}
               onClick={() => handlePageClick(pageNumber)}
