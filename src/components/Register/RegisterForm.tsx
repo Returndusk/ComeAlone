@@ -1,6 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import styles from './RegisterForm.module.scss';
-import { Errors, RegisterFormValues } from '../../types/UserTypes';
+import {
+  Errors,
+  RegisterFormData,
+  RegisterFormValues
+} from '../../types/UserTypes';
 import TextField from '@mui/material/TextField';
 import {
   FormControlLabel,
@@ -11,6 +15,8 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
+import { registerUser } from '../../apis/user';
+import { AxiosError } from 'axios';
 
 function RegisterForm() {
   const initValues: RegisterFormValues = {
@@ -23,7 +29,7 @@ function RegisterForm() {
       month: new Date().getMonth() + 1,
       day: new Date().getDate()
     },
-    gender: 'male',
+    gender: '남성',
     phoneNumber: ''
   };
   const [values, setValues] = useState<RegisterFormValues>(initValues);
@@ -190,15 +196,52 @@ function RegisterForm() {
     return errMsgs;
   };
 
+  const handleRegister = async () => {
+    const {
+      email,
+      nickname,
+      password,
+      phoneNumber,
+      birthDate: { year, month, day },
+      gender
+    } = values;
+
+    try {
+      const data: RegisterFormData = {
+        id: email,
+        password,
+        nickname,
+        birth_date: `${year}-${month}-${day}`,
+        phone_number: phoneNumber,
+        gender
+      };
+
+      const response = await registerUser(data);
+      console.log(response);
+      if (response.status === 200) {
+        alert('회원가입이 완료되었습니다!');
+      }
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) {
+          // const { message: errMsg, field } = err.response.data;
+          // return setErrors((prev) => ({ ...prev, [field]: errMsg }));
+        }
+      }
+
+      console.log(err);
+      alert('회원가입에 실패하였습니다.');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = validateForm(values);
+    setErrors(validationErrors);
+
     if (Object.keys(validationErrors).length === 0) {
-      alert('유효성 검사 통과!');
-      //회원가입 api 호출
-    } else {
-      setErrors(validationErrors);
+      handleRegister();
     }
   };
 
@@ -290,13 +333,13 @@ function RegisterForm() {
               value='male'
               control={<Radio size='small' />}
               label='남성'
-              checked={values.gender === 'male'}
+              checked={values.gender === '남성'}
             />
             <FormControlLabel
               value='female'
               control={<Radio size='small' />}
               label='여성'
-              checked={values.gender === 'female'}
+              checked={values.gender === '여성'}
             />
           </RadioGroup>
           {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
