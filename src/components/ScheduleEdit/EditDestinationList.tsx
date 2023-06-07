@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './EditDestinationList.module.scss';
 import { ScheduleEditDestinationListType } from '../../types/ScheduleEdit';
 import {
@@ -8,6 +9,7 @@ import {
   DropResult
 } from '@hello-pangea/dnd';
 import { FaGripVertical } from 'react-icons/fa';
+import ROUTER from '../../constants/Router';
 
 function EditDestinationList({
   updatedDestinationList,
@@ -55,6 +57,11 @@ function EditDestinationList({
   return (
     <div className={styles.destinationsContainer}>
       <div className={styles.destinationsTitle}>목적지 리스트</div>
+      <Link to={ROUTER.DESTINATION_LIST}>
+        <div className={styles.addDestinationButton}>
+          + 새로운 목적지 추가하기
+        </div>
+      </Link>
       <label>
         <input
           type='checkbox'

@@ -116,7 +116,6 @@ function ScheduleEdit() {
         onTitleUpdate={setUpdatedTitle}
         onSummaryUpdate={setUpdatedSummary}
       />
-      <Link to={ROUTER.DESTINATION_LIST}>새로운 목적지 추가하기</Link>
       <EditDestinationList
         updatedDestinationList={updatedDestinationList}
         checkedDayIndex={checkedDayIndex}

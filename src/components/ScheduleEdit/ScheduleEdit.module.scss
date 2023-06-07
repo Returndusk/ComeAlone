@@ -22,15 +22,11 @@
 .mapContainer {
   grid-column: 2 / 4;
   height: 530px;
-
-  div {
-    font-size: 20px;
-    margin: 0 10px;
-  }
+  padding: 100px 0 0 0;
 }
 
 .confirmButtonWrapper {
   grid-column: 1 / 2;
-  padding: 50px 0 0 0;
+  margin: 40px 0 0 0;
   justify-self: self-start;
 }
