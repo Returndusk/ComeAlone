@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './LoginForm.module.scss';
 import { Errors, LoginFormValues } from '../../types/UserTypes';
 import axios from 'axios';
+import { TextField } from '@mui/material';
+import styles from './LoginForm.module.scss';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -45,9 +46,11 @@ function LoginForm() {
       id: values.email,
       password: values.password
     };
+
     const response = await axios.post(
-      'http://34.64.169.7:3000/api/auth/signin',
-      body
+      'https://vvhooping.com/api/auth/signin',
+      body,
+      { withCredentials: true }
     );
     console.log(response);
   };
@@ -69,24 +72,29 @@ function LoginForm() {
     <form className={styles.form} onSubmit={handleSubmit}>
       <ul className={styles.inputs}>
         <li>
-          <label htmlFor='email'>이메일</label>
-          <input
-            type='text'
-            id='email'
+          <TextField
+            id='outlined-basic'
+            label='이메일'
+            variant='outlined'
             name='email'
             value={values.email}
             onChange={handleChange}
+            size='small'
+            style={{ width: '100%' }}
           />
           {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
         </li>
         <li>
-          <label htmlFor='password'>비밀번호</label>
-          <input
+          <TextField
+            id='outlined-basic'
+            label='비밀번호'
             type='password'
-            id='password'
+            variant='outlined'
             name='password'
             value={values.password}
             onChange={handleChange}
+            size='small'
+            style={{ width: '100%' }}
           />
           {errors.password && (
             <p className={styles.errMsg}>{errors.password}</p>
