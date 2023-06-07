@@ -13,13 +13,25 @@ export type RegisterFormValues = {
     month: number;
     day: number;
   };
-  gender: 'male' | 'female';
+  gender: '남성' | '여성';
   phoneNumber: string;
+};
+export type RegisterFormData = {
+  id: string;
+  password: string;
+  nickname: string;
+  birth_date: string;
+  gender: '남성' | '여성';
+  phone_number: string;
 };
 
 //Login/LoginForm
 export type LoginFormValues = {
   email: string;
+  password: string;
+};
+export type LoginFormData = {
+  id: string;
   password: string;
 };
 
