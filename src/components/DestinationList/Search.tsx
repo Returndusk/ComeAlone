@@ -37,9 +37,8 @@ function Search() {
         );
       }
     );
-
     return searchResultDestinations;
-  }, [searchQueryParam]);
+  }, [searchQueryParam, data]);
 
   const isNullishSearchInput = (input: string) => {
     return input === '';
@@ -55,6 +54,10 @@ function Search() {
     setSearchParams(`?search=${searchQueryString}`);
     return;
   };
+
+  useEffect(() => {
+    console.log(searchResults, 'searchResults');
+  }, [searchResults]);
 
   return (
     <>

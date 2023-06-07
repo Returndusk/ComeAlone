@@ -25,10 +25,11 @@ function Category({ searchResults }: CategoryPropsTypes) {
   const [selectedCategory, setSelectedCategory] = useState<number[]>([
     ...CATEGORIES_ID_LIST
   ]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [filteredDestinations, setFilteredDestinations] = useState<
     DestinationsType[] | []
-  >([]);
+  >(searchResults);
 
   const isSelectedAll = useMemo(() => {
     return selectedCategory.length === CATEGORIES_ID_LIST.length;
@@ -48,24 +49,44 @@ function Category({ searchResults }: CategoryPropsTypes) {
   const handleCategoryClick: React.MouseEventHandler<HTMLButtonElement> = (
     e
   ) => {
+    setIsLoading(true);
     const { value } = e.target as HTMLButtonElement;
     const targetCategoryId = Number(value);
 
     selectedCategory.includes(targetCategoryId)
       ? removeCategoryFromSelectedCategoryList(targetCategoryId)
       : addCategoryToSelectedCategoryList(targetCategoryId);
+    setIsLoading(false);
+    return;
   };
 
   const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
-    return isSelectedAll
+    setIsLoading(true);
+    isSelectedAll
       ? setSelectedCategory([])
       : setSelectedCategory(CATEGORIES_ID_LIST);
+    setIsLoading(false);
+    return;
   };
 
+  useEffect(() => {
+    const debouncer = setTimeout(() => {
+      console.log('로딩 중입니다.');
+    }, 300);
+
+    return () => {
+      clearTimeout(debouncer);
+    };
+  }, [isLoading]);
+
   const getCategorizedDestinationsData = useCallback(async () => {
-    const res = await getDestinationsListByCategoryId(selectedCategory);
-    const categorizedDestinationsList = res.data;
-    setFilteredDestinations(() => categorizedDestinationsList);
+    if (selectedCategory.length > 0) {
+      const res = await getDestinationsListByCategoryId(selectedCategory);
+      const categorizedDestinationsList = res.data.result;
+      setFilteredDestinations(() => categorizedDestinationsList);
+    } else {
+      setFilteredDestinations(() => []);
+    }
   }, [selectedCategory]);
 
   useEffect(() => {
@@ -74,12 +95,14 @@ function Category({ searchResults }: CategoryPropsTypes) {
 
   useEffect(() => {
     if (searchResults.length > 0) {
-      const newDestinations = filteredDestinations.filter(
-        (destination) => destination.title === searchResults[0].title
+      const searchResultsTitles = searchResults.map((result) => result.title);
+      const newDestinations = filteredDestinations.filter((destination) =>
+        searchResultsTitles.includes(destination.title)
       );
+      console.log(newDestinations, 'newDestinations');
       setFilteredDestinations(() => newDestinations);
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, searchResults]);
 
   return (
     <>
