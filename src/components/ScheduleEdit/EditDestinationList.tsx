@@ -80,18 +80,20 @@ function EditDestinationList({
                     {...droppableProvided.droppableProps}
                   >
                     <label>
-                      <input
-                        type='checkbox'
-                        checked={checkedDayIndex === dayIndex}
-                        onChange={() => {
-                          if (checkedDayIndex === dayIndex) {
-                            onCheckedDayIndexUpdate(-1);
-                          } else {
-                            onCheckedDayIndexUpdate(dayIndex);
-                          }
-                        }}
-                      />{' '}
-                      Day {dayIndex + 1}
+                      <div className={styles.destinationDayTitle}>
+                        <input
+                          type='checkbox'
+                          checked={checkedDayIndex === dayIndex}
+                          onChange={() => {
+                            if (checkedDayIndex === dayIndex) {
+                              onCheckedDayIndexUpdate(-1);
+                            } else {
+                              onCheckedDayIndexUpdate(dayIndex);
+                            }
+                          }}
+                        />{' '}
+                        Day {dayIndex + 1}
+                      </div>
                     </label>
                     {destOfDay.map((dest, destIndex) => (
                       <Draggable
