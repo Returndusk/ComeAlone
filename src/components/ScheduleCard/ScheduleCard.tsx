@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link } from 'react-router-dom';
 import { ScheduleCardProps } from '../../types/ScheduleTypes';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 function ScheduleCard({ schedule, link }: ScheduleCardProps) {
   const [firstDestination, setFirstDestination] = useState<string>('');
   const [lastDestination, setLastDestination] = useState<string>('');
   const [destinationCount, setDestinationCount] = useState<number>(0);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
     const destinations = schedule.destinations;
@@ -22,6 +24,11 @@ function ScheduleCard({ schedule, link }: ScheduleCardProps) {
     setDestinationCount(destinationCount < 0 ? 0 : destinationCount);
   }, []);
 
+  function handleLike(e: React.MouseEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsLiked(!isLiked);
+  }
+
   return (
     <Link to={link} className={styles.scheduleCard}>
       <div className={styles.scheduleCardContent}>
@@ -35,7 +42,17 @@ function ScheduleCard({ schedule, link }: ScheduleCardProps) {
             <div>작성자 : {schedule.nickname}</div>
             <div>등록 : {schedule.created_at}</div>
           </div>
-          <div>❤ 좋아요 수</div>
+          <div className={styles.like}>
+            <div
+              className={styles.likeIcon}
+              onClick={(e) => {
+                handleLike(e);
+              }}
+            >
+              {isLiked ? <FaHeart /> : <FaRegHeart />}
+            </div>
+            좋아요 수
+          </div>
         </div>
         <div className={styles.scheduleDestination}>
           <div>{firstDestination}</div>
