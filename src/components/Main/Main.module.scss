@@ -1,30 +1,46 @@
-.container {
-  display: flex;
-  flex-direction: column;
-}
+// .container {
+//   display: flex;
+//   justify-content: center;
+//   width: 100%;
+//   overflow-x: hidden;
+// }
 
-.gridContainer {
-  display: grid;
-  grid-template-areas:
-    'leftBanner topArea rightBanner'
-    'leftBanner bottomArea rightBanner';
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 10px;
-}
+// .gridContainer {
+//   display: grid;
+//   grid-template-areas:
+//     'SearchArea SearchArea SearchArea'
+//     'leftBanner topArea rightBanner'
+//     'leftBanner bottomArea rightBanner';
+//   grid-template-columns: minmax(0, 1fr) minmax(0, 1280px) minmax(0, 1fr);
+// }
 
-.leftBanner {
-  grid-area: leftBanner;
-}
+// .searchArea {
+//   grid-area: SearchArea;
+// }
 
-.rightBanner {
-  grid-area: rightBanner;
-}
+// .leftBanner {
+//   margin-top: 50px;
+//   display: none;
+//   grid-area: leftBanner;
+// }
+// .rightBanner {
+//   margin-top: 50px;
+//   display: none;
+//   grid-area: rightBanner;
+// }
 
-.topArea {
-  grid-area: topArea;
-}
+// .topArea {
+//   grid-area: topArea;
+// }
 
-.bottomArea {
-  grid-area: bottomArea;
-}
+// .bottomArea {
+//   grid-area: bottomArea;
+// }
+
+// /* 1280px 이상일 때 배너 보임 */
+// @media screen and (min-width: 1281px) {
+//   .leftBanner,
+//   .rightBanner {
+//     display: block;
+//   }
+// }

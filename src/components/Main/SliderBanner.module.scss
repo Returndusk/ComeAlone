@@ -1,27 +1,59 @@
 .container {
   height: 220px;
   width: 1200px;
-  background-color: rgba(0, 0, 0, 0.39);
   align-items: center;
   text-align: center;
   margin: 30px auto;
 
-  
-
   .box {
+    position: relative;
     width: calc(100% - 10px);
     height: 200px;
   }
 
-  .box h3 {
-    background-color: lightgreen;
-    width: calc(100% - 10px);
-    height: 200px;
-    margin: 0px auto;
+  .imageContainer {
+    position: relative;
+    width: 390px;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
-  .slick-slide {
-    margin: 0 1rem;
+  .text {
+    font-family: 'WandohopeR';
+    text-align: left;
+    position: absolute;
+    top: 115px;
+    width: 100%;
+    height: 100%;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.6); // 반투명 배경 추가
+  }
+
+  .text h3,
+  .text p {
+    margin: 0;
+  }
+
+  .text h3 {
+    font-size: 25px;
+    margin-bottom: 10px;
+  }
+
+  .text p {
+    font-size: 15px;
+    white-space: pre-wrap;
   }
 
   button::before {
