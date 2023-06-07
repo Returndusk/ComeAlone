@@ -15,6 +15,18 @@ export interface DestinationsType {
   overview?: string;
 }
 
+export interface DestinationsReviewType {
+  id: number;
+  commenter_id: string;
+  comment: string;
+  created_at: string;
+}
+
+export interface DestinationsPreferenceType {
+  id: number;
+  preference_user_number: number;
+}
+
 export type MapPropsType = Pick<DestinationsType, 'title' | 'mapx' | 'mapy'>;
 
 export type MapWithWaypointsPropsType = Pick<

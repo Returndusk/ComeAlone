@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DestinationsType } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
+import { getDestinationsListByCategoryId } from '../../apis/DestinationListAPI';
 import styles from './Category.module.scss';
 
-type CategoryPropsType = {
-  destinations: DestinationsType[] | [];
+type CategoryPropsTypes = {
+  searchResults: DestinationsType[] | [];
 };
 
 const CATEGORIES_ID = new Map([
@@ -20,18 +21,15 @@ const CATEGORIES_ID = new Map([
 
 const CATEGORIES_ID_LIST = Array.from(CATEGORIES_ID.keys());
 
-function Category({ destinations }: CategoryPropsType) {
+function Category({ searchResults }: CategoryPropsTypes) {
   const [selectedCategory, setSelectedCategory] = useState<number[]>([
     ...CATEGORIES_ID_LIST
   ]);
-
-  const unCategorizedDestinations = useMemo(() => {
-    return destinations;
-  }, [destinations]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [filteredDestinations, setFilteredDestinations] = useState<
     DestinationsType[] | []
-  >(unCategorizedDestinations);
+  >(searchResults);
 
   const isSelectedAll = useMemo(() => {
     return selectedCategory.length === CATEGORIES_ID_LIST.length;
@@ -51,27 +49,59 @@ function Category({ destinations }: CategoryPropsType) {
   const handleCategoryClick: React.MouseEventHandler<HTMLButtonElement> = (
     e
   ) => {
+    setIsLoading(true);
     const { value } = e.target as HTMLButtonElement;
     const targetCategoryId = Number(value);
 
     selectedCategory.includes(targetCategoryId)
       ? removeCategoryFromSelectedCategoryList(targetCategoryId)
       : addCategoryToSelectedCategoryList(targetCategoryId);
+    setIsLoading(false);
+    return;
   };
 
-  const handleAllClick: React.MouseEventHandler<HTMLButtonElement> =
-    useCallback(() => {
-      isSelectedAll
-        ? setSelectedCategory([])
-        : setSelectedCategory(CATEGORIES_ID_LIST);
-    }, [isSelectedAll]);
+  const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
+    setIsLoading(true);
+    isSelectedAll
+      ? setSelectedCategory([])
+      : setSelectedCategory(CATEGORIES_ID_LIST);
+    setIsLoading(false);
+    return;
+  };
 
   useEffect(() => {
-    const filteredDestinationsList = unCategorizedDestinations.filter(
-      (destination) => selectedCategory.includes(destination.category_id ?? 0) //Dummy 제거 후 ?? 체이닝 삭제 예정
-    );
-    setFilteredDestinations(() => filteredDestinationsList);
-  }, [selectedCategory, unCategorizedDestinations]);
+    const debouncer = setTimeout(() => {
+      console.log('로딩 중입니다.');
+    }, 4000);
+
+    return () => {
+      clearTimeout(debouncer);
+    };
+  }, [isLoading]);
+
+  const getCategorizedDestinationsData = useCallback(async () => {
+    if (selectedCategory.length > 0) {
+      const res = await getDestinationsListByCategoryId(selectedCategory);
+      const categorizedDestinationsList = res.data.result;
+      setFilteredDestinations(() => categorizedDestinationsList);
+    } else {
+      setFilteredDestinations(() => []);
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    getCategorizedDestinationsData();
+  }, [getCategorizedDestinationsData]);
+
+  useEffect(() => {
+    if (searchResults.length > 0) {
+      const searchResultsTitles = searchResults.map((result) => result.title);
+      const newDestinations = searchResults.filter((destination) =>
+        searchResultsTitles.includes(destination.title)
+      );
+      setFilteredDestinations(() => newDestinations);
+    }
+  }, [selectedCategory, searchResults]);
 
   return (
     <>

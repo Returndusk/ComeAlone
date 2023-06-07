@@ -3,13 +3,20 @@ import axios from 'axios';
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 export const getAllDestinationsList = async () => {
-  const response = await axios.get(`${baseUrl}/destinations`);
-  return response;
+  try {
+    const response = await axios.get(`${baseUrl}/destinations`);
+    return response;
+  } catch (error) {
+    console.error(error, '전체 목적지 리스트 정보를 받아오는데 실패했습니다.');
+  }
 };
 
-export const getDestinationsListByCategoryId = async (categoryId: number) => {
+export const getDestinationsListByCategoryId = async (
+  selectedCategory: number[]
+) => {
+  const categryIdLists = selectedCategory.join();
   const response = await axios.get(
-    `${baseUrl}/categories/${categoryId}/destinations`
+    `${baseUrl}/categories/destinations?categoryIds=${categryIdLists}`
   );
   return response;
 };
