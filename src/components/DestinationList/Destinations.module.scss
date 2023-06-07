@@ -6,7 +6,7 @@
 .destinationsContainer {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(20, 100px);
+  grid-template-rows: repeat(10, 150px);
   background-color: #fff;
   width: 420px; //search bar, category container와 동일
   height: 100%; // map-2px(border 너비)과 동일함.
@@ -26,10 +26,19 @@
   */
 
   .destinations {
+    display: flex;
     border-bottom: 1px solid #ccc;
+    flex-direction: column;
 
     &:hover {
       cursor: pointer;
+    }
+
+    #destinationImage {
+      width: 100px;
+      height: 100px;
+      justify-content: flex-end;
+      align-items: center;
     }
   }
 }
