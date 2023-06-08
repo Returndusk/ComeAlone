@@ -61,11 +61,7 @@ function ScheduleLists() {
           최신순
         </button>
       </div>
-      {isLoading ? (
-        <div className={styles.loading}>일정 불러오는중...</div>
-      ) : (
-        ''
-      )}
+      {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
       <div className={styles.scheduleCardContainer}>
         {scheduleList.map((schedule: ScheduleCardType, index: number) => (
           <ScheduleCard
