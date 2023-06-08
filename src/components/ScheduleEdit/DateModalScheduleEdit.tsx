@@ -36,18 +36,6 @@ function DateModalScheduleEdit({
     }
   };
 
-  useEffect(() => {
-    const fetchedDate = [
-      {
-        startDate: dateInfo.startDate,
-        endDate: dateInfo.endDate,
-        key: 'selection'
-      }
-    ];
-
-    setSelectedDate(fetchedDate);
-  }, [dateInfo]);
-
   return (
     <Modal open={openModal} onClose={onModalClose}>
       <Box className={styles.durationEditModal}>

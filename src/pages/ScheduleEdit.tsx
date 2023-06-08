@@ -35,6 +35,7 @@ function stringifyDate(date: Date) {
 
 function ScheduleEdit() {
   const { scheduleId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [scheduleFetched, setScheduleFetched] =
     useState<ScheduleEditFetchedType>(defaultSchedule);
@@ -88,6 +89,8 @@ function ScheduleEdit() {
       setUpdatedSummary(data.summary);
       setUpdatedStatus(data.status);
       setUpdatedDestinationList(data.destinations);
+
+      setIsLoading(true);
     };
 
     fetchData();
@@ -111,17 +114,17 @@ function ScheduleEdit() {
       image: '',
       destinations: mapDestinationId(updatedDestinationList)
     });
-    console.log({
-      schedule_id: Number(scheduleId),
-      title: updatedTitle,
-      summary: updatedSummary,
-      duration: updatedDateInfo.duration,
-      start_date: stringifyDate(updatedDateInfo.startDate),
-      end_date: stringifyDate(updatedDateInfo.endDate),
-      status: updatedStatus,
-      image: '',
-      destinations: mapDestinationId(updatedDestinationList)
-    });
+    // console.log({
+    //   schedule_id: Number(scheduleId),
+    //   title: updatedTitle,
+    //   summary: updatedSummary,
+    //   duration: updatedDateInfo.duration,
+    //   start_date: stringifyDate(updatedDateInfo.startDate),
+    //   end_date: stringifyDate(updatedDateInfo.endDate),
+    //   status: updatedStatus,
+    //   image: '',
+    //   destinations: mapDestinationId(updatedDestinationList)
+    // });
   };
 
   const markersLocations = useMemo(() => {
@@ -152,6 +155,10 @@ function ScheduleEdit() {
       );
     }
   }, [updatedDateInfo.duration]);
+
+  if (!isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={styles.container}>
