@@ -1,22 +1,44 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './DestinationDetails.module.scss';
 import { RiThumbUpFill } from 'react-icons/ri';
 import { RiThumbUpLine } from 'react-icons/ri';
 import Review from './Review';
 import { useParams } from 'react-router-dom';
 import { DEFAULT_DESTINATIONS } from './Dummy';
+import { postPreferredDestinationsByDestinationId } from '../../apis/destinationList';
+import { useAuthState } from '../../contexts/AuthContext';
+import AlertModal from '../common/Alert/AlertModal';
+
+const ALERT_PROPS = {
+  message: '로그인이 필요한 기능입니다.',
+  showTitle: false
+};
 
 function DestinationDetails() {
+  const { authState, updateAuthState } = useAuthState();
   const [likes, setLikes] = useState<boolean>(false);
   const { contentid } = useParams();
+  const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
 
   const destination = useMemo(() => {
     return DEFAULT_DESTINATIONS.find((des) => des.id === Number(contentid));
   }, [contentid]);
 
+  const postLikesDestinations = useCallback(async () => {
+    const res = await postPreferredDestinationsByDestinationId(
+      Number(contentid)
+    );
+    const userLikes = res?.data.is_liked;
+    setLikes(() => userLikes);
+  }, []);
+
   const handleLikesClick = () => {
-    /*좋아요 요청(백엔드 요청)*/
-    setLikes(() => !likes);
+    if (authState.isLoggedIn) {
+      postLikesDestinations();
+      console.log(likes);
+    } else {
+      setIsOpenAlert(true);
+    }
   };
 
   return (
@@ -44,6 +66,13 @@ function DestinationDetails() {
             <Review />
           </section>
         </div>
+      )}
+      {isOpenAlert && (
+        <AlertModal
+          message={ALERT_PROPS.message}
+          onConfirm={() => setIsOpenAlert(false)}
+          showTitle={ALERT_PROPS.showTitle}
+        />
       )}
     </>
   );
