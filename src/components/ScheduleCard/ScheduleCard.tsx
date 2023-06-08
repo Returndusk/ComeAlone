@@ -3,9 +3,13 @@ import styles from './ScheduleCard.module.scss';
 import { Link } from 'react-router-dom';
 import { ScheduleCardProps } from '../../types/ScheduleTypes';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { useAuthState } from '../../contexts/AuthContext';
+import ROUTER from '../../constants/Router';
 
-function ScheduleCard({ schedule, link }: ScheduleCardProps) {
+function ScheduleCard({ schedule }: ScheduleCardProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  const { authState } = useAuthState();
+  const isLoggedIn = authState.isLoggedIn;
 
   function getDate(dateString: string) {
     const toDate = new Date(dateString);
@@ -17,11 +21,18 @@ function ScheduleCard({ schedule, link }: ScheduleCardProps) {
 
   function handleLike(e: React.MouseEvent<HTMLDivElement>) {
     e.preventDefault();
-    setIsLiked(!isLiked);
+    if (isLoggedIn) {
+      setIsLiked(!isLiked);
+    } else {
+      alert('로그인이 필요합니다.');
+    }
   }
 
   return (
-    <Link to={link} className={styles.scheduleCard}>
+    <Link
+      to={`${ROUTER.SCHEDULE_DETAIL}/${schedule.schedule_id}`}
+      className={styles.scheduleCard}
+    >
       <div className={styles.scheduleCardContent}>
         <div className={styles.scheduleContent}>
           <div className={styles.scheduleText}>
