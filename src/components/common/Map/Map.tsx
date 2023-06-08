@@ -15,10 +15,9 @@ type MapPropsTypes = {
   >;
 };
 
-//제주도 시청을 map의 default 위치로 설정함.
 const DEFAULT_LOCATION = {
-  LATITUDE: 33.48907969999994,
-  LONGITUDE: 126.49932809999973
+  LATITUDE: 32.412348163024674,
+  LONGITUDE: 126.94951514124065
 };
 
 const { kakao } = window;
