@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
@@ -9,16 +9,55 @@ import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
-  scheduleFetched,
+  schedule,
   likesAmount,
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
+import { ScheduleDetailType } from '../types/ScheduleDetail';
 import { FaArrowLeft } from 'react-icons/fa';
+import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
+  const [scheduleFetched, setScheduleFetched] =
+    useState<ScheduleDetailType>(schedule);
+  const [reviewInput, setReviewInput] = useState('');
+
+  const getScheduleDetail = useCallback(async (id: number) => {
+    const response = await getScheduleDetailById(id);
+
+    const data = {
+      id: response?.data.schedule_id,
+      nickname: response?.data.user.nickname,
+      title: response?.data.title,
+      summary: response?.data.summary,
+      duration: response?.data.duration,
+      startDate: new Date(response?.data.start_date),
+      endDate: new Date(response?.data.end_date),
+      image: response?.data.image,
+      createdAt: new Date(response?.data.created_at.split('T')[0]),
+      destinations: response?.data.destinationMaps,
+      status: response?.data.status
+    };
+
+    return data;
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getScheduleDetail(24);
+
+      setScheduleFetched(data);
+      setCheckedDestinations(data.destinations.flat());
+
+      console.log('fetchData');
+    };
+
+    fetchData();
+  }, []);
+
   const {
     nickname,
     title,
@@ -30,7 +69,7 @@ function ScheduleDetail() {
     createdAt,
     destinations
   } = scheduleFetched;
-  const [reviewInput, setReviewInput] = useState('');
+
   const [checkedDestinations, setCheckedDestinations] = useState(
     destinations.flat()
   );

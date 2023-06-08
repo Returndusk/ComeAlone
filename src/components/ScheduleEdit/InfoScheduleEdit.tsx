@@ -27,7 +27,7 @@ function InfoScheduleEdit({
         </span>
         {nickname}
       </div>
-      <div className={styles.date}>{createdAt}</div>
+      <div className={styles.date}>{createdAt.toLocaleDateString('ko-KR')}</div>
       <TextField
         className={styles.description}
         required

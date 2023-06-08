@@ -26,7 +26,7 @@ function InfoScheduleDetail({
         </span>
         {nickname}
       </div>
-      <div className={styles.date}>{createdAt}</div>
+      <div className={styles.date}>{createdAt.toLocaleDateString('ko-KR')}</div>
       <p>{summary}</p>
     </div>
   );
