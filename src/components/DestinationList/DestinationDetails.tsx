@@ -3,11 +3,12 @@ import styles from './DestinationDetails.module.scss';
 import { RiThumbUpFill } from 'react-icons/ri';
 import { RiThumbUpLine } from 'react-icons/ri';
 import Review from './Review';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { DEFAULT_DESTINATIONS } from './Dummy';
 import { postPreferredDestinationsByDestinationId } from '../../apis/destinationList';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
+import { DestinationsType } from '../../types/DestinationListTypes';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -15,10 +16,14 @@ const ALERT_PROPS = {
 };
 
 function DestinationDetails() {
+  const [destinationDetails, setDestinationDetails] = useState<
+    DestinationsType[] | null
+  >(null);
   const { authState, updateAuthState } = useAuthState();
   const [likes, setLikes] = useState<boolean>(false);
   const { contentid } = useParams();
   const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const destination = useMemo(() => {
     return DEFAULT_DESTINATIONS.find((des) => des.id === Number(contentid));
@@ -35,10 +40,18 @@ function DestinationDetails() {
   const handleLikesClick = () => {
     if (authState.isLoggedIn) {
       postLikesDestinations();
-      console.log(likes);
     } else {
       setIsOpenAlert(true);
     }
+  };
+
+  useEffect(() => {
+    console.log(likes);
+  }, [likes]);
+
+  const handleOnConfirm = () => {
+    setIsOpenAlert(false);
+    navigate('/login');
   };
 
   return (
@@ -70,7 +83,7 @@ function DestinationDetails() {
       {isOpenAlert && (
         <AlertModal
           message={ALERT_PROPS.message}
-          onConfirm={() => setIsOpenAlert(false)}
+          onConfirm={handleOnConfirm}
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
