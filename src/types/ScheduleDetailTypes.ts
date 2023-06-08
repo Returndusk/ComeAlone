@@ -1,21 +1,33 @@
 import { MapWithWaypointsPropsType } from './DestinationListTypes';
-
-export interface ScheduleDetailType {
-  id: string;
+export interface IScheduleDetail {
+  id: number;
   title: string;
   summary: string;
   nickname: string;
   startDate: Date;
   endDate: Date;
-  duration: string;
-  createdAt: string;
+  duration: number;
+  createdAt: Date;
   destinations: MapWithWaypointsPropsType[][];
   image: string;
-  status: boolean;
+  status: string;
 }
 
+export type ScheduleFetchedType = Pick<
+  IScheduleDetail,
+  | 'title'
+  | 'summary'
+  | 'nickname'
+  | 'startDate'
+  | 'endDate'
+  | 'duration'
+  | 'createdAt'
+  | 'destinations'
+  | 'image'
+>;
+
 export type ScheduleDetailInfoType = Pick<
-  ScheduleDetailType,
+  IScheduleDetail,
   | 'title'
   | 'summary'
   | 'nickname'

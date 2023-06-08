@@ -13,29 +13,3 @@
     font-size: 28px;
   }
 }
-
-.durationEditModal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 700px;
-  height: 480px;
-  padding: 20px;
-  border-radius: 20px;
-  background-color: #ffffff;
-
-  p {
-    font-size: 20px;
-  }
-
-  .durationEditModalDate {
-    margin: 20px 0;
-  }
-
-  .durationEditModalConfirm {
-    position: absolute;
-    top: 90%;
-    left: 90%;
-  }
-}
