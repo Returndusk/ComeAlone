@@ -21,7 +21,7 @@ function Header() {
     setAnchorEl(null);
   };
 
-  console.log(authState.user);
+  console.log(authState.user)
 
   return (
     <div className={styles.layout}>
