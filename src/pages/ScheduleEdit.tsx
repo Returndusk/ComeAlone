@@ -51,9 +51,9 @@ function ScheduleEdit() {
   );
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
-  const handleOpen = () => setOpenModal(true);
+  const handleModelOpen = () => setOpenModal(true);
 
-  const handleClose = () => setOpenModal(false);
+  const handleModalClose = () => setOpenModal(false);
 
   const getScheduleEdit = useCallback(async (id: string | undefined) => {
     const response = await getScheduleDetailById(id);
@@ -163,7 +163,10 @@ function ScheduleEdit() {
         돌아가기
       </Link>
       <ImageScheduleEdit image={scheduleFetched.image} />
-      <DateScheduleEdit dateInfo={updatedDateInfo} onOpenModal={handleOpen} />
+      <DateScheduleEdit
+        dateInfo={updatedDateInfo}
+        onOpenModal={handleModelOpen}
+      />
       <PublicStatusScheduleEdit
         updatedStatus={updatedStatus}
         onStatusUpdate={setUpdatedStatus}
@@ -204,7 +207,7 @@ function ScheduleEdit() {
         openModal={openModal}
         dateInfo={updatedDateInfo}
         onDateInfoUpdate={setUpdatedDateInfo}
-        onModalClose={handleClose}
+        onModalClose={handleModalClose}
       />
     </div>
   );

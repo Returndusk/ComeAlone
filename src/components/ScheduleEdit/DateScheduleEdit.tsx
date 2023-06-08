@@ -15,22 +15,20 @@ function DateScheduleEdit({
   onOpenModal: () => void;
 }) {
   return (
-    <>
-      <div className={styles.dateContainer}>
-        <span className={styles.duration}>
-          {`${dateInfo.startDate.toLocaleDateString(
-            'ko-KR'
-          )} ~ ${dateInfo.endDate.toLocaleDateString('ko-KR')} (${
-            dateInfo.duration
-          }일)`}
-        </span>
-        <Tooltip title='날짜 수정하기' placement='right'>
-          <IconButton onClick={onOpenModal}>
-            <FaCalendarAlt className={styles.durationEdit} />
-          </IconButton>
-        </Tooltip>
-      </div>
-    </>
+    <div className={styles.dateContainer}>
+      <span className={styles.duration}>
+        {`${dateInfo.startDate.toLocaleDateString(
+          'ko-KR'
+        )} ~ ${dateInfo.endDate.toLocaleDateString('ko-KR')} (${
+          dateInfo.duration
+        }일)`}
+      </span>
+      <Tooltip title='날짜 수정하기' placement='right'>
+        <IconButton onClick={onOpenModal}>
+          <FaCalendarAlt className={styles.durationEdit} />
+        </IconButton>
+      </Tooltip>
+    </div>
   );
 }
 

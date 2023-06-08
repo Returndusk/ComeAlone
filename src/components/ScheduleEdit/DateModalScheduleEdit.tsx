@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import styles from './DateModalScheduleEdit.module.scss';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -17,13 +17,15 @@ function DateModalScheduleEdit({
   onDateInfoUpdate: Dispatch<SetStateAction<DateInfoType>>;
   onModalClose: () => void;
 }) {
-  const dateNow: DateSelectionType = {
-    startDate: dateInfo.startDate,
-    endDate: dateInfo.endDate,
-    key: 'selection'
-  };
+  const [selectedDate, setSelectedDate] = useState<DateSelectionType[]>([
+    {
+      startDate: dateInfo.startDate,
+      endDate: dateInfo.endDate,
+      key: 'selection'
+    }
+  ]);
 
-  const [selectedDate, setSelectedDate] = useState([dateNow]);
+  console.log(selectedDate);
 
   const handleDateInfoUpdate = () => {
     const { startDate, endDate } = selectedDate[0];
