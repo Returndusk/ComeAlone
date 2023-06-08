@@ -77,8 +77,8 @@ function EditDestinationList({
           {updatedDestinationList.map((destOfDay, dayIndex) => {
             return (
               <Droppable
-                droppableId={`destinationList ${dayIndex}`}
-                key={`destinationList ${dayIndex}`}
+                droppableId={`day ${dayIndex}`}
+                key={`day ${dayIndex}`}
               >
                 {(droppableProvided) => (
                   <div

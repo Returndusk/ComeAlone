@@ -14,8 +14,13 @@ import {
   ScheduleEditSubmitType
 } from '../types/ScheduleEditTypes';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
-
 import ROUTER from '../constants/Router';
+
+function mapDestinationId(destinationList: any) {
+  return destinationList.map((destOfDay: any) =>
+    destOfDay.map((dest: any) => dest.id)
+  );
+}
 
 function ScheduleEdit() {
   const { scheduleId } = useParams();
@@ -67,8 +72,6 @@ function ScheduleEdit() {
       setUpdatedSummary(data.summary);
       setUpdatedStatus(data.status);
       setUpdatedDestinationList(data.destinations);
-
-      console.log(data);
     };
 
     fetchData();
@@ -85,7 +88,7 @@ function ScheduleEdit() {
       ...updatedDateInfo,
       updatedTitle,
       updatedSummary,
-      updatedDestinationList,
+      updatedDestinationList: mapDestinationId(updatedDestinationList),
       updatedStatus
     });
   };
