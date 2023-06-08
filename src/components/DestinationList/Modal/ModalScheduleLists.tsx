@@ -3,6 +3,14 @@ import styles from './ModalScheduleLists.module.scss';
 import dummy from '../../ScheduleList/ScheduleListDummy';
 import ModalScheduleCard from './ModalScheduleCard';
 import { MyScheduleListType } from '../../../types/ScheduleTypes';
+import axios from 'axios';
+
+async function getMyScheduleLists() {
+  const response = await axios.get('https://vvhooping.com/api/schedules/24');
+  const data = response.data;
+  console.log(data);
+  return data;
+}
 
 export default function ModalScheduleLists() {
   const [scheduleList, setScheduleList] = useState<MyScheduleListType>(dummy);

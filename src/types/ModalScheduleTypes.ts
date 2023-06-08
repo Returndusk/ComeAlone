@@ -10,5 +10,5 @@ export type ModalScheduleCardType = {
 
 export type AddToScheduleModalType = {
   destinations: string[];
-  // onDestinationUpdate: (updatedDestination: string[]) => void;
+  onDestinationUpdate: (updatedDestination: string[]) => void;
 };

@@ -1,22 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './CommonModalDesign.module.scss';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
-import { addDays, format } from 'date-fns';
+import { addDays, format, differenceInDays } from 'date-fns';
+import axios from 'axios';
 
 function CreateScheduleModal(props: { closeModal: () => void }) {
-  // const [isOpen, setIsOpen] = useState(false);
-
-  // function openModal() {
-  //   setIsOpen(true);
-  // }
-
-  // function closeModal() {
-  //   setIsOpen(false);
-  // }
-
   /**
    * TODO: 모달 창 밖을 클릭해도 닫히도록
    * @param e 현재 지칭된 타겟(모달창 밖)
@@ -43,7 +34,6 @@ function CreateScheduleModal(props: { closeModal: () => void }) {
     }
   ]);
 
-  // console.log(date);
   const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd');
   const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd');
 
@@ -54,22 +44,29 @@ function CreateScheduleModal(props: { closeModal: () => void }) {
   function handleDateRange(ranges: any) {
     // console.log(ranges);
     setDate([ranges.selection]);
+  }
+
+  useEffect(() => {
+    const { startDate, endDate } = date[0];
+    const duration = differenceInDays(endDate, startDate) + 1;
 
     setFormData((prev) => ({
       ...prev,
-      start_date: String(ranges.selection.startDate),
-      end_date: String(ranges.selection.endDate)
+      start_date: String(startDate),
+      end_date: String(endDate),
+      duration
     }));
-  }
+  }, [date]);
 
   const [formData, setFormData] = useState({
     title: '',
     summary: '',
     start_date: '',
-    end_date: ''
+    end_date: '',
+    duration: 0
   });
 
-  function handleFormData(e: any) {
+  function handleFormData(e: React.ChangeEvent<HTMLInputElement>) {
     // console.log(e.target);
     const { name, value } = e.target;
     setFormData((prev) => {
@@ -80,11 +77,16 @@ function CreateScheduleModal(props: { closeModal: () => void }) {
     });
   }
 
-  function handleSubmit(e: any) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log('formData', formData);
-    // 여기에 득열님 alert 활용
-    props.closeModal();
+    try {
+      await axios.post('https://vvhooping.com/api/schedules/basic', formData);
+      // 여기에 득열님 alert 활용
+      console.log('formData', formData);
+      props.closeModal();
+    } catch (err) {
+      console.error('Error: ', err);
+    }
   }
 
   return (
