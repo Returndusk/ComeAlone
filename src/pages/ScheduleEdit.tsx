@@ -16,10 +16,7 @@ import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import DateModalScheduleEdit from '../components/ScheduleEdit/DateModalScheduleEdit';
 import { defaultSchedule } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
-import {
-  ScheduleEditFetchedType,
-  ScheduleEditSubmitType
-} from '../types/ScheduleEditTypes';
+import { ScheduleEditSubmitType } from '../types/ScheduleEditTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import { updateSchedule } from '../apis/ScheduleEditAPI';
@@ -44,8 +41,6 @@ function ScheduleEdit() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const [scheduleFetched, setScheduleFetched] =
-    useState<ScheduleEditFetchedType>(defaultSchedule);
   const [updatedDateInfo, setUpdatedDateInfo] = useState({
     startDate: defaultSchedule.startDate,
     endDate: defaultSchedule.endDate,
@@ -58,6 +53,8 @@ function ScheduleEdit() {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
   const updatedTitle = useRef(defaultSchedule.title);
   const updatedSummary = useRef(defaultSchedule.summary);
+  const nickname = useRef(defaultSchedule.nickname);
+  const createdAt = useRef(defaultSchedule.createdAt);
 
   const handleModelOpen = () => setOpenModal(true);
 
@@ -86,7 +83,6 @@ function ScheduleEdit() {
     const fetchData = async () => {
       const data = await getScheduleEdit(scheduleId);
 
-      setScheduleFetched(data);
       setUpdatedDateInfo({
         startDate: data.startDate,
         endDate: data.endDate,
@@ -94,6 +90,8 @@ function ScheduleEdit() {
       });
       updatedTitle.current = data.title;
       updatedSummary.current = data.summary;
+      nickname.current = data.nickname;
+      createdAt.current = data.createdAt;
       setUpdatedStatus(data.status);
       setUpdatedDestinationList(data.destinations);
       setIsLoading(false);
@@ -184,7 +182,7 @@ function ScheduleEdit() {
         <FaArrowLeft />
         돌아가기
       </Link>
-      <ImageScheduleEdit image={scheduleFetched.image} />
+      <ImageScheduleEdit image={defaultSchedule.image} />
       <DateScheduleEdit
         dateInfo={updatedDateInfo}
         onOpenModal={handleModelOpen}
@@ -196,8 +194,8 @@ function ScheduleEdit() {
       <InfoScheduleEdit
         updatedTitle={updatedTitle.current}
         updatedSummary={updatedSummary.current}
-        nickname={scheduleFetched.nickname}
-        createdAt={scheduleFetched.createdAt}
+        nickname={nickname.current}
+        createdAt={createdAt.current}
         onTitleUpdate={handleTitleUpdate}
         onSummaryUpdate={handleSummaryUpdate}
       />
