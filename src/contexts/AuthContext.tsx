@@ -5,6 +5,7 @@ import {
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_OPTIONS
 } from '../constants/Token';
+import { UserData } from '../types/UserTypes';
 
 export type AuthStateType = {
   isLoggedIn: boolean | null;
@@ -18,16 +19,6 @@ type AuthContextProps = {
 
 type AuthProviderProps = {
   children: React.ReactNode;
-};
-
-export type UserData = {
-  id: string;
-  nickname: string;
-  birth_date: string;
-  gender: string;
-  phone_number: string;
-  profile_image: string;
-  created_at: string;
 };
 
 export const AuthContext = createContext<AuthContextProps | null>(null);

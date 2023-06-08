@@ -2,6 +2,16 @@ export type Errors = {
   [key: string]: string;
 };
 
+export type UserData = {
+  id: string;
+  nickname: string;
+  birth_date: string;
+  gender: string;
+  phone_number: string;
+  profile_image: string;
+  created_at: string;
+};
+
 //Register/RegisterForm
 export type RegisterFormValues = {
   email: string;
