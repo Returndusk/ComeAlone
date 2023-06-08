@@ -92,7 +92,7 @@ CategoryPropsTypes) {
   const getCategorizedDestinationsData = useCallback(async () => {
     if (selectedCategory.length > 0) {
       const res = await getDestinationsListByCategoryId(selectedCategory);
-      const categorizedDestinationsList = res.data.result;
+      const categorizedDestinationsList = res?.data.result;
       setCategorizedData(() => categorizedDestinationsList);
     } else {
       setCategorizedData(() => []);
