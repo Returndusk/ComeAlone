@@ -21,8 +21,6 @@ function Header() {
     setAnchorEl(null);
   };
 
-  console.log(authState.user)
-
   return (
     <div className={styles.layout}>
       <div className={styles.body}>
