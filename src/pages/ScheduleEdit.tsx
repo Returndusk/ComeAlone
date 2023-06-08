@@ -15,6 +15,7 @@ import {
 } from '../types/ScheduleEditTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
+import { updateSchedule } from '../apis/ScheduleEditAPI';
 import ROUTER from '../constants/Router';
 
 function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
@@ -93,8 +94,19 @@ function ScheduleEdit() {
     updatedDestinationList,
     updatedStatus
   }: ScheduleEditSubmitType) => {
+    updateSchedule({
+      schedule_id: Number(scheduleId),
+      title: updatedTitle,
+      summary: updatedSummary,
+      duration: updatedDateInfo.duration,
+      start_date: stringifyDate(updatedDateInfo.startDate),
+      end_date: stringifyDate(updatedDateInfo.endDate),
+      status: updatedStatus,
+      image: '',
+      destinations: mapDestinationId(updatedDestinationList)
+    });
     console.log({
-      scheduleId,
+      schedule_id: Number(scheduleId),
       title: updatedTitle,
       summary: updatedSummary,
       duration: updatedDateInfo.duration,
