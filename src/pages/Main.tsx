@@ -17,7 +17,7 @@ function Main() {
           <SliderBanner
             settings={{ autoplay: false }}
             api={`${apiBaseUrl}/ranking/destinations?count=12`}
-            urlTemplate='/destination/list/0?search={title}'
+            urlTemplate='/destination/list/{id}?search={title}'
           />
         </div>
         <div className={styles.bottomArea}>

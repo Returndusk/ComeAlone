@@ -75,10 +75,11 @@ function SliderBanner({
 
   const finalSettings = { ...defaultSettings, ...settings };
 
-  const handleBannerClick = (title: string): void => {
+  const handleBannerClick = (id: number, title: string): void => {
     if (urlTemplate) {
-      const searchParam = encodeURIComponent(title);
-      const url = urlTemplate.replace('{title}', searchParam);
+      const url = urlTemplate
+        .replace('{id}', id.toString())
+        .replace('{title}', encodeURIComponent(title));
       window.location.href = url;
     }
   };
@@ -88,9 +89,9 @@ function SliderBanner({
       <Slider {...finalSettings}>
         {destinations.map((destination) => (
           <div
-            key={destination.id}
+            key={`destination-${destination.id}`}
             className={styles.box}
-            onClick={() => handleBannerClick(destination.title)}
+            onClick={() => handleBannerClick(destination.id, destination.title)}
           >
             <div className={styles.imageContainer}>
               <img
