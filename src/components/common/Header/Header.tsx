@@ -6,12 +6,14 @@ import Weather from './Weather';
 import styles from './Header.module.scss';
 import { useAuthState } from '../../../contexts/AuthContext';
 import { Cookies } from 'react-cookie';
+import AlertModal from '../Alert/AlertModal';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLElement) | null>(
     null
   );
   const { authState, updateAuthState } = useAuthState();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleUserIconClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -19,6 +21,25 @@ function Header() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogoutButtonClick = () => {
+    handleClose();
+    setShowLogoutModal(true);
+  };
+
+  const handleLogoutConfirm = () => {
+    const cookies = new Cookies();
+    cookies.remove('accessToken', { path: '/' });
+    cookies.remove('refreshToken', { path: '/' });
+    updateAuthState(false);
+    handleClose();
+    setShowLogoutModal(false);
+  };
+
+  const handleLogoutCancel = () => {
+    setShowLogoutModal(false);
+    handleClose();
   };
 
   return (
@@ -58,15 +79,7 @@ function Header() {
                   >
                     마이페이지
                   </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      const cookies = new Cookies();
-                      cookies.remove('accessToken', { path: '/' });
-                      cookies.remove('refreshToken', { path: '/' });
-                      updateAuthState(false);
-                      handleClose();
-                    }}
-                  >
+                  <MenuItem onClick={handleLogoutButtonClick}>
                     로그아웃
                   </MenuItem>
                 </Menu>
@@ -83,6 +96,14 @@ function Header() {
                 <span>회원 가입</span>
               </RouterLink>
             </div>
+          )}
+          {showLogoutModal && (
+            <AlertModal
+              message='로그아웃하시겠습니까?'
+              onConfirm={handleLogoutConfirm}
+              onCancel={handleLogoutCancel}
+              showCancelButton={true}
+            />
           )}
         </div>
       </div>
