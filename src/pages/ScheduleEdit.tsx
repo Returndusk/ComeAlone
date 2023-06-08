@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, {
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+  useRef
+} from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
@@ -45,13 +51,13 @@ function ScheduleEdit() {
     endDate: defaultSchedule.endDate,
     duration: defaultSchedule.duration
   });
-  const [updatedTitle, setUpdatedTitle] = useState(defaultSchedule.title);
-  const [updatedSummary, setUpdatedSummary] = useState(defaultSchedule.summary);
   const [updatedStatus, setUpdatedStatus] = useState(defaultSchedule.status);
   const [updatedDestinationList, setUpdatedDestinationList] = useState(
     defaultSchedule.destinations
   );
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
+  const updatedTitle = useRef(defaultSchedule.title);
+  const updatedSummary = useRef(defaultSchedule.summary);
 
   const handleModelOpen = () => setOpenModal(true);
 
@@ -86,8 +92,8 @@ function ScheduleEdit() {
         endDate: data.endDate,
         duration: data.duration
       });
-      setUpdatedTitle(data.title);
-      setUpdatedSummary(data.summary);
+      updatedTitle.current = data.title;
+      updatedSummary.current = data.summary;
       setUpdatedStatus(data.status);
       setUpdatedDestinationList(data.destinations);
       setIsLoading(false);
@@ -95,48 +101,6 @@ function ScheduleEdit() {
 
     fetchData();
   }, []);
-
-  const handleSubmit = ({
-    updatedTitle,
-    updatedSummary,
-    updatedDateInfo,
-    updatedDestinationList,
-    updatedStatus
-  }: ScheduleEditSubmitType) => {
-    updateSchedule({
-      schedule_id: Number(scheduleId),
-      title: updatedTitle,
-      summary: updatedSummary,
-      duration: updatedDateInfo.duration,
-      start_date: stringifyDate(updatedDateInfo.startDate),
-      end_date: stringifyDate(updatedDateInfo.endDate),
-      status: updatedStatus,
-      image: '',
-      destinations: mapDestinationId(updatedDestinationList)
-    });
-    navigate(`/schedule/detail/${scheduleId}`);
-    // console.log({
-    //   schedule_id: Number(scheduleId),
-    //   title: updatedTitle,
-    //   summary: updatedSummary,
-    //   duration: updatedDateInfo.duration,
-    //   start_date: stringifyDate(updatedDateInfo.startDate),
-    //   end_date: stringifyDate(updatedDateInfo.endDate),
-    //   status: updatedStatus,
-    //   image: '',
-    //   destinations: mapDestinationId(updatedDestinationList)
-    // });
-  };
-
-  const markersLocations = useMemo(() => {
-    if (checkedDayIndex === -1) {
-      return updatedDestinationList.flat();
-    } else {
-      return JSON.parse(JSON.stringify(updatedDestinationList))[
-        checkedDayIndex
-      ];
-    }
-  }, [checkedDayIndex, updatedDestinationList]);
 
   useEffect(() => {
     const prevDuration = updatedDestinationList.length;
@@ -156,6 +120,56 @@ function ScheduleEdit() {
       );
     }
   }, [updatedDateInfo.duration]);
+
+  const markersLocations = useMemo(() => {
+    if (checkedDayIndex === -1) {
+      return updatedDestinationList.flat();
+    } else {
+      return JSON.parse(JSON.stringify(updatedDestinationList))[
+        checkedDayIndex
+      ];
+    }
+  }, [checkedDayIndex, updatedDestinationList]);
+
+  const handleTitleUpdate = (title: string) => {
+    updatedTitle.current = title;
+  };
+
+  const handleSummaryUpdate = (summary: string) => {
+    updatedSummary.current = summary;
+  };
+
+  const handleSubmit = ({
+    updatedTitle,
+    updatedSummary,
+    updatedDateInfo,
+    updatedDestinationList,
+    updatedStatus
+  }: ScheduleEditSubmitType) => {
+    // updateSchedule({
+    //   schedule_id: Number(scheduleId),
+    //   title: updatedTitle,
+    //   summary: updatedSummary,
+    //   duration: updatedDateInfo.duration,
+    //   start_date: stringifyDate(updatedDateInfo.startDate),
+    //   end_date: stringifyDate(updatedDateInfo.endDate),
+    //   status: updatedStatus,
+    //   image: '',
+    //   destinations: mapDestinationId(updatedDestinationList)
+    // });
+    // navigate(`/schedule/detail/${scheduleId}`);
+    console.log({
+      schedule_id: Number(scheduleId),
+      title: updatedTitle,
+      summary: updatedSummary,
+      duration: updatedDateInfo.duration,
+      start_date: stringifyDate(updatedDateInfo.startDate),
+      end_date: stringifyDate(updatedDateInfo.endDate),
+      status: updatedStatus,
+      image: '',
+      destinations: mapDestinationId(updatedDestinationList)
+    });
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -180,12 +194,12 @@ function ScheduleEdit() {
         onStatusUpdate={setUpdatedStatus}
       />
       <InfoScheduleEdit
-        updatedTitle={updatedTitle}
+        updatedTitle={updatedTitle.current}
+        updatedSummary={updatedSummary.current}
         nickname={scheduleFetched.nickname}
         createdAt={scheduleFetched.createdAt}
-        updatedSummary={updatedSummary}
-        onTitleUpdate={setUpdatedTitle}
-        onSummaryUpdate={setUpdatedSummary}
+        onTitleUpdate={handleTitleUpdate}
+        onSummaryUpdate={handleSummaryUpdate}
       />
       <EditDestinationList
         updatedDestinationList={updatedDestinationList}
@@ -200,8 +214,8 @@ function ScheduleEdit() {
         <button
           onClick={() =>
             handleSubmit({
-              updatedTitle,
-              updatedSummary,
+              updatedTitle: updatedTitle.current,
+              updatedSummary: updatedSummary.current,
               updatedDateInfo,
               updatedDestinationList,
               updatedStatus

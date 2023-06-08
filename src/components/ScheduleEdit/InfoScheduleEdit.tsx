@@ -6,9 +6,9 @@ import Avatar from '@mui/material/Avatar';
 
 function InfoScheduleEdit({
   updatedTitle,
+  updatedSummary,
   nickname,
   createdAt,
-  updatedSummary,
   onTitleUpdate,
   onSummaryUpdate
 }: ScheduleEditInfoType) {
@@ -18,7 +18,7 @@ function InfoScheduleEdit({
         className={styles.title}
         required
         label='제목'
-        value={updatedTitle}
+        defaultValue={updatedTitle}
         onChange={(event) => onTitleUpdate(event.target.value)}
       />
       <div className={styles.nickname}>
@@ -34,7 +34,7 @@ function InfoScheduleEdit({
         label='일정 소개'
         multiline
         rows={3}
-        value={updatedSummary}
+        defaultValue={updatedSummary}
         onChange={(event) => onSummaryUpdate(event.target.value)}
       />
     </div>
