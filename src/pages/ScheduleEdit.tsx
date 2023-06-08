@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
 import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
@@ -18,6 +18,7 @@ import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
 function ScheduleEdit() {
+  const { scheduleId } = useParams();
   const [scheduleFetched, setScheduleFetched] =
     useState<ScheduleEditFetchedType>(schedule);
   const [updatedDateInfo, setUpdatedDateInfo] = useState({
@@ -54,7 +55,7 @@ function ScheduleEdit() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getScheduleEdit('24');
+      const data = await getScheduleEdit(scheduleId);
 
       setScheduleFetched(data);
       setUpdatedDateInfo({
@@ -101,7 +102,7 @@ function ScheduleEdit() {
 
   useEffect(() => {
     const prevDuration = updatedDestinationList.length;
-    const updatedDuration = Number(updatedDateInfo.duration);
+    const updatedDuration = updatedDateInfo.duration;
 
     if (prevDuration < updatedDuration) {
       const newUpdatedDestinationList = [...updatedDestinationList];

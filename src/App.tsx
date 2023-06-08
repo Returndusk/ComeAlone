@@ -46,7 +46,10 @@ function App() {
         </Route>
         <Route path={ROUTER.SCHEDULE_LIST} element={<ScheduleList />} />
         <Route path={ROUTER.MYSCHEDULE_LIST} element={<MyScheduleList />} />
-        <Route path={ROUTER.SCHEDULE_EDIT} element={<ScheduleEdit />} />
+        <Route
+          path={`${ROUTER.SCHEDULE_EDIT}/:scheduleId`}
+          element={<ScheduleEdit />}
+        />
         <Route
           path={`${ROUTER.SCHEDULE_DETAIL}/:scheduleId`}
           element={<ScheduleDetail />}
