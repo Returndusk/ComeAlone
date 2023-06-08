@@ -8,7 +8,7 @@ export const getAllDestinationsList = async () => {
     const response = await axios.get(`${baseUrl}/destinations`);
     return response;
   } catch (error) {
-    console.error(error, '전체 목적지 리스트 정보를 받아오는데 실패했습니다.');
+    console.error(error, '전체 여행지 리스트 정보를 받아오는데 실패했습니다.');
   }
 };
 
@@ -24,7 +24,7 @@ export const getDestinationsListByCategoryId = async (
   } catch (error) {
     console.error(
       error,
-      '카테고리별 목적지 리스트 정보를 받아오는데 실패했습니다.'
+      '카테고리별 여행지 리스트 정보를 받아오는데 실패했습니다.'
     );
   }
 };
@@ -38,7 +38,7 @@ export const getDestinationDetailsByDestinationId = async (
     );
     return response;
   } catch (error) {
-    console.error(error, '목적지별 상세정보를 받아오는데 실패했습니다.');
+    console.error(error, '여행지별 상세정보를 받아오는데 실패했습니다.');
   }
 };
 
@@ -53,7 +53,7 @@ export const getRankedDestinationsByRankingNumber = async (
   } catch (error) {
     console.error(
       error,
-      '좋아요가 높은 목적지 리스트를 받아오는데 실패했습니다.'
+      '좋아요가 높은 여행지 리스트를 받아오는데 실패했습니다.'
     );
   }
 };
@@ -68,6 +68,41 @@ export const postPreferredDestinationsByDestinationId = async (
     );
     return response;
   } catch (error) {
-    console.error(error, '목적지 좋아요 설정/해제를 실패했습니다.');
+    console.error(error, '여행지 좋아요 설정 및 해제에 실패했습니다.');
+  }
+};
+
+export const postReviewByDestinationId = async (destinationId: number) => {
+  try {
+    const response = await tokenInstance.post(
+      `${baseUrl}/destinations/${destinationId}/comments`,
+      destinationId
+    );
+    return response;
+  } catch (error) {
+    console.error(error, '여행지 리뷰 등록에 실패했습니다.');
+  }
+};
+
+export const modifyReviewByDestinationId = async (commentId: number) => {
+  try {
+    const response = await tokenInstance.put(
+      `${baseUrl}/destinations/comments/${commentId}`,
+      commentId
+    );
+    return response;
+  } catch (error) {
+    console.error(error, '여행지 리뷰 수정에 실패했습니다.');
+  }
+};
+
+export const deleteReviewByDestinationId = async (commentId: number) => {
+  try {
+    const response = await tokenInstance.delete(
+      `${baseUrl}/destinations/comments/${commentId}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error, '여행지 리뷰 삭제에 실패했습니다.');
   }
 };
