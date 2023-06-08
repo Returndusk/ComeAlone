@@ -101,6 +101,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (refreshToken) {
       getUserState(refreshToken);
+    } else {
+      updateAuthState(false);
     }
   }, []);
 
