@@ -213,19 +213,20 @@ function RegisterForm() {
         nickname,
         birth_date: `${year}-${month}-${day}`,
         phone_number: phoneNumber,
-        gender
+        gender,
+        profile_image: ''
       };
 
       const response = await registerUser(data);
-      console.log(response);
-      if (response.status === 200) {
+
+      if (response.status === 201) {
         alert('회원가입이 완료되었습니다!');
       }
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         if (err.response?.status === 409) {
-          // const { message: errMsg, field } = err.response.data;
-          // return setErrors((prev) => ({ ...prev, [field]: errMsg }));
+          const { message: errMsg, field } = err.response.data;
+          return setErrors((prev) => ({ ...prev, [field]: errMsg }));
         }
       }
 

@@ -6,11 +6,15 @@ import { Errors, LoginFormData, LoginFormValues } from '../../types/UserTypes';
 import { TextField } from '@mui/material';
 import styles from './LoginForm.module.scss';
 import { loginUser } from '../../apis/user';
-import { AuthStateType, useAuthState } from '../../contexts/AuthContext';
+import { UserData, useAuthState } from '../../contexts/AuthContext';
+import {
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  REFRESH_TOKEN_COOKIE_OPTIONS
+} from '../../constants/Token';
 
 function LoginForm() {
   const cookies = new Cookies();
-  const { setAuthState } = useAuthState();
+  const { updateAuthState } = useAuthState();
 
   const navigate = useNavigate();
   const initValues: LoginFormValues = {
@@ -50,20 +54,15 @@ function LoginForm() {
   const handleSuccess = (
     accessToken: string,
     refreshToken: string,
-    userData: any //추후 수정 예정
+    userData: UserData
   ) => {
     //쿠키에 토큰 저장
-    cookies.set('accessToken', accessToken);
-    cookies.set('refreshToken', refreshToken);
+    cookies.set('accessToken', accessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
+    cookies.set('refreshToken', refreshToken, REFRESH_TOKEN_COOKIE_OPTIONS);
 
     //전역으로 상태 관리
-    setAuthState((prev: AuthStateType) => ({
-      ...prev,
-      isLoggedIn: true,
-      user: userData
-    }));
-
     alert('로그인에 성공하였습니다!');
+    updateAuthState(true, userData);
   };
 
   const handleLogin = async () => {
@@ -82,7 +81,7 @@ function LoginForm() {
       }
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        if (err.response?.status === 400) {
+        if (err.response?.status === 401) {
           const errMsg = err.response.data.message;
           return setErrors((prev) => ({ ...prev, password: errMsg }));
         }
