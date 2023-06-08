@@ -12,6 +12,15 @@ export type UserData = {
   created_at: string;
 };
 
+export type UserDetail = {
+  email: string;
+  nickname: string;
+  birthDate: string;
+  gender: string;
+  phoneNumber: string;
+  profileImage: string;
+};
+
 //Register/RegisterForm
 export type RegisterFormValues = {
   email: string;
