@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './Map.module.scss';
 import { MapPropsType } from '../../../types/DestinationListTypes';
 
@@ -24,9 +24,8 @@ const DEFAULT_LOCATION = {
 const { kakao } = window;
 
 function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
-  const cachingMarkers = useMemo(() => {
-    return markersLocations;
-  }, [markersLocations]);
+  const [renderedMap, setRenderedMap] = useState<any>(null);
+  const [markers, setMarkers] = useState<any>(null);
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -38,29 +37,50 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
       ),
       level: 3
     };
-
     const map = new kakao.maps.Map(container, options);
-    const bounds = new kakao.maps.LatLngBounds();
+    setRenderedMap(() => map);
+  }, []);
 
-    cachingMarkers?.forEach((marker) => {
-      const position = new kakao.maps.LatLng(
-        Number(marker?.mapy),
-        Number(marker?.mapx)
+  useEffect(() => {
+    if (renderedMap === null) {
+      return;
+    } else {
+      const positions = markersLocations?.map(
+        (marker) =>
+          new kakao.maps.LatLng(Number(marker?.mapy), Number(marker?.mapx))
       );
-      const newMarker = new kakao.maps.Marker({
-        title: marker.title,
-        position,
-        map
-      });
-      newMarker.setMap(map);
-      bounds.extend(position);
-      map.setBounds(bounds, 36, 32, 32, 650);
+      if (markers !== null) {
+        const removeMarkers = markers.map((marker: any) => marker.setMap(null));
+        setMarkers(removeMarkers);
+      }
+      const newMarkers = positions.map(
+        (position) =>
+          new kakao.maps.Marker({
+            position,
+            map: renderedMap
+          })
+      );
 
-      kakao.maps.event.addListener(newMarker, 'click', function () {
-        setClickedDestination(marker);
-      });
-    });
-  }, [cachingMarkers]);
+      setMarkers(newMarkers);
+
+      if (positions.length > 0) {
+        const bounds = positions.reduce(
+          (bounds, latlng) => bounds.extend(latlng),
+          new kakao.maps.LatLngBounds()
+        );
+        renderedMap?.setBounds(bounds, 36, 32, 32, 650);
+      }
+
+      // markers.setMap(renderedMap);
+      // bounds.extend(position);
+
+      // markers.map((marker: any) => {
+      //   kakao.maps.event.addListener(marker, 'click', function () {
+      //     setClickedDestination(marker);
+      //   });
+      // });
+    }
+  }, [markersLocations]);
 
   return (
     <>
