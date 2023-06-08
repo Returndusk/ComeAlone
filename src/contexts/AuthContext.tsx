@@ -7,7 +7,7 @@ import {
 } from '../constants/Token';
 
 export type AuthStateType = {
-  isLoggedIn: boolean;
+  isLoggedIn: boolean | null;
   user: UserData | null;
 };
 
@@ -43,7 +43,7 @@ export function useAuthState() {
 export function AuthProvider({ children }: AuthProviderProps) {
   const cookies = new Cookies();
   const initAuthState: AuthStateType = {
-    isLoggedIn: false,
+    isLoggedIn: null,
     user: null
   };
   const [authState, setAuthState] = useState<AuthStateType>(initAuthState);
@@ -101,6 +101,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (refreshToken) {
       getUserState(refreshToken);
+    } else {
+      updateAuthState(false);
     }
   }, []);
 
