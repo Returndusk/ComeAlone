@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { AxiosError } from 'axios';
+import { TextField } from '@mui/material';
 import { UserConfirmFormProps } from '../../types/UserTypes';
 import styles from './UserConfirmForm.module.scss';
-import { TextField } from '@mui/material';
+import { checkPassword } from '../../apis/user';
 
 function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (error) setError('');
     setPassword(e.target.value);
   };
 
@@ -16,17 +19,29 @@ function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
     return errMsg;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationError = validateForm(password);
     setError(validationError);
 
     if (!validationError) {
-      alert('유효성 검사 통과!');
-      //비밀번호 확인 api 호출
+      try {
+        const data = { password };
+        const response = await checkPassword(data);
 
-      //비밀번호 확인 성공시
-      confirmUser();
+        if (response.status === 201) {
+          confirmUser();
+        }
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 401) {
+            return setError('비밀번호가 일치하지 않습니다.');
+          }
+        }
+
+        console.log(err);
+        alert('비밀번호 확인에 실패하였습니다.');
+      }
     }
   };
 

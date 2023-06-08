@@ -44,6 +44,14 @@ export const editUser = async (formData: UserEditFormData) => {
   return response;
 };
 
+export const checkPassword = async (formData: { password: string }) => {
+  const response = await tokenInstance.post(
+    `${baseUrl}/auth/users/password`,
+    formData
+  );
+  return response;
+};
+
 export const testUserToken = async (accessToken: string) => {
   const response = await axios.post(`${baseUrl}/auth/tokenTest`, accessToken);
   return response;
