@@ -3,7 +3,7 @@ import styles from './PublicStatusScheduleEdit.module.scss';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { ScheduleEditPublicStatusPropsType } from '../../types/ScheduleEdit';
+import { ScheduleEditPublicStatusPropsType } from '../../types/ScheduleEditTypes';
 
 function PublicStatusScheduleEdit({
   updatedStatus,

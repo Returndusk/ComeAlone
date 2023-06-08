@@ -1,4 +1,4 @@
-import { ScheduleEditFetchedType } from '../../types/ScheduleEdit';
+import { ScheduleEditFetchedType } from '../../types/ScheduleEditTypes';
 
 export const scheduleFetched: ScheduleEditFetchedType = {
   nickname: '제주123',

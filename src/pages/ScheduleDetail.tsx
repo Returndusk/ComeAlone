@@ -15,7 +15,7 @@ import {
   reviews
 } from '../components/ScheduleDetail/Dummy';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
-import { ScheduleFetchedType } from '../types/ScheduleDetail';
+import { ScheduleFetchedType } from '../types/ScheduleDetailTypes';
 import { FaArrowLeft } from 'react-icons/fa';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
@@ -70,12 +70,6 @@ function ScheduleDetail() {
     destinations
   } = scheduleFetched;
 
-  const handleDestinationsCheck = (
-    destinations: MapWithWaypointsPropsType[]
-  ) => {
-    setCheckedDestinations(destinations);
-  };
-
   const handleReviewSubmit = (input: string) => {
     setReviewInput(input);
     console.log(reviewInput);
@@ -108,7 +102,7 @@ function ScheduleDetail() {
       />
       <DestinationList
         destinations={destinations}
-        onDestinationsChecked={handleDestinationsCheck}
+        onDestinationsChecked={setCheckedDestinations}
       />
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />

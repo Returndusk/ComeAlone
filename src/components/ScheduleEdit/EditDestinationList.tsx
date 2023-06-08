@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './EditDestinationList.module.scss';
-import { ScheduleEditDestinationListType } from '../../types/ScheduleEdit';
+import { ScheduleEditDestinationListType } from '../../types/ScheduleEditTypes';
 import {
   DragDropContext,
   Droppable,

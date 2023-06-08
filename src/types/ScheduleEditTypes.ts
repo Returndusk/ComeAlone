@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { IScheduleDetail } from './ScheduleDetail';
+import { IScheduleDetail } from './ScheduleDetailTypes';
 import { MapWithWaypointsPropsType } from './DestinationListTypes';
 
 export type DateInfoType = Pick<

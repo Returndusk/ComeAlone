@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './InfoScheduleEdit.module.scss';
 import TextField from '@mui/material/TextField';
-import { ScheduleEditInfoType } from '../../types/ScheduleEdit';
+import { ScheduleEditInfoType } from '../../types/ScheduleEditTypes';
 import Avatar from '@mui/material/Avatar';
 
 function InfoScheduleEdit({

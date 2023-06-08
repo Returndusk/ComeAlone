@@ -9,7 +9,7 @@ import EditDestinationList from '../components/ScheduleEdit/EditDestinationList'
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import { scheduleFetched } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
-import { ScheduleEditSubmitType } from '../types/ScheduleEdit';
+import { ScheduleEditSubmitType } from '../types/ScheduleEditTypes';
 import ROUTER from '../constants/Router';
 
 function ScheduleEdit() {

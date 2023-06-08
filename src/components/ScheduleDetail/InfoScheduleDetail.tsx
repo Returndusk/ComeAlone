@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './InfoScheduleDetail.module.scss';
 import Avatar from '@mui/material/Avatar';
-import { ScheduleDetailInfoType } from '../../types/ScheduleDetail';
+import { ScheduleDetailInfoType } from '../../types/ScheduleDetailTypes';
 
 function InfoScheduleDetail({
   nickname,

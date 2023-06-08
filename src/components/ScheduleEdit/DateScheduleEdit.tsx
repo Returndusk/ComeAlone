@@ -9,7 +9,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
-import { DateInfoType, DateSelectionType } from '../../types/ScheduleEdit';
+import { DateInfoType, DateSelectionType } from '../../types/ScheduleEditTypes';
 
 function DateScheduleEdit({
   dateInfo,

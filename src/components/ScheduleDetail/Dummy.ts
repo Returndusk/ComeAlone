@@ -1,7 +1,7 @@
 import {
   ScheduleFetchedType,
   ScheduleReviewPropsType
-} from '../../types/ScheduleDetail';
+} from '../../types/ScheduleDetailTypes';
 
 export const schedule: ScheduleFetchedType = {
   nickname: '제주123',
