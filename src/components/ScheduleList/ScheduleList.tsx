@@ -5,16 +5,17 @@ import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import ROUTER from '../../constants/Router';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
 function ScheduleLists() {
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
-    const API_URL = 'https://vvhooping.com/api/schedules';
     setIsLoading(true);
     try {
-      const response = await axios.get(API_URL);
+      const response = await axios.get(`${baseUrl}/schedules`);
       setScheduleList(response.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
