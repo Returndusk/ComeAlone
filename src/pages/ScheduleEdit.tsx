@@ -1,11 +1,9 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
 import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
+import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusScheduleEdit';
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
@@ -32,7 +30,7 @@ function ScheduleEdit() {
     endDate,
     duration
   });
-  const [isPublic, setIsPublic] = useState('');
+  const [updatedStatus, setUpdatedStatus] = useState(status);
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedSummary, setUpdatedSummary] = useState(summary);
   const [updatedDestinationList, setUpdatedDestinationList] =
@@ -44,14 +42,14 @@ function ScheduleEdit() {
     updatedSummary,
     updatedDateInfo,
     updatedDestinationList,
-    isPublic
+    updatedStatus
   }: ScheduleEditSubmitType) => {
     console.log({
       ...updatedDateInfo,
       updatedTitle,
       updatedSummary,
       updatedDestinationList,
-      isPublic
+      updatedStatus
     });
   };
 
@@ -95,25 +93,10 @@ function ScheduleEdit() {
         dateInfo={updatedDateInfo}
         onDateInfoUpdate={setUpdatedDateInfo}
       />
-      <div className={styles.publicStatus}>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isPublic === 'PUBLIC' ? true : false}
-                onClick={() => {
-                  if (isPublic === 'PUBLIC') {
-                    setIsPublic('PRIVATE');
-                  } else {
-                    setIsPublic('PUBLIC');
-                  }
-                }}
-              />
-            }
-            label={isPublic ? '공개' : '비공개'}
-          />
-        </FormGroup>
-      </div>
+      <PublicStatusScheduleEdit
+        updatedStatus={updatedStatus}
+        onStatusUpdate={setUpdatedStatus}
+      />
       <InfoScheduleEdit
         updatedTitle={updatedTitle}
         nickname={nickname}
@@ -139,7 +122,7 @@ function ScheduleEdit() {
               updatedSummary,
               updatedDateInfo,
               updatedDestinationList,
-              isPublic
+              updatedStatus
             })
           }
         >

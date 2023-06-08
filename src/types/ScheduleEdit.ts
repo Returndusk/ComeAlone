@@ -27,6 +27,11 @@ export type ScheduleEditFetchedType = Pick<
   | 'status'
 >;
 
+export type ScheduleEditPublicStatusPropsType = {
+  updatedStatus: string;
+  onStatusUpdate: Dispatch<SetStateAction<string>>;
+};
+
 export type ScheduleEditInfoType = Pick<
   IScheduleDetail,
   'nickname' | 'createdAt'
@@ -51,5 +56,5 @@ export type ScheduleEditSubmitType = {
   updatedSummary: string;
   updatedDateInfo: DateInfoType;
   updatedDestinationList: MapWithWaypointsPropsType[][];
-  isPublic: string;
+  updatedStatus: string;
 };
