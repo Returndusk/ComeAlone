@@ -76,6 +76,18 @@ function App() {
         </Route>
         <Route path={ROUTER.SCHEDULE_LIST} element={<ScheduleList />} />
         <Route
+          path={`${ROUTER.SCHEDULE_EDIT}/:scheduleId`}
+          element={
+            <Auth required={true}>
+              <ScheduleEdit />
+            </Auth>
+          }
+        />
+        <Route
+          path={`${ROUTER.SCHEDULE_DETAIL}/:scheduleId`}
+          element={<ScheduleDetail />}
+        />
+        <Route
           path={ROUTER.MYSCHEDULE_LIST}
           element={
             <Auth required={true}>
@@ -83,8 +95,6 @@ function App() {
             </Auth>
           }
         />
-        <Route path={ROUTER.SCHEDULE_EDIT} element={<ScheduleEdit />} />
-        <Route path={ROUTER.SCHEDULE_DETAIL} element={<ScheduleDetail />} />
       </Routes>
       <Footer />
     </BrowserRouter>

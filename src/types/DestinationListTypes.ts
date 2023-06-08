@@ -31,5 +31,5 @@ export type MapPropsType = Pick<DestinationsType, 'title' | 'mapx' | 'mapy'>;
 
 export type MapWithWaypointsPropsType = Pick<
   DestinationsType,
-  'title' | 'mapx' | 'mapy'
+  'id' | 'title' | 'mapx' | 'mapy'
 >;
