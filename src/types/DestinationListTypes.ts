@@ -10,8 +10,8 @@ export interface DestinationsType {
   addr1: string;
   addr2: string;
   zipcode: string;
-  mapx: number; //dummy data 제거 후 string으로 수정 예정 (API에서는 string)
-  mapy: number; //dummy data 제거 후 string으로 수정 예정 (API에서는 string)
+  mapx: string; //dummy data 제거 후 string으로 수정 예정 (API에서는 string)
+  mapy: string; //dummy data 제거 후 string으로 수정 예정 (API에서는 string)
   overview: string;
 }
 

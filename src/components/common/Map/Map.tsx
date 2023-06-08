@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './Map.module.scss';
-import { MapPropsType } from '../../../types/DestinationListTypes';
+import {
+  DestinationsType,
+  MapPropsType
+} from '../../../types/DestinationListTypes';
 
 declare global {
   interface Window {
@@ -11,7 +14,7 @@ declare global {
 type MapPropsTypes = {
   markersLocations: MapPropsType[];
   setClickedDestination: React.Dispatch<
-    React.SetStateAction<MapPropsType | null>
+    React.SetStateAction<DestinationsType | null>
   >;
 };
 
