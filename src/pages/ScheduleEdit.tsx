@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
@@ -7,35 +7,71 @@ import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusSch
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import { scheduleFetched } from '../components/ScheduleEdit/Dummy';
+import { schedule } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
-import { ScheduleEditSubmitType } from '../types/ScheduleEditTypes';
+import {
+  ScheduleEditFetchedType,
+  ScheduleEditSubmitType
+} from '../types/ScheduleEditTypes';
+import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
+
 import ROUTER from '../constants/Router';
 
 function ScheduleEdit() {
-  const {
-    nickname,
-    title,
-    summary,
-    duration,
-    startDate,
-    endDate,
-    image,
-    createdAt,
-    status,
-    destinations
-  } = scheduleFetched;
+  const [scheduleFetched, setScheduleFetched] =
+    useState<ScheduleEditFetchedType>(schedule);
   const [updatedDateInfo, setUpdatedDateInfo] = useState({
-    startDate,
-    endDate,
-    duration
+    startDate: schedule.startDate,
+    endDate: schedule.endDate,
+    duration: schedule.duration
   });
-  const [updatedStatus, setUpdatedStatus] = useState(status);
-  const [updatedTitle, setUpdatedTitle] = useState(title);
-  const [updatedSummary, setUpdatedSummary] = useState(summary);
-  const [updatedDestinationList, setUpdatedDestinationList] =
-    useState(destinations);
+  const [updatedTitle, setUpdatedTitle] = useState(schedule.title);
+  const [updatedSummary, setUpdatedSummary] = useState(schedule.summary);
+  const [updatedStatus, setUpdatedStatus] = useState(schedule.status);
+  const [updatedDestinationList, setUpdatedDestinationList] = useState(
+    schedule.destinations
+  );
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
+
+  const getScheduleEdit = useCallback(async (id: string | undefined) => {
+    const response = await getScheduleDetailById(id);
+
+    const data = {
+      nickname: response?.data.user.nickname,
+      title: response?.data.title,
+      summary: response?.data.summary,
+      duration: response?.data.duration,
+      startDate: new Date(response?.data.start_date),
+      endDate: new Date(response?.data.end_date),
+      image: response?.data.image,
+      createdAt: new Date(response?.data.created_at.split('T')[0]),
+      status: response?.data.status,
+      destinations: response?.data.destinationMaps
+    };
+
+    return data;
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getScheduleEdit('24');
+
+      setScheduleFetched(data);
+      setUpdatedDateInfo({
+        startDate: data.startDate,
+        endDate: data.endDate,
+        duration: data.duration
+      });
+      setUpdatedTitle(data.title);
+      setUpdatedSummary(data.summary);
+      setUpdatedStatus(data.status);
+      setUpdatedDestinationList(data.destinations);
+
+      console.log(data);
+    };
+
+    fetchData();
+  }, []);
 
   const handleSubmit = ({
     updatedTitle,
@@ -88,7 +124,7 @@ function ScheduleEdit() {
         <FaArrowLeft />
         돌아가기
       </Link>
-      <ImageScheduleEdit image={image} />
+      <ImageScheduleEdit image={scheduleFetched.image} />
       <DateScheduleEdit
         dateInfo={updatedDateInfo}
         onDateInfoUpdate={setUpdatedDateInfo}
@@ -99,8 +135,8 @@ function ScheduleEdit() {
       />
       <InfoScheduleEdit
         updatedTitle={updatedTitle}
-        nickname={nickname}
-        createdAt={createdAt}
+        nickname={scheduleFetched.nickname}
+        createdAt={scheduleFetched.createdAt}
         updatedSummary={updatedSummary}
         onTitleUpdate={setUpdatedTitle}
         onSummaryUpdate={setUpdatedSummary}

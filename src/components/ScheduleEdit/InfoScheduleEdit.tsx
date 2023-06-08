@@ -18,7 +18,7 @@ function InfoScheduleEdit({
         className={styles.title}
         required
         label='제목'
-        defaultValue={updatedTitle}
+        value={updatedTitle}
         onChange={(event) => onTitleUpdate(event.target.value)}
       />
       <div className={styles.nickname}>
@@ -34,7 +34,7 @@ function InfoScheduleEdit({
         label='일정 소개'
         multiline
         rows={3}
-        defaultValue={updatedSummary}
+        value={updatedSummary}
         onChange={(event) => onSummaryUpdate(event.target.value)}
       />
     </div>

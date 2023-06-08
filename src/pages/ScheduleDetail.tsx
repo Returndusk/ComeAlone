@@ -14,7 +14,6 @@ import {
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
-import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { ScheduleFetchedType } from '../types/ScheduleDetailTypes';
 import { FaArrowLeft } from 'react-icons/fa';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';

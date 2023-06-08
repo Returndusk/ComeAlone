@@ -1,6 +1,6 @@
 import { ScheduleEditFetchedType } from '../../types/ScheduleEditTypes';
 
-export const scheduleFetched: ScheduleEditFetchedType = {
+export const schedule: ScheduleEditFetchedType = {
   nickname: '제주123',
   title: '혼자 떠나는 우도 여행',
   summary: '혼자 떠나는 우도 여행 일정입니다.',
