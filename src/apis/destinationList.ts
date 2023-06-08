@@ -27,3 +27,12 @@ export const getDestinationDetailsByDestinationId = async (
   const response = await axios.get(`${baseUrl}/destinations/${destinationId}`);
   return response;
 };
+
+export const getRankedDestinationsByRankingNumber = async (
+  rankingNumber: number
+) => {
+  const response = await axios.get(
+    `${baseUrl}/ranking/destinations?count=${rankingNumber}`
+  );
+  return response;
+};
