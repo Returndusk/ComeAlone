@@ -125,16 +125,16 @@ function UserInfo({
           row
         >
           <FormControlLabel
-            value='male'
+            value='남성'
             control={<Radio size='small' />}
             label='남성'
-            checked={values.gender === 'male'}
+            checked={values.gender === '남성'}
           />
           <FormControlLabel
-            value='female'
+            value='여성'
             control={<Radio size='small' />}
             label='여성'
-            checked={values.gender === 'female'}
+            checked={values.gender === '여성'}
           />
         </RadioGroup>
         {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
