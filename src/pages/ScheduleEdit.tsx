@@ -32,7 +32,7 @@ function ScheduleEdit() {
     endDate,
     duration
   });
-  const [isPublic, setIsPublic] = useState(status);
+  const [isPublic, setIsPublic] = useState('');
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedSummary, setUpdatedSummary] = useState(summary);
   const [updatedDestinationList, setUpdatedDestinationList] =
@@ -100,8 +100,14 @@ function ScheduleEdit() {
           <FormControlLabel
             control={
               <Switch
-                checked={isPublic}
-                onClick={() => setIsPublic((prev) => !prev)}
+                checked={isPublic === 'PUBLIC' ? true : false}
+                onClick={() => {
+                  if (isPublic === 'PUBLIC') {
+                    setIsPublic('PRIVATE');
+                  } else {
+                    setIsPublic('PUBLIC');
+                  }
+                }}
               />
             }
             label={isPublic ? '공개' : '비공개'}

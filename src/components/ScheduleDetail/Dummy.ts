@@ -1,10 +1,9 @@
 import {
-  ScheduleDetailType,
+  ScheduleFetchedType,
   ScheduleReviewPropsType
 } from '../../types/ScheduleDetail';
 
-export const schedule: ScheduleDetailType = {
-  id: 99,
+export const schedule: ScheduleFetchedType = {
   nickname: '제주123',
   title: '혼자 떠나는 우도 여행',
   summary: '혼자 떠나는 우도 여행 일정입니다.',
@@ -14,7 +13,6 @@ export const schedule: ScheduleDetailType = {
   image:
     'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80',
   createdAt: new Date(2023, 5, 15),
-  status: true,
   destinations: [
     [
       {

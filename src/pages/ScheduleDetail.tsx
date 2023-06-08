@@ -15,21 +15,20 @@ import {
   reviews
 } from '../components/ScheduleDetail/Dummy';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
-import { ScheduleDetailType } from '../types/ScheduleDetail';
+import { ScheduleFetchedType } from '../types/ScheduleDetail';
 import { FaArrowLeft } from 'react-icons/fa';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
   const [scheduleFetched, setScheduleFetched] =
-    useState<ScheduleDetailType>(schedule);
+    useState<ScheduleFetchedType>(schedule);
   const [reviewInput, setReviewInput] = useState('');
 
   const getScheduleDetail = useCallback(async (id: number) => {
     const response = await getScheduleDetailById(id);
 
     const data = {
-      id: response?.data.schedule_id,
       nickname: response?.data.user.nickname,
       title: response?.data.title,
       summary: response?.data.summary,
@@ -38,8 +37,7 @@ function ScheduleDetail() {
       endDate: new Date(response?.data.end_date),
       image: response?.data.image,
       createdAt: new Date(response?.data.created_at.split('T')[0]),
-      destinations: response?.data.destinationMaps,
-      status: response?.data.status
+      destinations: response?.data.destinationMaps
     };
 
     return data;
@@ -51,8 +49,6 @@ function ScheduleDetail() {
 
       setScheduleFetched(data);
       setCheckedDestinations(data.destinations.flat());
-
-      console.log('fetchData');
     };
 
     fetchData();
