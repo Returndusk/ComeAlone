@@ -21,6 +21,7 @@ import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
   const { scheduleId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
   const [scheduleFetched, setScheduleFetched] =
     useState<ScheduleFetchedType>(defaultSchedule);
   const [reviewInput, setReviewInput] = useState('');
@@ -52,6 +53,7 @@ function ScheduleDetail() {
 
       setScheduleFetched(data);
       setCheckedDestinations(data.destinations.flat());
+      setIsLoading(false);
     };
 
     fetchData();
@@ -73,6 +75,10 @@ function ScheduleDetail() {
     setReviewInput(input);
     console.log(reviewInput);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={styles.container}>

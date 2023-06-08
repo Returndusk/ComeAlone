@@ -36,7 +36,7 @@ function stringifyDate(date: Date) {
 function ScheduleEdit() {
   const { scheduleId } = useParams();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [scheduleFetched, setScheduleFetched] =
     useState<ScheduleEditFetchedType>(defaultSchedule);
@@ -90,8 +90,7 @@ function ScheduleEdit() {
       setUpdatedSummary(data.summary);
       setUpdatedStatus(data.status);
       setUpdatedDestinationList(data.destinations);
-
-      setIsLoading(true);
+      setIsLoading(false);
     };
 
     fetchData();
@@ -158,7 +157,7 @@ function ScheduleEdit() {
     }
   }, [updatedDateInfo.duration]);
 
-  if (!isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
