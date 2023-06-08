@@ -15,12 +15,14 @@ function Auth({ children, required }: AuthProps) {
   } = useAuthState();
 
   useEffect(() => {
-    if (required && !isLoggedIn) {
-      //비로그인 유저 접근 제한
-      navigate(ROUTER.LOGIN);
-    } else if (!required && isLoggedIn) {
-      //로그인 유저 접근 제한
-      navigate(ROUTER.MAIN);
+    if (isLoggedIn !== null) {
+      if (required && !isLoggedIn) {
+        //비로그인 유저 접근 제한
+        navigate(ROUTER.LOGIN);
+      } else if (!required && isLoggedIn) {
+        //로그인 유저 접근 제한
+        navigate(ROUTER.MAIN);
+      }
     }
   }, [navigate, isLoggedIn, required]);
 
