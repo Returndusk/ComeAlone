@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
@@ -24,10 +24,10 @@ function ScheduleDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [scheduleFetched, setScheduleFetched] =
     useState<ScheduleFetchedType>(defaultSchedule);
-  const [reviewInput, setReviewInput] = useState('');
   const [checkedDestinations, setCheckedDestinations] = useState(
     defaultSchedule.destinations.flat()
   );
+  const reviewInput = useRef('');
 
   const getScheduleDetail = useCallback(async (id: string | undefined) => {
     const response = await getScheduleDetailById(id);
@@ -72,8 +72,8 @@ function ScheduleDetail() {
   } = scheduleFetched;
 
   const handleReviewSubmit = (input: string) => {
-    setReviewInput(input);
-    console.log(reviewInput);
+    reviewInput.current = input;
+    console.log(reviewInput.current);
   };
 
   if (isLoading) {

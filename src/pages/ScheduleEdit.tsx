@@ -144,19 +144,7 @@ function ScheduleEdit() {
     updatedDestinationList,
     updatedStatus
   }: ScheduleEditSubmitType) => {
-    // updateSchedule({
-    //   schedule_id: Number(scheduleId),
-    //   title: updatedTitle,
-    //   summary: updatedSummary,
-    //   duration: updatedDateInfo.duration,
-    //   start_date: stringifyDate(updatedDateInfo.startDate),
-    //   end_date: stringifyDate(updatedDateInfo.endDate),
-    //   status: updatedStatus,
-    //   image: '',
-    //   destinations: mapDestinationId(updatedDestinationList)
-    // });
-    // navigate(`/schedule/detail/${scheduleId}`);
-    console.log({
+    updateSchedule({
       schedule_id: Number(scheduleId),
       title: updatedTitle,
       summary: updatedSummary,
@@ -167,6 +155,18 @@ function ScheduleEdit() {
       image: '',
       destinations: mapDestinationId(updatedDestinationList)
     });
+    navigate(`/schedule/detail/${scheduleId}`);
+    // console.log({
+    //   schedule_id: Number(scheduleId),
+    //   title: updatedTitle,
+    //   summary: updatedSummary,
+    //   duration: updatedDateInfo.duration,
+    //   start_date: stringifyDate(updatedDateInfo.startDate),
+    //   end_date: stringifyDate(updatedDateInfo.endDate),
+    //   status: updatedStatus,
+    //   image: '',
+    //   destinations: mapDestinationId(updatedDestinationList)
+    // });
   };
 
   if (isLoading) {
