@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-export async function getScheduleDetailById(id: number) {
+export async function getScheduleDetailById(id: string | undefined) {
   try {
     const response = await axios.get(`${baseUrl}/schedules/${id}`);
 

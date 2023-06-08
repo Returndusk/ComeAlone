@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
 import InfoScheduleDetail from '../components/ScheduleDetail/InfoScheduleDetail';
@@ -21,11 +21,15 @@ import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
+  const { scheduleId } = useParams();
   const [scheduleFetched, setScheduleFetched] =
     useState<ScheduleFetchedType>(schedule);
   const [reviewInput, setReviewInput] = useState('');
+  const [checkedDestinations, setCheckedDestinations] = useState(
+    schedule.destinations.flat()
+  );
 
-  const getScheduleDetail = useCallback(async (id: number) => {
+  const getScheduleDetail = useCallback(async (id: string | undefined) => {
     const response = await getScheduleDetailById(id);
 
     const data = {
@@ -45,7 +49,7 @@ function ScheduleDetail() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getScheduleDetail(24);
+      const data = await getScheduleDetail(scheduleId);
 
       setScheduleFetched(data);
       setCheckedDestinations(data.destinations.flat());
@@ -65,10 +69,6 @@ function ScheduleDetail() {
     createdAt,
     destinations
   } = scheduleFetched;
-
-  const [checkedDestinations, setCheckedDestinations] = useState(
-    destinations.flat()
-  );
 
   const handleDestinationsCheck = (
     destinations: MapWithWaypointsPropsType[]
