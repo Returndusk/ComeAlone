@@ -14,7 +14,7 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
   function getDate(dateString: string) {
     const toDate = new Date(dateString);
     const year = toDate.getFullYear();
-    const month = toDate.getMonth();
+    const month = toDate.getMonth() + 1;
     const day = toDate.getDate();
     return `${year}년 ${month}월 ${day}일`;
   }

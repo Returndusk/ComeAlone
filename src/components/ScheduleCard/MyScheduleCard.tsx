@@ -7,6 +7,7 @@ import { useAuthState } from '../../contexts/AuthContext';
 import ROUTER from '../../constants/Router';
 
 function ScheduleCard({ schedule }: MyScheduleCardProps) {
+  console.log(schedule);
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
 
@@ -24,7 +25,7 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
   function getDate(dateString: string) {
     const toDate = new Date(dateString);
     const year = toDate.getFullYear();
-    const month = toDate.getMonth();
+    const month = toDate.getMonth() + 1;
     const day = toDate.getDate();
     return `${year}년 ${month}월 ${day}일`;
   }
