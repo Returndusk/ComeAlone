@@ -27,6 +27,10 @@ export interface DestinationsReviewType {
   created_at: string;
 }
 
+export interface commentType {
+  comment: string | null;
+}
+
 export interface DestinationsPreferenceType {
   id: number;
   preference_user_number: number;
