@@ -25,8 +25,6 @@ function DateModalScheduleEdit({
     }
   ]);
 
-  console.log(selectedDate);
-
   const handleDateInfoUpdate = () => {
     const { startDate, endDate } = selectedDate[0];
 
@@ -37,6 +35,18 @@ function DateModalScheduleEdit({
       onDateInfoUpdate({ startDate, endDate, duration: diffDay });
     }
   };
+
+  useEffect(() => {
+    const fetchedDate = [
+      {
+        startDate: dateInfo.startDate,
+        endDate: dateInfo.endDate,
+        key: 'selection'
+      }
+    ];
+
+    setSelectedDate(fetchedDate);
+  }, [dateInfo]);
 
   return (
     <Modal open={openModal} onClose={onModalClose}>
