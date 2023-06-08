@@ -14,7 +14,6 @@ import {
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
-import { ScheduleFetchedType } from '../types/ScheduleDetailTypes';
 import { FaArrowLeft } from 'react-icons/fa';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
@@ -22,11 +21,10 @@ import ROUTER from '../constants/Router';
 function ScheduleDetail() {
   const { scheduleId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [scheduleFetched, setScheduleFetched] =
-    useState<ScheduleFetchedType>(defaultSchedule);
   const [checkedDestinations, setCheckedDestinations] = useState(
     defaultSchedule.destinations.flat()
   );
+  const scheduleFetched = useRef(defaultSchedule);
   const reviewInput = useRef('');
 
   const getScheduleDetail = useCallback(async (id: string | undefined) => {
@@ -51,7 +49,7 @@ function ScheduleDetail() {
     const fetchData = async () => {
       const data = await getScheduleDetail(scheduleId);
 
-      setScheduleFetched(data);
+      scheduleFetched.current = data;
       setCheckedDestinations(data.destinations.flat());
       setIsLoading(false);
     };
@@ -69,7 +67,7 @@ function ScheduleDetail() {
     image,
     createdAt,
     destinations
-  } = scheduleFetched;
+  } = scheduleFetched.current;
 
   const handleReviewSubmit = (input: string) => {
     reviewInput.current = input;
