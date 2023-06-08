@@ -17,8 +17,10 @@ import {
 } from '@mui/material';
 import { registerUser } from '../../apis/user';
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router';
 
 function RegisterForm() {
+  const navigate = useNavigate();
   const initValues: RegisterFormValues = {
     email: '',
     password: '',
@@ -221,6 +223,7 @@ function RegisterForm() {
 
       if (response.status === 201) {
         alert('회원가입이 완료되었습니다!');
+        navigate('/login');
       }
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
