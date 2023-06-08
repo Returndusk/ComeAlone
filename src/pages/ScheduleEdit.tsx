@@ -13,13 +13,22 @@ import {
   ScheduleEditFetchedType,
   ScheduleEditSubmitType
 } from '../types/ScheduleEditTypes';
+import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
-function mapDestinationId(destinationList: any) {
-  return destinationList.map((destOfDay: any) =>
-    destOfDay.map((dest: any) => dest.id)
+function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
+  return destinationList.map((destOfDay: MapWithWaypointsPropsType[]) =>
+    destOfDay.map((dest: MapWithWaypointsPropsType) => dest.id)
   );
+}
+
+function stringifyDate(date: Date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 function ScheduleEdit() {
@@ -85,11 +94,15 @@ function ScheduleEdit() {
     updatedStatus
   }: ScheduleEditSubmitType) => {
     console.log({
-      ...updatedDateInfo,
-      updatedTitle,
-      updatedSummary,
-      updatedDestinationList: mapDestinationId(updatedDestinationList),
-      updatedStatus
+      scheduleId,
+      title: updatedTitle,
+      summary: updatedSummary,
+      duration: updatedDateInfo.duration,
+      start_date: stringifyDate(updatedDateInfo.startDate),
+      end_date: stringifyDate(updatedDateInfo.endDate),
+      status: updatedStatus,
+      image: '',
+      destinations: mapDestinationId(updatedDestinationList)
     });
   };
 
