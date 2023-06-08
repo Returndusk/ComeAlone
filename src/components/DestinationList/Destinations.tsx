@@ -13,7 +13,6 @@ type DestinationsPropsType = {
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-//해야할거: 랭킹 데이터, 서치데이터, 카테고리 데이터 랭킹 규정하기
 function Destinations({
   filteredDestinations
 }: // isLoading,
