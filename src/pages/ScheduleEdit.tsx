@@ -7,6 +7,7 @@ import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusSch
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
+import DateModalScheduleEdit from '../components/ScheduleEdit/DateModalScheduleEdit';
 import { defaultSchedule } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
@@ -34,6 +35,7 @@ function stringifyDate(date: Date) {
 
 function ScheduleEdit() {
   const { scheduleId } = useParams();
+  const [openModal, setOpenModal] = useState(false);
   const [scheduleFetched, setScheduleFetched] =
     useState<ScheduleEditFetchedType>(defaultSchedule);
   const [updatedDateInfo, setUpdatedDateInfo] = useState({
@@ -48,6 +50,10 @@ function ScheduleEdit() {
     defaultSchedule.destinations
   );
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
+
+  const handleOpen = () => setOpenModal(true);
+
+  const handleClose = () => setOpenModal(false);
 
   const getScheduleEdit = useCallback(async (id: string | undefined) => {
     const response = await getScheduleDetailById(id);
@@ -157,10 +163,7 @@ function ScheduleEdit() {
         돌아가기
       </Link>
       <ImageScheduleEdit image={scheduleFetched.image} />
-      <DateScheduleEdit
-        dateInfo={updatedDateInfo}
-        onDateInfoUpdate={setUpdatedDateInfo}
-      />
+      <DateScheduleEdit dateInfo={updatedDateInfo} onOpenModal={handleOpen} />
       <PublicStatusScheduleEdit
         updatedStatus={updatedStatus}
         onStatusUpdate={setUpdatedStatus}
@@ -197,6 +200,12 @@ function ScheduleEdit() {
           수정완료
         </button>
       </div>
+      <DateModalScheduleEdit
+        openModal={openModal}
+        dateInfo={updatedDateInfo}
+        onDateInfoUpdate={setUpdatedDateInfo}
+        onModalClose={handleClose}
+      />
     </div>
   );
 }
