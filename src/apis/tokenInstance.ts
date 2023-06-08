@@ -12,12 +12,12 @@ const tokenInstance = axios.create({
 
 const cookies = new Cookies();
 
-let accessToken: string = cookies.get('accessToken');
-let refreshToken: string = cookies.get('refreshToken');
-
 tokenInstance.interceptors.request.use(async (config) => {
   //액세스 토큰이 없는(만료된) 경우 리프레시 토큰으로 토큰 재발급
   //*프론트 액세스 토큰 쿠키 유효 기간과 서버 액세스 토큰 유효 기간이 같아야 함
+  let accessToken: string = cookies.get('accessToken');
+  let refreshToken: string = cookies.get('refreshToken');
+
   if (!accessToken) {
     try {
       const response = await refreshUserTokens(refreshToken);
