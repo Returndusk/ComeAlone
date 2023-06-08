@@ -17,8 +17,10 @@ import {
 } from '@mui/material';
 import { registerUser } from '../../apis/user';
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router';
 
 function RegisterForm() {
+  const navigate = useNavigate();
   const initValues: RegisterFormValues = {
     email: '',
     password: '',
@@ -221,6 +223,7 @@ function RegisterForm() {
 
       if (response.status === 201) {
         alert('회원가입이 완료되었습니다!');
+        navigate('/login');
       }
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
@@ -331,13 +334,13 @@ function RegisterForm() {
             row
           >
             <FormControlLabel
-              value='male'
+              value='남성'
               control={<Radio size='small' />}
               label='남성'
               checked={values.gender === '남성'}
             />
             <FormControlLabel
-              value='female'
+              value='여성'
               control={<Radio size='small' />}
               label='여성'
               checked={values.gender === '여성'}
