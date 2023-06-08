@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
 import InfoScheduleDetail from '../components/ScheduleDetail/InfoScheduleDetail';
@@ -9,16 +9,54 @@ import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
-  scheduleFetched,
+  defaultSchedule,
   likesAmount,
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
-import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
+import { ScheduleFetchedType } from '../types/ScheduleDetailTypes';
 import { FaArrowLeft } from 'react-icons/fa';
+import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
+  const { scheduleId } = useParams();
+  const [scheduleFetched, setScheduleFetched] =
+    useState<ScheduleFetchedType>(defaultSchedule);
+  const [reviewInput, setReviewInput] = useState('');
+  const [checkedDestinations, setCheckedDestinations] = useState(
+    defaultSchedule.destinations.flat()
+  );
+
+  const getScheduleDetail = useCallback(async (id: string | undefined) => {
+    const response = await getScheduleDetailById(id);
+
+    const data = {
+      nickname: response?.data.user.nickname,
+      title: response?.data.title,
+      summary: response?.data.summary,
+      duration: response?.data.duration,
+      startDate: new Date(response?.data.start_date),
+      endDate: new Date(response?.data.end_date),
+      image: response?.data.image,
+      createdAt: new Date(response?.data.created_at.split('T')[0]),
+      destinations: response?.data.destinationMaps
+    };
+
+    return data;
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getScheduleDetail(scheduleId);
+
+      setScheduleFetched(data);
+      setCheckedDestinations(data.destinations.flat());
+    };
+
+    fetchData();
+  }, []);
+
   const {
     nickname,
     title,
@@ -30,16 +68,6 @@ function ScheduleDetail() {
     createdAt,
     destinations
   } = scheduleFetched;
-  const [reviewInput, setReviewInput] = useState('');
-  const [checkedDestinations, setCheckedDestinations] = useState(
-    destinations.flat()
-  );
-
-  const handleDestinationsCheck = (
-    destinations: MapWithWaypointsPropsType[]
-  ) => {
-    setCheckedDestinations(destinations);
-  };
 
   const handleReviewSubmit = (input: string) => {
     setReviewInput(input);
@@ -63,7 +91,10 @@ function ScheduleDetail() {
         createdAt={createdAt}
       />
       <div className={styles.editButtonContainer}>
-        <Link to={ROUTER.SCHEDULE_EDIT} className={styles.editButton}>
+        <Link
+          to={`${ROUTER.SCHEDULE_EDIT}/${scheduleId}`}
+          className={styles.editButton}
+        >
           수정하기
         </Link>
       </div>
@@ -73,7 +104,7 @@ function ScheduleDetail() {
       />
       <DestinationList
         destinations={destinations}
-        onDestinationsChecked={handleDestinationsCheck}
+        onDestinationsChecked={setCheckedDestinations}
       />
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
