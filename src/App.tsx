@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ROUTER from './constants/Router';
+import Auth from './components/common/Auth/Auth';
 import Main from './pages/Main';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -12,7 +14,6 @@ import ScheduleList from './pages/ScheduleList';
 import MyScheduleList from './pages/MyScheduleList';
 import Header from './components/common/Header/Header';
 import Footer from './components/common/Footer/Footer';
-import ROUTER from './constants/Router';
 import DestinationDetails from './components/DestinationList/DestinationDetails';
 
 function App() {
@@ -29,15 +30,44 @@ function App() {
     DestinationList: 목적지 리스트
   */
   }
+
   return (
     <BrowserRouter>
       <Header />
       <Routes>
         <Route path={ROUTER.MAIN} element={<Main />} />
-        <Route path={ROUTER.LOGIN} element={<Login />} />
-        <Route path={ROUTER.REGISTER} element={<Register />} />
-        <Route path={ROUTER.MYPAGE} element={<MyPage />} />
-        <Route path={ROUTER.MYPAGE_EDIT} element={<UserEdit />} />
+        <Route
+          path={ROUTER.LOGIN}
+          element={
+            <Auth required={false}>
+              <Login />
+            </Auth>
+          }
+        />
+        <Route
+          path={ROUTER.REGISTER}
+          element={
+            <Auth required={false}>
+              <Register />
+            </Auth>
+          }
+        />
+        <Route
+          path={ROUTER.MYPAGE}
+          element={
+            <Auth required={true}>
+              <MyPage />
+            </Auth>
+          }
+        />
+        <Route
+          path={ROUTER.MYPAGE_EDIT}
+          element={
+            <Auth required={true}>
+              <UserEdit />
+            </Auth>
+          }
+        />
         <Route path={ROUTER.DESTINATION_LIST} element={<DestinationList />}>
           <Route
             path={ROUTER.DESTINATION_LIST_DETAILS_PARAMS}

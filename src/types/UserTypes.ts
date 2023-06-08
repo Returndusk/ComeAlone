@@ -23,6 +23,7 @@ export type RegisterFormData = {
   birth_date: string;
   gender: '남성' | '여성';
   phone_number: string;
+  profile_image: '';
 };
 
 //Login/LoginForm
