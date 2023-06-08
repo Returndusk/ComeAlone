@@ -9,6 +9,8 @@ import {
 import ROUTER from '../../constants/Router';
 import CreateScheduleModal from './Modal/CreateScheduleModal';
 
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
 function MyScheduleLists() {
   const [scheduleList, setScheduleList] = useState<MyScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
@@ -16,10 +18,9 @@ function MyScheduleLists() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
-    const API_URL = 'https://vvhooping.com/api/schedules';
     setIsLoading(true);
     try {
-      const response = await axios.get(API_URL);
+      const response = await axios.get(`${baseUrl}/users/me/schedules`);
       setScheduleList(response.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
