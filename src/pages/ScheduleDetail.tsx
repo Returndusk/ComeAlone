@@ -9,7 +9,7 @@ import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
-  schedule,
+  defaultSchedule,
   likesAmount,
   reviewsAmount,
   reviews
@@ -22,10 +22,10 @@ import ROUTER from '../constants/Router';
 function ScheduleDetail() {
   const { scheduleId } = useParams();
   const [scheduleFetched, setScheduleFetched] =
-    useState<ScheduleFetchedType>(schedule);
+    useState<ScheduleFetchedType>(defaultSchedule);
   const [reviewInput, setReviewInput] = useState('');
   const [checkedDestinations, setCheckedDestinations] = useState(
-    schedule.destinations.flat()
+    defaultSchedule.destinations.flat()
   );
 
   const getScheduleDetail = useCallback(async (id: string | undefined) => {

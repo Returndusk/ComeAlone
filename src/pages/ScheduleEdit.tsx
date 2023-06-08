@@ -7,7 +7,7 @@ import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusSch
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import { schedule } from '../components/ScheduleEdit/Dummy';
+import { defaultSchedule } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
   ScheduleEditFetchedType,
@@ -20,17 +20,17 @@ import ROUTER from '../constants/Router';
 function ScheduleEdit() {
   const { scheduleId } = useParams();
   const [scheduleFetched, setScheduleFetched] =
-    useState<ScheduleEditFetchedType>(schedule);
+    useState<ScheduleEditFetchedType>(defaultSchedule);
   const [updatedDateInfo, setUpdatedDateInfo] = useState({
-    startDate: schedule.startDate,
-    endDate: schedule.endDate,
-    duration: schedule.duration
+    startDate: defaultSchedule.startDate,
+    endDate: defaultSchedule.endDate,
+    duration: defaultSchedule.duration
   });
-  const [updatedTitle, setUpdatedTitle] = useState(schedule.title);
-  const [updatedSummary, setUpdatedSummary] = useState(schedule.summary);
-  const [updatedStatus, setUpdatedStatus] = useState(schedule.status);
+  const [updatedTitle, setUpdatedTitle] = useState(defaultSchedule.title);
+  const [updatedSummary, setUpdatedSummary] = useState(defaultSchedule.summary);
+  const [updatedStatus, setUpdatedStatus] = useState(defaultSchedule.status);
   const [updatedDestinationList, setUpdatedDestinationList] = useState(
-    schedule.destinations
+    defaultSchedule.destinations
   );
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
