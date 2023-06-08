@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import styles from './DestinationList.module.scss';
 import { MapWithWaypointsPropsType } from '../../types/DestinationListTypes';
 
@@ -7,7 +7,7 @@ function DestinationList({
   onDestinationsChecked
 }: {
   destinations: MapWithWaypointsPropsType[][];
-  onDestinationsChecked: (destination: MapWithWaypointsPropsType[]) => void;
+  onDestinationsChecked: Dispatch<SetStateAction<MapWithWaypointsPropsType[]>>;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
