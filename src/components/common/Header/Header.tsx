@@ -5,13 +5,13 @@ import { Menu, MenuItem, IconButton } from '@mui/material';
 import Weather from './Weather';
 import styles from './Header.module.scss';
 import { useAuthState } from '../../../contexts/AuthContext';
+import { Cookies } from 'react-cookie';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLElement) | null>(
     null
   );
-
-  const { authState } = useAuthState();
+  const { authState, updateAuthState } = useAuthState();
 
   const handleUserIconClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -20,6 +20,8 @@ function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  console.log(authState.user);
 
   return (
     <div className={styles.layout}>
@@ -37,7 +39,7 @@ function Header() {
         </div>
         <div className={styles.layoutRight}>
           <Weather />
-          {authState.isLoggedIn ? (
+          {authState.isLoggedIn && (
             <>
               <RouterLink to='/myschedule/list'>
                 <BiCalendar className={styles.calendar} />
@@ -59,16 +61,21 @@ function Header() {
                     마이페이지
                   </MenuItem>
                   <MenuItem
-                    onClick={handleClose}
-                    component={RouterLink}
-                    to='/logout'
+                    onClick={() => {
+                      const cookies = new Cookies();
+                      cookies.remove('accessToken', { path: '/' });
+                      cookies.remove('refreshToken', { path: '/' });
+                      updateAuthState(false);
+                      handleClose();
+                    }}
                   >
                     로그아웃
                   </MenuItem>
                 </Menu>
               </div>
             </>
-          ) : (
+          )}
+          {!authState.isLoggedIn && (
             <div className={styles.auth}>
               <RouterLink to='/login'>
                 <span>로그인</span>
