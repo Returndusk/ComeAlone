@@ -1,72 +1,142 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './Review.module.scss';
-import { DestinationsDetailsType } from '../../types/DestinationListTypes';
+import {
+  DestinationsReviewType,
+  commentType
+} from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { useNavigate } from 'react-router-dom';
-
-type ReviewPropsType = {
-  destinationDetails: DestinationsDetailsType | null;
-};
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  getReviewByDestinationId,
+  postReviewByDestinationId
+} from '../../apis/destinationList';
+import UsersReview from './UsersReview';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
   showTitle: false
 };
 
-function Review({ destinationDetails }: ReviewPropsType) {
-  const [submittedReview, setSubmittedReview] = useState<string>('');
+const SUCCESS_ALERT_PROPS = {
+  successMessage: '리뷰 등록에 성공했습니다.',
+  failedMessage: '리뷰 등록에 실패했습니다. 다시 등록해주세요',
+  showTitle: false
+};
+
+function Review() {
+  const [submittedReview, setSubmittedReview] = useState<commentType>({
+    comment: null
+  });
+  const [allReviewList, setAllReviewList] = useState<
+    DestinationsReviewType[] | null
+  >(null);
+  const [isAccessUsersReview, setIsAccessUsersReview] =
+    useState<boolean>(false);
   const { authState, updateAuthState } = useAuthState();
-  const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
+  const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
+  const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
+    null
+  );
+  const { contentid } = useParams();
   const navigate = useNavigate();
+  //리뷰 등록 -> 요청 -> 리뷰 목록 상태 리렌더링
 
-  const reviewList = useMemo(() => {
-    return destinationDetails?.destination_comments;
-  }, [destinationDetails]);
+  //리뷰 조회 메서드
+  const getReviewList = useCallback(async () => {
+    const res = await getReviewByDestinationId(Number(contentid));
+    const reviewList = res?.data;
+    setAllReviewList(() => reviewList);
+  }, [contentid]);
 
+  useEffect(() => {
+    getReviewList();
+  }, [getReviewList]);
+
+  //리뷰 등록 메서드
+  const addReview = useCallback(async () => {
+    const res = await postReviewByDestinationId(
+      Number(contentid),
+      submittedReview
+    );
+    const status = res?.status;
+    if (status === 201) {
+      setIsShowSuccessAlert(true);
+      getReviewList();
+      return;
+    }
+    setIsShowSuccessAlert(false);
+  }, [contentid, submittedReview]);
+
+  //리뷰 수
   const reviewCount = useMemo(() => {
-    return destinationDetails?.comment_count;
-  }, [destinationDetails]);
+    return allReviewList?.length;
+  }, [allReviewList]);
 
+  //리뷰 등록 시도
   const handleReviewSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userReview = e.target.review.value;
-    setSubmittedReview(() => userReview);
+    setSubmittedReview({ comment: userReview });
     return;
   };
 
-  useEffect(() => {
-    /*Post 요청*/
-    /*Get 요청*/
-  }, [submittedReview]);
+  //사용자 리뷰 목록 조회 시도
+  const handleUsersReviewClick = () => {
+    if (authState.isLoggedIn) {
+      setIsAccessUsersReview(true);
+      return;
+    }
+    setIsShowAlert(true);
+  };
+
+  // useEffect(() => {
+  //   /*Post 요청*/
+  //   /*Get 요청*/
+  // }, [submittedReview]);
+
+  useEffect(() => console.log(submittedReview), [submittedReview]);
 
   const handleCommentInputClick = () => {
     if (authState.isLoggedIn) {
-      postLikesDestinations();
+      addReview();
     } else {
-      setIsOpenAlert(true);
+      setIsShowAlert(true);
     }
   };
 
-  const handleOnConfirm = () => {
-    setIsOpenAlert(false);
+  const handleOnLoginConfirm = () => {
+    setIsShowAlert(false);
     navigate('/login');
   };
+
+  const handleOnReviewConfirm = () => {
+    setIsShowSuccessAlert(null);
+  };
+
+  /*
+   * 리뷰 객체
+  id: number;
+  commenter_id: string;
+  comment: string;
+  created_at: string; */
 
   return (
     <div>
       <div className={styles.reviewContainer}>
         <div>{`한 줄 리뷰(${reviewCount})`}</div>
         <ul>
-          {reviewList?.map((review, index) => {
-            return <li key={index}>{review}</li>;
+          {allReviewList?.map((review, index) => {
+            return (
+              <div key={index}>
+                <p>{review.commenter_id}</p>
+                <p>{review.comment}</p>
+                <p>{review.created_at}</p>
+              </div>
+            );
           })}
         </ul>
-        <form
-          className={styles.reviewBar}
-          onSubmit={handleReviewSubmit}
-          onClick={handleCommentInputClick}
-        >
+        <form className={styles.reviewBar} onSubmit={handleReviewSubmit}>
           <input
             id={styles.reviewBar}
             type='text'
@@ -77,15 +147,35 @@ function Review({ destinationDetails }: ReviewPropsType) {
                 : '로그인이 필요합니다.'
             }
           />
-          <button id={styles.reviewButton} type='submit'>
+          <button
+            id={styles.reviewButton}
+            type='submit'
+            onClick={handleCommentInputClick}
+          >
             등록
           </button>
         </form>
+        <button onClick={handleUsersReviewClick}>내 리뷰 목록</button>
       </div>
-      {isOpenAlert && (
+      {isAccessUsersReview && <UsersReview />}
+      {isShowAlert && (
         <AlertModal
           message={ALERT_PROPS.message}
-          onConfirm={handleOnConfirm}
+          onConfirm={handleOnLoginConfirm}
+          showTitle={ALERT_PROPS.showTitle}
+        />
+      )}
+      {isShowSuccessAlert && (
+        <AlertModal
+          message={SUCCESS_ALERT_PROPS.successMessage}
+          onConfirm={handleOnReviewConfirm}
+          showTitle={ALERT_PROPS.showTitle}
+        />
+      )}
+      {isShowSuccessAlert === false && (
+        <AlertModal
+          message={SUCCESS_ALERT_PROPS.failedMessage}
+          onConfirm={handleOnReviewConfirm}
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
