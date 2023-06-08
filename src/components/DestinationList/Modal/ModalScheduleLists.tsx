@@ -13,12 +13,14 @@ async function getMyScheduleLists() {
     'https://vvhooping.com/api/users/me/schedules'
   );
   const data = response.data;
-  console.log(data);
+  // console.log(data);
   return data;
 }
 
 export default function ModalScheduleLists() {
-  const [scheduleList, setScheduleList] = useState<ModalScheduleCardType[]>([]);
+  const [scheduleLists, setScheduleLists] = useState<ModalScheduleCardType[]>(
+    []
+  );
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
   const [selectedCardIdx, setSelectedCardIdx] = useState<number | null>(null);
 
@@ -26,8 +28,8 @@ export default function ModalScheduleLists() {
     async function getScheduleLists() {
       try {
         const data = await getMyScheduleLists();
-        console.log(data);
-        setScheduleList(
+        // console.log(data);
+        setScheduleLists(
           data.map((schedule, index) => ({
             schedule,
             index,
@@ -43,8 +45,8 @@ export default function ModalScheduleLists() {
     getScheduleLists();
   }, [selectedCardIdx]);
 
-  console.log(scheduleList);
-
+  console.log(scheduleLists);
+  // setScheduleLists;
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     // console.log(sortOption);
@@ -59,7 +61,7 @@ export default function ModalScheduleLists() {
   // function handleCloseDestinations() {
   //   setSelectedCardIdx(null);
   // }
-  // console.log(scheduleList);
+  // console.log(scheduleLists);
 
   return (
     <div className={styles.scheduleContainer}>
@@ -89,7 +91,7 @@ export default function ModalScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {scheduleList.map((schedule, index) => (
+        {scheduleLists.map((schedule, index) => (
           <ModalScheduleCard
             key={schedule.schedule.schedule_id}
             schedule={schedule.schedule}
