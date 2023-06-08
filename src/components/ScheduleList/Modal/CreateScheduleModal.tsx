@@ -5,7 +5,6 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 import { addDays, format, differenceInDays } from 'date-fns';
-import axios from 'axios';
 import tokenInstance from '../../../apis/tokenInstance';
 
 function CreateScheduleModal(props: { closeModal: () => void }) {

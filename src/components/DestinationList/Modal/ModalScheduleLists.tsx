@@ -6,14 +6,14 @@ import {
   ModalScheduleCardType,
   MyScheduleListType
 } from '../../../types/ModalScheduleTypes';
-import axios from 'axios';
+import tokenInstance from '../../../apis/tokenInstance';
 
 async function getMyScheduleLists() {
-  const response = await axios.get<MyScheduleListType>(
-    'https://vvhooping.com/api/schedules/24'
+  const response = await tokenInstance.get<MyScheduleListType>(
+    'https://vvhooping.com/api/users/me/schedules'
   );
   const data = response.data;
-  // console.log(data);
+  console.log(data);
   return data;
 }
 
