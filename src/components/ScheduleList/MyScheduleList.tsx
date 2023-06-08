@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './ScheduleList.module.scss';
 import MyScheduleCard from '../ScheduleCard/MyScheduleCard';
-import axios from 'axios';
 import {
   MyScheduleCardType,
   MyScheduleListType
 } from '../../types/ScheduleTypes';
 import ROUTER from '../../constants/Router';
 import CreateScheduleModal from './Modal/CreateScheduleModal';
+import tokenInstance from '../../apis/tokenInstance';
+
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function MyScheduleLists() {
   const [scheduleList, setScheduleList] = useState<MyScheduleListType>([]);
@@ -16,15 +18,12 @@ function MyScheduleLists() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
-    const API_URL = 'https://vvhooping.com/api/schedules';
     setIsLoading(true);
     try {
-      const response = await axios.get(API_URL);
+      const response = await tokenInstance.get(`${baseUrl}/users/me/schedules`);
       setScheduleList(response.data);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        alert('여행 일정을 불러올 수 없습니다.');
-      }
+      alert('여행 일정을 불러올 수 없습니다.');
     }
     setIsLoading(false);
   }, []);

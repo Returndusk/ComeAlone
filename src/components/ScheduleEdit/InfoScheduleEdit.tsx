@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './InfoScheduleEdit.module.scss';
 import TextField from '@mui/material/TextField';
-import { ScheduleEditInfoType } from '../../types/ScheduleEdit';
+import { ScheduleEditInfoType } from '../../types/ScheduleEditTypes';
 import Avatar from '@mui/material/Avatar';
 
 function InfoScheduleEdit({
@@ -18,7 +18,7 @@ function InfoScheduleEdit({
         className={styles.title}
         required
         label='제목'
-        defaultValue={updatedTitle}
+        value={updatedTitle}
         onChange={(event) => onTitleUpdate(event.target.value)}
       />
       <div className={styles.nickname}>
@@ -27,14 +27,14 @@ function InfoScheduleEdit({
         </span>
         {nickname}
       </div>
-      <div className={styles.date}>{createdAt}</div>
+      <div className={styles.date}>{createdAt.toLocaleDateString('ko-KR')}</div>
       <TextField
         className={styles.description}
         required
         label='일정 소개'
         multiline
         rows={3}
-        defaultValue={updatedSummary}
+        value={updatedSummary}
         onChange={(event) => onSummaryUpdate(event.target.value)}
       />
     </div>

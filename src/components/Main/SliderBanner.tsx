@@ -20,28 +20,10 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './SliderBanner.module.scss';
-
-interface SliderComponentProps {
-  settings?: {
-    arrows?: boolean;
-    dots?: boolean;
-    infinite?: boolean;
-    speed?: number;
-    slidesToShow?: number;
-    slidesToScroll?: number;
-    autoplay?: boolean;
-    autoplaySpeed?: number;
-  };
-  api: string;
-  urlTemplate?: string;
-}
-
-interface Destination {
-  id: number;
-  title: string;
-  image1: string;
-  overview: string;
-}
+import {
+  SliderComponentProps,
+  Destination
+} from '../../types/SliderBannerTypes';
 
 function SliderBanner({
   settings,
@@ -75,23 +57,40 @@ function SliderBanner({
 
   const finalSettings = { ...defaultSettings, ...settings };
 
-  const handleBannerClick = (id: number, title: string): void => {
+  const handleBannerClick = (data: Destination): void => {
     if (urlTemplate) {
-      const url = urlTemplate
-        .replace('{id}', id.toString())
-        .replace('{title}', encodeURIComponent(title));
-      window.location.href = url;
+      let url;
+      if (
+        Object.prototype.hasOwnProperty.call(data, 'id') &&
+        typeof data.id !== 'undefined'
+      ) {
+        url = urlTemplate
+          .replace('{id}', data.id.toString())
+          .replace('{title}', encodeURIComponent(data.title));
+      } else if (
+        Object.prototype.hasOwnProperty.call(data, 'schedule_id') &&
+        typeof data.schedule_id !== 'undefined'
+      ) {
+        url = urlTemplate
+          .replace('{schedule_id}', data.schedule_id.toString())
+          .replace('{title}', encodeURIComponent(data.title));
+      }
+      if (url) {
+        window.location.href = url;
+      }
     }
   };
 
   return (
     <div className={styles.container}>
       <Slider {...finalSettings}>
-        {destinations.map((destination) => (
+        {destinations.map((destination, index) => (
           <div
-            key={`destination-${destination.id}`}
+            key={`destination-${
+              destination.id || destination.schedule_id || index
+            }`}
             className={styles.box}
-            onClick={() => handleBannerClick(destination.id, destination.title)}
+            onClick={() => handleBannerClick(destination)}
           >
             <div className={styles.imageContainer}>
               <img

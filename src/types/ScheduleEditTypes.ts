@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ScheduleDetailType } from './ScheduleDetail';
+import { IScheduleDetail } from './ScheduleDetailTypes';
 import { MapWithWaypointsPropsType } from './DestinationListTypes';
 
 export type DateInfoType = Pick<
-  ScheduleDetailType,
+  IScheduleDetail,
   'startDate' | 'endDate' | 'duration'
 >;
 
@@ -13,8 +13,27 @@ export type DateSelectionType = {
   key?: string | undefined;
 };
 
+export type ScheduleEditFetchedType = Pick<
+  IScheduleDetail,
+  | 'title'
+  | 'summary'
+  | 'nickname'
+  | 'startDate'
+  | 'endDate'
+  | 'duration'
+  | 'createdAt'
+  | 'destinations'
+  | 'image'
+  | 'status'
+>;
+
+export type ScheduleEditPublicStatusPropsType = {
+  updatedStatus: string;
+  onStatusUpdate: Dispatch<SetStateAction<string>>;
+};
+
 export type ScheduleEditInfoType = Pick<
-  ScheduleDetailType,
+  IScheduleDetail,
   'nickname' | 'createdAt'
 > & {
   updatedTitle: string;
@@ -37,5 +56,5 @@ export type ScheduleEditSubmitType = {
   updatedSummary: string;
   updatedDateInfo: DateInfoType;
   updatedDestinationList: MapWithWaypointsPropsType[][];
-  isPublic: boolean;
+  updatedStatus: string;
 };

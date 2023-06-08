@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ReviewsSchedule.module.scss';
 import Avatar from '@mui/material/Avatar';
-import { ScheduleReviewPropsType } from '../../types/ScheduleDetail';
+import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
 
 function ReviewsSchedule({ reviews }: { reviews: ScheduleReviewPropsType[] }) {
   return (
