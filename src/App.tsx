@@ -60,7 +60,14 @@ function App() {
             </Auth>
           }
         />
-        <Route path={ROUTER.MYPAGE_EDIT} element={<UserEdit />} />
+        <Route
+          path={ROUTER.MYPAGE_EDIT}
+          element={
+            <Auth required={true}>
+              <UserEdit />
+            </Auth>
+          }
+        />
         <Route path={ROUTER.DESTINATION_LIST} element={<DestinationList />}>
           <Route
             path={ROUTER.DESTINATION_LIST_DETAILS_PARAMS}
