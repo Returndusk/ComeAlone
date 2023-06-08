@@ -4,30 +4,64 @@ import styles from './Search.module.scss';
 import Category from './Category';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { getAllDestinationsList } from '../../apis/destinationList';
+import {
+  getAllDestinationsList,
+  getRankedDestinationsByRankingNumber
+} from '../../apis/destinationList';
 
 // 사용자에게 쿼리 받음 -> 검색 함수 전달 -> 검색함수가 쿼리랑, 목적지 받아서 검색 수행 -> 검색 결과 Destinations 파일에 전달
 
-function Search() {
-  const [data, setData] = useState<DestinationsType[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+const RANKED_DESTINAIONS_NUMBER = {
+  count: 10
+};
 
+function Search() {
+  const [totalData, setTotalData] = useState<DestinationsType[] | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [rankedDestinations, setRankedDestinations] = useState<
+    DestinationsType[] | []
+  >([]);
+  const [resultData, setResultData] = useState<DestinationsType[] | []>(
+    rankedDestinations
+  );
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  //인기 목적지 목록
+  const getRankedDestinationsData = useCallback(async () => {
+    const res = await getRankedDestinationsByRankingNumber(
+      RANKED_DESTINAIONS_NUMBER.count
+    );
+    const rankedDestinationsList = res?.data;
+    setRankedDestinations(() => rankedDestinationsList);
+    setResultData(rankedDestinations);
+  }, []);
+
+  useEffect(() => {
+    getRankedDestinationsData();
+  }, [getRankedDestinationsData]);
+
+  // 전체 목록 가져오기
   const getAllDestinationsData = useCallback(async () => {
     const res = await getAllDestinationsList();
     const allDestinationsList = res?.data;
-    setData(() => allDestinationsList);
+    setTotalData(() => allDestinationsList);
   }, []);
 
   useEffect(() => {
     getAllDestinationsData();
   }, [getAllDestinationsData]);
 
+  // const totalDestinationsData = useMemo(() => {
+  //   return totalData;
+  // }, [totalData]);
+
+  //검색 로직
   const searchQueryParam = useMemo(() => {
     return searchParams.get('search') ?? '';
   }, [searchParams]);
 
   const searchResults = useMemo(() => {
-    const searchResultDestinations = data.filter(
+    const searchResultDestinations = totalData?.filter(
       (destination: DestinationsType) => {
         const destinationTitle = destination?.title?.trim();
         const destinationAddress = destination?.addr1?.trim();
@@ -38,7 +72,16 @@ function Search() {
       }
     );
     return searchResultDestinations;
-  }, [searchQueryParam, data]);
+  }, [searchQueryParam, totalData]);
+
+  //검색 결과 저장
+  useEffect(() => {
+    if (searchQueryParam === '') {
+      setResultData(rankedDestinations);
+      return;
+    }
+    setResultData(searchResults ?? []);
+  }, [searchResults]);
 
   const isNullishSearchInput = (input: string) => {
     return input === '';
@@ -57,10 +100,6 @@ function Search() {
     return;
   };
 
-  useEffect(() => {
-    console.log(searchResults, 'searchResults');
-  }, [searchResults]);
-
   return (
     <>
       <div className={styles.filterContainer}>
@@ -78,7 +117,11 @@ function Search() {
             </button>
           </form>
         </div>
-        <Category searchResults={searchResults} />
+        <Category
+          searchResults={resultData}
+          // isLoading={isLoading}
+          // setIsLoading={setIsLoading}
+        />
       </div>
     </>
   );
