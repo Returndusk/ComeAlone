@@ -6,6 +6,7 @@ import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 import { addDays, format, differenceInDays } from 'date-fns';
 import axios from 'axios';
+import tokenInstance from '../../../apis/tokenInstance';
 
 function CreateScheduleModal(props: { closeModal: () => void }) {
   /**
@@ -80,9 +81,13 @@ function CreateScheduleModal(props: { closeModal: () => void }) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      await axios.post('https://vvhooping.com/api/schedules/basic', formData);
-      // 여기에 득열님 alert 활용
       console.log('formData', formData);
+      await tokenInstance.post(
+        'https://vvhooping.com/api/schedules/basic',
+        formData
+      );
+      // 여기에 득열님 alert 활용
+      alert('일정이 추가되었습니다!');
       props.closeModal();
     } catch (err) {
       console.error('Error: ', err);
