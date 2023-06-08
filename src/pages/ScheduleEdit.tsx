@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
 import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
@@ -35,6 +35,7 @@ function stringifyDate(date: Date) {
 
 function ScheduleEdit() {
   const { scheduleId } = useParams();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [scheduleFetched, setScheduleFetched] =
@@ -114,6 +115,7 @@ function ScheduleEdit() {
       image: '',
       destinations: mapDestinationId(updatedDestinationList)
     });
+    navigate(`/schedule/detail/${scheduleId}`);
     // console.log({
     //   schedule_id: Number(scheduleId),
     //   title: updatedTitle,
