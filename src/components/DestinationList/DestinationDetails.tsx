@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './DestinationDetails.module.scss';
 import { RiThumbUpFill } from 'react-icons/ri';
 import { RiThumbUpLine } from 'react-icons/ri';
 import Review from './Review';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { DEFAULT_DESTINATIONS } from './Dummy';
-import { postPreferredDestinationsByDestinationId } from '../../apis/destinationList';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  getDestinationDetailsByDestinationId,
+  postPreferredDestinationsByDestinationId
+} from '../../apis/destinationList';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
 import { DestinationsType } from '../../types/DestinationListTypes';
@@ -16,18 +18,23 @@ const ALERT_PROPS = {
 };
 
 function DestinationDetails() {
-  const [destinationDetails, setDestinationDetails] = useState<
-    DestinationsType[] | null
-  >(null);
+  const [destinationDetails, setDestinationDetails] =
+    useState<DestinationsType | null>(null);
   const { authState, updateAuthState } = useAuthState();
   const [likes, setLikes] = useState<boolean>(false);
   const { contentid } = useParams();
   const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const destination = useMemo(() => {
-    return DEFAULT_DESTINATIONS.find((des) => des.id === Number(contentid));
+  const getDestinationDetails = useCallback(async () => {
+    const res = await getDestinationDetailsByDestinationId(Number(contentid));
+    const details = res?.data;
+    setDestinationDetails(() => details);
   }, [contentid]);
+
+  useEffect(() => {
+    getDestinationDetails();
+  }, [getDestinationDetails]);
 
   const postLikesDestinations = useCallback(async () => {
     const res = await postPreferredDestinationsByDestinationId(
@@ -56,12 +63,12 @@ function DestinationDetails() {
 
   return (
     <>
-      {destination !== null && (
+      {destinationDetails !== null && (
         <div className={styles.destinationDetailsContainer}>
           <section className={styles.destinationDetails}>
-            <h2>{destination?.title}</h2>
-            <p>전화번호:{destination?.tel}</p>
-            <div>{destination?.overview}</div>
+            <h2>{destinationDetails?.title}</h2>
+            <p>전화번호:{destinationDetails?.tel}</p>
+            <div>{destinationDetails?.overview}</div>
 
             <button
               className={styles.detailsLikesButton}
