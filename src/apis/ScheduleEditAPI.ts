@@ -2,9 +2,12 @@ import tokenInstance from './tokenInstance';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-export function updateSchedule(updatedSchedule: any) {
+export async function updateSchedule(updatedSchedule: any) {
   try {
-    const response = tokenInstance.put(`${baseUrl}/schedules`, updatedSchedule);
+    const response = await tokenInstance.put(
+      `${baseUrl}/schedules`,
+      updatedSchedule
+    );
 
     return response;
   } catch (err) {
