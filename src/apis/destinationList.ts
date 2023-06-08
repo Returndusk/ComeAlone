@@ -1,5 +1,6 @@
 import axios from 'axios';
 import tokenInstance from './tokenInstance';
+import { commentType } from '../types/DestinationListTypes';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -72,11 +73,25 @@ export const postPreferredDestinationsByDestinationId = async (
   }
 };
 
-export const postReviewByDestinationId = async (destinationId: number) => {
+export const getReviewByDestinationId = async (destinationId: number) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/destinations/${destinationId}/comments`
+    );
+    return response;
+  } catch (error) {
+    console.error(error, '여행지 리뷰 목록을 불러오는데 실패했습니다.');
+  }
+};
+
+export const postReviewByDestinationId = async (
+  destinationId: number,
+  comment: commentType
+) => {
   try {
     const response = await tokenInstance.post(
       `${baseUrl}/destinations/${destinationId}/comments`,
-      destinationId
+      comment
     );
     return response;
   } catch (error) {
@@ -84,11 +99,14 @@ export const postReviewByDestinationId = async (destinationId: number) => {
   }
 };
 
-export const modifyReviewByDestinationId = async (commentId: number) => {
+export const modifyReviewByDestinationId = async (
+  commentId: number,
+  comment: commentType
+) => {
   try {
     const response = await tokenInstance.put(
       `${baseUrl}/destinations/comments/${commentId}`,
-      commentId
+      comment
     );
     return response;
   } catch (error) {
@@ -104,5 +122,14 @@ export const deleteReviewByDestinationId = async (commentId: number) => {
     return response;
   } catch (error) {
     console.error(error, '여행지 리뷰 삭제에 실패했습니다.');
+  }
+};
+
+export const getUsersReview = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/destinations/comments/me`);
+    return response;
+  } catch (error) {
+    console.error(error, '유저의 여행지 리뷰 목록을 불러오는데 실패했습니다.');
   }
 };
