@@ -53,7 +53,7 @@ export const getRankedDestinationsByRankingNumber = async (
   } catch (error) {
     console.error(
       error,
-      ' 좋아요가 높은 목적지 리스트를 받아오는데 실패했습니다.'
+      '좋아요가 높은 목적지 리스트를 받아오는데 실패했습니다.'
     );
   }
 };
@@ -68,6 +68,6 @@ export const postPreferredDestinationsByDestinationId = async (
     );
     return response;
   } catch (error) {
-    console.error(error, ' 목적지 좋아요 설정/해제를 실패했습니다.');
+    console.error(error, '목적지 좋아요 설정/해제를 실패했습니다.');
   }
 };
