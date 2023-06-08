@@ -91,7 +91,10 @@ function ScheduleDetail() {
         createdAt={createdAt}
       />
       <div className={styles.editButtonContainer}>
-        <Link to={ROUTER.SCHEDULE_EDIT} className={styles.editButton}>
+        <Link
+          to={`${ROUTER.SCHEDULE_EDIT}/${scheduleId}`}
+          className={styles.editButton}
+        >
           수정하기
         </Link>
       </div>
