@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { LoginFormData, RegisterFormData } from '../types/UserTypes';
+import tokenInstance from './tokenInstance';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -14,6 +15,24 @@ export const loginUser = async (formData: LoginFormData) => {
 };
 
 export const refreshUserTokens = async (refreshToken: string) => {
-  const response = await axios.post(`${baseUrl}/auth/refresh`, refreshToken);
+  const response = await axios.post(
+    `${baseUrl}/auth/refresh`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`
+      }
+    }
+  );
+  return response;
+};
+
+export const getUser = async () => {
+  const response = await tokenInstance.get(`${baseUrl}/auth/users/me`);
+  return response;
+};
+
+export const testUserToken = async (accessToken: string) => {
+  const response = await axios.post(`${baseUrl}/auth/tokenTest`, accessToken);
   return response;
 };
