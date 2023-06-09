@@ -3,30 +3,48 @@ import styles from './ModalScheduleCard.module.scss';
 import { ModalScheduleCardType } from '../../../types/ModalScheduleTypes';
 import AddToScheduleModal from './AddToScheduleModal';
 
+function getDate(dateString: string) {
+  const toDate = new Date(dateString);
+  const year = toDate.getFullYear();
+  const month = toDate.getMonth() + 1;
+  const day = toDate.getDate();
+  return `${year}년 ${month}월 ${day}일`;
+}
+
 export default function ModalScheduleCard({
   schedule,
   index,
   isSelected,
-  onShowDestinations
+  onShowDestinations,
+  scheduleId
 }: // onCloseDestinations
 ModalScheduleCardType) {
   const endDate = new Date(schedule.end_date);
   const startDate = new Date(schedule.start_date);
-  const createdAt = schedule.created_at;
+  const createdAt = getDate(schedule.created_at);
   const diffTime = endDate.getTime() - startDate.getTime();
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
   // N일차
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  // const [updatedDestination, setUpdatedDestination] = useState<string[]>([]);
+  const [updatedDestination, setUpdatedDestination] = useState<string[][]>(
+    schedule.destinations.map(() => [])
+  );
 
   function handleToggleDestinations(dayIndex: number) {
     // 선택시점에는 dayIndex !== selectedDay
     setSelectedDay(selectedDay === dayIndex ? null : dayIndex);
   }
 
-  // function handleDestinationUpdate(updatedDestination: string[]) {
-  //   setUpdatedDestination(updatedDestination);
-  // }
+  // console.log(updatedDestination);
+  function handleDestinationUpdate(updatedDestination: string[]) {
+    if (selectedDay !== null) {
+      setUpdatedDestination((prevDestinations) => {
+        const updatedDestinations = [...prevDestinations];
+        updatedDestinations[selectedDay] = updatedDestination;
+        return updatedDestinations;
+      });
+    }
+  }
 
   return (
     <>
@@ -63,7 +81,8 @@ ModalScheduleCardType) {
       {isSelected && selectedDay !== null && (
         <AddToScheduleModal
           destinations={schedule.destinations[selectedDay]}
-          // onDestinationUpdate={handleDestinationUpdate}
+          onDestinationUpdate={handleDestinationUpdate}
+          scheduleId={scheduleId}
         />
       )}
     </>
