@@ -7,12 +7,13 @@
   border-left: 1px solid #ccc;
   // border-radius: 20px;
 
-  z-index: 100;
+  z-index: 1000;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   width: 330px;
   height: 100%;
+  max-height: 700px;
   box-sizing: border-box;
   box-shadow: 2px 0 0 0 rgba(96, 101, 105, 0.3);
 
@@ -20,6 +21,10 @@
     width: 30px;
     height: 30px;
   }
+}
+.destinationDetailsImage {
+  width: 90px;
+  height: 60px;
 }
 
 .destinationDetails {

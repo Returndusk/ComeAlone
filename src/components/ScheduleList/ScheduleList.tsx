@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
-import ROUTER from '../../constants/Router';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
+
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function ScheduleLists() {
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
@@ -11,10 +12,9 @@ function ScheduleLists() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
-    const API_URL = 'https://vvhooping.com/api/schedules';
     setIsLoading(true);
     try {
-      const response = await axios.get(API_URL);
+      const response = await axios.get(`${baseUrl}/schedules`);
       setScheduleList(response.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -60,18 +60,10 @@ function ScheduleLists() {
           최신순
         </button>
       </div>
-      {isLoading ? (
-        <div className={styles.loading}>일정 불러오는중...</div>
-      ) : (
-        ''
-      )}
+      {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
       <div className={styles.scheduleCardContainer}>
         {scheduleList.map((schedule: ScheduleCardType, index: number) => (
-          <ScheduleCard
-            schedule={schedule}
-            key={index}
-            link={ROUTER.SCHEDULE_DETAIL}
-          />
+          <ScheduleCard schedule={schedule} key={index} />
         ))}
       </div>
     </div>

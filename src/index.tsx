@@ -4,7 +4,6 @@ import { CookiesProvider } from 'react-cookie';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AuthProvider } from './contexts/AuthContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,9 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <CookiesProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <App />
     </CookiesProvider>
   </React.StrictMode>
 );

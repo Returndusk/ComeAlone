@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { LoginFormData, RegisterFormData } from '../types/UserTypes';
+import {
+  LoginFormData,
+  RegisterFormData,
+  UserEditFormData
+} from '../types/UserTypes';
 import tokenInstance from './tokenInstance';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
@@ -29,6 +33,22 @@ export const refreshUserTokens = async (refreshToken: string) => {
 
 export const getUser = async () => {
   const response = await tokenInstance.get(`${baseUrl}/auth/users/me`);
+  return response;
+};
+
+export const editUser = async (formData: UserEditFormData) => {
+  const response = await tokenInstance.put(
+    `${baseUrl}/auth/users/me`,
+    formData
+  );
+  return response;
+};
+
+export const checkPassword = async (formData: { password: string }) => {
+  const response = await tokenInstance.post(
+    `${baseUrl}/auth/users/password`,
+    formData
+  );
   return response;
 };
 

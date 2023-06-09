@@ -13,6 +13,8 @@ interface Schedule {
   first_destination: string;
   last_destination: string;
   destination_count: number;
+  likes_count: number;
+  likes: string[];
 }
 
 export type ScheduleCardType = Pick<
@@ -28,6 +30,8 @@ export type ScheduleCardType = Pick<
   | 'first_destination'
   | 'last_destination'
   | 'destination_count'
+  | 'likes_count'
+  | 'likes'
 >;
 
 export type MyScheduleCardType = Pick<
@@ -48,9 +52,3 @@ export type MyScheduleCardType = Pick<
 
 export type ScheduleListType = ScheduleCardType[];
 export type MyScheduleListType = MyScheduleCardType[];
-
-export type ScheduleCardProps = { schedule: ScheduleCardType; link: string };
-export type MyScheduleCardProps = {
-  schedule: MyScheduleCardType;
-  link: string;
-};

@@ -1,86 +1,73 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styles from './CommonModalDesign.module.scss';
 import { AddToScheduleModalType } from '../../../types/ModalScheduleTypes';
+import axios from 'axios';
+import tokenInstance from '../../../apis/tokenInstance';
 
 /**
  * TODO
  * 1. 추가는 됐지만 N일차로 넘어갔을 때 reset되는 문제
- * 2. 추가한 목적지라면 더 이상 추가 안 되도록
+ * 2. POST 요청 => .title이 아니고 .id
  */
 
-const DEFAULT_DESTINATIONS = [
-  {
-    title: '제주도 시청',
-    mapy: 33.48907969999994,
-    mapx: 126.49932809999973,
-    tel: '064-772-3366',
-    overview: '개요 설명입니다.',
-    contenttypeid: '32',
-    contentid: '0'
-  },
-  {
-    title: '한라산',
-    mapy: 33.37915262371278,
-    mapx: 126.54626368383182,
-    tel: '064-772-3366',
-    overview: '개요 설명입니다.',
-    contenttypeid: '12',
-    contentid: '1'
-  },
-  {
-    title: '서귀포 해양 도립공원',
-    mapy: 33.241570451808215,
-    mapx: 126.55770550692283,
-    tel: '064-772-3366',
-    overview: '개요 설명입니다.',
-    contenttypeid: '25',
-    contentid: '2'
-  },
-  {
-    title: '금오름',
-    mapy: 33.35452764241429,
-    mapx: 126.30590904987518,
-    tel: '064-772-3366',
-    overview: '개요 설명입니다.',
-    contenttypeid: '12',
-    contentid: '3'
-  }
-];
-
-function getDestinationTitle(id: number) {
-  const destination = DEFAULT_DESTINATIONS.find(
-    (destination) => Number(destination.contentid) === id
-  );
-  return destination ? destination.title : '';
-}
-
-/**
- * @param id /destination/list/:id
- * @returns 현재 URL에서 id따와서 title 반환해서 해당 N일차에 추가
- */
 function AddToScheduleModal({
-  destinations
-}: // onDestinationUpdate
-AddToScheduleModalType) {
-  const { contentid } = useParams();
+  destinations,
+  onDestinationUpdate,
+  scheduleId
+}: AddToScheduleModalType) {
+  const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
+  // const contentid = Number(searchParams.get('contentid'));
+  const contentid = Number(location.pathname.split('/').pop());
   const [updatedDestination, setUpdatedDestination] = useState(destinations);
 
   useEffect(() => {
     setUpdatedDestination(destinations);
   }, [destinations]);
 
-  function addToSelectedDay() {
-    const title = getDestinationTitle(Number(contentid));
+  async function getDestinationTitle(id: number) {
+    try {
+      const response = await axios.get(
+        `https://vvhooping.com/api/destinations/${contentid}`
+      );
+      const data = response.data;
+      // console.log(data);
 
-    if (title) {
+      if (data && data.id === id) {
+        const title = data.title;
+        // console.log('title', title);
+        return title;
+      }
+    } catch (err) {
+      console.error('Error: ', err);
+      alert('목적지를 선택해 주세요.');
+    }
+  }
+
+  async function addToSelectedDay() {
+    const title = await getDestinationTitle(contentid);
+
+    if (contentid && !updatedDestination.includes(title)) {
       const copiedDestinations = [...updatedDestination];
       copiedDestinations.push(title);
       setUpdatedDestination(copiedDestinations);
-      // onDestinationUpdate(copiedDestinations);
+      onDestinationUpdate(updatedDestination);
+
+      console.log(contentid);
+
+      try {
+        const response = await tokenInstance.post(
+          `https://vvhooping.com/api/schedules/${scheduleId}`,
+          {
+            destinations: destinations
+          }
+        );
+      } catch (err) {
+        console.error('Error: ', err);
+      }
     }
   }
-  // console.log(updatedDestination);
 
   return (
     <div className={styles.scheduleDestination}>
