@@ -3,7 +3,7 @@
   flex-direction: column;
   position: relative;
   background-color: #fff;
-  padding: 20px;
+  padding: 70px 50px;
   border-left: 1px solid #ccc;
   // border-radius: 20px;
 
@@ -11,26 +11,70 @@
   overflow-x: hidden;
   overflow-y: auto;
 
-  width: 330px;
-  height: 100%;
-  max-height: 700px;
+  width: 550px;
+  height: calc(100vh + 32px);
   box-sizing: border-box;
   box-shadow: 2px 0 0 0 rgba(96, 101, 105, 0.3);
+}
 
-  button {
-    width: 30px;
-    height: 30px;
+.destinationDetailsTitle {
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 600;
+  padding: 30px;
+}
+
+#destinationDetailsImage {
+  width: 450px;
+  height: 300px;
+}
+
+.destinationTelNumber {
+  font-size: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.destinationOverview {
+  font-size: 18px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.scheduleModalButtonContainer {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+
+  width: 100%;
+
+  #scheduleModalButton {
+    width: 200px;
+    height: 50px;
+
+    border: none;
+    display: inline-block;
+    margin: auto 5px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 17px;
+
+    background: var(--sub-1-color);
+    color: white;
+
+    &:hover {
+      letter-spacing: 2px;
+      transform: scale(1.1);
+      cursor: pointer;
+    }
   }
 }
-.destinationDetailsImage {
-  width: 90px;
-  height: 60px;
-}
 
-.destinationDetails {
-  padding: 20px;
-}
-
+/* 후순위 기능
 .detailsLikesButton {
   background-color: #fff;
   border: none;
@@ -44,3 +88,4 @@
     cursor: pointer;
   }
 }
+*/

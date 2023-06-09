@@ -4,7 +4,6 @@ import Review from './Review';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getDestinationDetailsByDestinationId } from '../../apis/destinationList';
 import AlertModal from '../common/Alert/AlertModal';
-import Accordian from './Accordian';
 import { DestinationsDetailsType } from '../../types/DestinationListTypes';
 import OpenModal from './Modal/OpenModal';
 
@@ -50,17 +49,32 @@ function DestinationDetails() {
             <div>
               <img
                 id={styles.destinationDetailsImage}
-                src={destinationDetails.image2}
+                src={destinationDetails.image1}
                 alt={destinationDetails.title}
               />
             </div>
-            <h2>{destinationDetails?.title}</h2>
+            <h2 className={styles.destinationDetailsTitle}>
+              {destinationDetails?.title}
+            </h2>
 
-            <p>Tel:{destinationDetails?.tel}</p>
-            <Accordian>{destinationDetails?.overview}</Accordian>
+            <p className={styles.destinationTelNumber}>
+              Tel:{' '}
+              {destinationDetails?.tel
+                ? destinationDetails?.tel
+                : '정보가 제공되고 있지 않습니다.'}
+            </p>
+
+            <div className={styles.destinationOverview}>
+              {destinationDetails?.overview}
+            </div>
 
             <div className={styles.scheduleModalButtonContainer}>
-              <button onClick={handleShowModalClick}>내 일정에 추가</button>
+              <button
+                id={styles.scheduleModalButton}
+                onClick={handleShowModalClick}
+              >
+                내 일정에 추가
+              </button>
             </div>
           </section>
           <section className={styles.detailsReviewsContainer}>

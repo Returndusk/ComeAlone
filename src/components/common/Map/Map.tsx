@@ -70,7 +70,7 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
           (bounds, latlng) => bounds.extend(latlng),
           new kakao.maps.LatLngBounds()
         );
-        renderedMap?.setBounds(bounds, 36, 32, 32, 650);
+        renderedMap?.setBounds(bounds, 36, 32, 32, 900);
       }
 
       // markers.setMap(renderedMap);
