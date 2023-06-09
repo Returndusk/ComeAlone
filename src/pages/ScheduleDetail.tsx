@@ -16,7 +16,10 @@ import {
   reviews
 } from '../components/ScheduleDetail/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
-import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
+import {
+  getScheduleDetailById,
+  getDoesUserLikedById
+} from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
@@ -26,6 +29,7 @@ function ScheduleDetail() {
   const [checkedDestinations, setCheckedDestinations] = useState(
     defaultSchedule.destinations.flat()
   );
+  const [doesUserLike, setDoesUserLike] = useState(false);
   const scheduleFetched = useRef(defaultSchedule);
   const reviewInput = useRef('');
 
@@ -48,11 +52,19 @@ function ScheduleDetail() {
     return data;
   }, []);
 
+  const getIsUserLiked = useCallback(async (id: string | undefined) => {
+    const response = await getDoesUserLikedById(id);
+
+    return response?.data.is_liked;
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await getScheduleDetail(scheduleId);
+      const doesUserLike = await getIsUserLiked(scheduleId);
 
       scheduleFetched.current = data;
+      setDoesUserLike(doesUserLike);
       setCheckedDestinations(data.destinations.flat());
       setIsLoading(false);
     };
@@ -109,6 +121,7 @@ function ScheduleDetail() {
         ) : null}
       </div>
       <IconsScheduleDetail
+        doesUserLike={doesUserLike}
         likesAmount={likesAmount}
         reviewsAmount={reviewsAmount}
       />

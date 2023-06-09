@@ -40,6 +40,7 @@ export type ScheduleDetailInfoType = Pick<
 >;
 
 export type IconsScheduleDetailType = {
+  doesUserLike: boolean;
   likesAmount: number;
   reviewsAmount: number;
 };
