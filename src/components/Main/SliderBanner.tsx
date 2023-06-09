@@ -4,23 +4,22 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './SliderBanner.module.scss';
-import {
-  SliderComponentProps,
-  Destination
-} from '../../types/SliderBannerTypes';
-
-interface SliderBannerProps extends SliderComponentProps {
-  api?: string;
-  destinations?: Destination[];
-  showTitleAndOverview?: boolean;
-}
+import { SliderBannerProps, Destination } from '../../types/SliderBannerTypes';
 
 function SliderBanner({
   settings,
   api,
   urlTemplate,
   destinations: destinationsProp,
-  showTitleAndOverview = true
+  showTitleAndOverview = true,
+  idProperty = 'id',
+  titleProperty = 'title',
+  imageProperty = 'image1',
+  overviewProperty = 'overview',
+  className,
+  boxClassName,
+  imageContainerClassName,
+  textClassName
 }: SliderBannerProps): JSX.Element {
   const defaultSettings = {
     arrows: true,
@@ -55,22 +54,10 @@ function SliderBanner({
 
   const handleBannerClick = (data: Destination): void => {
     if (urlTemplate) {
-      let url;
-      if (
-        Object.prototype.hasOwnProperty.call(data, 'id') &&
-        typeof data.id !== 'undefined'
-      ) {
-        url = urlTemplate
-          .replace('{id}', data.id.toString())
-          .replace('{title}', encodeURIComponent(data.title));
-      } else if (
-        Object.prototype.hasOwnProperty.call(data, 'schedule_id') &&
-        typeof data.schedule_id !== 'undefined'
-      ) {
-        url = urlTemplate
-          .replace('{schedule_id}', data.schedule_id.toString())
-          .replace('{title}', encodeURIComponent(data.title));
-      }
+      const url = urlTemplate.replace(/{(\w+)}/g, (match, key) => {
+        return String(data[key] || '');
+      });
+
       if (url) {
         window.location.href = url;
       }
@@ -78,31 +65,41 @@ function SliderBanner({
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${className || ''}`}>
       <Slider {...finalSettings}>
         {destinations.map((destination, index) => (
           <div
-            key={`destination-${
-              destination.id || destination.schedule_id || index
-            }`}
-            className={styles.box}
+            key={`destination-${String(destination[idProperty]) || index}`}
+            className={`${styles.box} ${boxClassName || ''}`}
             onClick={() => handleBannerClick(destination)}
           >
-            <div className={styles.imageContainer}>
+            <div
+              className={`${styles.imageContainer} ${
+                imageContainerClassName || ''
+              }`}
+            >
               <img
                 src={
-                  destination.image1 ||
-                  'https://image.utoimage.com/preview/cp872655/2021/05/202105029544_500.jpg'
+                  destination[imageProperty] &&
+                  String(destination[imageProperty]).trim() !== ''
+                    ? String(destination[imageProperty])
+                    : 'https://image.utoimage.com/preview/cp872655/2021/05/202105029544_500.jpg'
                 }
-                alt={destination.title}
+                alt={String(destination[titleProperty]) || ''}
               />
               {showTitleAndOverview && (
-                <div className={styles.text}>
-                  <h3>{destination.title}</h3>
+                <div className={`${styles.text} ${textClassName || ''}`}>
+                  <h3>{String(destination[titleProperty])}</h3>
                   <p>
-                    {destination.overview && destination.overview.length > 20
-                      ? destination.overview.slice(0, 62) + '...'
-                      : destination.overview}
+                    {destination[overviewProperty] &&
+                    typeof destination[overviewProperty] === 'string'
+                      ? (destination[overviewProperty] as string).length > 20
+                        ? (destination[overviewProperty] as string).slice(
+                            0,
+                            62
+                          ) + '...'
+                        : destination[overviewProperty]
+                      : String(destination[overviewProperty])}
                   </p>
                 </div>
               )}

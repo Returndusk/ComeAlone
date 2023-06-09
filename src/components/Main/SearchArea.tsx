@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
 import styles from './SearchArea.module.scss';
-
 import {
   Container,
   InputAdornment,
@@ -10,63 +9,55 @@ import {
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import SliderBanner from './SliderBanner';
-import image1 from '../../assets/1.jpg';
-import image2 from '../../assets/2.jpg';
-import image3 from '../../assets/3.jpg';
-import image4 from '../../assets/4.jpg';
-import image5 from '../../assets/5.jpg';
-import image6 from '../../assets/6.jpg';
-import image7 from '../../assets/7.jpg';
-import image8 from '../../assets/8.jpg';
-import image9 from '../../assets/9.jpg';
-import image10 from '../../assets/10.jpg';
+
+const images = [
+  require('../../assets/1.jpg'),
+  require('../../assets/2.jpg'),
+  require('../../assets/3.jpg'),
+  require('../../assets/4.jpg'),
+  require('../../assets/5.jpg'),
+  require('../../assets/6.jpg'),
+  require('../../assets/7.jpg'),
+  require('../../assets/8.jpg'),
+  require('../../assets/9.jpg'),
+  require('../../assets/10.jpg')
+];
 
 function SearchArea() {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [hasError, setHasError] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
     setSearchTerm(event.target.value);
     setHasError(false);
   };
 
-  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearch = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter') {
-      if (searchTerm.trim() === '') {
-        setHasError(true);
-      } else {
-        navigate(`/destination/list?search=${searchTerm}`);
-      }
+      performSearch();
     }
   };
 
   const handleIconClick = () => {
-    if (searchTerm.trim() === '') {
-      setHasError(true);
-    } else {
-      navigate(`/destination/list?search=${searchTerm}`);
-    }
+    performSearch();
   };
 
-  const images = [
-    image1,
-    image2,
-    image3,
-    image4,
-    image5,
-    image6,
-    image7,
-    image8,
-    image9,
-    image10
-  ];
+  const performSearch = () => {
+    if (searchTerm && searchTerm.trim() !== '') {
+      navigate(`/destination/list?search=${searchTerm}`);
+    } else {
+      setHasError(true);
+    }
+  };
 
   const destinations = images.map((image, index) => ({
     id: index,
     image1: image,
-    title: '' // title을 추가합니다. (빈 문자열이거나, 적절한 값을 넣을 수 있습니다.)
+    title: ''
   }));
 
   const fadeSettings = {
@@ -74,11 +65,11 @@ function SearchArea() {
     arrows: false,
     fade: true,
     infinite: true,
-    speed: 1000,
+    speed: 10000,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000
+    autoplaySpeed: 5000
   };
 
   return (
@@ -87,6 +78,10 @@ function SearchArea() {
         settings={fadeSettings}
         destinations={destinations}
         showTitleAndOverview={false}
+        className='TopSlider'
+        boxClassName='custom-box'
+        imageContainerClassName='custom-image-container'
+        textClassName='custom-text'
       />
       <div className={styles.searchArea}>
         <Container maxWidth='md' sx={{ mt: 1 }}>
@@ -94,9 +89,9 @@ function SearchArea() {
             id='search'
             type='search'
             label='목적지명을 입력해 주세요.'
-            value={searchTerm}
+            value={searchTerm || ''}
             onChange={handleChange}
-            onKeyPress={handleSearch}
+            onKeyDown={handleSearch}
             sx={{ width: 600 }}
             error={hasError}
             helperText={hasError ? '빈 칸을 채워주세요.' : ''}

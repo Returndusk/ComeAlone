@@ -15,8 +15,22 @@ export interface SliderComponentProps {
 
 export interface Destination {
   id?: number;
-  title: string;
-  image1?: string;
   schedule_id?: number;
+  title?: string;
+  image1?: string;
   overview?: string;
+  [key: string]: string | number | undefined;
+}
+
+export interface SliderBannerProps extends SliderComponentProps {
+  destinations?: Destination[];
+  showTitleAndOverview?: boolean;
+  idProperty?: keyof Destination;
+  titleProperty?: keyof Destination;
+  imageProperty?: keyof Destination;
+  overviewProperty?: keyof Destination;
+  className?: string;
+  boxClassName?: string;
+  imageContainerClassName?: string;
+  textClassName?: string;
 }
