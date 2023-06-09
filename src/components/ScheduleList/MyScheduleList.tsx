@@ -5,7 +5,6 @@ import {
   MyScheduleCardType,
   MyScheduleListType
 } from '../../types/ScheduleTypes';
-import ROUTER from '../../constants/Router';
 import CreateScheduleModal from './Modal/CreateScheduleModal';
 import tokenInstance from '../../apis/tokenInstance';
 
@@ -90,11 +89,7 @@ function MyScheduleLists() {
         )}
         {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
         {scheduleList.map((schedule: MyScheduleCardType, index: number) => (
-          <MyScheduleCard
-            schedule={schedule}
-            key={index}
-            link={ROUTER.SCHEDULE_DETAIL}
-          />
+          <MyScheduleCard schedule={schedule} key={index} />
         ))}
       </div>
     </div>

@@ -1,27 +1,29 @@
 import React from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { MyScheduleCardProps } from '../../types/ScheduleTypes';
-import { FaTrashAlt } from 'react-icons/fa';
+import { MyScheduleCardType } from '../../types/ScheduleTypes';
+import { FaRegDotCircle, FaTrashAlt } from 'react-icons/fa';
 import { useAuthState } from '../../contexts/AuthContext';
 import ROUTER from '../../constants/Router';
 import tokenInstance from '../../apis/tokenInstance';
 
+type MyScheduleCardProps = { schedule: MyScheduleCardType };
+
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function ScheduleCard({ schedule }: MyScheduleCardProps) {
-  console.log(schedule);
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
 
-  function handleDelete(e: React.MouseEvent<SVGElement>) {
+  async function handleDelete(e: React.MouseEvent<SVGElement>) {
     e.preventDefault();
     if (isLoggedIn) {
       if (confirm('일정을 삭제하시겠습니까?')) {
         try {
-          tokenInstance.delete(`${baseUrl}/schedules/${schedule.schedule_id}`);
+          await tokenInstance.delete(
+            `${baseUrl}/schedules/${schedule.schedule_id}`
+          );
           alert('일정이 삭제되었습니다.');
-          window.location.reload();
         } catch (error) {
           console.log(error);
         }
@@ -32,14 +34,18 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
         navigate(ROUTER.LOGIN);
       }
     }
+    window.location.reload();
   }
 
-  function getDate(dateString: string) {
-    const toDate = new Date(dateString);
-    const year = toDate.getFullYear();
-    const month = toDate.getMonth() + 1;
-    const day = toDate.getDate();
-    return `${year}년 ${month}월 ${day}일`;
+  function getDate(startDateString: string, endDateString: string) {
+    const startDate = new Date(startDateString);
+    const endDate = new Date(endDateString);
+    const startYear = startDate.getFullYear();
+    const startMonth = startDate.getMonth() + 1;
+    const startDay = startDate.getDate();
+    const endMonth = endDate.getMonth() + 1;
+    const endDay = endDate.getDate();
+    return `${startYear}년 ${startMonth}월 ${startDay}일 ~ ${endMonth}월 ${endDay}일`;
   }
 
   return (
@@ -50,15 +56,14 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
       <div className={styles.scheduleCardContent}>
         <div className={styles.scheduleContent}>
           <div className={styles.scheduleText}>
-            <div className={styles.scheduleTitle}>{schedule.title}</div>
-            <div>{schedule.summary}</div>
+            <div className={styles.scheduleTitle}>
+              {schedule.title ? schedule.title : '여행 이름'}
+            </div>
+            <div>{schedule.summary ? schedule.summary : '여행 소개'}</div>
             <div>
               {schedule.duration - 1}박 {schedule.duration}일
             </div>
-            <div>
-              {getDate(schedule.start_date)} ~ {getDate(schedule.end_date)}
-            </div>
-            <div>등록 : {getDate(schedule.created_at)}</div>
+            <div>{getDate(schedule.start_date, schedule.end_date)}</div>
           </div>
           <div className={styles.like}>
             <FaTrashAlt
@@ -70,23 +75,30 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
           </div>
         </div>
         <div className={styles.scheduleDestination}>
-          <div>
-            {schedule.first_destination
-              ? schedule.first_destination
-              : '출발지가 필요합니다'}
+          <div className={styles.destinationMap}>
+            <FaRegDotCircle />
+            <div className={styles.mapLineContainer}>
+              <div className={styles.mapLine}></div>
+            </div>
+            <div className={styles.destinationCount}>
+              경유{' '}
+              {schedule.destination_count - 2 > 0
+                ? schedule.destination_count - 2
+                : 0}
+            </div>
+            <FaRegDotCircle />
           </div>
-          <div>{'=>'}</div>
-          <div className={styles.destinationCount}>
-            경유{' '}
-            {schedule.destination_count - 2 > 0
-              ? schedule.destination_count - 2
-              : 0}
-          </div>
-          <div>{'=>'}</div>
-          <div>
-            {schedule.last_destination
-              ? schedule.last_destination
-              : '도착지가 필요합니다'}
+          <div className={styles.destinationText}>
+            <div>
+              {schedule.first_destination
+                ? schedule.first_destination
+                : '출발지 없음'}
+            </div>
+            <div>
+              {schedule.last_destination
+                ? schedule.last_destination
+                : '도착지 없음'}
+            </div>
           </div>
         </div>
         <img

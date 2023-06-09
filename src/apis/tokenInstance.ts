@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { refreshUserTokens } from './user';
+import { refreshUserTokens } from './UserAPI';
 import { Cookies } from 'react-cookie';
 import {
   ACCESS_TOKEN_COOKIE_OPTIONS,
