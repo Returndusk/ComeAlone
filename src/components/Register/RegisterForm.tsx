@@ -15,7 +15,7 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
-import { registerUser } from '../../apis/user';
+import { registerUser } from '../../apis/UserAPI';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
 

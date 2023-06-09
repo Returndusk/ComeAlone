@@ -10,7 +10,7 @@ import {
 } from '../../types/UserTypes';
 import { TextField } from '@mui/material';
 import styles from './LoginForm.module.scss';
-import { loginUser } from '../../apis/user';
+import { loginUser } from '../../apis/UserAPI';
 import { useAuthState } from '../../contexts/AuthContext';
 import {
   ACCESS_TOKEN_COOKIE_OPTIONS,
