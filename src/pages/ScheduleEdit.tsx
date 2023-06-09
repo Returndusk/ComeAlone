@@ -189,6 +189,7 @@ function ScheduleEdit() {
         updatedStatus={updatedStatus}
         onStatusUpdate={setUpdatedStatus}
       />
+      <button className={styles.deleteButtonContainer}>삭제하기</button>
       <InfoScheduleEdit
         updatedTitle={updatedTitle.current}
         updatedSummary={updatedSummary.current}
