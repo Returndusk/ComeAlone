@@ -47,3 +47,15 @@ export type ScheduleEditDestinationListType = {
   >;
   onCheckedDayIndexUpdate: Dispatch<SetStateAction<number>>;
 };
+
+export type ScheduleEditSubmitType = {
+  schedule_id: number;
+  title: string;
+  summary: string;
+  duration: number;
+  start_date: string;
+  end_date: string;
+  status: string;
+  image: string;
+  destinations: (number | undefined)[][];
+};

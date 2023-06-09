@@ -1,8 +1,9 @@
 import tokenInstance from './tokenInstance';
+import { ScheduleEditSubmitType } from '../types/ScheduleEditTypes';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-export async function updateSchedule(updatedSchedule: any) {
+export async function updateSchedule(updatedSchedule: ScheduleEditSubmitType) {
   try {
     const response = await tokenInstance.put(
       `${baseUrl}/schedules`,
