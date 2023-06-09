@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import ROUTER from './constants/Router';
 import Auth from './components/common/Auth/Auth';
 import Main from './pages/Main';
@@ -33,70 +34,72 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path={ROUTER.MAIN} element={<Main />} />
-        <Route
-          path={ROUTER.LOGIN}
-          element={
-            <Auth required={false}>
-              <Login />
-            </Auth>
-          }
-        />
-        <Route
-          path={ROUTER.REGISTER}
-          element={
-            <Auth required={false}>
-              <Register />
-            </Auth>
-          }
-        />
-        <Route
-          path={ROUTER.MYPAGE}
-          element={
-            <Auth required={true}>
-              <MyPage />
-            </Auth>
-          }
-        />
-        <Route
-          path={ROUTER.MYPAGE_EDIT}
-          element={
-            <Auth required={true}>
-              <UserEdit />
-            </Auth>
-          }
-        />
-        <Route path={ROUTER.DESTINATION_LIST} element={<DestinationList />}>
+      <AuthProvider>
+        <Header />
+        <Routes>
+          <Route path={ROUTER.MAIN} element={<Main />} />
           <Route
-            path={ROUTER.DESTINATION_LIST_DETAILS_PARAMS}
-            element={<DestinationDetails />}
+            path={ROUTER.LOGIN}
+            element={
+              <Auth required={false}>
+                <Login />
+              </Auth>
+            }
           />
-        </Route>
-        <Route path={ROUTER.SCHEDULE_LIST} element={<ScheduleList />} />
-        <Route
-          path={`${ROUTER.SCHEDULE_EDIT}/:scheduleId`}
-          element={
-            <Auth required={true}>
-              <ScheduleEdit />
-            </Auth>
-          }
-        />
-        <Route
-          path={`${ROUTER.SCHEDULE_DETAIL}/:scheduleId`}
-          element={<ScheduleDetail />}
-        />
-        <Route
-          path={ROUTER.MYSCHEDULE_LIST}
-          element={
-            <Auth required={true}>
-              <MyScheduleList />
-            </Auth>
-          }
-        />
-      </Routes>
-      <Footer />
+          <Route
+            path={ROUTER.REGISTER}
+            element={
+              <Auth required={false}>
+                <Register />
+              </Auth>
+            }
+          />
+          <Route
+            path={ROUTER.MYPAGE}
+            element={
+              <Auth required={true}>
+                <MyPage />
+              </Auth>
+            }
+          />
+          <Route
+            path={ROUTER.MYPAGE_EDIT}
+            element={
+              <Auth required={true}>
+                <UserEdit />
+              </Auth>
+            }
+          />
+          <Route path={ROUTER.DESTINATION_LIST} element={<DestinationList />}>
+            <Route
+              path={ROUTER.DESTINATION_LIST_DETAILS_PARAMS}
+              element={<DestinationDetails />}
+            />
+          </Route>
+          <Route path={ROUTER.SCHEDULE_LIST} element={<ScheduleList />} />
+          <Route
+            path={`${ROUTER.SCHEDULE_EDIT}/:scheduleId`}
+            element={
+              <Auth required={true}>
+                <ScheduleEdit />
+              </Auth>
+            }
+          />
+          <Route
+            path={`${ROUTER.SCHEDULE_DETAIL}/:scheduleId`}
+            element={<ScheduleDetail />}
+          />
+          <Route
+            path={ROUTER.MYSCHEDULE_LIST}
+            element={
+              <Auth required={true}>
+                <MyScheduleList />
+              </Auth>
+            }
+          />
+        </Routes>
+        <Footer />
+      </AuthProvider>
     </BrowserRouter>
   );
 }
