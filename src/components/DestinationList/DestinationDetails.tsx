@@ -6,6 +6,7 @@ import { getDestinationDetailsByDestinationId } from '../../apis/destinationList
 import AlertModal from '../common/Alert/AlertModal';
 import Accordian from './Accordian';
 import { DestinationsDetailsType } from '../../types/DestinationListTypes';
+import OpenModal from './Modal/OpenModal';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -18,6 +19,8 @@ function DestinationDetails() {
 
   const { contentid } = useParams();
   const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
+  const [isShowScheduleModal, setIsShowScheduleModal] =
+    useState<boolean>(false);
   const navigate = useNavigate();
 
   const getDestinationDetails = useCallback(async () => {
@@ -33,6 +36,10 @@ function DestinationDetails() {
   const handleOnConfirm = () => {
     setIsOpenAlert(false);
     navigate('/login');
+  };
+
+  const handleShowModalClick = () => {
+    setIsShowScheduleModal(true);
   };
 
   return (
@@ -52,12 +59,17 @@ function DestinationDetails() {
             <p>전화번호:{destinationDetails?.tel}</p>
             <Accordian>{destinationDetails?.overview}</Accordian>
 
-            <div>{/*<button>내 일정에 추가</button>*/}</div>
+            <div className={styles.scheduleModalButtonContainer}>
+              <button onClick={handleShowModalClick}>내 일정에 추가</button>
+            </div>
           </section>
           <section className={styles.detailsReviewsContainer}>
             <Review />
           </section>
         </div>
+      )}
+      {isShowScheduleModal && (
+        <OpenModal closeModal={() => setIsShowScheduleModal(false)} />
       )}
       {isOpenAlert && (
         <AlertModal
