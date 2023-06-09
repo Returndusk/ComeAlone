@@ -39,8 +39,6 @@ function Category({
     DestinationsType[] | []
   >([]);
 
-  const [isClicked, setIsClicked] = useState(false);
-
   const isSelectedAll = useMemo(() => {
     return selectedCategory.length === CATEGORIES_ID_LIST.length;
   }, [selectedCategory]);
@@ -59,23 +57,23 @@ function Category({
   const handleCategoryClick: React.MouseEventHandler<HTMLButtonElement> = (
     e
   ) => {
-    setIsClicked(true);
+    setIsLoading(true);
     const { value } = e.target as HTMLButtonElement;
     const targetCategoryId = Number(value);
 
     selectedCategory.includes(targetCategoryId)
       ? removeCategoryFromSelectedCategoryList(targetCategoryId)
       : addCategoryToSelectedCategoryList(targetCategoryId);
-    setIsClicked(false);
+    setIsLoading(false);
     return;
   };
 
   const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
-    setIsClicked(true);
+    setIsLoading(true);
     isSelectedAll
       ? setSelectedCategory([])
       : setSelectedCategory(CATEGORIES_ID_LIST);
-    setIsClicked(false);
+    setIsLoading(false);
     return;
   };
 
@@ -87,7 +85,7 @@ function Category({
     return () => {
       clearTimeout(debouncer);
     };
-  }, [isClicked, isLoading]);
+  }, [isLoading]);
 
   const getCategorizedDestinationsData = useCallback(async () => {
     if (selectedCategory.length > 0) {
@@ -122,7 +120,7 @@ function Category({
 
   return (
     <>
-      {isClicked || isLoading ? (
+      {isLoading ? (
         <div>로딩 중..</div>
       ) : (
         <>
