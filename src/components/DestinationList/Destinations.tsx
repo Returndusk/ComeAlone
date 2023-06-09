@@ -9,9 +9,15 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 type DestinationsPropsType = {
   filteredDestinations: DestinationsType[] | [];
+  // isLoading: boolean;
+  // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Destinations({ filteredDestinations }: DestinationsPropsType) {
+function Destinations({
+  filteredDestinations
+}: // isLoading,
+// setIsLoading
+DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
     DestinationsType[] | []
   >(filteredDestinations);
@@ -21,16 +27,13 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
   const [detailsDomRoot, setDetailsDomRoot] = useState<HTMLElement | null>(
     null
   );
+  const [imageError, setImageError] = useState<boolean>(false);
   const { search } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     setDetailsDomRoot(() => document.getElementById('main'));
   }, []);
-
-  // useEffect(() => {
-  //   setSlicedDestinations(() => filteredDestinations);
-  // }, [filteredDestinations]);
 
   const handleDestinationClick = (destination: DestinationsType) => {
     setClickedDestination(() => destination);
@@ -44,8 +47,15 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
     navigate(`/destination/list${search}`);
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <div className={styles.destinationContentsContainer}>
+      {/* {isLoading ? (
+        <div>로딩 중..</div>
+      ) : ( */}
       <div className={styles.destinationsInfoContainer}>
         <section className={styles.destinationsContainer}>
           {filteredDestinations.length > 0 ? (
@@ -60,10 +70,21 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
                     <h3>{destination?.title}</h3>
                     <p>{destination?.addr1}</p>
                     <p>{destination?.category_id}</p>
-                    <img
-                      id={styles.destinationImage}
-                      src={destination?.image1}
-                    />
+
+                    {imageError ? (
+                      <img
+                        id={styles.destinationImage}
+                        src={destination?.image1}
+                        alt={destination.title}
+                      />
+                    ) : (
+                      <img
+                        id={styles.destinationImage}
+                        src={destination?.image2}
+                        alt={destination.title}
+                        onError={handleImageError}
+                      />
+                    )}
                   </div>
                 )
               )}
@@ -96,6 +117,7 @@ function Destinations({ filteredDestinations }: DestinationsPropsType) {
             detailsDomRoot
           )}
       </div>
+      {/* )} */}
       <Map
         markersLocations={
           clickedDestination !== null
