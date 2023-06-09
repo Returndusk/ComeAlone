@@ -12,6 +12,7 @@ import {
   getUsersReview,
   modifyReviewByDestinationId
 } from '../../apis/destinationList';
+import { isReturnStatement } from 'typescript';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -33,7 +34,7 @@ function UsersReview() {
   const [modifiedReview, setModifiedReview] = useState<commentType>({
     comment: null
   });
-  const [isEditing, setIsEditing] = useState<boolean[] | []>([]);
+  const [isEditing, setIsEditing] = useState<boolean[] | null>(null);
   const { authState, updateAuthState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
@@ -50,13 +51,18 @@ function UsersReview() {
 
   useEffect(() => {
     getUserReviewList();
+  }, [getUserReviewList]);
+
+  //유저 리뷰목록을 상태관리할 배열 생성
+  useEffect(() => {
     const userReviewCount = usersReview?.length ?? 0;
     if (userReviewCount > 0) {
       const editingArray = Array.from({ length: userReviewCount }, () => false);
       setIsEditing(editingArray);
     }
+    console.log('editingArray 배열 생성');
     return;
-  }, [getUserReviewList, usersReview]);
+  }, [usersReview]);
 
   //리뷰 수정 요청 메서드
   const modifyReview = useCallback(
@@ -98,29 +104,43 @@ function UsersReview() {
       setIsShowAlert(true);
       return;
     }
-    const submittedModifiedReview = e.target.value;
+    const submittedModifiedReview = e.target.userReview.value;
     if (isNullishReviewInput(submittedModifiedReview)) {
       alert('수정할 내용을 5자 이상 입력해주세요.');
     }
-    setModifiedReview(() => submittedModifiedReview);
+    setModifiedReview(() => {
+      return { comment: submittedModifiedReview };
+    });
+    //목록으로 돌려보내기
     return;
   };
 
-  const handleModifeidDone = (index: number, commentid: number) => {
-    modifyReview(commentid);
-    const newIsEditing = [...isEditing];
-    newIsEditing[index] = false;
-    setIsEditing(newIsEditing);
-  };
-
+  // 수정 버튼 클릭 이벤트 (수정 시작)
   const handleModifiedButtonOnClick = (index: number) => {
-    if (authState.isLoggedIn) {
+    if (!authState.isLoggedIn) {
+      setIsShowAlert(true);
+      return;
+    }
+    if (isEditing && isEditing.length > 0) {
       const newIsEditing = [...isEditing];
       newIsEditing[index] = true;
       setIsEditing(newIsEditing);
-    } else {
-      setIsShowAlert(true);
+      return;
     }
+  };
+
+  //수정 submit 이벤트 (수정 완료)
+  const handleModifiedDone = (index: number, commentid: number) => {
+    if (modifiedReview.comment !== null) {
+      modifyReview(commentid);
+    }
+    if (isEditing && isEditing.length > 0) {
+      const newIsEditing = [...isEditing];
+      newIsEditing[index] = false;
+      setIsEditing(newIsEditing);
+      return;
+    }
+    return;
   };
 
   const handleDeleteOnClick = (commentid: number) => {
@@ -151,11 +171,11 @@ function UsersReview() {
   return (
     <div>
       <div className={styles.usersReviewContainer}>
-        <div>{`내 리뷰 목록`}</div>
+        <div>{`[내 리뷰 목록]`}</div>
 
         {usersReview?.map((review, index) => {
-          return !isEditing[index] ? (
-            <div key={index}>
+          return isEditing !== null && !isEditing[index] ? (
+            <div key={index} className={styles.usersReviewBox}>
               <p>{review.id}</p>
               <p>{review.comment}</p>
               <p>{review.created_at}</p>
@@ -167,7 +187,11 @@ function UsersReview() {
               </button>
             </div>
           ) : (
-            <div key={index}>
+            <div
+              key={index}
+              className={styles.usersReviewBox}
+              id={styles.modifyReviewBox}
+            >
               <form
                 className={styles.reviewBar}
                 onSubmit={handleModifiedReviewSubmit}
@@ -175,13 +199,13 @@ function UsersReview() {
                 <input
                   id={styles.usersReviewBar}
                   type='text'
-                  name='review'
+                  name='userReview'
                   defaultValue={review.comment}
                 />
                 <button
                   id={styles.reviewSubmmitButton}
                   type='submit'
-                  onClick={() => handleModifeidDone(index, review.id)}
+                  onClick={() => handleModifiedDone(index, review.id)}
                 >
                   완료
                 </button>
