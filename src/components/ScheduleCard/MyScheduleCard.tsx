@@ -1,11 +1,13 @@
 import React from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { MyScheduleCardProps } from '../../types/ScheduleTypes';
+import { MyScheduleCardType } from '../../types/ScheduleTypes';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useAuthState } from '../../contexts/AuthContext';
 import ROUTER from '../../constants/Router';
 import tokenInstance from '../../apis/tokenInstance';
+
+type MyScheduleCardProps = { schedule: MyScheduleCardType };
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 

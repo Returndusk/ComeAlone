@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link } from 'react-router-dom';
-import { ScheduleCardProps } from '../../types/ScheduleTypes';
+import { ScheduleCardType } from '../../types/ScheduleTypes';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useAuthState } from '../../contexts/AuthContext';
 import ROUTER from '../../constants/Router';
+
+type ScheduleCardProps = { schedule: ScheduleCardType };
 
 function ScheduleCard({ schedule }: ScheduleCardProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);

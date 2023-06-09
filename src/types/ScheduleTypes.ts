@@ -52,9 +52,3 @@ export type MyScheduleCardType = Pick<
 
 export type ScheduleListType = ScheduleCardType[];
 export type MyScheduleListType = MyScheduleCardType[];
-
-export type ScheduleCardProps = { schedule: ScheduleCardType; link: string };
-export type MyScheduleCardProps = {
-  schedule: MyScheduleCardType;
-  link: string;
-};
