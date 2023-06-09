@@ -56,7 +56,7 @@ function DestinationDetails() {
             </div>
             <h2>{destinationDetails?.title}</h2>
 
-            <p>전화번호:{destinationDetails?.tel}</p>
+            <p>Tel:{destinationDetails?.tel}</p>
             <Accordian>{destinationDetails?.overview}</Accordian>
 
             <div className={styles.scheduleModalButtonContainer}>
