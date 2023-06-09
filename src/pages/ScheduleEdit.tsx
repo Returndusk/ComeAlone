@@ -64,7 +64,6 @@ function ScheduleEdit() {
     const response = await getScheduleDetailById(id);
 
     const data = {
-      nickname: response?.data.user.nickname,
       title: response?.data.title,
       summary: response?.data.summary,
       duration: response?.data.duration,
@@ -90,7 +89,6 @@ function ScheduleEdit() {
       });
       updatedTitle.current = data.title;
       updatedSummary.current = data.summary;
-      nickname.current = data.nickname;
       createdAt.current = data.createdAt;
       setUpdatedStatus(data.status);
       setUpdatedDestinationList(data.destinations);
@@ -194,7 +192,6 @@ function ScheduleEdit() {
       <InfoScheduleEdit
         updatedTitle={updatedTitle.current}
         updatedSummary={updatedSummary.current}
-        nickname={nickname.current}
         createdAt={createdAt.current}
         onTitleUpdate={handleTitleUpdate}
         onSummaryUpdate={handleSummaryUpdate}

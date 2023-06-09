@@ -32,10 +32,7 @@ export type ScheduleEditPublicStatusPropsType = {
   onStatusUpdate: Dispatch<SetStateAction<string>>;
 };
 
-export type ScheduleEditInfoType = Pick<
-  IScheduleDetail,
-  'nickname' | 'createdAt'
-> & {
+export type ScheduleEditInfoType = Pick<IScheduleDetail, 'createdAt'> & {
   updatedTitle: string;
   updatedSummary: string;
   onTitleUpdate: (title: string) => void;
