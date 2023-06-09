@@ -1,7 +1,7 @@
 .categoryContainer {
   display: flex;
   justify-content: center;
-  width: 420px;
+  width: 500px;
   flex-wrap: wrap;
   z-index: 1000;
   background-color: #fff;
@@ -17,7 +17,7 @@
     min-width: 65px;
   }
   button + button {
-    margin-left: 10px;
+    margin-left: 15px;
   }
 }
 

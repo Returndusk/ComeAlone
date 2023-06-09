@@ -1,8 +1,9 @@
 import { MapWithWaypointsPropsType } from './DestinationListTypes';
 export interface IScheduleDetail {
-  id: number;
+  scheduleId: number;
   title: string;
   summary: string;
+  userId: string;
   nickname: string;
   startDate: Date;
   endDate: Date;
@@ -15,6 +16,7 @@ export interface IScheduleDetail {
 
 export type ScheduleFetchedType = Pick<
   IScheduleDetail,
+  | 'userId'
   | 'title'
   | 'summary'
   | 'nickname'
