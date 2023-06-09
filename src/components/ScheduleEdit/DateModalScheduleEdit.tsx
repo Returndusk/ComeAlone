@@ -25,8 +25,6 @@ function DateModalScheduleEdit({
     }
   ]);
 
-  console.log(selectedDate);
-
   const handleDateInfoUpdate = () => {
     const { startDate, endDate } = selectedDate[0];
 
