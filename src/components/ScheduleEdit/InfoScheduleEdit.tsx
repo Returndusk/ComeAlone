@@ -2,18 +2,19 @@ import React from 'react';
 import styles from './InfoScheduleEdit.module.scss';
 import TextField from '@mui/material/TextField';
 import { ScheduleEditInfoType } from '../../types/ScheduleEditTypes';
-import Avatar from '@mui/material/Avatar';
 
 function InfoScheduleEdit({
   updatedTitle,
   updatedSummary,
-  nickname,
   createdAt,
   onTitleUpdate,
   onSummaryUpdate
 }: ScheduleEditInfoType) {
   return (
     <div className={styles.ScheduleInfoContainer}>
+      <div className={styles.date}>
+        작성일: {createdAt.toLocaleDateString('ko-KR')}
+      </div>
       <TextField
         className={styles.title}
         required
@@ -21,13 +22,6 @@ function InfoScheduleEdit({
         defaultValue={updatedTitle}
         onChange={(event) => onTitleUpdate(event.target.value)}
       />
-      <div className={styles.nickname}>
-        <span className={styles.avatar}>
-          <Avatar>{nickname[0]}</Avatar>
-        </span>
-        {nickname}
-      </div>
-      <div className={styles.date}>{createdAt.toLocaleDateString('ko-KR')}</div>
       <TextField
         className={styles.description}
         required

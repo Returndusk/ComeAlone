@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
-import ROUTER from '../../constants/Router';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
@@ -64,11 +63,7 @@ function ScheduleLists() {
       {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
       <div className={styles.scheduleCardContainer}>
         {scheduleList.map((schedule: ScheduleCardType, index: number) => (
-          <ScheduleCard
-            schedule={schedule}
-            key={index}
-            link={ROUTER.SCHEDULE_DETAIL}
-          />
+          <ScheduleCard schedule={schedule} key={index} />
         ))}
       </div>
     </div>
