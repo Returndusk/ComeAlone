@@ -32,10 +32,7 @@ export type ScheduleEditPublicStatusPropsType = {
   onStatusUpdate: Dispatch<SetStateAction<string>>;
 };
 
-export type ScheduleEditInfoType = Pick<
-  IScheduleDetail,
-  'nickname' | 'createdAt'
-> & {
+export type ScheduleEditInfoType = Pick<IScheduleDetail, 'createdAt'> & {
   updatedTitle: string;
   updatedSummary: string;
   onTitleUpdate: (title: string) => void;
@@ -52,9 +49,13 @@ export type ScheduleEditDestinationListType = {
 };
 
 export type ScheduleEditSubmitType = {
-  updatedTitle: string;
-  updatedSummary: string;
-  updatedDateInfo: DateInfoType;
-  updatedDestinationList: MapWithWaypointsPropsType[][];
-  updatedStatus: string;
+  schedule_id: number;
+  title: string;
+  summary: string;
+  duration: number;
+  start_date: string;
+  end_date: string;
+  status: string;
+  image: string;
+  destinations: (number | undefined)[][];
 };

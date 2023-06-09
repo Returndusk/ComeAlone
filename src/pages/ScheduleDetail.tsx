@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useAuthState } from '../contexts/AuthContext';
 import { Link, useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
@@ -20,6 +21,7 @@ import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
   const { scheduleId } = useParams();
+  const { authState } = useAuthState();
   const [isLoading, setIsLoading] = useState(true);
   const [checkedDestinations, setCheckedDestinations] = useState(
     defaultSchedule.destinations.flat()
@@ -31,6 +33,7 @@ function ScheduleDetail() {
     const response = await getScheduleDetailById(id);
 
     const data = {
+      userId: response?.data.user.id,
       nickname: response?.data.user.nickname,
       title: response?.data.title,
       summary: response?.data.summary,
@@ -58,6 +61,7 @@ function ScheduleDetail() {
   }, []);
 
   const {
+    userId,
     nickname,
     title,
     summary,
@@ -95,12 +99,14 @@ function ScheduleDetail() {
         createdAt={createdAt}
       />
       <div className={styles.editButtonContainer}>
-        <Link
-          to={`${ROUTER.SCHEDULE_EDIT}/${scheduleId}`}
-          className={styles.editButton}
-        >
-          수정하기
-        </Link>
+        {userId === authState.user?.id ? (
+          <Link
+            to={`${ROUTER.SCHEDULE_EDIT}/${scheduleId}`}
+            className={styles.editButton}
+          >
+            수정하기
+          </Link>
+        ) : null}
       </div>
       <IconsScheduleDetail
         likesAmount={likesAmount}

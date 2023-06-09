@@ -4,6 +4,7 @@ import {
 } from '../../types/ScheduleDetailTypes';
 
 export const defaultSchedule: ScheduleFetchedType = {
+  userId: '',
   nickname: '',
   title: '',
   summary: '',
