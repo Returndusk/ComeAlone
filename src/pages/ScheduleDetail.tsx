@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
@@ -14,19 +14,18 @@ import {
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
-import { ScheduleFetchedType } from '../types/ScheduleDetailTypes';
 import { FaArrowLeft } from 'react-icons/fa';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
   const { scheduleId } = useParams();
-  const [scheduleFetched, setScheduleFetched] =
-    useState<ScheduleFetchedType>(defaultSchedule);
-  const [reviewInput, setReviewInput] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [checkedDestinations, setCheckedDestinations] = useState(
     defaultSchedule.destinations.flat()
   );
+  const scheduleFetched = useRef(defaultSchedule);
+  const reviewInput = useRef('');
 
   const getScheduleDetail = useCallback(async (id: string | undefined) => {
     const response = await getScheduleDetailById(id);
@@ -50,8 +49,9 @@ function ScheduleDetail() {
     const fetchData = async () => {
       const data = await getScheduleDetail(scheduleId);
 
-      setScheduleFetched(data);
+      scheduleFetched.current = data;
       setCheckedDestinations(data.destinations.flat());
+      setIsLoading(false);
     };
 
     fetchData();
@@ -67,12 +67,16 @@ function ScheduleDetail() {
     image,
     createdAt,
     destinations
-  } = scheduleFetched;
+  } = scheduleFetched.current;
 
   const handleReviewSubmit = (input: string) => {
-    setReviewInput(input);
-    console.log(reviewInput);
+    reviewInput.current = input;
+    console.log(reviewInput.current);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={styles.container}>
