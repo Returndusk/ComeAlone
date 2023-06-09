@@ -115,7 +115,9 @@ function UsersReview() {
     }
     const submittedModifiedReview = e.target.userReview.value;
     if (isNullishReviewInput(submittedModifiedReview)) {
-      alert('수정할 내용을 5자 이상 입력해주세요.');
+      alert(
+        `수정할 내용을 ${REVIEW_STANDARDS.MIN_LENGTH}자 이상 입력해주세요.`
+      );
     }
     setModifiedReview(() => {
       return { comment: submittedModifiedReview };

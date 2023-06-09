@@ -94,7 +94,7 @@ function Review() {
     }
     const userReview = e.target.review.value;
     if (isNullishReviewInput(userReview)) {
-      alert('내용을 5자 이상 입력해주세요.');
+      alert(`내용을 ${REVIEW_STANDARDS.MIN_LENGTH}자 이상 입력해주세요.`);
     }
 
     setSubmittedReview(() => {
