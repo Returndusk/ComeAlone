@@ -67,8 +67,8 @@ DestinationsPropsType) {
                     className={styles.destinations}
                     onClick={() => handleDestinationClick(destination)}
                   >
-                    <h3>{destination?.title}</h3>
-                    <p>{destination?.addr1}</p>
+                    <h2>{destination?.title}</h2>
+                    <span>{destination?.addr1}</span>
                     <p>{destination?.category_id}</p>
 
                     {imageError ? (
