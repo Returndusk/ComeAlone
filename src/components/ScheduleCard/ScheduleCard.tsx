@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './ScheduleCard.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ScheduleCardType } from '../../types/ScheduleTypes';
 import { FaHeart, FaRegHeart, FaRegDotCircle } from 'react-icons/fa';
 import { useAuthState } from '../../contexts/AuthContext';
@@ -15,8 +15,11 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(0);
   const [showLikeAlertModal, setShowLikeAlertModal] = useState<boolean>(false);
+  const [showLoginAlertModal, setShowLoginAlertModal] =
+    useState<boolean>(false);
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
+  const navigate = useNavigate();
 
   const fetchLike = useCallback(async () => {
     try {
@@ -24,7 +27,6 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
         `${baseUrl}/schedules/${schedule.schedule_id}/likes`
       );
       const { is_liked, likes_count_of_schedule } = response.data;
-      console.log(response.data);
       setIsLiked(is_liked);
       setLikeCount(likes_count_of_schedule);
     } catch (error) {
@@ -38,12 +40,10 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
         `${baseUrl}/schedules/${schedule.schedule_id}/likes`
       );
       const { is_liked, likes_count_of_schedule } = response.data;
-      console.log(response.data);
       setIsLiked(is_liked);
       setLikeCount(likes_count_of_schedule);
     } catch (error) {
       setShowLikeAlertModal(true);
-      console.log(error);
     }
   }, []);
 
@@ -56,12 +56,21 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
     if (isLoggedIn) {
       postLike();
     } else {
-      alert('로그인이 필요합니다.');
+      setShowLoginAlertModal(true);
     }
   }
 
-  function handleOnConfirm() {
+  function handleLikeConfirm() {
     setShowLikeAlertModal(false);
+  }
+
+  function handleLoginConfirm() {
+    setShowLoginAlertModal(false);
+    navigate(ROUTER.LOGIN);
+  }
+
+  function handleLoginCancel() {
+    setShowLoginAlertModal(false);
   }
 
   return (
@@ -135,7 +144,15 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
       {showLikeAlertModal && (
         <AlertModal
           message='자신의 일정에는 좋아요를 누를 수 없습니다.'
-          onConfirm={handleOnConfirm}
+          onConfirm={handleLikeConfirm}
+        />
+      )}
+      {showLoginAlertModal && (
+        <AlertModal
+          message='로그인이 필요합니다.'
+          onConfirm={handleLoginConfirm}
+          onCancel={handleLoginCancel}
+          showCancelButton={true}
         />
       )}
     </>
