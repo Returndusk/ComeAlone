@@ -8,7 +8,7 @@ import {
   Draggable,
   DropResult
 } from '@hello-pangea/dnd';
-import { FaGripVertical } from 'react-icons/fa';
+import { FaGripLines } from 'react-icons/fa';
 import ROUTER from '../../constants/Router';
 
 function EditDestinationList({
@@ -115,7 +115,7 @@ function EditDestinationList({
                             {...draggableProvided.draggableProps}
                             {...draggableProvided.dragHandleProps}
                           >
-                            <FaGripVertical className={styles.gripIcon} />
+                            <FaGripLines className={styles.gripIcon} />
                             {dest.title}
                             <button
                               onClick={() => {

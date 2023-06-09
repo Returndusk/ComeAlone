@@ -15,14 +15,15 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
 
-  function handleDelete(e: React.MouseEvent<SVGElement>) {
+  async function handleDelete(e: React.MouseEvent<SVGElement>) {
     e.preventDefault();
     if (isLoggedIn) {
       if (confirm('일정을 삭제하시겠습니까?')) {
         try {
-          tokenInstance.delete(`${baseUrl}/schedules/${schedule.schedule_id}`);
+          await tokenInstance.delete(
+            `${baseUrl}/schedules/${schedule.schedule_id}`
+          );
           alert('일정이 삭제되었습니다.');
-          window.location.reload();
         } catch (error) {
           console.log(error);
         }
@@ -33,6 +34,7 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
         navigate(ROUTER.LOGIN);
       }
     }
+    window.location.reload();
   }
 
   function getDate(startDateString: string, endDateString: string) {

@@ -127,7 +127,9 @@ export const deleteReviewByDestinationId = async (commentId: number) => {
 
 export const getUsersReview = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/destinations/comments/me`);
+    const response = await tokenInstance.get(
+      `${baseUrl}/destinations/comments/me`
+    );
     return response;
   } catch (error) {
     console.error(error, '유저의 여행지 리뷰 목록을 불러오는데 실패했습니다.');

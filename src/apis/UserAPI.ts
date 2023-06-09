@@ -52,6 +52,12 @@ export const checkPassword = async (formData: { password: string }) => {
   return response;
 };
 
+export const deleteUser = async () => {
+  const response = await tokenInstance.delete(`${baseUrl}/auth/users/me`);
+
+  return response;
+};
+
 export const testUserToken = async (accessToken: string) => {
   const response = await axios.post(`${baseUrl}/auth/tokenTest`, accessToken);
   return response;

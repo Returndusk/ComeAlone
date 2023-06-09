@@ -6,8 +6,8 @@ import styles from './Category.module.scss';
 
 type CategoryPropsTypes = {
   searchResults: DestinationsType[] | [];
-  // isLoading: boolean;
-  // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CATEGORIES_ID = new Map([
@@ -24,10 +24,10 @@ const CATEGORIES_ID = new Map([
 const CATEGORIES_ID_LIST = Array.from(CATEGORIES_ID.keys());
 
 function Category({
-  searchResults
-}: // isLoading,
-// setIsLoading
-CategoryPropsTypes) {
+  searchResults,
+  isLoading,
+  setIsLoading
+}: CategoryPropsTypes) {
   const [selectedCategory, setSelectedCategory] = useState<number[]>([
     ...CATEGORIES_ID_LIST
   ]);
@@ -87,7 +87,7 @@ CategoryPropsTypes) {
     return () => {
       clearTimeout(debouncer);
     };
-  }, [isClicked]);
+  }, [isClicked, isLoading]);
 
   const getCategorizedDestinationsData = useCallback(async () => {
     if (selectedCategory.length > 0) {
@@ -100,9 +100,9 @@ CategoryPropsTypes) {
   }, [selectedCategory]);
 
   useEffect(() => {
-    // setIsLoading(true);
+    setIsLoading(true);
     getCategorizedDestinationsData();
-    // setIsLoading(false);
+    setIsLoading(false);
   }, [getCategorizedDestinationsData]);
 
   useEffect(() => {
@@ -122,7 +122,7 @@ CategoryPropsTypes) {
 
   return (
     <>
-      {isClicked ? (
+      {isClicked || isLoading ? (
         <div>로딩 중..</div>
       ) : (
         <>
@@ -134,6 +134,7 @@ CategoryPropsTypes) {
                   ? styles.activeSelectedAllButton
                   : styles.selectedAllButton
               }
+              disabled={isLoading}
             >
               전체
             </button>
@@ -142,6 +143,7 @@ CategoryPropsTypes) {
                 key={index}
                 value={categoryId}
                 onClick={handleCategoryClick}
+                disabled={isLoading}
                 className={
                   selectedCategory.includes(categoryId)
                     ? styles.activeSelectedButton
