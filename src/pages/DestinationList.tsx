@@ -6,7 +6,6 @@ function DestinationList() {
   return (
     <Layout>
       <Search />
-      {/* <OpenModal /> */}
     </Layout>
   );
 }
