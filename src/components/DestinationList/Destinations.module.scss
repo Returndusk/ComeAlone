@@ -9,7 +9,7 @@
   grid-template-rows: repeat(10, 200px);
   background-color: #fff;
   width: 550px; //search bar, category container와 동일
-  height: calc(100vh - 220px); // map과 맞추기(추후 변경 가능성 있음)
+  height: calc(100vh - 150px); // map과 맞추기(추후 변경 가능성 있음)
 
   // max-height: 550px; //추후 삭제
   // min-height: 550px; 상의 후 결정
@@ -61,7 +61,7 @@
       align-self: flex-start;
       width: 190px;
       height: 30px;
-      align-items: center;
+
       white-space: normal;
     }
 
