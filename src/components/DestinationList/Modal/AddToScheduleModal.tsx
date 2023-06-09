@@ -13,17 +13,25 @@ import tokenInstance from '../../../apis/tokenInstance';
 
 function AddToScheduleModal({
   destinations,
-  onDestinationUpdate,
+  // schedule,
+  // onDestinationUpdate,
+  selectedDay,
   scheduleId
-}: AddToScheduleModalType) {
+}: // 해당 일정 카드의 N일차별 목적지들: string[][]
+// updatedDestinations
+AddToScheduleModalType) {
   const location = useLocation();
   // const searchParams = new URLSearchParams(location.search);
   // const contentid = Number(searchParams.get('contentid'));
   const contentid = Number(location.pathname.split('/').pop());
-  const [updatedDestination, setUpdatedDestination] = useState(destinations);
+  const [updatedDestinations, setUpdatedDestinations] = useState([
+    ...destinations
+  ]);
+
+  // console.log(selectedDay);
 
   useEffect(() => {
-    setUpdatedDestination(destinations);
+    setUpdatedDestinations([...destinations]);
   }, [destinations]);
 
   async function getDestinationTitle(id: number) {
@@ -45,24 +53,43 @@ function AddToScheduleModal({
     }
   }
 
+  /**
+   * 현재 destinations[][] 은 넘어옴
+   * selectedDay 에 따라서 해당 배열에 push함
+   * 이후 변경된 내용을 포함해 copy
+   */
+
   async function addToSelectedDay() {
     const title = await getDestinationTitle(contentid);
 
-    if (contentid && !updatedDestination.includes(title)) {
-      const copiedDestinations = [...updatedDestination];
-      copiedDestinations.push(title);
-      setUpdatedDestination(copiedDestinations);
-      onDestinationUpdate(updatedDestination);
+    console.log(destinations);
 
-      console.log(contentid);
+    if (contentid && !updatedDestinations.includes(title)) {
+      const copiedDestinations = [...updatedDestinations];
+      copiedDestinations[selectedDay] = copiedDestinations[selectedDay] || [];
+      copiedDestinations[selectedDay].push(title);
+      setUpdatedDestinations(copiedDestinations);
+      // onDestinationUpdate(updatedDestination);
 
+      console.log(copiedDestinations);
       try {
+        // const updatedDestinationsCopy = updatedDestinations.map((selectedDay) =>
+        //   selectedDay.map((destination) => {
+        //     if (destination === title) {
+        //       return contentid;
+        //     }
+        //     return destination;
+        //   })
+        // );
+        // updatedDestinationsCopy = copiedDestinations;
+
         const response = await tokenInstance.post(
           `https://vvhooping.com/api/schedules/${scheduleId}`,
           {
-            destinations: destinations
+            destinations: copiedDestinations
           }
         );
+        console.log(copiedDestinations);
       } catch (err) {
         console.error('Error: ', err);
       }
@@ -72,7 +99,7 @@ function AddToScheduleModal({
   return (
     <div className={styles.scheduleDestination}>
       <div className={styles.destinationList}>
-        {updatedDestination.map((destination, idx) => (
+        {updatedDestinations[selectedDay]?.map((destination, idx) => (
           <div key={idx}>{destination}</div>
         ))}
         <button onClick={addToSelectedDay}>목적지 추가하기</button>

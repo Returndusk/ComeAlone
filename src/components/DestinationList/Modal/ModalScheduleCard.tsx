@@ -26,9 +26,9 @@ ModalScheduleCardType) {
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
   // N일차
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [updatedDestination, setUpdatedDestination] = useState<string[][]>(
-    schedule.destinations.map(() => [])
-  );
+  // const [updatedDestinations, setUpdatedDestinations] = useState<string[][]>([
+  //   ...schedule.destinations
+  // ]);
 
   function handleToggleDestinations(dayIndex: number) {
     // 선택시점에는 dayIndex !== selectedDay
@@ -36,15 +36,17 @@ ModalScheduleCardType) {
   }
 
   // console.log(updatedDestination);
-  function handleDestinationUpdate(updatedDestination: string[]) {
-    if (selectedDay !== null) {
-      setUpdatedDestination((prevDestinations) => {
-        const updatedDestinations = [...prevDestinations];
-        updatedDestinations[selectedDay] = updatedDestination;
-        return updatedDestinations;
-      });
-    }
-  }
+  // function handleDestinationUpdate(updatedDestination: string[]) {
+  //   if (selectedDay !== null) {
+  //     setUpdatedDestinations((prevDestinations) => {
+  //       const updatedDestinations = [...prevDestinations];
+  //       updatedDestinations[selectedDay] = updatedDestination;
+  //       return updatedDestinations;
+  //     });
+  //   }
+  // }
+
+  // console.log(schedule.destinations);
 
   return (
     <>
@@ -80,9 +82,12 @@ ModalScheduleCardType) {
       )}
       {isSelected && selectedDay !== null && (
         <AddToScheduleModal
-          destinations={schedule.destinations[selectedDay]}
-          onDestinationUpdate={handleDestinationUpdate}
+          destinations={schedule.destinations}
+          // onDestinationUpdate={handleDestinationUpdate}
+          // schedule={schedule}
+          selectedDay={selectedDay}
           scheduleId={scheduleId}
+          // updatedDestinations={updatedDestinations}
         />
       )}
     </>
