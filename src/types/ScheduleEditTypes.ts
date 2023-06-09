@@ -47,11 +47,3 @@ export type ScheduleEditDestinationListType = {
   >;
   onCheckedDayIndexUpdate: Dispatch<SetStateAction<number>>;
 };
-
-export type ScheduleEditSubmitType = {
-  updatedTitle: string;
-  updatedSummary: string;
-  updatedDateInfo: DateInfoType;
-  updatedDestinationList: MapWithWaypointsPropsType[][];
-  updatedStatus: string;
-};

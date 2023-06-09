@@ -77,11 +77,7 @@ function App() {
         <Route path={ROUTER.SCHEDULE_LIST} element={<ScheduleList />} />
         <Route
           path={`${ROUTER.SCHEDULE_EDIT}/:scheduleId`}
-          element={
-            <Auth required={true}>
-              <ScheduleEdit />
-            </Auth>
-          }
+          element={<ScheduleEdit />}
         />
         <Route
           path={`${ROUTER.SCHEDULE_DETAIL}/:scheduleId`}

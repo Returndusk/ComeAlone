@@ -13,10 +13,10 @@ import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusSch
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
+import ButttonsScheduleEdit from '../components/ScheduleEdit/ButtonsScheduleEdit';
 import DateModalScheduleEdit from '../components/ScheduleEdit/DateModalScheduleEdit';
 import { defaultSchedule } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
-import { ScheduleEditSubmitType } from '../types/ScheduleEditTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import { updateSchedule } from '../apis/ScheduleEditAPI';
@@ -53,12 +53,7 @@ function ScheduleEdit() {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
   const updatedTitle = useRef(defaultSchedule.title);
   const updatedSummary = useRef(defaultSchedule.summary);
-  const nickname = useRef(defaultSchedule.nickname);
   const createdAt = useRef(defaultSchedule.createdAt);
-
-  const handleModelOpen = () => setOpenModal(true);
-
-  const handleModalClose = () => setOpenModal(false);
 
   const getScheduleEdit = useCallback(async (id: string | undefined) => {
     const response = await getScheduleDetailById(id);
@@ -127,6 +122,10 @@ function ScheduleEdit() {
     }
   }, [checkedDayIndex, updatedDestinationList]);
 
+  const handleModelOpen = () => setOpenModal(true);
+
+  const handleModalClose = () => setOpenModal(false);
+
   const handleTitleUpdate = (title: string) => {
     updatedTitle.current = title;
   };
@@ -135,36 +134,34 @@ function ScheduleEdit() {
     updatedSummary.current = summary;
   };
 
-  const handleSubmit = ({
-    updatedTitle,
-    updatedSummary,
-    updatedDateInfo,
-    updatedDestinationList,
-    updatedStatus
-  }: ScheduleEditSubmitType) => {
+  const handleSubmit = () => {
+    const schedule_id = Number(scheduleId);
+    const title = updatedTitle.current;
+    const summary = updatedSummary.current;
+    const duration = updatedDateInfo.duration;
+    const start_date = stringifyDate(updatedDateInfo.startDate);
+    const end_date = stringifyDate(updatedDateInfo.endDate);
+    const status = updatedStatus;
+    const image = '';
+    const destinations = mapDestinationId(updatedDestinationList);
+
     updateSchedule({
-      schedule_id: Number(scheduleId),
-      title: updatedTitle,
-      summary: updatedSummary,
-      duration: updatedDateInfo.duration,
-      start_date: stringifyDate(updatedDateInfo.startDate),
-      end_date: stringifyDate(updatedDateInfo.endDate),
-      status: updatedStatus,
-      image: '',
-      destinations: mapDestinationId(updatedDestinationList)
+      schedule_id,
+      title,
+      summary,
+      duration,
+      start_date,
+      end_date,
+      status,
+      image,
+      destinations
     });
+
     navigate(`/schedule/detail/${scheduleId}`);
-    // console.log({
-    //   schedule_id: Number(scheduleId),
-    //   title: updatedTitle,
-    //   summary: updatedSummary,
-    //   duration: updatedDateInfo.duration,
-    //   start_date: stringifyDate(updatedDateInfo.startDate),
-    //   end_date: stringifyDate(updatedDateInfo.endDate),
-    //   status: updatedStatus,
-    //   image: '',
-    //   destinations: mapDestinationId(updatedDestinationList)
-    // });
+  };
+
+  const handleDelete = () => {
+    console.log('일정이 삭제되었습니다.');
   };
 
   if (isLoading) {
@@ -189,7 +186,6 @@ function ScheduleEdit() {
         updatedStatus={updatedStatus}
         onStatusUpdate={setUpdatedStatus}
       />
-      <button className={styles.deleteButtonContainer}>삭제하기</button>
       <InfoScheduleEdit
         updatedTitle={updatedTitle.current}
         updatedSummary={updatedSummary.current}
@@ -206,21 +202,7 @@ function ScheduleEdit() {
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={markersLocations} />
       </div>
-      <div className={styles.confirmButtonWrapper}>
-        <button
-          onClick={() =>
-            handleSubmit({
-              updatedTitle: updatedTitle.current,
-              updatedSummary: updatedSummary.current,
-              updatedDateInfo,
-              updatedDestinationList,
-              updatedStatus
-            })
-          }
-        >
-          수정완료
-        </button>
-      </div>
+      <ButttonsScheduleEdit onSubmit={handleSubmit} onDelete={handleDelete} />
       <DateModalScheduleEdit
         openModal={openModal}
         dateInfo={updatedDateInfo}
