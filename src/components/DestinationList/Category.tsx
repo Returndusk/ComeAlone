@@ -121,42 +121,40 @@ function Category({
   return (
     <>
       {isLoading ? (
-        <div>로딩 중..</div>
+        <div className={styles.IsLoadingContainer}>로딩 중..</div>
       ) : (
         <>
-          <div className={styles.categoryContainer}>
-            <button
-              onClick={handleAllClick}
-              className={
-                isSelectedAll
-                  ? styles.activeSelectedAllButton
-                  : styles.selectedAllButton
-              }
-              disabled={isLoading}
-            >
-              전체
-            </button>
-            {CATEGORIES_ID_LIST.map((categoryId, index) => (
+          <section className={styles.categoryWrapper}>
+            <div className={styles.categoryContainer}>
               <button
-                key={index}
-                value={categoryId}
-                onClick={handleCategoryClick}
-                disabled={isLoading}
+                onClick={handleAllClick}
                 className={
-                  selectedCategory.includes(categoryId)
-                    ? styles.activeSelectedButton
-                    : styles.selectedButton
+                  isSelectedAll
+                    ? styles.activeSelectedAllButton
+                    : styles.selectedAllButton
                 }
+                disabled={isLoading}
               >
-                {CATEGORIES_ID.get(categoryId)}
+                전체
               </button>
-            ))}
-          </div>
-          <Destinations
-            filteredDestinations={filteredDestinations}
-            // isLoading={isLoading}
-            // setIsLoading={setIsLoading}
-          />{' '}
+              {CATEGORIES_ID_LIST.map((categoryId, index) => (
+                <button
+                  key={index}
+                  value={categoryId}
+                  onClick={handleCategoryClick}
+                  disabled={isLoading}
+                  className={
+                    selectedCategory.includes(categoryId)
+                      ? styles.activeSelectedButton
+                      : styles.selectedButton
+                  }
+                >
+                  {CATEGORIES_ID.get(categoryId)}
+                </button>
+              ))}
+            </div>
+          </section>
+          <Destinations filteredDestinations={filteredDestinations} />
         </>
       )}
     </>

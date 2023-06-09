@@ -1,19 +1,26 @@
-.categoryContainer {
+.categoryWrapper {
   display: flex;
   justify-content: center;
   width: 550px;
-  flex-wrap: wrap;
   z-index: 1000;
   background-color: #fff;
 
-  padding-bottom: 15px;
+  padding: 15px 0;
+}
+
+.categoryContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  margin: 0 50px;
 
   button {
     font-size: 13px;
     cursor: pointer;
     border-radius: 16px;
     margin: 2px;
-    //font-weight: 550;
     min-width: 65px;
   }
   button + button {
