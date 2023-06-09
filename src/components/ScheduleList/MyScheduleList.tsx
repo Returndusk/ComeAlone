@@ -23,7 +23,7 @@ function MyScheduleLists() {
       const response = await tokenInstance.get(`${baseUrl}/users/me/schedules`);
       setScheduleList(response.data);
     } catch (error: unknown) {
-      alert('여행 일정을 불러올 수 없습니다.');
+      console.log('내 일정을 불러올 수 없습니다.', error);
     }
     setIsLoading(false);
   }, []);
@@ -80,9 +80,7 @@ function MyScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {isLoading ? (
-          ''
-        ) : (
+        {!isLoading && (
           <button className={styles.scheduleAdd} onClick={openModal}>
             일정 추가하기
           </button>
@@ -90,11 +88,7 @@ function MyScheduleLists() {
         {isModalOpen && (
           <CreateScheduleModal closeModal={() => setIsModalOpen(false)} />
         )}
-        {isLoading ? (
-          <div className={styles.loading}>일정 불러오는중...</div>
-        ) : (
-          ''
-        )}
+        {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
         {scheduleList.map((schedule: MyScheduleCardType, index: number) => (
           <MyScheduleCard
             schedule={schedule}
