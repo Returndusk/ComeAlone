@@ -1,5 +1,6 @@
 .paginationBar {
-  margin: auto;
+  margin: 15px 0 30px 0; //목적지 목록 div 박스 margin = 15px
+  justify-content: center;
   display: flex;
 
   button {
