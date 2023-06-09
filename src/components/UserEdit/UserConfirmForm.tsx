@@ -4,8 +4,10 @@ import { TextField } from '@mui/material';
 import { UserConfirmFormProps } from '../../types/UserTypes';
 import styles from './UserConfirmForm.module.scss';
 import { checkPassword } from '../../apis/UserAPI';
+import { useAuthState } from '../../contexts/AuthContext';
 
 function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
+  const { updateAuthState } = useAuthState();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +37,14 @@ function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
           if (err.response?.status === 401) {
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
+
             return setError('비밀번호가 일치하지 않습니다.');
           }
         }

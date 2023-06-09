@@ -190,7 +190,13 @@ function UserEditForm() {
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
           if (err.response?.status === 401) {
-            //
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
           }
         }
 
@@ -233,7 +239,13 @@ function UserEditForm() {
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
           if (err.response?.status === 401) {
-            //
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
           }
         }
 
