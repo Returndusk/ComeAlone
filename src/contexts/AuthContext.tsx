@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import { getUser, refreshUserTokens } from '../apis/user';
 import {
@@ -32,6 +33,7 @@ export function useAuthState() {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const location = useLocation();
   const cookies = new Cookies();
   const initAuthState: AuthStateType = {
     isLoggedIn: null,
@@ -96,6 +98,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       updateAuthState(false);
     }
   }, []);
+
+  //url 변경시 리프레시 토큰이 없을 경우 상태 업데이트
+  useEffect(() => {
+    const refreshToken = cookies.get('refreshToken');
+
+    if (!refreshToken) {
+      updateAuthState(false);
+    }
+  }, [location]);
 
   return (
     <AuthContext.Provider value={{ authState, updateAuthState }}>
