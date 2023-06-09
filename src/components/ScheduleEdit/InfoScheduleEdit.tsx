@@ -12,6 +12,9 @@ function InfoScheduleEdit({
 }: ScheduleEditInfoType) {
   return (
     <div className={styles.ScheduleInfoContainer}>
+      <div className={styles.date}>
+        작성일: {createdAt.toLocaleDateString('ko-KR')}
+      </div>
       <TextField
         className={styles.title}
         required
@@ -19,7 +22,6 @@ function InfoScheduleEdit({
         defaultValue={updatedTitle}
         onChange={(event) => onTitleUpdate(event.target.value)}
       />
-      <div className={styles.date}>{createdAt.toLocaleDateString('ko-KR')}</div>
       <TextField
         className={styles.description}
         required
