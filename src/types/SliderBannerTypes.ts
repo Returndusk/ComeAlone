@@ -9,7 +9,7 @@ export interface SliderComponentProps {
     autoplay?: boolean;
     autoplaySpeed?: number;
   };
-  api: string;
+  api?: string;
   urlTemplate?: string;
 }
 
