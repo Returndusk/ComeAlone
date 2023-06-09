@@ -134,7 +134,11 @@ function Pagination({
             </span>
           ) : (
             <NavLink
-              to={`?page=${pageNumber}&search=${searchQueryParam}`}
+              to={
+                searchQueryParam !== null
+                  ? `?page=${pageNumber}&search=${searchQueryParam}`
+                  : `?page=${pageNumber}`
+              }
               className={styles.pageNumber}
               key={pageNumber}
               onClick={() => handlePageClick(pageNumber)}
