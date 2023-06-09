@@ -1,10 +1,13 @@
 import React from 'react';
 import styles from './ScheduleCard.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MyScheduleCardProps } from '../../types/ScheduleTypes';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useAuthState } from '../../contexts/AuthContext';
 import ROUTER from '../../constants/Router';
+import tokenInstance from '../../apis/tokenInstance';
+
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function ScheduleCard({ schedule }: MyScheduleCardProps) {
   console.log(schedule);
@@ -15,10 +18,19 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
     e.preventDefault();
     if (isLoggedIn) {
       if (confirm('일정을 삭제하시겠습니까?')) {
-        alert('일정이 삭제되었습니다.');
+        try {
+          tokenInstance.delete(`${baseUrl}/schedules/${schedule.schedule_id}`);
+          alert('일정이 삭제되었습니다.');
+          window.location.reload();
+        } catch (error) {
+          console.log(error);
+        }
       }
     } else {
-      confirm('로그인이 필요합니다. 로그인 하시겠습니까?');
+      if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
+        const navigate = useNavigate();
+        navigate(ROUTER.LOGIN);
+      }
     }
   }
 
