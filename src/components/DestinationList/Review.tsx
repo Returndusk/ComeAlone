@@ -155,7 +155,12 @@ function Review() {
             등록
           </button>
         </form>
-        <button onClick={handleUsersReviewClick}>내 리뷰 목록</button>
+        <button
+          className={styles.usersReviewListButton}
+          onClick={handleUsersReviewClick}
+        >
+          내 리뷰 목록
+        </button>
       </div>
       {isAccessUsersReview && <UsersReview />}
       {isShowAlert && (
