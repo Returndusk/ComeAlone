@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
+import AlertModal from '../common/Alert/AlertModal';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -10,6 +11,7 @@ function ScheduleLists() {
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -18,7 +20,7 @@ function ScheduleLists() {
       setScheduleList(response.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        alert('여행 일정을 불러올 수 없습니다.');
+        setShowAlertModal(true);
       }
     }
     setIsLoading(false);
@@ -31,6 +33,10 @@ function ScheduleLists() {
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     setScheduleSort(sortOption);
+  }
+
+  function handleOnConfirm() {
+    setShowAlertModal(false);
   }
 
   return (
@@ -60,6 +66,12 @@ function ScheduleLists() {
           최신순
         </button>
       </div>
+      {showAlertModal && (
+        <AlertModal
+          message='여행 일정을 불러올 수 없습니다.'
+          onConfirm={handleOnConfirm}
+        />
+      )}
       {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
       <div className={styles.scheduleCardContainer}>
         {scheduleList.map((schedule: ScheduleCardType, index: number) => (
