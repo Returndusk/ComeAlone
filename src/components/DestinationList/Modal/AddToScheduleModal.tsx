@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import styles from './CommonModalDesign.module.scss';
 import { AddToScheduleModalType } from '../../../types/ModalScheduleTypes';
 import axios from 'axios';
+import tokenInstance from '../../../apis/tokenInstance';
 
 /**
  * TODO
@@ -12,68 +13,61 @@ import axios from 'axios';
 
 function AddToScheduleModal({
   destinations,
-  onDestinationUpdate
+  onDestinationUpdate,
+  scheduleId
 }: AddToScheduleModalType) {
   const location = useLocation();
   // const searchParams = new URLSearchParams(location.search);
   // const contentid = Number(searchParams.get('contentid'));
   const contentid = Number(location.pathname.split('/').pop());
-
   const [updatedDestination, setUpdatedDestination] = useState(destinations);
 
   useEffect(() => {
     setUpdatedDestination(destinations);
   }, [destinations]);
 
-  async function addToSelectedDay() {
-    // console.log(contentid);
-    // if (contentid) {
-    //   const contentid = await getDestinationId(contentid);
-    if (contentid && !updatedDestination.includes(String(contentid))) {
-      const copiedDestinations = [...updatedDestination];
-      copiedDestinations.push(String(contentid));
-      setUpdatedDestination(copiedDestinations);
-      // const updatedDestination = [...updatedDestinations[selectedDay], title];
-      // setUpdatedDestinations((prevDestinations) => {
-      //   const updated = [...prevDestinations];
-      //   updated[selectedDay] = updatedDestination;
-      //   return updated;
-      // });
-      // onDestinationUpdate(copiedDestinations);
-      onDestinationUpdate(updatedDestination);
-      // }
+  async function getDestinationTitle(id: number) {
+    try {
+      const response = await axios.get(
+        `https://vvhooping.com/api/destinations/${contentid}`
+      );
+      const data = response.data;
+      // console.log(data);
 
-      // try {
-      //   const response = await axios.post("https://vvhooping.com/api/schedules/24", {
-      //     destination:
-      //   })
-      // }
+      if (data && data.id === id) {
+        const title = data.title;
+        // console.log('title', title);
+        return title;
+      }
+    } catch (err) {
+      console.error('Error: ', err);
+      alert('목적지를 선택해 주세요.');
     }
   }
-  // console.log(updatedDestination);
 
-  // async function getDestinationId(id: number) {
-  //   // const destination = DEFAULT_DESTINATIONS.find(
-  //   //   (destination) => Number(destination.contentid) === id
-  //   // );
-  //   // return destination ? destination.title : '';
+  async function addToSelectedDay() {
+    const title = await getDestinationTitle(contentid);
 
-  //   try {
-  //     const response = await axios.get(
-  //       `https://vvhooping.com/api/destinations/${id}`
-  //     );
-  //     const data = response.data;
-  //     // console.log(data);
+    if (contentid && !updatedDestination.includes(title)) {
+      const copiedDestinations = [...updatedDestination];
+      copiedDestinations.push(title);
+      setUpdatedDestination(copiedDestinations);
+      onDestinationUpdate(updatedDestination);
 
-  //     if (data && data.id === id) {
-  //       const contentid = data.id;
-  //       console.log('contentid', contentid);
-  //       return contentid;
-  //     }
-  //   } catch (err) {
-  //     console.error('Error: ', err);
-  //   }
-  // }
+      console.log(contentid);
+
+      try {
+        const response = await tokenInstance.post(
+          `https://vvhooping.com/api/schedules/${scheduleId}`,
+          {
+            destinations: destinations
+          }
+        );
+      } catch (err) {
+        console.error('Error: ', err);
+      }
+    }
+  }
 
   return (
     <div className={styles.scheduleDestination}>

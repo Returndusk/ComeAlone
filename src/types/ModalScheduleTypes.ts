@@ -18,9 +18,11 @@ export type ModalScheduleCardType = {
   isSelected: boolean;
   onShowDestinations: (index: number) => void;
   // onCloseDestinations: () => void;
+  scheduleId: number;
 };
 
 export type AddToScheduleModalType = {
   destinations: string[];
   onDestinationUpdate: (updatedDestination: string[]) => void;
+  scheduleId: number;
 };

@@ -15,7 +15,8 @@ export default function ModalScheduleCard({
   schedule,
   index,
   isSelected,
-  onShowDestinations
+  onShowDestinations,
+  scheduleId
 }: // onCloseDestinations
 ModalScheduleCardType) {
   const endDate = new Date(schedule.end_date);
@@ -81,6 +82,7 @@ ModalScheduleCardType) {
         <AddToScheduleModal
           destinations={schedule.destinations[selectedDay]}
           onDestinationUpdate={handleDestinationUpdate}
+          scheduleId={scheduleId}
         />
       )}
     </>

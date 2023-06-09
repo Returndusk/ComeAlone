@@ -28,13 +28,14 @@ export default function ModalScheduleLists() {
     async function getScheduleLists() {
       try {
         const data = await getMyScheduleLists();
-        // console.log(data);
+        console.log(data);
         setScheduleLists(
           data.map((schedule, index) => ({
             schedule,
             index,
             isSelected: selectedCardIdx === index,
-            onShowDestinations: handleShowDestinations
+            onShowDestinations: handleShowDestinations,
+            scheduleId: schedule.schedule_id
           }))
         );
       } catch (err) {
@@ -46,7 +47,7 @@ export default function ModalScheduleLists() {
   }, [selectedCardIdx]);
 
   console.log(scheduleLists);
-  // setScheduleLists;
+
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     // console.log(sortOption);
@@ -91,14 +92,15 @@ export default function ModalScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {scheduleLists.map((schedule, index) => (
+        {scheduleLists.map((scheduleList, index) => (
           <ModalScheduleCard
-            key={schedule.schedule.schedule_id}
-            schedule={schedule.schedule}
+            key={scheduleList.schedule.schedule_id}
+            schedule={scheduleList.schedule}
             index={index}
             isSelected={selectedCardIdx === index}
             onShowDestinations={handleShowDestinations}
             // onCloseDestinations={handleCloseDestinations}
+            scheduleId={scheduleList.schedule.schedule_id}
           />
         ))}
       </div>
