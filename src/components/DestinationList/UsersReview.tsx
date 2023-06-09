@@ -26,6 +26,15 @@ const SUCCESS_ALERT_PROPS = {
   showTitle: false
 };
 
+const RESPONSE_STATUS = {
+  MODIFY_SUCCESS: 200,
+  DELETE_SUCCESS: 201
+};
+
+const REVIEW_STANDARDS = {
+  MIN_LENGTH: 5
+};
+
 function UsersReview() {
   const [usersReview, setUsersReview] = useState<
     DestinationsReviewType[] | null
@@ -68,7 +77,7 @@ function UsersReview() {
     async (commentid: number) => {
       const res = await modifyReviewByDestinationId(commentid, modifiedReview);
       const status = res?.status;
-      if (status === 201) {
+      if (status === RESPONSE_STATUS.MODIFY_SUCCESS) {
         setIsShowSuccessAlert(true);
         return;
       }
@@ -81,7 +90,7 @@ function UsersReview() {
   const deleteReview = async (commentid: number) => {
     const res = await deleteReviewByDestinationId(commentid);
     const status = res?.status;
-    if (status === 201) {
+    if (status === RESPONSE_STATUS.DELETE_SUCCESS) {
       setIsShowSuccessAlert(true);
       return;
     }
@@ -92,7 +101,7 @@ function UsersReview() {
   useEffect(() => console.log(modifiedReview), [modifiedReview]);
 
   const isNullishReviewInput = (input: string) => {
-    return input === '' || input.length <= 5;
+    return input === '' || input.length <= REVIEW_STANDARDS.MIN_LENGTH;
   };
 
   //수정할 내용을 제출했을때 실행할 로직

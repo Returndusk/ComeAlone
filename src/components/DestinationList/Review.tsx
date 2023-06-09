@@ -24,6 +24,14 @@ const SUCCESS_ALERT_PROPS = {
   showTitle: false
 };
 
+const RESPONSE_STATUS = {
+  POST_SUCCESS: 201
+};
+
+const REVIEW_STANDARDS = {
+  MIN_LENGTH: 5
+};
+
 function Review() {
   const [submittedReview, setSubmittedReview] = useState<commentType>({
     comment: null
@@ -60,7 +68,7 @@ function Review() {
       submittedReview
     );
     const status = res?.status;
-    if (status === 201) {
+    if (status === RESPONSE_STATUS.POST_SUCCESS) {
       setIsShowSuccessAlert(true);
       await getReviewList();
       return;
@@ -74,7 +82,7 @@ function Review() {
   }, [allReviewList]);
 
   const isNullishReviewInput = (input: string) => {
-    return input === '' || input.length <= 5;
+    return input === '' || input.length <= REVIEW_STANDARDS.MIN_LENGTH;
   };
 
   //리뷰 등록 시도
