@@ -38,8 +38,8 @@ export type ScheduleEditInfoType = Pick<
 > & {
   updatedTitle: string;
   updatedSummary: string;
-  onTitleUpdate: Dispatch<SetStateAction<string>>;
-  onSummaryUpdate: Dispatch<SetStateAction<string>>;
+  onTitleUpdate: (title: string) => void;
+  onSummaryUpdate: (title: string) => void;
 };
 
 export type ScheduleEditDestinationListType = {
