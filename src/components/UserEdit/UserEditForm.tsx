@@ -1,40 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import styles from './UserEditForm.module.scss';
 import { Errors, UserInfoValues } from '../../types/UserTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
 import UserEditButtons from './UserEditButtons';
-
-const userInfo = {
-  email: 'elice@test.com',
-  profileImage: '',
-  nickname: '엘리스',
-  birthDate: {
-    year: 1999,
-    month: 12,
-    day: 5
-  },
-  gender: 'female',
-  phoneNumber: '010-1234-1234'
-};
+import { editUser, getUser } from '../../apis/user';
+import { AxiosError } from 'axios';
+import { useAuthState } from '../../contexts/AuthContext';
 
 function UserEditForm() {
+  const navigate = useNavigate();
   const initValues: UserInfoValues = {
-    email: userInfo.email,
-    profileImage: userInfo.profileImage,
-    nickname: userInfo.nickname,
+    email: '',
+    profileImage: '',
+    nickname: '',
     newPassword: '',
     passwordConfirm: '',
     birthDate: {
-      year: userInfo.birthDate.year,
-      month: userInfo.birthDate.month,
-      day: userInfo.birthDate.day
+      year: '',
+      month: '',
+      day: ''
     },
-    gender: userInfo.gender,
-    phoneNumber: userInfo.phoneNumber
+    gender: '',
+    phoneNumber: ''
   };
   const [values, setValues] = useState<UserInfoValues>(initValues);
   const [errors, setErrors] = useState<Errors>({});
+  const { updateAuthState } = useAuthState();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -43,7 +36,7 @@ function UserEditForm() {
   const handleBirthDateChange = (
     e:
       | React.ChangeEvent<{ name: string; value: unknown }>
-      | { target: { name: string; value: number } }
+      | { target: { name: string; value: string } }
   ) => {
     const { name, value } = e.target;
     setValues((prev) => {
@@ -142,10 +135,10 @@ function UserEditForm() {
     { year, month, day }: UserInfoValues['birthDate'],
     errMsgs: Errors
   ) => {
-    const birthDate = new Date(year, month - 1, day);
-    const isYearValid = birthDate.getFullYear() === year;
-    const isMonthValid = birthDate.getMonth() + 1 === month;
-    const isDayValid = birthDate.getDate() === day;
+    const birthDate = new Date(Number(year), Number(month) - 1, Number(day));
+    const isYearValid = birthDate.getFullYear() === Number(year);
+    const isMonthValid = birthDate.getMonth() + 1 === Number(month);
+    const isDayValid = birthDate.getDate() === Number(day);
 
     if (!isYearValid || !isMonthValid || !isDayValid) {
       return (errMsgs.birthDate = '유효한 날짜를 입력해주세요.');
@@ -171,21 +164,90 @@ function UserEditForm() {
     return errMsgs;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = validateForm(values);
+    setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
-      alert('유효성 검사 통과!');
-      //회원정보수정 api 호출
-    } else {
-      setErrors(validationErrors);
+      try {
+        const { year, month, day } = values.birthDate;
+        const data = {
+          password: values.newPassword,
+          nickname: values.nickname,
+          birth_date: `${year}-${month}-${day}`,
+          phone_number: values.phoneNumber,
+          gender: values.gender,
+          profile_image: values.profileImage
+        };
+        const response = await editUser(data);
+
+        if (response.status === 200) {
+          alert('회원 정보가 수정되었습니다.');
+          updateAuthState(true, response.data.user);
+          navigate('/mypage');
+        }
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 401) {
+            //
+          }
+        }
+
+        console.log(err);
+        alert('회원 정보 수정에 실패하였습니다.');
+      }
     }
   };
 
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const response = await getUser();
+        if (response.status === 200) {
+          const {
+            id,
+            birth_date,
+            gender,
+            nickname,
+            phone_number,
+            profile_image
+          } = response.data;
+
+          const [year, month, day] = birth_date.split('-');
+
+          setValues((prev: UserInfoValues) => ({
+            ...prev,
+            email: id,
+            birthDate: {
+              year,
+              month,
+              day
+            },
+            gender,
+            nickname,
+            phoneNumber: phone_number,
+            profileImage: profile_image
+          }));
+        }
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 401) {
+            //
+          }
+        }
+
+        console.log(err);
+        alert('회원 정보 불러오기에 실패하였습니다.');
+      }
+    };
+
+    getUserData();
+  }, []);
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <ProfileImage url={userInfo.profileImage} />
+      <ProfileImage url={values.profileImage} />
       <UserInfo
         values={values}
         errors={errors}

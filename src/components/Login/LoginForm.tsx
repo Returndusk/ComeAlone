@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { Cookies } from 'react-cookie';
-import { Errors, LoginFormData, LoginFormValues } from '../../types/UserTypes';
+import {
+  Errors,
+  LoginFormData,
+  LoginFormValues,
+  UserData
+} from '../../types/UserTypes';
 import { TextField } from '@mui/material';
 import styles from './LoginForm.module.scss';
 import { loginUser } from '../../apis/user';
-import { UserData, useAuthState } from '../../contexts/AuthContext';
+import { useAuthState } from '../../contexts/AuthContext';
 import {
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_OPTIONS
