@@ -1,14 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './DestinationDetails.module.scss';
-import { RiThumbUpFill } from 'react-icons/ri';
-import { RiThumbUpLine } from 'react-icons/ri';
 import Review from './Review';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  getDestinationDetailsByDestinationId,
-  postPreferredDestinationsByDestinationId
-} from '../../apis/destinationList';
-import { useAuthState } from '../../contexts/AuthContext';
+import { getDestinationDetailsByDestinationId } from '../../apis/destinationList';
 import AlertModal from '../common/Alert/AlertModal';
 import Accordian from './Accordian';
 import { DestinationsDetailsType } from '../../types/DestinationListTypes';
@@ -21,8 +15,7 @@ const ALERT_PROPS = {
 function DestinationDetails() {
   const [destinationDetails, setDestinationDetails] =
     useState<DestinationsDetailsType | null>(null);
-  const { authState, updateAuthState } = useAuthState();
-  const [likes, setLikes] = useState<boolean>(false);
+
   const { contentid } = useParams();
   const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -36,26 +29,6 @@ function DestinationDetails() {
   useEffect(() => {
     getDestinationDetails();
   }, [getDestinationDetails]);
-
-  const postLikesDestinations = useCallback(async () => {
-    const res = await postPreferredDestinationsByDestinationId(
-      Number(contentid)
-    );
-    const userLikes = res?.data.is_liked;
-    setLikes(() => userLikes);
-  }, [contentid]);
-
-  const handleLikesClick = async () => {
-    if (authState.isLoggedIn) {
-      await postLikesDestinations();
-    } else {
-      setIsOpenAlert(true);
-    }
-  };
-
-  useEffect(() => {
-    console.log(likes);
-  }, [likes]);
 
   const handleOnConfirm = () => {
     setIsOpenAlert(false);
@@ -75,16 +48,7 @@ function DestinationDetails() {
               />
             </div>
             <h2>{destinationDetails?.title}</h2>
-            <button
-              className={styles.detailsLikesButton}
-              onClick={handleLikesClick}
-            >
-              {likes ? (
-                <RiThumbUpFill className={styles.detailsLikesUpButton} />
-              ) : (
-                <RiThumbUpLine className={styles.detailsLikesCancelButton} />
-              )}
-            </button>
+
             <p>전화번호:{destinationDetails?.tel}</p>
             <Accordian>{destinationDetails?.overview}</Accordian>
 
