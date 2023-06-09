@@ -19,7 +19,7 @@ import { defaultSchedule } from '../components/ScheduleEdit/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
-import { updateSchedule } from '../apis/ScheduleEditAPI';
+import { updateSchedule, deleteScheduleById } from '../apis/ScheduleEditAPI';
 import ROUTER from '../constants/Router';
 
 function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
@@ -160,8 +160,8 @@ function ScheduleEdit() {
     navigate(`/schedule/detail/${scheduleId}`);
   };
 
-  const handleDelete = () => {
-    console.log('일정이 삭제되었습니다.');
+  const handleDelete = async () => {
+    await deleteScheduleById(scheduleId);
   };
 
   if (isLoading) {

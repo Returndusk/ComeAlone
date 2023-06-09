@@ -14,3 +14,11 @@ export async function updateSchedule(updatedSchedule: any) {
     console.log(err);
   }
 }
+
+export async function deleteScheduleById(id: string | undefined) {
+  try {
+    await tokenInstance.delete(`${baseUrl}/schedules/${id}`);
+  } catch (err) {
+    console.log(err);
+  }
+}
