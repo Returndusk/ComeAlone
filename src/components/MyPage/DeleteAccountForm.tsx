@@ -51,7 +51,6 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
           if (err.response?.status === 401) {
-            console.log(err.response.data);
             if (
               err.response.data.reason === 'INVALID' ||
               err.response.data.reason === 'EXPIRED'
