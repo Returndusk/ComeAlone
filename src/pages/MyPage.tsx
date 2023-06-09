@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
+import { useAuthState } from '../contexts/AuthContext';
+import { getUser } from '../apis/UserAPI';
+import { UserDetail } from '../types/UserTypes';
 import UserInfo from '../components/MyPage/UserInfo';
 import ProfileImage from '../components/MyPage/ProfileImage';
 import styles from '../components/MyPage/MyPage.module.scss';
 import MyPageButtons from '../components/MyPage/MyPageButtons';
 import DeleteAccountForm from '../components/MyPage/DeleteAccountForm';
-import { getUser } from '../apis/user';
-import { UserDetail } from '../types/UserTypes';
-import { AxiosError } from 'axios';
 
 function MyPage() {
+  const { updateAuthState } = useAuthState();
   const initValues: UserDetail = {
     email: '',
     nickname: '',
@@ -47,10 +49,19 @@ function MyPage() {
         }
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
-          console.log(err);
-          // if (err.response?.status === 401) {
-          // }
+          if (err.response?.status === 401) {
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
+          }
         }
+
+        console.log(err);
+        alert('회원 정보 불러오기에 실패하였습니다.');
       }
     };
 
