@@ -26,7 +26,9 @@ function InfoScheduleDetail({
         </span>
         {nickname}
       </div>
-      <div className={styles.date}>{createdAt.toLocaleDateString('ko-KR')}</div>
+      <div className={styles.createdAt}>
+        작성일: {createdAt.toLocaleDateString('ko-KR')}
+      </div>
       <p>{summary}</p>
     </div>
   );

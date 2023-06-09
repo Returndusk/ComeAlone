@@ -12,7 +12,7 @@ function InfoScheduleEdit({
 }: ScheduleEditInfoType) {
   return (
     <div className={styles.ScheduleInfoContainer}>
-      <div className={styles.date}>
+      <div className={styles.createdAt}>
         작성일: {createdAt.toLocaleDateString('ko-KR')}
       </div>
       <TextField
