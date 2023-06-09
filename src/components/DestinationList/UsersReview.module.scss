@@ -1,4 +1,7 @@
 .usersReviewContainer {
-  width: 50px;
-  height: 30px;
+  display: grid;
+}
+
+.usersReviewBox:not(:first-child) {
+  margin-top: 20px;
 }

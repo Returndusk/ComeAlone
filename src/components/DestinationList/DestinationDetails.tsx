@@ -43,11 +43,11 @@ function DestinationDetails() {
     );
     const userLikes = res?.data.is_liked;
     setLikes(() => userLikes);
-  }, []);
+  }, [contentid]);
 
-  const handleLikesClick = () => {
+  const handleLikesClick = async () => {
     if (authState.isLoggedIn) {
-      postLikesDestinations();
+      await postLikesDestinations();
     } else {
       setIsOpenAlert(true);
     }
