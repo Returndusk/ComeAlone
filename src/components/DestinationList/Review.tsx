@@ -62,7 +62,7 @@ function Review() {
     const status = res?.status;
     if (status === 201) {
       setIsShowSuccessAlert(true);
-      getReviewList();
+      await getReviewList();
       return;
     }
     setIsShowSuccessAlert(false);
@@ -109,15 +109,18 @@ function Review() {
       return;
     }
     setIsShowAlert(true);
+    return;
   };
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
     navigate('/login');
+    return;
   };
 
   const handleOnReviewConfirm = () => {
     setIsShowSuccessAlert(null);
+    return;
   };
 
   /*
@@ -135,7 +138,7 @@ function Review() {
           {allReviewList?.map((review, index) => {
             return (
               <div key={index}>
-                <p>{review.commenter_id}</p>
+                <p>{review.user.nickname}</p>
                 <p>{review.comment}</p>
                 <p>{review.created_at}</p>
               </div>

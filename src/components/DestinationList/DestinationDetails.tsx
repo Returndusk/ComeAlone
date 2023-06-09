@@ -45,9 +45,9 @@ function DestinationDetails() {
     setLikes(() => userLikes);
   }, [contentid]);
 
-  const handleLikesClick = () => {
+  const handleLikesClick = async () => {
     if (authState.isLoggedIn) {
-      postLikesDestinations();
+      await postLikesDestinations();
     } else {
       setIsOpenAlert(true);
     }

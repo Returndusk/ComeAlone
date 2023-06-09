@@ -12,7 +12,6 @@ import {
   getUsersReview,
   modifyReviewByDestinationId
 } from '../../apis/destinationList';
-import { isReturnStatement } from 'typescript';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -87,6 +86,7 @@ function UsersReview() {
       return;
     }
     setIsShowSuccessAlert(false);
+    return;
   };
 
   useEffect(() => console.log(modifiedReview), [modifiedReview]);
@@ -130,9 +130,9 @@ function UsersReview() {
   };
 
   //수정 submit 이벤트 (수정 완료)
-  const handleModifiedDone = (index: number, commentid: number) => {
+  const handleModifiedDone = async (index: number, commentid: number) => {
     if (modifiedReview.comment !== null) {
-      modifyReview(commentid);
+      await modifyReview(commentid);
     }
     if (isEditing && isEditing.length > 0) {
       const newIsEditing = [...isEditing];
@@ -143,12 +143,17 @@ function UsersReview() {
     return;
   };
 
-  const handleDeleteOnClick = (commentid: number) => {
-    if (authState.isLoggedIn) {
-      deleteReview(commentid);
-      //isEditing 관리해야하는지 확인하기
-    } else {
+  const handleDeleteOnClick = async (index: number, commentid: number) => {
+    if (!authState.isLoggedIn) {
       setIsShowAlert(true);
+      return;
+    }
+    await deleteReview(commentid);
+    if (isEditing && isEditing.length > 0) {
+      const newIsEditing = [...isEditing];
+      newIsEditing.splice(index, 1);
+      setIsEditing(newIsEditing);
+      return;
     }
   };
 
@@ -176,13 +181,16 @@ function UsersReview() {
         {usersReview?.map((review, index) => {
           return isEditing !== null && !isEditing[index] ? (
             <div key={index} className={styles.usersReviewBox}>
-              <p>{review.id}</p>
+              <p>{review.comment_id}</p>
               <p>{review.comment}</p>
               <p>{review.created_at}</p>
+              <p>{review.updated_at}</p>
               <button onClick={() => handleModifiedButtonOnClick(index)}>
                 수정
               </button>
-              <button onClick={() => handleDeleteOnClick(review.id)}>
+              <button
+                onClick={() => handleDeleteOnClick(index, review.comment_id)}
+              >
                 삭제
               </button>
             </div>
@@ -205,7 +213,7 @@ function UsersReview() {
                 <button
                   id={styles.reviewSubmmitButton}
                   type='submit'
-                  onClick={() => handleModifiedDone(index, review.id)}
+                  onClick={() => handleModifiedDone(index, review.comment_id)}
                 >
                   완료
                 </button>

@@ -20,11 +20,19 @@ export interface DestinationsDetailsType extends DestinationsType {
   comment_count: number;
 }
 
+export interface User {
+  id: string;
+  nickname: string;
+  profile_image: string;
+}
+
 export interface DestinationsReviewType {
-  id: number;
-  commenter_id: string;
+  comment_id: number;
+  destination_id: number;
   comment: string;
   created_at: string;
+  updated_at: string;
+  user: User;
 }
 
 export interface commentType {
