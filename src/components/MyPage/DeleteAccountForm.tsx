@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import styles from './DeleteAccountForm.module.scss';
 import { DeleteFormProps } from '../../types/UserTypes';
 import { TextField } from '@mui/material';
+import { AxiosError } from 'axios';
+import { checkPassword, deleteUser } from '../../apis/user';
+import { useAuthState } from '../../contexts/AuthContext';
 
 function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
+  const { updateAuthState } = useAuthState();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,15 +20,52 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
     return errMsg;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleDeleteAccount = async () => {
+    if (window.confirm('정말 탈퇴하시겠습니까?')) {
+      try {
+        const response = await deleteUser();
+        if (response.status === 200) {
+          alert('탈퇴 완료되었습니다.');
+          updateAuthState(false);
+        }
+      } catch (err) {
+        console.log(err);
+        alert('회원 탈퇴에 실패하였습니다.');
+      }
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationError = validateForm(password);
     setError(validationError);
 
     if (!validationError) {
-      alert('유효성 검사 통과!');
-      //비밀번호 확인 api 호출
-      //비밀번호 확인 성공시 회원탈퇴 api 호출
+      try {
+        const data = { password };
+        const response = await checkPassword(data);
+
+        if (response.status === 201) {
+          handleDeleteAccount();
+        }
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 401) {
+            console.log(err.response.data);
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
+            return setError('비밀번호가 일치하지 않습니다.');
+          }
+        }
+
+        console.log(err);
+        alert('비밀번호 확인에 실패하였습니다.');
+      }
     }
   };
 
