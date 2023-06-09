@@ -24,6 +24,14 @@ const SUCCESS_ALERT_PROPS = {
   showTitle: false
 };
 
+const RESPONSE_STATUS = {
+  POST_SUCCESS: 201
+};
+
+const REVIEW_STANDARDS = {
+  MIN_LENGTH: 5
+};
+
 function Review() {
   const [submittedReview, setSubmittedReview] = useState<commentType>({
     comment: null
@@ -54,32 +62,53 @@ function Review() {
   }, [getReviewList]);
 
   //리뷰 등록 메서드
-  const addReview = useCallback(async () => {
+  const addReview = async () => {
     const res = await postReviewByDestinationId(
       Number(contentid),
       submittedReview
     );
     const status = res?.status;
-    if (status === 201) {
+    if (status === RESPONSE_STATUS.POST_SUCCESS) {
       setIsShowSuccessAlert(true);
-      getReviewList();
+      await getReviewList();
       return;
     }
     setIsShowSuccessAlert(false);
-  }, [contentid, submittedReview]);
+  };
 
   //리뷰 수
   const reviewCount = useMemo(() => {
     return allReviewList?.length;
   }, [allReviewList]);
 
+  const isNullishReviewInput = (input: string) => {
+    return input === '' || input.length <= REVIEW_STANDARDS.MIN_LENGTH;
+  };
+
   //리뷰 등록 시도
   const handleReviewSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!authState.isLoggedIn) {
+      setIsShowAlert(true);
+      return;
+    }
     const userReview = e.target.review.value;
-    setSubmittedReview({ comment: userReview });
-    return;
+    if (isNullishReviewInput(userReview)) {
+      alert(`내용을 ${REVIEW_STANDARDS.MIN_LENGTH}자 이상 입력해주세요.`);
+    }
+
+    setSubmittedReview(() => {
+      return { comment: userReview };
+    });
+    e.target.review.value = null;
   };
+
+  useEffect(() => {
+    if (submittedReview.comment !== null) {
+      addReview();
+      return;
+    }
+  }, [submittedReview]);
 
   //사용자 리뷰 목록 조회 시도
   const handleUsersReviewClick = () => {
@@ -88,30 +117,18 @@ function Review() {
       return;
     }
     setIsShowAlert(true);
-  };
-
-  // useEffect(() => {
-  //   /*Post 요청*/
-  //   /*Get 요청*/
-  // }, [submittedReview]);
-
-  useEffect(() => console.log(submittedReview), [submittedReview]);
-
-  const handleCommentInputClick = () => {
-    if (authState.isLoggedIn) {
-      addReview();
-    } else {
-      setIsShowAlert(true);
-    }
+    return;
   };
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
     navigate('/login');
+    return;
   };
 
   const handleOnReviewConfirm = () => {
     setIsShowSuccessAlert(null);
+    return;
   };
 
   /*
@@ -129,7 +146,7 @@ function Review() {
           {allReviewList?.map((review, index) => {
             return (
               <div key={index}>
-                <p>{review.commenter_id}</p>
+                <p>{review.user.nickname}</p>
                 <p>{review.comment}</p>
                 <p>{review.created_at}</p>
               </div>
@@ -147,11 +164,7 @@ function Review() {
                 : '로그인이 필요합니다.'
             }
           />
-          <button
-            id={styles.reviewButton}
-            type='submit'
-            onClick={handleCommentInputClick}
-          >
+          <button id={styles.reviewButton} type='submit'>
             등록
           </button>
         </form>

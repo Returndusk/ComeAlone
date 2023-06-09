@@ -24,7 +24,7 @@ function Search() {
   const [resultData, setResultData] = useState<DestinationsType[] | []>(
     rankedDestinations
   );
-  // const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   //인기 목적지 목록
   const getRankedDestinationsData = useCallback(async () => {
@@ -119,8 +119,8 @@ function Search() {
         </div>
         <Category
           searchResults={resultData}
-          // isLoading={isLoading}
-          // setIsLoading={setIsLoading}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
         />
       </div>
     </>
