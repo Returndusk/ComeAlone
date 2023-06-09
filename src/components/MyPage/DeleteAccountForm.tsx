@@ -3,7 +3,7 @@ import styles from './DeleteAccountForm.module.scss';
 import { DeleteFormProps } from '../../types/UserTypes';
 import { TextField } from '@mui/material';
 import { AxiosError } from 'axios';
-import { checkPassword, deleteUser } from '../../apis/user';
+import { checkPassword, deleteUser } from '../../apis/UserAPI';
 import { useAuthState } from '../../contexts/AuthContext';
 
 function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {

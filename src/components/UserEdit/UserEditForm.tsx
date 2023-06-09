@@ -5,7 +5,7 @@ import { Errors, UserInfoValues } from '../../types/UserTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
 import UserEditButtons from './UserEditButtons';
-import { editUser, getUser } from '../../apis/user';
+import { editUser, getUser } from '../../apis/UserAPI';
 import { AxiosError } from 'axios';
 import { useAuthState } from '../../contexts/AuthContext';
 

@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import { TextField } from '@mui/material';
 import { UserConfirmFormProps } from '../../types/UserTypes';
 import styles from './UserConfirmForm.module.scss';
-import { checkPassword } from '../../apis/user';
+import { checkPassword } from '../../apis/UserAPI';
 
 function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
   const [password, setPassword] = useState('');

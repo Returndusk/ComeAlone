@@ -4,7 +4,7 @@ import ProfileImage from '../components/MyPage/ProfileImage';
 import styles from '../components/MyPage/MyPage.module.scss';
 import MyPageButtons from '../components/MyPage/MyPageButtons';
 import DeleteAccountForm from '../components/MyPage/DeleteAccountForm';
-import { getUser } from '../apis/user';
+import { getUser } from '../apis/UserAPI';
 import { UserDetail } from '../types/UserTypes';
 import { AxiosError } from 'axios';
 

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
-import { getUser, refreshUserTokens } from '../apis/user';
+import { getUser, refreshUserTokens } from '../apis/UserAPI';
 import {
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_OPTIONS
