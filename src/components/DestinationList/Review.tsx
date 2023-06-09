@@ -54,7 +54,7 @@ function Review() {
   }, [getReviewList]);
 
   //리뷰 등록 메서드
-  const addReview = useCallback(async () => {
+  const addReview = async () => {
     const res = await postReviewByDestinationId(
       Number(contentid),
       submittedReview
@@ -66,20 +66,41 @@ function Review() {
       return;
     }
     setIsShowSuccessAlert(false);
-  }, [contentid, submittedReview]);
+  };
 
   //리뷰 수
   const reviewCount = useMemo(() => {
     return allReviewList?.length;
   }, [allReviewList]);
 
+  const isNullishReviewInput = (input: string) => {
+    return input === '' || input.length <= 5;
+  };
+
   //리뷰 등록 시도
   const handleReviewSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!authState.isLoggedIn) {
+      setIsShowAlert(true);
+      return;
+    }
     const userReview = e.target.review.value;
-    setSubmittedReview({ comment: userReview });
-    return;
+    if (isNullishReviewInput(userReview)) {
+      alert('내용을 5자 이상 입력해주세요.');
+    }
+
+    setSubmittedReview(() => {
+      return { comment: userReview };
+    });
+    e.target.review.value = null;
   };
+
+  useEffect(() => {
+    if (submittedReview.comment !== null) {
+      addReview();
+      return;
+    }
+  }, [submittedReview]);
 
   //사용자 리뷰 목록 조회 시도
   const handleUsersReviewClick = () => {
@@ -88,21 +109,6 @@ function Review() {
       return;
     }
     setIsShowAlert(true);
-  };
-
-  // useEffect(() => {
-  //   /*Post 요청*/
-  //   /*Get 요청*/
-  // }, [submittedReview]);
-
-  useEffect(() => console.log(submittedReview), [submittedReview]);
-
-  const handleCommentInputClick = () => {
-    if (authState.isLoggedIn) {
-      addReview();
-    } else {
-      setIsShowAlert(true);
-    }
   };
 
   const handleOnLoginConfirm = () => {
@@ -147,11 +153,7 @@ function Review() {
                 : '로그인이 필요합니다.'
             }
           />
-          <button
-            id={styles.reviewButton}
-            type='submit'
-            onClick={handleCommentInputClick}
-          >
+          <button id={styles.reviewButton} type='submit'>
             등록
           </button>
         </form>

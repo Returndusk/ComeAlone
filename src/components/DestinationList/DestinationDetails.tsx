@@ -43,7 +43,7 @@ function DestinationDetails() {
     );
     const userLikes = res?.data.is_liked;
     setLikes(() => userLikes);
-  }, []);
+  }, [contentid]);
 
   const handleLikesClick = () => {
     if (authState.isLoggedIn) {
