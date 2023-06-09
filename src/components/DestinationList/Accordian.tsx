@@ -17,10 +17,7 @@ function Accordian(props: { children: React.ReactNode }) {
       >
         {props.children}
       </div>
-      <button
-        className={styles.accordianButton}
-        onClick={handleToggleAccordion}
-      >
+      <button id={styles.accordianButton} onClick={handleToggleAccordion}>
         {isExpanded ? '접기' : '펼치기'}
       </button>
     </div>

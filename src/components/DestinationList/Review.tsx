@@ -156,7 +156,7 @@ function Review() {
           </button>
         </form>
         <button
-          className={styles.usersReviewListButton}
+          id={styles.usersReviewListButton}
           onClick={handleUsersReviewClick}
         >
           내 리뷰 목록
