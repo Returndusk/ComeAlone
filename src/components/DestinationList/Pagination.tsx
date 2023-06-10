@@ -1,19 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
 import styles from './Pagination.module.scss';
-import { DestinationsType } from '../../types/DestinationListTypes';
+import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 
 type PaginationProps = {
-  filteredDestinations: DestinationsType[];
+  filteredDestinations: specifiedCategoryDestinationsType[] | [];
   setSlicedDestinations: React.Dispatch<
-    React.SetStateAction<DestinationsType[]>
+    React.SetStateAction<specifiedCategoryDestinationsType[]>
   >;
 };
 
 const PAGES = {
   START_INDEX_OF_PAGE: 1,
   PAGES_TO_SKIP: 1,
-  ITEMS_PER_PAGE: 20,
+  ITEMS_PER_PAGE: 10,
   QUERY_OF_URL: 'page',
   PAGES_TO_SHOW_IN_NAVBAR: 5
 };
@@ -22,15 +22,19 @@ function Pagination({
   filteredDestinations,
   setSlicedDestinations
 }: PaginationProps) {
-  const [currentPage, setCurrentPage] = useState<number>(
-    PAGES.START_INDEX_OF_PAGE
-  );
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState<number>(PAGES.START_INDEX_OF_PAGE);
 
-  const location = useLocation();
-  const navigate = useNavigate();
-  const queryParams = new URLSearchParams(location.search);
+  const pageQueryParam = useMemo(() => {
+    return searchParams.get('page');
+  }, [searchParams]);
+
+  const searchQueryParam = useMemo(() => {
+    return searchParams.get('search');
+  }, [searchParams]);
+
   const pageNumber = parseInt(
-    queryParams.get(PAGES.QUERY_OF_URL) || PAGES.START_INDEX_OF_PAGE.toString()
+    pageQueryParam || PAGES.START_INDEX_OF_PAGE.toString()
   );
 
   const totalPages = useMemo(() => {
@@ -38,10 +42,12 @@ function Pagination({
   }, [filteredDestinations]);
 
   const firstDestinationIdx = useMemo(() => {
-    return (currentPage - PAGES.PAGES_TO_SKIP) * PAGES.ITEMS_PER_PAGE;
-  }, [currentPage]);
+    return (page - PAGES.PAGES_TO_SKIP) * PAGES.ITEMS_PER_PAGE;
+  }, [page]);
 
-  const lastDestinationIdx = firstDestinationIdx + PAGES.ITEMS_PER_PAGE;
+  const lastDestinationIdx = useMemo(() => {
+    return firstDestinationIdx + PAGES.ITEMS_PER_PAGE;
+  }, [firstDestinationIdx]);
 
   useEffect(() => {
     setSlicedDestinations(() => {
@@ -50,16 +56,20 @@ function Pagination({
         lastDestinationIdx
       );
     });
-  }, [filteredDestinations]);
+  }, [filteredDestinations, firstDestinationIdx, lastDestinationIdx]);
 
   useEffect(() => {
-    setCurrentPage(() => pageNumber);
+    setPage(() => pageNumber);
   }, [pageNumber]);
 
   const handlePageQueryChange = (targetPageNumber: number) => {
-    setCurrentPage(() => targetPageNumber);
-    queryParams.set(PAGES.QUERY_OF_URL, targetPageNumber.toString());
-    navigate(`?${queryParams.toString()}`);
+    setPage(() => targetPageNumber);
+    if (searchQueryParam !== null) {
+      setSearchParams(`?page=${targetPageNumber}&search=${searchQueryParam}`);
+    } else {
+      setSearchParams(`?page=${targetPageNumber}`);
+    }
+    return;
   };
 
   const pageNumbers = Array.from(
@@ -70,17 +80,16 @@ function Pagination({
   const slicePageIdx = useMemo(() => {
     return (
       Math.floor(
-        (currentPage - PAGES.START_INDEX_OF_PAGE) /
-          PAGES.PAGES_TO_SHOW_IN_NAVBAR
+        (page - PAGES.START_INDEX_OF_PAGE) / PAGES.PAGES_TO_SHOW_IN_NAVBAR
       ) *
         PAGES.PAGES_TO_SHOW_IN_NAVBAR +
       PAGES.START_INDEX_OF_PAGE
     );
-  }, [currentPage]);
+  }, [page]);
 
   const handlePreviousPageClick = () => {
-    if (currentPage > 1) {
-      handlePageQueryChange(currentPage - PAGES.PAGES_TO_SKIP);
+    if (page > 1) {
+      handlePageQueryChange(page - PAGES.PAGES_TO_SKIP);
     }
   };
 
@@ -89,8 +98,8 @@ function Pagination({
   };
 
   const handleNextPageClick = () => {
-    if (currentPage < totalPages) {
-      handlePageQueryChange(currentPage + PAGES.PAGES_TO_SKIP);
+    if (page < totalPages) {
+      handlePageQueryChange(page + PAGES.PAGES_TO_SKIP);
     }
   };
 
@@ -115,7 +124,7 @@ function Pagination({
             PAGES.START_INDEX_OF_PAGE
         )
         .map((pageNumber) =>
-          currentPage === pageNumber ? (
+          page === pageNumber ? (
             <span
               key={pageNumber}
               className={styles.pageNumber}
@@ -125,7 +134,11 @@ function Pagination({
             </span>
           ) : (
             <NavLink
-              to={`?page=${pageNumber}`}
+              to={
+                searchQueryParam !== null
+                  ? `?page=${pageNumber}&search=${searchQueryParam}`
+                  : `?page=${pageNumber}`
+              }
               className={styles.pageNumber}
               key={pageNumber}
               onClick={() => handlePageClick(pageNumber)}

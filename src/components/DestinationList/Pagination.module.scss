@@ -1,3 +1,59 @@
 .paginationBar {
-  margin: auto;
+  margin: 15px 0 30px 0; //목적지 목록 div 박스 margin = 15px
+  justify-content: center;
+  display: flex;
+
+  button {
+    display: flex;
+    justify-content: center;
+
+    position: relative;
+    border: none;
+    display: inline-block;
+    margin: auto 5px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 17px;
+
+    background: #ccc;
+    color: white;
+
+    &:hover {
+      letter-spacing: 2px;
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+  }
+}
+
+.pageNumber {
+  color: var(--sub-1-color);
+  text-decoration: none;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    letter-spacing: 2px;
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+
+  & + & {
+    margin-left: 5px;
+  }
+}
+
+#selected {
+  position: relative;
+  font-weight: bold;
+  color: #000;
 }

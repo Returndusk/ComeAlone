@@ -1,31 +1,47 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Errors, LoginFormValues } from '../../types/UserTypes';
-import axios from 'axios';
+import { AxiosError } from 'axios';
+import { Cookies } from 'react-cookie';
+import { LoginFormData, UserData } from '../../types/UserTypes';
+import { LoginFormValues, LoginFormErrors } from './LoginTypes';
 import { TextField } from '@mui/material';
 import styles from './LoginForm.module.scss';
+import { loginUser } from '../../apis/UserAPI';
+import { useAuthState } from '../../contexts/AuthContext';
+import {
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  REFRESH_TOKEN_COOKIE_OPTIONS
+} from '../../constants/Token';
 
 function LoginForm() {
+  const cookies = new Cookies();
+  const { updateAuthState } = useAuthState();
+
   const navigate = useNavigate();
   const initValues: LoginFormValues = {
     email: '',
     password: ''
   };
+  const initErrors = { ...initValues };
   const [values, setValues] = useState<LoginFormValues>(initValues);
-  const [errors, setErrors] = useState<Errors>({});
+  const [errors, setErrors] = useState<LoginFormErrors>(initErrors);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const checkEmptyInputFields = (values: LoginFormValues, errMsgs: Errors) => {
+  const checkEmptyInputFields = (
+    values: LoginFormValues,
+    errMsgs: LoginFormErrors
+  ) => {
     for (const [key, value] of Object.entries(values)) {
-      if (!value) errMsgs[key] = '빈칸을 입력해 주세요.';
+      const errorKey = key as keyof LoginFormErrors;
+      if (!value) errMsgs[errorKey] = '빈칸을 입력해 주세요.';
     }
   };
 
-  const validateEmail = (email: string, errMsgs: Errors) => {
+  const validateEmail = (email: string, errMsgs: LoginFormErrors) => {
     const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!pattern.test(email)) {
       errMsgs.email = '유효한 이메일 주소가 아닙니다.';
@@ -33,7 +49,7 @@ function LoginForm() {
   };
 
   const validateForm = (values: LoginFormValues) => {
-    const errMsgs: Errors = {};
+    const errMsgs: LoginFormErrors = initErrors;
 
     checkEmptyInputFields(values, errMsgs);
     if (!errMsgs.email) validateEmail(values.email, errMsgs);
@@ -41,28 +57,49 @@ function LoginForm() {
     return errMsgs;
   };
 
-  const handleLogin = async () => {
-    const body = {
-      id: values.email,
-      password: values.password
-    };
-    const response = await axios.post(
-      'http://34.64.169.7:3000/api/auth/signin',
-      body
-    );
-    console.log(response);
+  const handleSuccess = (
+    accessToken: string,
+    refreshToken: string,
+    userData: UserData
+  ) => {
+    //쿠키에 토큰 저장
+    cookies.set('accessToken', accessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
+    cookies.set('refreshToken', refreshToken, REFRESH_TOKEN_COOKIE_OPTIONS);
+
+    //전역으로 상태 관리
+    alert('로그인에 성공하였습니다!');
+    updateAuthState(true, userData);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = validateForm(values);
-    if (Object.keys(validationErrors).length === 0) {
-      alert('유효성 검사 통과!');
-      //로그인 api 호출
-      await handleLogin();
-    } else {
-      setErrors(validationErrors);
+    setErrors(validationErrors);
+
+    if (Object.values(validationErrors).every((error) => !error)) {
+      try {
+        const data: LoginFormData = {
+          id: values.email,
+          password: values.password
+        };
+        const response = await loginUser(data);
+
+        if (response.status === 201) {
+          const { accessToken, refreshToken, user } = response.data;
+          handleSuccess(accessToken, refreshToken, user);
+        }
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 401) {
+            const errMsg = err.response.data.message;
+            return setErrors((prev) => ({ ...prev, password: errMsg }));
+          }
+        }
+
+        console.log(err);
+        alert('로그인에 실패하였습니다.');
+      }
     }
   };
 

@@ -1,13 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ModalScheduleLists.module.scss';
-import dummy from '../../ScheduleList/ScheduleListDummy';
+// import dummy from '../../ScheduleList/ScheduleListDummy';
 import ModalScheduleCard from './ModalScheduleCard';
-import { MyScheduleListType } from '../../../types/ScheduleTypes';
+import {
+  ModalScheduleCardType,
+  MyScheduleListType
+} from '../../../types/ModalScheduleTypes';
+import tokenInstance from '../../../apis/tokenInstance';
+
+async function getMyScheduleLists() {
+  const response = await tokenInstance.get<MyScheduleListType>(
+    'https://vvhooping.com/api/users/me/schedules'
+  );
+  const data = response.data;
+  // console.log(data);
+  return data;
+}
 
 export default function ModalScheduleLists() {
-  const [scheduleList, setScheduleList] = useState<MyScheduleListType>(dummy);
+  const [scheduleLists, setScheduleLists] = useState<ModalScheduleCardType[]>(
+    []
+  );
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
   const [selectedCardIdx, setSelectedCardIdx] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function getScheduleLists() {
+      try {
+        const data = await getMyScheduleLists();
+        console.log(data);
+        setScheduleLists(
+          data.map((schedule, index) => ({
+            schedule,
+            index,
+            isSelected: selectedCardIdx === index,
+            onShowDestinations: handleShowDestinations,
+            scheduleId: schedule.schedule_id
+          }))
+        );
+      } catch (err) {
+        console.error('Error: ', err);
+      }
+    }
+
+    getScheduleLists();
+  }, [selectedCardIdx]);
+
+  // console.log(scheduleLists);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
@@ -23,7 +62,7 @@ export default function ModalScheduleLists() {
   // function handleCloseDestinations() {
   //   setSelectedCardIdx(null);
   // }
-  // console.log(scheduleList);
+  // console.log(scheduleLists);
 
   return (
     <div className={styles.scheduleContainer}>
@@ -53,17 +92,17 @@ export default function ModalScheduleLists() {
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
-        {scheduleList.map((schedule, index) => (
+        {scheduleLists.map((scheduleList, index) => (
           <ModalScheduleCard
-            key={schedule.id}
-            schedule={schedule}
+            key={scheduleList.schedule.schedule_id}
+            schedule={scheduleList.schedule}
             index={index}
             isSelected={selectedCardIdx === index}
             onShowDestinations={handleShowDestinations}
             // onCloseDestinations={handleCloseDestinations}
+            scheduleId={scheduleList.schedule.schedule_id}
           />
         ))}
-        {/* <div className={styles.scheduleAdd}>일정 추가하기</div> */}
       </div>
     </div>
   );

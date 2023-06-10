@@ -1,14 +1,33 @@
-import { MyScheduleCardType } from './ScheduleTypes';
+// import { MyScheduleCardType } from './ScheduleTypes';
+
+export type ModalMyScheduleType = {
+  schedule_id: number;
+  title: string;
+  summary: string;
+  start_date: string;
+  end_date: string;
+  created_at: string;
+  destinations: string[][];
+  destinationIds: number[][];
+};
+
+export type MyScheduleListType = ModalMyScheduleType[];
 
 export type ModalScheduleCardType = {
-  schedule: MyScheduleCardType;
+  schedule: ModalMyScheduleType;
   index: number;
   isSelected: boolean;
   onShowDestinations: (index: number) => void;
   // onCloseDestinations: () => void;
+  scheduleId: number;
 };
 
 export type AddToScheduleModalType = {
-  destinations: string[];
+  // schedule: ModalMyScheduleType;
+  selectedDay: number;
+  scheduleId: number;
+  destinations: string[][];
+  destinationIds: number[][];
   // onDestinationUpdate: (updatedDestination: string[]) => void;
+  // updatedDestinations: string[][];
 };

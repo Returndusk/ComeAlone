@@ -1,33 +1,57 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DestinationsType } from '../../types/DestinationListTypes';
 import styles from './Search.module.scss';
 import Category from './Category';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { DEFAULT_DESTINATIONS } from './Dummy';
+import {
+  getDestinationDetailsByDestinationId,
+  getRankedDestinationsByRankingNumber
+} from '../../apis/destinationList';
 
-// 사용자에게 쿼리 받음 -> 검색 함수 전달 -> 검색함수가 쿼리랑, 목적지 받아서 검색 수행 -> 검색 결과 Destinations 파일에 전달
+// 사용자 검색 X -> 랭킹 데이터를 props로 전송
+// 사용자 검색 O -> 검색 쿼리를 props로 전송
+
+const RANKED_DESTINAIONS_NUMBER = {
+  count: 10
+};
 
 function Search() {
-  const [data, setData] = useState<DestinationsType[]>(DEFAULT_DESTINATIONS);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [rankedDestinations, setRankedDestinations] = useState<
+    DestinationsType[] | []
+  >([]);
+  const [isUserSearched, setIsUserSearched] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  //인기 목적지 목록
+  /*
+  const getRankedDestinationsData = useCallback(async () => {
+    const res = await getRankedDestinationsByRankingNumber(
+      RANKED_DESTINAIONS_NUMBER.count
+    );
+    const rankedDestinationsList = res?.data;
+    setRankedDestinations(() => rankedDestinationsList);
+  }, []);
+
+  useEffect(() => {
+    getRankedDestinationsData();
+  }, [getRankedDestinationsData]);
+  */
+
+  const getRankedDestinationsData = useCallback(async () => {
+    const res = await getDestinationDetailsByDestinationId(2853453); //임시 id
+    const rankedDestinationsList = res?.data.destinations;
+    setRankedDestinations(() => rankedDestinationsList);
+  }, []);
+
+  useEffect(() => {
+    getRankedDestinationsData();
+  }, [getRankedDestinationsData]);
 
   const searchQueryParam = useMemo(() => {
     return searchParams.get('search') ?? '';
   }, [searchParams]);
-
-  const searchResults = useMemo(() => {
-    const searchResultDestinations = data.filter((destination) => {
-      const destinationTitle = destination?.title?.trim();
-      const destinationAddress = destination?.addr1?.trim();
-      return (
-        destinationTitle?.includes(searchQueryParam.trim()) ||
-        destinationAddress?.includes(searchQueryParam.trim())
-      );
-    });
-
-    return searchResultDestinations ?? [];
-  }, [searchQueryParam]);
 
   const isNullishSearchInput = (input: string) => {
     return input === '';
@@ -35,12 +59,15 @@ function Search() {
 
   const handleSubmitQuery = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsUserSearched(true);
     const submittedQuery = e.target.searchQuery.value;
     if (isNullishSearchInput(submittedQuery)) {
       alert('검색어를 입력해주세요.');
     }
     const searchQueryString = encodeURIComponent(submittedQuery);
-    setSearchParams(`?search=${searchQueryString}`);
+    if (searchQueryString !== null) {
+      setSearchParams(`?search=${searchQueryString}`);
+    }
     return;
   };
 
@@ -61,7 +88,13 @@ function Search() {
             </button>
           </form>
         </div>
-        <Category destinations={searchResults} />
+        <Category
+          rankedDestinations={rankedDestinations}
+          isUserSearched={isUserSearched}
+          searchQueryParam={searchQueryParam}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+        />
       </div>
     </>
   );

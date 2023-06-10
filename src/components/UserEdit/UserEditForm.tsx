@@ -1,40 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import styles from './UserEditForm.module.scss';
-import { Errors, UserInfoValues } from '../../types/UserTypes';
+import { UserInfoErrors, UserInfoValues } from './UserEditTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
 import UserEditButtons from './UserEditButtons';
-
-const userInfo = {
-  email: 'elice@test.com',
-  profileImage: '',
-  nickname: '엘리스',
-  birthDate: {
-    year: 1999,
-    month: 12,
-    day: 5
-  },
-  gender: 'female',
-  phoneNumber: '010-1234-1234'
-};
+import { checkNicknameDuplicate, editUser, getUser } from '../../apis/UserAPI';
+import { AxiosError } from 'axios';
+import { useAuthState } from '../../contexts/AuthContext';
 
 function UserEditForm() {
+  const navigate = useNavigate();
+  const { updateAuthState } = useAuthState();
   const initValues: UserInfoValues = {
-    email: userInfo.email,
-    profileImage: userInfo.profileImage,
-    nickname: userInfo.nickname,
+    email: '',
+    profileImage: '',
+    nickname: '',
     newPassword: '',
     passwordConfirm: '',
     birthDate: {
-      year: userInfo.birthDate.year,
-      month: userInfo.birthDate.month,
-      day: userInfo.birthDate.day
+      year: '',
+      month: '',
+      day: ''
     },
-    gender: userInfo.gender,
-    phoneNumber: userInfo.phoneNumber
+    gender: '',
+    phoneNumber: ''
+  };
+  const initErrors = {
+    ...initValues,
+    birthDate: ''
   };
   const [values, setValues] = useState<UserInfoValues>(initValues);
-  const [errors, setErrors] = useState<Errors>({});
+  const [errors, setErrors] = useState<UserInfoErrors>(initErrors);
+  const [nicknameDuplicate, setNicknameDuplicate] = useState({
+    isPass: false,
+    newNickname: '',
+    prevNickname: ''
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -43,7 +46,7 @@ function UserEditForm() {
   const handleBirthDateChange = (
     e:
       | React.ChangeEvent<{ name: string; value: unknown }>
-      | { target: { name: string; value: number } }
+      | { target: { name: string; value: string } }
   ) => {
     const { name, value } = e.target;
     setValues((prev) => {
@@ -57,7 +60,10 @@ function UserEditForm() {
     });
   };
 
-  const checkEmptyInputFields = (values: UserInfoValues, errMsgs: Errors) => {
+  const checkEmptyInputFields = (
+    values: UserInfoValues,
+    errMsgs: UserInfoErrors
+  ) => {
     for (const [key, value] of Object.entries(values)) {
       if (
         key === 'newPassword' ||
@@ -65,11 +71,12 @@ function UserEditForm() {
         key === 'profileImage'
       )
         return;
-      if (!value) errMsgs[key] = '빈칸을 입력해 주세요.';
+      const errorKey = key as keyof UserInfoErrors;
+      if (!value) errMsgs[errorKey] = '빈칸을 입력해 주세요.';
     }
   };
 
-  const validateNickname = (nickname: string, errMsgs: Errors) => {
+  const validateNickname = (nickname: string, errMsgs: UserInfoErrors) => {
     const minLength = 2;
     const maxLength = 6;
     const hasAllowedChars = /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/;
@@ -86,9 +93,16 @@ function UserEditForm() {
       return (errMsgs.nickname =
         '닉네임은 알파벳 대소문자, 숫자, 한글만 사용할 수 있습니다.');
     }
+
+    if (
+      !nicknameDuplicate.isPass ||
+      nicknameDuplicate.newNickname !== nickname
+    ) {
+      return (errMsgs.nickname = '닉네임 중복 확인을 해주세요.');
+    }
   };
 
-  const validatePassword = (password: string, errMsgs: Errors) => {
+  const validatePassword = (password: string, errMsgs: UserInfoErrors) => {
     const hasSpecialChar = /[-_!@#$%&*,.]/;
     const hasUpperCase = /[A-Z]/;
     const hasLowerCase = /[a-z]/;
@@ -118,14 +132,17 @@ function UserEditForm() {
   const validatePasswordConfirm = (
     password: string,
     passwordConfirm: string,
-    errMsgs: Errors
+    errMsgs: UserInfoErrors
   ) => {
     if (password !== passwordConfirm) {
       errMsgs.passwordConfirm = '비밀번호가 일치하지 않습니다.';
     }
   };
 
-  const validatePhoneNumber = (phoneNumber: string, errMsgs: Errors) => {
+  const validatePhoneNumber = (
+    phoneNumber: string,
+    errMsgs: UserInfoErrors
+  ) => {
     const pattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
     const hasAllowedChars = /^[0-9-]*$/;
 
@@ -140,12 +157,12 @@ function UserEditForm() {
 
   const validateBirthDate = (
     { year, month, day }: UserInfoValues['birthDate'],
-    errMsgs: Errors
+    errMsgs: UserInfoErrors
   ) => {
-    const birthDate = new Date(year, month - 1, day);
-    const isYearValid = birthDate.getFullYear() === year;
-    const isMonthValid = birthDate.getMonth() + 1 === month;
-    const isDayValid = birthDate.getDate() === day;
+    const birthDate = new Date(Number(year), Number(month) - 1, Number(day));
+    const isYearValid = birthDate.getFullYear() === Number(year);
+    const isMonthValid = birthDate.getMonth() + 1 === Number(month);
+    const isDayValid = birthDate.getDate() === Number(day);
 
     if (!isYearValid || !isMonthValid || !isDayValid) {
       return (errMsgs.birthDate = '유효한 날짜를 입력해주세요.');
@@ -153,7 +170,7 @@ function UserEditForm() {
   };
 
   const validateForm = (values: UserInfoValues) => {
-    const errMsgs: Errors = {};
+    const errMsgs: UserInfoErrors = initErrors;
 
     checkEmptyInputFields(values, errMsgs);
     if (!errMsgs.nickname) validateNickname(values.nickname, errMsgs);
@@ -171,25 +188,152 @@ function UserEditForm() {
     return errMsgs;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleCheckNickname = async () => {
+    const nickname = values.nickname;
+    if (!nickname) {
+      return setErrors((prev) => ({
+        ...prev,
+        nickname: '빈칸을 입력해주세요.'
+      }));
+    }
 
-    const validationErrors = validateForm(values);
-    if (Object.keys(validationErrors).length === 0) {
-      alert('유효성 검사 통과!');
-      //회원정보수정 api 호출
-    } else {
-      setErrors(validationErrors);
+    try {
+      const response = await checkNicknameDuplicate({ nickname });
+
+      if (response.status === 201) {
+        setNicknameDuplicate((prev) => ({
+          ...prev,
+          isPass: true,
+          newNickname: nickname
+        }));
+        setErrors((prev) => ({ ...prev, nickname: '' }));
+        alert('사용할 수 있는 닉네임입니다.');
+      }
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) {
+          const { message: errMsg } = err.response.data;
+
+          setNicknameDuplicate((prev) => ({
+            ...prev,
+            isPass: false,
+            nickname: ''
+          }));
+          return setErrors((prev) => ({ ...prev, nickname: errMsg }));
+        }
+      }
+
+      console.log(err);
+      alert('닉네임 중복 확인에 실패하였습니다.');
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const validationErrors = validateForm(values);
+    setErrors(validationErrors);
+    if (Object.values(validationErrors).every((error) => !error)) {
+      try {
+        const { year, month, day } = values.birthDate;
+        const data = {
+          password: values.newPassword,
+          nickname: values.nickname,
+          birth_date: `${year}-${month}-${day}`,
+          phone_number: values.phoneNumber,
+          gender: values.gender,
+          profile_image: values.profileImage
+        };
+        const response = await editUser(data);
+
+        if (response.status === 200) {
+          alert('회원 정보가 수정되었습니다.');
+          updateAuthState(true, response.data.user);
+          navigate('/mypage');
+        }
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 401) {
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
+          }
+        }
+
+        console.log(err);
+        alert('회원 정보 수정에 실패하였습니다.');
+      }
+    }
+  };
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const response = await getUser();
+        if (response.status === 200) {
+          const {
+            id,
+            birth_date,
+            gender,
+            nickname,
+            phone_number,
+            profile_image
+          } = response.data;
+
+          const [year, month, day] = birth_date.split('-');
+
+          setValues((prev: UserInfoValues) => ({
+            ...prev,
+            email: id,
+            birthDate: {
+              year,
+              month,
+              day
+            },
+            gender,
+            nickname,
+            phoneNumber: phone_number,
+            profileImage: profile_image
+          }));
+          setNicknameDuplicate((prev) => ({
+            ...prev,
+            prevNickname: nickname
+          }));
+        }
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 401) {
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
+          }
+        }
+
+        console.log(err);
+        alert('회원 정보 불러오기에 실패하였습니다.');
+      }
+    };
+
+    getUserData();
+  }, []);
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <ProfileImage url={userInfo.profileImage} />
+      <ProfileImage url={values.profileImage} />
       <UserInfo
         values={values}
         errors={errors}
+        isNicknameNew={values.nickname !== nicknameDuplicate.prevNickname}
         handleChange={handleChange}
+        handleCheckNickname={handleCheckNickname}
         handleBirthDateChange={handleBirthDateChange}
       />
       <UserEditButtons />
