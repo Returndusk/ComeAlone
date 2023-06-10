@@ -5,10 +5,9 @@ import Avatar from '@mui/material/Avatar';
 import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
 
 function ReviewsSchedule({
-  scheduleReviews
-}: {
-  scheduleReviews: ScheduleReviewPropsType[];
-}) {
+  scheduleReviews,
+  onReviewDelete
+}: ScheduleReviewPropsType) {
   const loggedInUserId = useAuthState().authState.user?.id;
 
   return (
@@ -26,7 +25,16 @@ function ReviewsSchedule({
                 {loggedInUserId === review.user.id ? (
                   <>
                     <button className={styles.updateButton}>수정하기</button>
-                    <button className={styles.deleteButton}>삭제하기</button>
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => {
+                        console.log('clicked');
+
+                        onReviewDelete(review.comment_id);
+                      }}
+                    >
+                      삭제하기
+                    </button>
                   </>
                 ) : null}
                 <span className={styles.createdAt}>
