@@ -7,6 +7,7 @@ import {
 } from '../../types/ScheduleTypes';
 import CreateScheduleModal from './Modal/CreateScheduleModal';
 import tokenInstance from '../../apis/tokenInstance';
+import AlertModal from '../common/Alert/AlertModal';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -15,6 +16,7 @@ function MyScheduleLists() {
   const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -22,7 +24,7 @@ function MyScheduleLists() {
       const response = await tokenInstance.get(`${baseUrl}/users/me/schedules`);
       setScheduleList(response.data);
     } catch (error: unknown) {
-      console.log('내 일정을 불러올 수 없습니다.', error);
+      setShowAlertModal(true);
     }
     setIsLoading(false);
   }, []);
@@ -38,6 +40,10 @@ function MyScheduleLists() {
 
   function openModal() {
     setIsModalOpen(true);
+  }
+
+  function handleOnConfirm() {
+    setShowAlertModal(false);
   }
 
   return (
@@ -78,6 +84,12 @@ function MyScheduleLists() {
           좋아요 한 일정
         </button>
       </div>
+      {showAlertModal && (
+        <AlertModal
+          message='내 여행 일정을 불러올 수 없습니다.'
+          onConfirm={handleOnConfirm}
+        />
+      )}
       <div className={styles.scheduleCardContainer}>
         {!isLoading && (
           <button className={styles.scheduleAdd} onClick={openModal}>
