@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './CommonModalDesign.module.scss';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRange } from 'react-date-range';
+import { DateRange, RangeKeyDict } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 import { addDays, format, differenceInDays } from 'date-fns';
 import tokenInstance from '../../../apis/tokenInstance';
@@ -39,13 +39,16 @@ function CreateScheduleModal(props: { closeModal: () => void }) {
   const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd');
   const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd');
 
-  /**
-   * TODO: any 타입 대신 적절한 타입으로 변환하기
-   * @param ranges 현재 찍힌 Date값(Object)
-   */
-  function handleDateRange(ranges: any) {
-    // console.log(ranges);
-    setDate([ranges.selection]);
+  function handleDateRange(ranges: RangeKeyDict) {
+    const { startDate, endDate } = ranges.selection;
+
+    setDate([
+      {
+        startDate: startDate || new Date(),
+        endDate: endDate || addDays(new Date(), 7),
+        key: 'selection'
+      }
+    ]);
   }
 
   useEffect(() => {
