@@ -233,7 +233,7 @@ function Category({
             </div>
           </section>
           <div className={styles.filteredCounterWraper}>
-            <p id={styles.filteredCounter}>{`전체ㆍ${filteredCount}`}</p>
+            <p id={styles.filteredCounter}>{`전체ㆍ${filteredCount ?? 0}`}</p>
           </div>
           <Destinations
             filteredDestinations={filteredDestinations}

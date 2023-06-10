@@ -69,7 +69,7 @@ function Search() {
 
   const handleSubmitQuery = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsUserSearched(true);
+    setIsUserSearched(() => true);
     const submittedQuery = e.target.searchQuery.value;
     if (isNullishSearchInput(submittedQuery)) {
       setIsShowAlert(true);
