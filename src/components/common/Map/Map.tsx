@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './Map.module.scss';
 import {
-  DestinationsType,
-  MapPropsType
+  MapPropsType,
+  specifiedCategoryDestinationsType
 } from '../../../types/DestinationListTypes';
 
 declare global {
@@ -14,7 +14,7 @@ declare global {
 type MapPropsTypes = {
   markersLocations: MapPropsType[];
   setClickedDestination: React.Dispatch<
-    React.SetStateAction<DestinationsType | null>
+    React.SetStateAction<specifiedCategoryDestinationsType | null>
   >;
 };
 
@@ -70,7 +70,7 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
           (bounds, latlng) => bounds.extend(latlng),
           new kakao.maps.LatLngBounds()
         );
-        renderedMap?.setBounds(bounds, 36, 32, 32, 650);
+        renderedMap?.setBounds(bounds, 36, 32, 32, 900);
       }
 
       // markers.setMap(renderedMap);
