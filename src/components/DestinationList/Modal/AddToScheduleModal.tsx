@@ -77,6 +77,8 @@ function AddToScheduleModal({
         console.error('Error: ', err);
       }
     }
+    alert('이미 추가된 일정입니다.');
+    return;
   }
 
   return (
