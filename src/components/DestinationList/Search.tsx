@@ -5,15 +5,23 @@ import Category from './Category';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import {
-  getDestinationDetailsByDestinationId,
-  getRankedDestinationsByRankingNumber
+  getDestinationDetailsByDestinationId
+  // getRankedDestinationsByRankingNumber
 } from '../../apis/destinationList';
+import AlertModal from '../common/Alert/AlertModal';
 
 // 사용자 검색 X -> 랭킹 데이터를 props로 전송
 // 사용자 검색 O -> 검색 쿼리를 props로 전송
 
+/*
 const RANKED_DESTINAIONS_NUMBER = {
   count: 10
+};
+*/
+
+const ALERT_PROPS = {
+  NulllishQueryMessage: '검색어를 입력해주세요.',
+  showTitle: false
 };
 
 function Search() {
@@ -23,6 +31,7 @@ function Search() {
   >([]);
   const [isUserSearched, setIsUserSearched] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
 
   //인기 목적지 목록
   /*
@@ -32,7 +41,7 @@ function Search() {
     );
     const rankedDestinationsList = res?.data;
     setRankedDestinations(() => rankedDestinationsList);
-  }, []);
+  }, [setRankedDestinations]);
 
   useEffect(() => {
     getRankedDestinationsData();
@@ -40,10 +49,10 @@ function Search() {
   */
 
   const getRankedDestinationsData = useCallback(async () => {
-    const res = await getDestinationDetailsByDestinationId(2853453); //임시 id
+    const res = await getDestinationDetailsByDestinationId(2906155); //임시 인기 목적지 지정
     const rankedDestinationsList = res?.data.destinations;
     setRankedDestinations(() => rankedDestinationsList);
-  }, []);
+  }, [setRankedDestinations]);
 
   useEffect(() => {
     getRankedDestinationsData();
@@ -54,21 +63,27 @@ function Search() {
   }, [searchParams]);
 
   const isNullishSearchInput = (input: string) => {
-    return input === '';
+    const trimmedInput = input.replace(/ /g, '');
+    return trimmedInput === '';
   };
 
   const handleSubmitQuery = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsUserSearched(true);
+    setIsUserSearched(() => true);
     const submittedQuery = e.target.searchQuery.value;
     if (isNullishSearchInput(submittedQuery)) {
-      alert('검색어를 입력해주세요.');
+      setIsShowAlert(true);
+      return;
     }
     const searchQueryString = encodeURIComponent(submittedQuery);
     if (searchQueryString !== null) {
-      setSearchParams(`?search=${searchQueryString}`);
+      setSearchParams(`?search=${encodeURIComponent(searchQueryString)}`);
     }
     return;
+  };
+
+  const handleOnSearchQueryConfirm = () => {
+    setIsShowAlert(false);
   };
 
   return (
@@ -81,7 +96,7 @@ function Search() {
               type='text'
               name='searchQuery'
               placeholder='목적지를 입력해주세요.'
-              defaultValue={searchQueryParam}
+              defaultValue={decodeURIComponent(searchQueryParam)}
             />
             <button id={styles.searchButton} type='submit'>
               <AiOutlineSearch />
@@ -96,6 +111,13 @@ function Search() {
           setIsLoading={setIsLoading}
         />
       </div>
+      {isShowAlert && (
+        <AlertModal
+          message={ALERT_PROPS.NulllishQueryMessage}
+          onConfirm={handleOnSearchQueryConfirm}
+          showTitle={ALERT_PROPS.showTitle}
+        />
+      )}
     </>
   );
 }

@@ -30,16 +30,15 @@
 
 .activeSelectedButton {
   border: none;
-  background-color: var(--sub-1-color);
   color: #fff;
   padding: 6px;
 }
 
 .activeSelectedAllButton {
   border: none;
-  background-color: var(--main-color);
   color: #fff;
   padding: 6px;
+  background-color: var(--main-color);
 }
 
 .selectedButton {
@@ -72,4 +71,76 @@
     font-size: 18px;
     font-weight: 550;
   }
+}
+
+#activeCategory-12 {
+  background-color: #ff4500;
+}
+
+#Category-12 {
+  border-color: #ff4500;
+  color: #ff4500;
+}
+
+#activeCategory-14 {
+  background-color: #8a2be2;
+}
+
+#Category-14 {
+  border-color: #8a2be2;
+  color: #8a2be2;
+}
+
+#activeCategory-15 {
+  background-color: #00ff00;
+}
+
+#Category-15 {
+  border-color: #00ff00;
+  color: #00ff00;
+}
+
+#activeCategory-25 {
+  background-color: #008080;
+}
+
+#Category-25 {
+  border-color: #008080;
+  color: #008080;
+}
+
+#activeCategory-28 {
+  background-color: #40e0d0;
+}
+
+#Category-28 {
+  border-color: #40e0d0;
+  color: #40e0d0;
+}
+
+#activeCategory-32 {
+  background-color: #ffd700;
+}
+
+#Category-32 {
+  border-color: #ffd700;
+  color: #ffd700;
+}
+
+#activeCategory-38 {
+  background-color: #8b4513;
+}
+
+#Category-38 {
+  border-color: #8b4513;
+  color: #8b4513;
+}
+
+#activeCategory-39 {
+  background-color: #1e90ff;
+}
+
+#Category-39 {
+  border-color: #1e90ff;
+  color: #1e90ff;
 }

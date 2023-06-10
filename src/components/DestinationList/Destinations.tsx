@@ -80,7 +80,7 @@ function Destinations({
                         {destination?.addr1}
                       </p>
                       <p className={styles.destinationCategory}>
-                        {destination?.category_id}
+                        {destination?.category_name}
                       </p>
 
                       {imageError ? (

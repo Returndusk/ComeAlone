@@ -13,9 +13,8 @@ const ALERT_PROPS = {
 };
 
 function DestinationDetails() {
-  const [destinationDetails, setDestinationDetails] = useState<
-    specifiedCategoryDestinationsType | null
-  >(null);
+  const [destinationDetails, setDestinationDetails] =
+    useState<specifiedCategoryDestinationsType | null>(null);
 
   const { contentid } = useParams();
   const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
@@ -57,6 +56,11 @@ function DestinationDetails() {
             <h2 className={styles.destinationDetailsTitle}>
               {destinationDetails?.title}
             </h2>
+
+            <p className={styles.destinationAddress}>
+              주소:{' '}
+              {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
+            </p>
 
             <p className={styles.destinationTelNumber}>
               Tel:{' '}

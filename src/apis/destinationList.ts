@@ -136,3 +136,18 @@ export const getUsersReview = async () => {
     console.error(error, '유저의 여행지 리뷰 목록을 불러오는데 실패했습니다.');
   }
 };
+
+export const countCategorizedItemsByQueryAndCategoryId = async (
+  title: string,
+  categoryIds: number[]
+) => {
+  try {
+    const categoryIdsQuery = categoryIds.join();
+    const response = await axios.get(
+      `${baseUrl}/categories/search-counts?title=${title}&categoryIds=${categoryIdsQuery}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error, '카테고리별 여행지 수를 불러오는데 실패했습니다.');
+  }
+};

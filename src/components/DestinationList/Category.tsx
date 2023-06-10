@@ -55,7 +55,7 @@ function Category({
     const categoryListData = res?.data;
     setCategoryList(() => categoryListData);
     return;
-  }, []);
+  }, [setCategoryList]);
 
   useEffect(() => {
     getAllCategoryData();
@@ -70,6 +70,7 @@ function Category({
   }, [categoryList]);
 
   //카테고리 id => name 변환 함수
+
   const changeCategoryIdIntoName = useCallback(
     (destinationList: DestinationsType[]) => {
       const specifiedCatogory = destinationList?.map((el) => {
@@ -77,7 +78,7 @@ function Category({
           (category) => category?.id === el?.category_id
         );
 
-        return { ...el, category_name: categoryPair?.name ?? '' }; //예외처리 다시 수정
+        return { ...el, category_name: categoryPair?.name ?? '기타' }; //예외처리 다시 수정
       });
       return specifiedCatogory;
     },
@@ -87,7 +88,7 @@ function Category({
   //체크박스 로직
   const isSelectedAll = useMemo(() => {
     return selectedCategory?.length === categoryList?.length;
-  }, [selectedCategory]);
+  }, [selectedCategory, categoryList]);
 
   const removeCategoryFromSelectedCategoryList = (targetCategoryId: number) => {
     const subSelectedCategory =
@@ -116,10 +117,6 @@ function Category({
     setIsLoading(false);
     return;
   };
-
-  useEffect(() => {
-    console.log(selectedCategory);
-  }, [selectedCategory]);
 
   const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     setIsLoading(true);
@@ -158,12 +155,15 @@ function Category({
       setIsLoading(false);
     }
     return;
-  }, [selectedCategory, rankedDestinations]);
+  }, [
+    selectedCategory,
+    rankedDestinations,
+    setFilteredCount,
+    setIsLoading,
+    isUserSearched
+  ]);
 
   const getCategorizedSearchingData = useCallback(async () => {
-    if (selectedCategory.length <= 0) {
-      return;
-    }
     if (isUserSearched) {
       const res = await getDestinationListByTitleAndCategoryId(
         selectedCategory,
@@ -176,13 +176,19 @@ function Category({
       setFilteredCount(() => categorizedSearchingDestinationsList.length);
     }
     return;
-  }, [selectedCategory, searchQueryParam]);
+  }, [
+    selectedCategory,
+    searchQueryParam,
+    setFilteredDestinations,
+    setFilteredCount,
+    isUserSearched
+  ]);
 
   useEffect(() => {
     setIsLoading(true);
     getCategorizedSearchingData();
     setIsLoading(false);
-  }, [getCategorizedSearchingData]);
+  }, [getCategorizedSearchingData, setIsLoading]);
 
   return (
     <>
@@ -214,6 +220,11 @@ function Category({
                       ? styles.activeSelectedButton
                       : styles.selectedButton
                   }
+                  id={
+                    selectedCategory?.includes(categoryId)
+                      ? styles[`activeCategory-${categoryId}`]
+                      : styles[`Category-${categoryId}`]
+                  }
                 >
                   {categoryList?.find(
                     (categoryPair) => categoryPair.id === categoryId
@@ -223,7 +234,7 @@ function Category({
             </div>
           </section>
           <div className={styles.filteredCounterWraper}>
-            <p id={styles.filteredCounter}>{`전체ㆍ${filteredCount}`}</p>
+            <p id={styles.filteredCounter}>{`전체ㆍ${filteredCount ?? 0}`}</p>
           </div>
           <Destinations
             filteredDestinations={filteredDestinations}
