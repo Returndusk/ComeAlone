@@ -5,12 +5,13 @@ import { UserInfoErrors, UserInfoValues } from './UserEditTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
 import UserEditButtons from './UserEditButtons';
-import { editUser, getUser } from '../../apis/UserAPI';
+import { checkNicknameDuplicate, editUser, getUser } from '../../apis/UserAPI';
 import { AxiosError } from 'axios';
 import { useAuthState } from '../../contexts/AuthContext';
 
 function UserEditForm() {
   const navigate = useNavigate();
+  const { updateAuthState } = useAuthState();
   const initValues: UserInfoValues = {
     email: '',
     profileImage: '',
@@ -31,7 +32,12 @@ function UserEditForm() {
   };
   const [values, setValues] = useState<UserInfoValues>(initValues);
   const [errors, setErrors] = useState<UserInfoErrors>(initErrors);
-  const { updateAuthState } = useAuthState();
+  const [nicknameDuplicate, setNicknameDuplicate] = useState({
+    isPass: false,
+    newNickname: '',
+    prevNickname: ''
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -86,6 +92,13 @@ function UserEditForm() {
     if (!hasAllowedChars.test(nickname)) {
       return (errMsgs.nickname =
         '닉네임은 알파벳 대소문자, 숫자, 한글만 사용할 수 있습니다.');
+    }
+
+    if (
+      !nicknameDuplicate.isPass ||
+      nicknameDuplicate.newNickname !== nickname
+    ) {
+      return (errMsgs.nickname = '닉네임 중복 확인을 해주세요.');
     }
   };
 
@@ -175,6 +188,46 @@ function UserEditForm() {
     return errMsgs;
   };
 
+  const handleCheckNickname = async () => {
+    const nickname = values.nickname;
+    if (!nickname) {
+      return setErrors((prev) => ({
+        ...prev,
+        nickname: '빈칸을 입력해주세요.'
+      }));
+    }
+
+    try {
+      const response = await checkNicknameDuplicate({ nickname });
+
+      if (response.status === 201) {
+        setNicknameDuplicate((prev) => ({
+          ...prev,
+          isPass: true,
+          newNickname: nickname
+        }));
+        setErrors((prev) => ({ ...prev, nickname: '' }));
+        alert('사용할 수 있는 닉네임입니다.');
+      }
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) {
+          const { message: errMsg } = err.response.data;
+
+          setNicknameDuplicate((prev) => ({
+            ...prev,
+            isPass: false,
+            nickname: ''
+          }));
+          return setErrors((prev) => ({ ...prev, nickname: errMsg }));
+        }
+      }
+
+      console.log(err);
+      alert('닉네임 중복 확인에 실패하였습니다.');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -246,6 +299,10 @@ function UserEditForm() {
             phoneNumber: phone_number,
             profileImage: profile_image
           }));
+          setNicknameDuplicate((prev) => ({
+            ...prev,
+            prevNickname: nickname
+          }));
         }
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
@@ -274,7 +331,9 @@ function UserEditForm() {
       <UserInfo
         values={values}
         errors={errors}
+        isNicknameNew={values.nickname !== nicknameDuplicate.prevNickname}
         handleChange={handleChange}
+        handleCheckNickname={handleCheckNickname}
         handleBirthDateChange={handleBirthDateChange}
       />
       <UserEditButtons />

@@ -15,7 +15,9 @@ import {
 type UserInfoProps = {
   values: UserInfoValues;
   errors: UserInfoErrors;
+  isNicknameNew: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleCheckNickname: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleBirthDateChange: (
     e:
       | React.ChangeEvent<{ name: string; value: unknown }>
@@ -26,7 +28,9 @@ type UserInfoProps = {
 function UserInfo({
   values,
   errors,
+  isNicknameNew,
   handleChange,
+  handleCheckNickname,
   handleBirthDateChange
 }: UserInfoProps) {
   const birthDateOptions = useMemo(() => {
@@ -80,7 +84,14 @@ function UserInfo({
             onChange={handleChange}
             size='small'
           />
-          <button type='button'>중복확인</button>
+          <button
+            type='button'
+            onClick={handleCheckNickname}
+            className={!isNicknameNew ? styles.disabled : ''}
+            disabled={!isNicknameNew}
+          >
+            중복확인
+          </button>
         </div>
         {!errors.nickname && (
           <p className={styles.msg}>

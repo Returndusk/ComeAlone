@@ -44,6 +44,12 @@
       font-weight: 500;
       color: var(--main-color);
       cursor: pointer;
+
+      &.disabled {
+        background-color: #bbb;
+        border: none;
+        color: #fff;
+      }
     }
   }
 
