@@ -182,7 +182,7 @@ function Category({
     setIsLoading(true);
     getCategorizedSearchingData();
     setIsLoading(false);
-  }, [getCategorizedSearchingData]);
+  }, [getCategorizedSearchingData, setIsLoading]);
 
   return (
     <>

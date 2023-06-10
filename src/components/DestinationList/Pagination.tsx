@@ -56,7 +56,12 @@ function Pagination({
         lastDestinationIdx
       );
     });
-  }, [filteredDestinations, firstDestinationIdx, lastDestinationIdx]);
+  }, [
+    filteredDestinations,
+    firstDestinationIdx,
+    lastDestinationIdx,
+    setSlicedDestinations
+  ]);
 
   useEffect(() => {
     setPage(() => pageNumber);

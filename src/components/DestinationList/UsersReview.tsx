@@ -43,7 +43,7 @@ function UsersReview() {
     comment: null
   });
   const [isEditing, setIsEditing] = useState<boolean[] | null>(null);
-  const { authState, updateAuthState } = useAuthState();
+  const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
     null

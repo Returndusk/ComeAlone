@@ -41,7 +41,7 @@ function Review() {
   >(null);
   const [isAccessUsersReview, setIsAccessUsersReview] =
     useState<boolean>(false);
-  const { authState, updateAuthState } = useAuthState();
+  const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
     null
@@ -62,7 +62,7 @@ function Review() {
   }, [getReviewList]);
 
   //리뷰 등록 메서드
-  const addReview = async () => {
+  const addReview = useCallback(async () => {
     const res = await postReviewByDestinationId(
       Number(contentid),
       submittedReview
@@ -74,7 +74,7 @@ function Review() {
       return;
     }
     setIsShowSuccessAlert(false);
-  };
+  }, [contentid, getReviewList, submittedReview]);
 
   //리뷰 수
   const reviewCount = useMemo(() => {
@@ -108,7 +108,7 @@ function Review() {
       addReview();
       return;
     }
-  }, [submittedReview]);
+  }, [submittedReview.comment, addReview]);
 
   //사용자 리뷰 목록 조회 시도
   const handleUsersReviewClick = () => {

@@ -82,7 +82,7 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
       //   });
       // });
     }
-  }, [markersLocations]);
+  }, [markersLocations, markers, renderedMap]);
 
   return (
     <>

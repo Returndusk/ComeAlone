@@ -5,16 +5,18 @@ import Category from './Category';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import {
-  getDestinationDetailsByDestinationId,
-  getRankedDestinationsByRankingNumber
+  getDestinationDetailsByDestinationId
+  // getRankedDestinationsByRankingNumber
 } from '../../apis/destinationList';
 
 // 사용자 검색 X -> 랭킹 데이터를 props로 전송
 // 사용자 검색 O -> 검색 쿼리를 props로 전송
 
+/*
 const RANKED_DESTINAIONS_NUMBER = {
   count: 10
 };
+*/
 
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,7 +34,7 @@ function Search() {
     );
     const rankedDestinationsList = res?.data;
     setRankedDestinations(() => rankedDestinationsList);
-  }, []);
+  }, [setRankedDestinations]);
 
   useEffect(() => {
     getRankedDestinationsData();
@@ -40,10 +42,10 @@ function Search() {
   */
 
   const getRankedDestinationsData = useCallback(async () => {
-    const res = await getDestinationDetailsByDestinationId(2853453); //임시 id
+    const res = await getDestinationDetailsByDestinationId(2853453); //임시 인기 목적지 지정
     const rankedDestinationsList = res?.data.destinations;
     setRankedDestinations(() => rankedDestinationsList);
-  }, []);
+  }, [setRankedDestinations]);
 
   useEffect(() => {
     getRankedDestinationsData();

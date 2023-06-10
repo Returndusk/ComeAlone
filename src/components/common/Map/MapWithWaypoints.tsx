@@ -128,7 +128,7 @@ function MapWithWaypoints({
     newPolyline.setMap(renderedMap);
 
     renderedMap?.setBounds(bounds);
-  }, [markersLocations]);
+  }, [markersLocations, renderedMap]);
 
   return <div className={styles.mapWithWaypoints} id='mapWithWaypoints'></div>;
 }
