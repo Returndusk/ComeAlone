@@ -12,6 +12,9 @@ function ScheduleLists() {
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
+  const [showScheduleList, setShowScheduleList] = useState<ScheduleListType>(
+    []
+  );
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
@@ -20,7 +23,9 @@ function ScheduleLists() {
     setIsLoading(true);
     try {
       const response = await axios.get(`${baseUrl}/schedules`);
-      setScheduleList(response.data);
+      const scheduleData = response.data;
+      setScheduleList(scheduleData);
+      setShowScheduleList(sortByScheduleLikes(scheduleData));
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setShowAlertModal(true);
@@ -33,6 +38,10 @@ function ScheduleLists() {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    sortSchedule();
+  }, [scheduleSort]);
+
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     setScheduleSort(sortOption);
@@ -40,6 +49,38 @@ function ScheduleLists() {
 
   function handleOnConfirm() {
     setShowAlertModal(false);
+  }
+
+  function sortByScheduleLikes(scheduleData: ScheduleCardType[]) {
+    return scheduleData.sort((a, b) => b.likes_count - a.likes_count);
+  }
+
+  function sortByScheduleRecent(scheduleData: ScheduleCardType[]) {
+    return scheduleData.sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+  }
+
+  function sortByScheduleIsLiked(scheduleData: ScheduleCardType[]) {
+    return scheduleData.filter((schedule) => {
+      return schedule.likes.some((like) => {
+        if (authState.user) {
+          return like.id === authState.user.id;
+        }
+      });
+    });
+  }
+
+  function sortSchedule() {
+    const scheduleData = [...scheduleList];
+    if (scheduleSort === 'likes') {
+      setShowScheduleList(sortByScheduleLikes(scheduleData));
+    } else if (scheduleSort === 'recent') {
+      setShowScheduleList(sortByScheduleRecent(scheduleData));
+    } else if (scheduleSort === 'liked') {
+      setShowScheduleList(sortByScheduleIsLiked(scheduleData));
+    }
   }
 
   return (
@@ -90,7 +131,7 @@ function ScheduleLists() {
       )}
       {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
       <div className={styles.scheduleCardContainer}>
-        {scheduleList.map((schedule: ScheduleCardType, index: number) => (
+        {showScheduleList.map((schedule: ScheduleCardType, index: number) => (
           <ScheduleCard schedule={schedule} key={index} />
         ))}
       </div>
