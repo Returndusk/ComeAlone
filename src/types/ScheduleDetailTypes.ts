@@ -5,6 +5,7 @@ export interface IScheduleDetail {
   summary: string;
   userId: string;
   nickname: string;
+  likesCount: number;
   startDate: Date;
   endDate: Date;
   duration: number;
@@ -20,6 +21,7 @@ export type ScheduleFetchedType = Pick<
   | 'title'
   | 'summary'
   | 'nickname'
+  | 'likesCount'
   | 'startDate'
   | 'endDate'
   | 'duration'
@@ -40,19 +42,27 @@ export type ScheduleDetailInfoType = Pick<
 >;
 
 export type IconsScheduleDetailType = {
-  likesAmount: number;
+  userId: string;
+  doesUserLike: boolean;
+  likesCount: number;
   reviewsAmount: number;
+  onUserLike: () => void;
 };
 
 interface ScheduleReviewType {
-  contentId: string;
-  commenterId: string;
-  nickname: string;
+  commentId: number;
+  scheduleId: number;
   comment: string;
-  createdAt: string;
+  created_at: string;
+  updatedAt: string;
+  user: {
+    id: string;
+    nickname: string;
+    profileImage: string;
+  };
 }
 
 export type ScheduleReviewPropsType = Pick<
   ScheduleReviewType,
-  'nickname' | 'comment' | 'createdAt'
+  'user' | 'comment' | 'created_at'
 >;

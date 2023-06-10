@@ -46,7 +46,7 @@ export default function ModalScheduleLists() {
     getScheduleLists();
   }, [selectedCardIdx]);
 
-  console.log(scheduleLists);
+  // console.log(scheduleLists);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;

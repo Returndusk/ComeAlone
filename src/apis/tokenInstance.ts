@@ -22,7 +22,6 @@ tokenInstance.interceptors.request.use(async (config) => {
     try {
       const response = await refreshUserTokens(refreshToken);
       const data = response.data;
-      console.log('액세스토큰 없음. 재발급!');
       accessToken = data.accessToken;
       refreshToken = data.refreshToken;
       cookies.set('accessToken', accessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
@@ -31,7 +30,6 @@ tokenInstance.interceptors.request.use(async (config) => {
       //액세스 토큰 재발급 실패시
       //(리프레시 토큰도 유효하지 않거나 만료된 경우)
       //액세스, 리프레시 토큰 쿠키에서 삭제
-      console.log('토큰 재발급 실패', err);
       cookies.remove('accessToken', { path: '/' });
       cookies.remove('refreshToken', { path: '/' });
       return Promise.reject(err);

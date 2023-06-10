@@ -11,12 +11,17 @@ import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedul
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
   defaultSchedule,
-  likesAmount,
   reviewsAmount,
-  reviews
+  defaultScheduleReviews
 } from '../components/ScheduleDetail/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
-import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
+import {
+  getScheduleDetailById,
+  getDoesUserLikeById,
+  toggleUserLikeById,
+  getScheduleReviewsById,
+  addScheduleReviewById
+} from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
 function ScheduleDetail() {
@@ -26,8 +31,12 @@ function ScheduleDetail() {
   const [checkedDestinations, setCheckedDestinations] = useState(
     defaultSchedule.destinations.flat()
   );
+  const [doesUserLike, setDoesUserLike] = useState(false);
+  const [scheduleReviews, setScheduleReviews] = useState(
+    defaultScheduleReviews
+  );
   const scheduleFetched = useRef(defaultSchedule);
-  const reviewInput = useRef('');
+  const userLikesCount = useRef(defaultSchedule.likesCount);
 
   const getScheduleDetail = useCallback(async (id: string | undefined) => {
     const response = await getScheduleDetailById(id);
@@ -37,6 +46,7 @@ function ScheduleDetail() {
       nickname: response?.data.user.nickname,
       title: response?.data.title,
       summary: response?.data.summary,
+      likesCount: response?.data.likes_count,
       duration: response?.data.duration,
       startDate: new Date(response?.data.start_date),
       endDate: new Date(response?.data.end_date),
@@ -48,13 +58,52 @@ function ScheduleDetail() {
     return data;
   }, []);
 
+  const getDoesUserLike = useCallback(async (id: string | undefined) => {
+    const response = await getDoesUserLikeById(id);
+
+    return response?.data.is_liked;
+  }, []);
+
+  const toggleUserLike = useCallback(async (id: string | undefined) => {
+    const response = await toggleUserLikeById(id);
+    const isLiked = response?.data.is_liked;
+    const likesCount = response?.data.likes_count_of_schedule;
+
+    userLikesCount.current = likesCount;
+
+    setDoesUserLike(isLiked);
+  }, []);
+
+  const getScheduleReviews = useCallback(async (id: string | undefined) => {
+    const response = await getScheduleReviewsById(id);
+
+    return response?.data;
+  }, []);
+
+  const addScheduleReview = useCallback(
+    async (id: string | undefined, review: string) => {
+      await addScheduleReviewById(id, review);
+      setScheduleReviews(await getScheduleReviews(scheduleId));
+    },
+    []
+  );
+
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getScheduleDetail(scheduleId);
+      const fetchedDetail = await getScheduleDetail(scheduleId);
+      const fetchedReviews = await getScheduleReviews(scheduleId);
 
-      scheduleFetched.current = data;
-      setCheckedDestinations(data.destinations.flat());
+      scheduleFetched.current = fetchedDetail;
+      userLikesCount.current = fetchedDetail.likesCount;
+      setScheduleReviews(fetchedReviews);
+      setCheckedDestinations(fetchedDetail.destinations.flat());
       setIsLoading(false);
+
+      if (authState.isLoggedIn) {
+        const doesUserLike = await getDoesUserLike(scheduleId);
+
+        setDoesUserLike(doesUserLike);
+      }
     };
 
     fetchData();
@@ -74,8 +123,11 @@ function ScheduleDetail() {
   } = scheduleFetched.current;
 
   const handleReviewSubmit = (input: string) => {
-    reviewInput.current = input;
-    console.log(reviewInput.current);
+    addScheduleReview(scheduleId, input);
+  };
+
+  const handleUserLike = () => {
+    toggleUserLike(scheduleId);
   };
 
   if (isLoading) {
@@ -109,8 +161,11 @@ function ScheduleDetail() {
         ) : null}
       </div>
       <IconsScheduleDetail
-        likesAmount={likesAmount}
+        userId={userId}
+        doesUserLike={doesUserLike}
+        likesCount={userLikesCount.current}
         reviewsAmount={reviewsAmount}
+        onUserLike={handleUserLike}
       />
       <DestinationList
         destinations={destinations}
@@ -119,7 +174,7 @@ function ScheduleDetail() {
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
       </div>
-      <ReviewsSchedule reviews={reviews} />
+      <ReviewsSchedule scheduleReviews={scheduleReviews} />
       <InputReviewSchedule onReviewSubmit={handleReviewSubmit} />
     </div>
   );

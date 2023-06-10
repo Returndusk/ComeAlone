@@ -3,9 +3,25 @@
   align-self: self-start;
   font-size: 26px;
 
-  #likes {
+  #likesDisabled {
+    border: 0;
+    background-color: transparent;
     font-size: 26px;
-    color: red;
+    color: rgb(231, 49, 49);
+    cursor: not-allowed;
+
+    #likesIcon {
+      margin: 0 5px 0 0;
+      font-size: 20px;
+    }
+  }
+
+  #likes {
+    border: 0;
+    background-color: transparent;
+    font-size: 26px;
+    color: rgb(231, 49, 49);
+    cursor: pointer;
 
     #likesIcon {
       margin: 0 5px 0 0;
@@ -15,6 +31,7 @@
 
   #reviewNumber {
     font-size: 26px;
+    color: rgb(75, 74, 74);
 
     #reviewNumberIcon {
       margin: 0 5px 0 20px;

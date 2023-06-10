@@ -48,8 +48,10 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
   }, []);
 
   useEffect(() => {
-    fetchLike();
-  }, [fetchLike]);
+    if (isLoggedIn) {
+      fetchLike();
+    }
+  }, [fetchLike, isLoggedIn]);
 
   function handleLike(e: React.MouseEvent<HTMLDivElement>) {
     e.preventDefault();
