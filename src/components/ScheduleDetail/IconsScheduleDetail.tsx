@@ -9,7 +9,7 @@ function IconsScheduleDetail({
   userId,
   doesUserLike,
   likesCount,
-  reviewsAmount,
+  reviewsCount,
   onUserLike
 }: IconsScheduleDetailType) {
   const { authState } = useAuthState();
@@ -32,7 +32,7 @@ function IconsScheduleDetail({
         </Tooltip>
         <span id={styles.reviewNumber}>
           <FaCommentAlt id={styles.reviewNumberIcon} />
-          {reviewsAmount}
+          {reviewsCount}
         </span>
       </div>
     );
@@ -41,18 +41,20 @@ function IconsScheduleDetail({
   if (userId === loggedInUserId) {
     return (
       <div className={styles.iconsContainer}>
-        <button
-          id={styles.likesDisabled}
-          onClick={() => {
-            return;
-          }}
-        >
-          <FaRegHeart id={styles.likesIcon} />
-          {likesCount}
-        </button>
+        <Tooltip title='자신의 일정에는 좋아요할 수 없습니다.' placement='top'>
+          <button
+            id={styles.likesDisabled}
+            onClick={() => {
+              return;
+            }}
+          >
+            <FaRegHeart id={styles.likesIcon} />
+            {likesCount}
+          </button>
+        </Tooltip>
         <span id={styles.reviewNumber}>
           <FaCommentAlt id={styles.reviewNumberIcon} />
-          {reviewsAmount}
+          {reviewsCount}
         </span>
       </div>
     );
@@ -75,7 +77,7 @@ function IconsScheduleDetail({
       </button>
       <span id={styles.reviewNumber}>
         <FaCommentAlt id={styles.reviewNumberIcon} />
-        {reviewsAmount}
+        {reviewsCount}
       </span>
     </div>
   );

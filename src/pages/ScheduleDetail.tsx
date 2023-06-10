@@ -9,18 +9,15 @@ import DestinationList from '../components/ScheduleDetail/DestinationList';
 import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import {
-  defaultSchedule,
-  reviewsAmount,
-  defaultScheduleReviews
-} from '../components/ScheduleDetail/Dummy';
+import { defaultSchedule } from '../components/ScheduleDetail/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
   getScheduleDetailById,
   getDoesUserLikeById,
   toggleUserLikeById,
   getScheduleReviewsById,
-  addScheduleReviewById
+  addScheduleReviewById,
+  deleteScheduleReviewById
 } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
@@ -32,9 +29,7 @@ function ScheduleDetail() {
     defaultSchedule.destinations.flat()
   );
   const [doesUserLike, setDoesUserLike] = useState(false);
-  const [scheduleReviews, setScheduleReviews] = useState(
-    defaultScheduleReviews
-  );
+  const [scheduleReviews, setScheduleReviews] = useState([]);
   const scheduleFetched = useRef(defaultSchedule);
   const userLikesCount = useRef(defaultSchedule.likesCount);
 
@@ -87,6 +82,13 @@ function ScheduleDetail() {
     },
     []
   );
+
+  const deleteScheduleReview = useCallback(async (id: number) => {
+    const response = await deleteScheduleReviewById(id);
+    setScheduleReviews(await getScheduleReviews(scheduleId));
+
+    console.log(response);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -164,7 +166,7 @@ function ScheduleDetail() {
         userId={userId}
         doesUserLike={doesUserLike}
         likesCount={userLikesCount.current}
-        reviewsAmount={reviewsAmount}
+        reviewsCount={scheduleReviews.length}
         onUserLike={handleUserLike}
       />
       <DestinationList
@@ -174,7 +176,10 @@ function ScheduleDetail() {
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
       </div>
-      <ReviewsSchedule scheduleReviews={scheduleReviews} />
+      <ReviewsSchedule
+        scheduleReviews={scheduleReviews}
+        onReviewDelete={deleteScheduleReview}
+      />
       <InputReviewSchedule onReviewSubmit={handleReviewSubmit} />
     </div>
   );
