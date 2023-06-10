@@ -67,21 +67,23 @@ function Destinations({
                       className={styles.destinations}
                       onClick={() => handleDestinationClick(destination)}
                     >
-                      <h2
-                        className={
-                          destination?.title.length >= 10
-                            ? styles.destinationExceedTitle
-                            : styles.destinationShortTitle
-                        }
-                      >
-                        {destination?.title}
-                      </h2>
-                      <p className={styles.destinationAddress}>
-                        {destination?.addr1}
-                      </p>
-                      <p className={styles.destinationCategory}>
-                        {destination?.category_name}
-                      </p>
+                      <div className={styles.destinationTextWrapper}>
+                        <h2
+                          className={
+                            destination?.title.length >= 10
+                              ? styles.destinationExceedTitle
+                              : styles.destinationShortTitle
+                          }
+                        >
+                          {destination?.title}
+                        </h2>
+                        <p className={styles.destinationAddress}>
+                          {destination?.addr1}
+                        </p>
+                        <p className={styles.destinationCategory}>
+                          {destination?.category_name}
+                        </p>
+                      </div>
 
                       {imageError ? (
                         <img
