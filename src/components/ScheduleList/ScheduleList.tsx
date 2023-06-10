@@ -3,11 +3,14 @@ import axios from 'axios';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
+import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function ScheduleLists() {
+  const { authState } = useAuthState();
+  const isLoggedIn = authState.isLoggedIn;
   const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,7 +31,7 @@ function ScheduleLists() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, isLoggedIn]);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
