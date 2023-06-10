@@ -8,6 +8,7 @@ import {
   getDestinationDetailsByDestinationId
   // getRankedDestinationsByRankingNumber
 } from '../../apis/destinationList';
+import AlertModal from '../common/Alert/AlertModal';
 
 // 사용자 검색 X -> 랭킹 데이터를 props로 전송
 // 사용자 검색 O -> 검색 쿼리를 props로 전송
@@ -18,6 +19,11 @@ const RANKED_DESTINAIONS_NUMBER = {
 };
 */
 
+const ALERT_PROPS = {
+  NulllishQueryMessage: '검색어를 입력해주세요.',
+  showTitle: false
+};
+
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [rankedDestinations, setRankedDestinations] = useState<
@@ -25,6 +31,7 @@ function Search() {
   >([]);
   const [isUserSearched, setIsUserSearched] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
 
   //인기 목적지 목록
   /*
@@ -56,7 +63,7 @@ function Search() {
   }, [searchParams]);
 
   const isNullishSearchInput = (input: string) => {
-    return input === '';
+    return input === '' || input.trim() === '';
   };
 
   const handleSubmitQuery = (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -64,13 +71,17 @@ function Search() {
     setIsUserSearched(true);
     const submittedQuery = e.target.searchQuery.value;
     if (isNullishSearchInput(submittedQuery)) {
-      alert('검색어를 입력해주세요.');
+      setIsShowAlert(true);
     }
     const searchQueryString = encodeURIComponent(submittedQuery);
     if (searchQueryString !== null) {
-      setSearchParams(`?search=${searchQueryString}`);
+      setSearchParams(`?search=${encodeURIComponent(searchQueryString)}`);
     }
     return;
+  };
+
+  const handleOnSearchQueryConfirm = () => {
+    setIsShowAlert(false);
   };
 
   return (
@@ -98,6 +109,13 @@ function Search() {
           setIsLoading={setIsLoading}
         />
       </div>
+      {isShowAlert && (
+        <AlertModal
+          message={ALERT_PROPS.NulllishQueryMessage}
+          onConfirm={handleOnSearchQueryConfirm}
+          showTitle={ALERT_PROPS.showTitle}
+        />
+      )}
     </>
   );
 }
