@@ -1,5 +1,3 @@
-// import { MyScheduleCardType } from './ScheduleTypes';
-
 export type ModalMyScheduleType = {
   schedule_id: number;
   title: string;

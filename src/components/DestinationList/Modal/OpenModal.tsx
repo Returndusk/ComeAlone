@@ -5,6 +5,21 @@ import styles from './CommonModalDesign.module.scss';
 
 function OpenModal(props: { closeModal: () => void }) {
   const navigate = useNavigate();
+  // const modalRef = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   function handleClickBackground(e: any) {
+  //     if (modalRef.current && !modalRef.current.contains(e.target)) {
+  //       props.closeModal();
+  //     }
+  //   }
+
+  //   document.addEventListener('mousedown', handleClickBackground);
+
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickBackground);
+  //   };
+  // }, []);
 
   function MoveToMySchedule() {
     navigate('/myschedule/list');
