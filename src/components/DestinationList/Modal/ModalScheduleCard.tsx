@@ -46,7 +46,7 @@ ModalScheduleCardType) {
   //   }
   // }
 
-  // console.log(schedule.destinations);
+  // console.log('schedule', schedule);
 
   return (
     <>
