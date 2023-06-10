@@ -5,7 +5,7 @@ import { Errors, UserInfoValues } from '../../types/UserTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
 import UserEditButtons from './UserEditButtons';
-import { editUser, getUser } from '../../apis/user';
+import { editUser, getUser } from '../../apis/UserAPI';
 import { AxiosError } from 'axios';
 import { useAuthState } from '../../contexts/AuthContext';
 
@@ -190,7 +190,13 @@ function UserEditForm() {
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
           if (err.response?.status === 401) {
-            //
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
           }
         }
 
@@ -233,7 +239,13 @@ function UserEditForm() {
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
           if (err.response?.status === 401) {
-            //
+            if (
+              err.response.data.reason === 'INVALID' ||
+              err.response.data.reason === 'EXPIRED'
+            ) {
+              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+              return updateAuthState(false);
+            }
           }
         }
 
