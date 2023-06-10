@@ -65,11 +65,11 @@ function SearchArea() {
     arrows: false,
     fade: true,
     infinite: true,
-    speed: 10000,
+    speed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000
+    autoplaySpeed: 15000
   };
 
   return (
@@ -78,10 +78,9 @@ function SearchArea() {
         settings={fadeSettings}
         destinations={destinations}
         showTitleAndOverview={false}
-        className='TopSlider'
+        customClassName='TopSlider'
         boxClassName='custom-box'
         imageContainerClassName='custom-image-container'
-        textClassName='custom-text'
       />
       <div className={styles.searchArea}>
         <Container maxWidth='md' sx={{ mt: 1 }}>
