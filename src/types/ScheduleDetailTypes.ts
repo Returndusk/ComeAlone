@@ -52,7 +52,7 @@ interface ScheduleReviewType {
   commentId: number;
   scheduleId: number;
   comment: string;
-  createdAt: string;
+  created_at: string;
   updatedAt: string;
   user: {
     id: string;
@@ -63,5 +63,5 @@ interface ScheduleReviewType {
 
 export type ScheduleReviewPropsType = Pick<
   ScheduleReviewType,
-  'user' | 'comment' | 'createdAt'
+  'user' | 'comment' | 'created_at'
 >;
