@@ -7,6 +7,8 @@ import ko from 'date-fns/locale/ko';
 import { addDays, format, differenceInDays } from 'date-fns';
 import tokenInstance from '../../../apis/tokenInstance';
 
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
 function CreateScheduleModal(props: { closeModal: () => void }) {
   /**
    * TODO: 모달 창 밖을 클릭해도 닫히도록
@@ -79,12 +81,21 @@ function CreateScheduleModal(props: { closeModal: () => void }) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (
+      formData.title.trim() === '' ||
+      formData.summary.trim() === '' ||
+      formData.start_date.trim() === '' ||
+      formData.end_date.trim() === '' ||
+      formData.duration === 0
+    ) {
+      alert('일정 정보를 모두 입력해주세요!');
+      return;
+    }
+
     try {
       console.log('formData', formData);
-      await tokenInstance.post(
-        'https://vvhooping.com/api/schedules/basic',
-        formData
-      );
+      await tokenInstance.post(`${baseUrl}/schedules/basic`, formData);
       // 여기에 득열님 alert 활용
       alert('일정이 추가되었습니다!');
       props.closeModal();

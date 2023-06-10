@@ -4,8 +4,7 @@ import Review from './Review';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getDestinationDetailsByDestinationId } from '../../apis/destinationList';
 import AlertModal from '../common/Alert/AlertModal';
-import Accordian from './Accordian';
-import { DestinationsDetailsType } from '../../types/DestinationListTypes';
+import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 import OpenModal from './Modal/OpenModal';
 
 const ALERT_PROPS = {
@@ -14,8 +13,9 @@ const ALERT_PROPS = {
 };
 
 function DestinationDetails() {
-  const [destinationDetails, setDestinationDetails] =
-    useState<DestinationsDetailsType | null>(null);
+  const [destinationDetails, setDestinationDetails] = useState<
+    specifiedCategoryDestinationsType | null
+  >(null);
 
   const { contentid } = useParams();
   const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
@@ -50,17 +50,32 @@ function DestinationDetails() {
             <div>
               <img
                 id={styles.destinationDetailsImage}
-                src={destinationDetails.image2}
+                src={destinationDetails.image1}
                 alt={destinationDetails.title}
               />
             </div>
-            <h2>{destinationDetails?.title}</h2>
+            <h2 className={styles.destinationDetailsTitle}>
+              {destinationDetails?.title}
+            </h2>
 
-            <p>전화번호:{destinationDetails?.tel}</p>
-            <Accordian>{destinationDetails?.overview}</Accordian>
+            <p className={styles.destinationTelNumber}>
+              Tel:{' '}
+              {destinationDetails?.tel
+                ? destinationDetails?.tel
+                : '정보가 제공되고 있지 않습니다.'}
+            </p>
+
+            <div className={styles.destinationOverview}>
+              {destinationDetails?.overview}
+            </div>
 
             <div className={styles.scheduleModalButtonContainer}>
-              <button onClick={handleShowModalClick}>내 일정에 추가</button>
+              <button
+                id={styles.scheduleModalButton}
+                onClick={handleShowModalClick}
+              >
+                내 일정에 추가
+              </button>
             </div>
           </section>
           <section className={styles.detailsReviewsContainer}>
