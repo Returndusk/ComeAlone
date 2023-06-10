@@ -8,6 +8,7 @@ export type ModalMyScheduleType = {
   end_date: string;
   created_at: string;
   destinations: string[][];
+  destinationIds: number[][];
 };
 
 export type MyScheduleListType = ModalMyScheduleType[];
@@ -26,6 +27,7 @@ export type AddToScheduleModalType = {
   selectedDay: number;
   scheduleId: number;
   destinations: string[][];
+  destinationIds: number[][];
   // onDestinationUpdate: (updatedDestination: string[]) => void;
   // updatedDestinations: string[][];
 };
