@@ -109,13 +109,13 @@ function SliderBanner({
                 }
                 alt={String(destination[titleProperty]) || ''}
               ></img>
-              {showCategory && destination.category_id && (
+              {showCategory && destination.destination_category_id && (
                 <div
                   className={`${styles.category} ${
-                    styles['category-' + destination.category_id]
+                    styles['category-' + destination.destination_category_id]
                   }`}
                 >
-                  {categoryMapping[Number(destination.category_id)]}
+                  {categoryMapping[Number(destination.destination_category_id)]}
                 </div>
               )}
 
