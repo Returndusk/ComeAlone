@@ -157,11 +157,13 @@ function ScheduleEdit() {
       destinations
     });
 
-    navigate(`/schedule/detail/${scheduleId}`);
+    navigate(`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`);
   };
 
   const handleDelete = async () => {
     await deleteScheduleById(scheduleId);
+
+    navigate(ROUTER.MYSCHEDULE_LIST);
   };
 
   if (isLoading) {
