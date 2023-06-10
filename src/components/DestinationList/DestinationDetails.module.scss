@@ -12,7 +12,7 @@
   overflow-y: auto;
 
   width: 575px; // 스크롤 간격(25px 고려)
-  height: calc(100vh + 32px);
+  height: calc(100vh + 49px);
   box-sizing: border-box;
   box-shadow: 2px 0 0 0 rgba(96, 101, 105, 0.3);
 }
@@ -30,9 +30,15 @@
   height: 300px;
 }
 
+.destinationAddress {
+  font-size: 18px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
 .destinationTelNumber {
   font-size: 18px;
-  padding-bottom: 10px;
+  padding: 10px 0;
   border-bottom: 1px solid #ccc;
 }
 
