@@ -68,6 +68,19 @@ function ScheduleLists() {
         >
           최신순
         </button>
+        {isLoggedIn && (
+          <button
+            className={`${styles.sortButton} ${
+              scheduleSort === 'liked' ? styles.selected : ''
+            }`}
+            onClick={(e) => {
+              handleSort(e);
+            }}
+            value='liked'
+          >
+            좋아요 한 일정
+          </button>
+        )}
       </div>
       {showAlertModal && (
         <AlertModal

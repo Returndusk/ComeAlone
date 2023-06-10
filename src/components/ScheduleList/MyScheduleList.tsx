@@ -72,17 +72,6 @@ function MyScheduleLists() {
         >
           지난 일정
         </button>
-        <button
-          className={`${styles.sortButton} ${
-            scheduleSort === 'like' ? styles.selected : ''
-          }`}
-          onClick={(e) => {
-            handleSort(e);
-          }}
-          value='like'
-        >
-          좋아요 한 일정
-        </button>
       </div>
       {showAlertModal && (
         <AlertModal
