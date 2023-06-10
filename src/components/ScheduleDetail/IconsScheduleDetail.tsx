@@ -5,7 +5,7 @@ import { IconsScheduleDetailType } from '../../types/ScheduleDetailTypes';
 
 function IconsScheduleDetail({
   doesUserLike,
-  likesAmount,
+  likesCount,
   reviewsAmount,
   onUserLike
 }: IconsScheduleDetailType) {
@@ -17,7 +17,7 @@ function IconsScheduleDetail({
         ) : (
           <FaRegHeart id={styles.likesIcon} />
         )}
-        {likesAmount}
+        {likesCount}
       </button>
       <span id={styles.reviewNumber}>
         <FaCommentAlt id={styles.reviewNumberIcon} />

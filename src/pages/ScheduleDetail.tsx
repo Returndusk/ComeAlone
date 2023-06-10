@@ -11,7 +11,6 @@ import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedul
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
   defaultSchedule,
-  likesAmount,
   reviewsAmount,
   reviews
 } from '../components/ScheduleDetail/Dummy';
@@ -32,6 +31,7 @@ function ScheduleDetail() {
   );
   const [doesUserLike, setDoesUserLike] = useState(false);
   const scheduleFetched = useRef(defaultSchedule);
+  const userLikesCount = useRef(defaultSchedule.likesCount);
   const reviewInput = useRef('');
 
   const getScheduleDetail = useCallback(async (id: string | undefined) => {
@@ -42,6 +42,7 @@ function ScheduleDetail() {
       nickname: response?.data.user.nickname,
       title: response?.data.title,
       summary: response?.data.summary,
+      likesCount: response?.data.likes_count,
       duration: response?.data.duration,
       startDate: new Date(response?.data.start_date),
       endDate: new Date(response?.data.end_date),
@@ -64,6 +65,8 @@ function ScheduleDetail() {
     const isLiked = response?.data.is_liked;
     const likesCount = response?.data.likes_count_of_schedule;
 
+    userLikesCount.current = likesCount;
+
     console.log('updated like', isLiked);
 
     setDoesUserLike(isLiked);
@@ -75,6 +78,7 @@ function ScheduleDetail() {
       const doesUserLike = await getDoesUserLike(scheduleId);
 
       scheduleFetched.current = data;
+      userLikesCount.current = data.likesCount;
       setDoesUserLike(doesUserLike);
       setCheckedDestinations(data.destinations.flat());
       setIsLoading(false);
@@ -139,7 +143,7 @@ function ScheduleDetail() {
       </div>
       <IconsScheduleDetail
         doesUserLike={doesUserLike}
-        likesAmount={likesAmount}
+        likesCount={userLikesCount.current}
         reviewsAmount={reviewsAmount}
         onUserLike={handleUserLike}
       />
