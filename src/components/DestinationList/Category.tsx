@@ -55,7 +55,7 @@ function Category({
     const categoryListData = res?.data;
     setCategoryList(() => categoryListData);
     return;
-  }, []);
+  }, [setCategoryList]);
 
   useEffect(() => {
     getAllCategoryData();
@@ -87,7 +87,7 @@ function Category({
   //체크박스 로직
   const isSelectedAll = useMemo(() => {
     return selectedCategory?.length === categoryList?.length;
-  }, [selectedCategory]);
+  }, [selectedCategory, categoryList]);
 
   const removeCategoryFromSelectedCategoryList = (targetCategoryId: number) => {
     const subSelectedCategory =
@@ -158,7 +158,13 @@ function Category({
       setIsLoading(false);
     }
     return;
-  }, [selectedCategory, rankedDestinations]);
+  }, [
+    selectedCategory,
+    rankedDestinations,
+    setFilteredCount,
+    setIsLoading,
+    isUserSearched
+  ]);
 
   const getCategorizedSearchingData = useCallback(async () => {
     if (selectedCategory.length <= 0) {
@@ -176,7 +182,13 @@ function Category({
       setFilteredCount(() => categorizedSearchingDestinationsList.length);
     }
     return;
-  }, [selectedCategory, searchQueryParam]);
+  }, [
+    selectedCategory,
+    searchQueryParam,
+    setFilteredDestinations,
+    setFilteredCount,
+    isUserSearched
+  ]);
 
   useEffect(() => {
     setIsLoading(true);
