@@ -1,7 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import styles from './MyPageButtons.module.scss';
-import { MyPageButtonsProps } from '../../types/UserTypes';
+
+type MyPageButtonsProps = {
+  attemptDeleteAccount: () => void;
+};
 
 function MyPageButtons({ attemptDeleteAccount }: MyPageButtonsProps) {
   const navigate = useNavigate();

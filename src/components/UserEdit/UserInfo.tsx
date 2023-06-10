@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styles from './UserEditForm.module.scss';
-import { UserInfoProps } from '../../types/UserTypes';
+import { UserInfoValues, UserInfoErrors } from './UserEditTypes';
 import TextField from '@mui/material/TextField';
 import {
   FormControlLabel,
@@ -12,10 +12,25 @@ import {
   InputLabel
 } from '@mui/material';
 
+type UserInfoProps = {
+  values: UserInfoValues;
+  errors: UserInfoErrors;
+  isNicknameNew: boolean;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleCheckNickname: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleBirthDateChange: (
+    e:
+      | React.ChangeEvent<{ name: string; value: unknown }>
+      | { target: { name: string; value: string } }
+  ) => void;
+};
+
 function UserInfo({
   values,
   errors,
+  isNicknameNew,
   handleChange,
+  handleCheckNickname,
   handleBirthDateChange
 }: UserInfoProps) {
   const birthDateOptions = useMemo(() => {
@@ -69,7 +84,14 @@ function UserInfo({
             onChange={handleChange}
             size='small'
           />
-          <button type='button'>중복확인</button>
+          <button
+            type='button'
+            onClick={handleCheckNickname}
+            className={!isNicknameNew ? styles.disabled : ''}
+            disabled={!isNicknameNew}
+          >
+            중복확인
+          </button>
         </div>
         {!errors.nickname && (
           <p className={styles.msg}>
@@ -137,7 +159,6 @@ function UserInfo({
             checked={values.gender === '여성'}
           />
         </RadioGroup>
-        {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
       </li>
       <li className={styles.birthDate}>
         <InputLabel id='birthDate-select-label'>생년월일</InputLabel>

@@ -1,7 +1,10 @@
 import React from 'react';
 import styles from './ProfileImage.module.scss';
-import { ProfileImageProps } from '../../types/UserTypes';
 import { IoMdSettings } from 'react-icons/io';
+
+type ProfileImageProps = {
+  url: string;
+};
 
 function ProfileImage({ url }: ProfileImageProps) {
   return (

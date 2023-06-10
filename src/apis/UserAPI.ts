@@ -52,6 +52,13 @@ export const checkPassword = async (formData: { password: string }) => {
   return response;
 };
 
+export const checkNicknameDuplicate = async (formData: {
+  nickname: string;
+}) => {
+  const response = await axios.post(`${baseUrl}/auth/users/nickname`, formData);
+  return response;
+};
+
 export const deleteUser = async () => {
   const response = await tokenInstance.delete(`${baseUrl}/auth/users/me`);
 
