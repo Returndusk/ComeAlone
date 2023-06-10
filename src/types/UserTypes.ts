@@ -40,13 +40,3 @@ export type LoginFormData = {
   id: string;
   password: string;
 };
-
-//MyPage/MyPageButtons
-export type MyPageButtonsProps = {
-  attemptDeleteAccount: () => void;
-};
-
-//MyPage/DeleteAccountForm
-export type DeleteFormProps = {
-  cancelDeleteAccount: () => void;
-};

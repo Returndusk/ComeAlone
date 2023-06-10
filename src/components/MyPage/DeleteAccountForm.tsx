@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styles from './DeleteAccountForm.module.scss';
-import { DeleteFormProps } from '../../types/UserTypes';
 import { TextField } from '@mui/material';
 import { AxiosError } from 'axios';
 import { checkPassword, deleteUser } from '../../apis/UserAPI';
 import { useAuthState } from '../../contexts/AuthContext';
+
+type DeleteFormProps = {
+  cancelDeleteAccount: () => void;
+};
 
 function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
   const { updateAuthState } = useAuthState();
