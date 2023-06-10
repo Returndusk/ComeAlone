@@ -1,4 +1,76 @@
+.reviewContainer {
+  display: flex;
+  flex-direction: column;
+}
+.reviewBanner {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.reviewBoxes {
+  margin: 20px 0;
+
+  .review {
+    margin: 10px 0;
+    .reviewerNickname {
+      font-size: 18px;
+    }
+
+    .reviewComment {
+    }
+    .reviewCreatedDate {
+    }
+
+    div:not(:last-child) {
+      border-bottom: 1px solid #ccc;
+    }
+  }
+}
+
+#reviewInputBar {
+  border-radius: 12px;
+  border: 1px solid #c6cfe0;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 50px;
+
+  min-height: 15px;
+  background: #fff;
+
+  font-size: 15px;
+}
+
 #reviewButton {
   width: 50px;
   height: 30px;
+}
+
+.usersReviewListButtonContainer {
+  display: flex;
+
+  padding: 30px 0;
+
+  width: 100%;
+  #usersReviewListButton {
+    margin: 30px;
+    width: 120px;
+    height: 40px;
+
+    border: none;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 15px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 17px;
+
+    background: var(--sub-1-color);
+    color: white;
+
+    &:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+  }
 }

@@ -1,6 +1,5 @@
 .ScheduleInfoContainer {
   grid-column: 1 / 4;
-  margin: 0 0 60px 0;
 
   .title {
     width: 100%;
@@ -9,14 +8,10 @@
     font-weight: bold;
   }
 
-  .writer {
-    margin: 0 0 30px 0;
-    font-size: 24px;
-  }
-
-  .date {
-    margin: 0 0 40px 0;
+  .createdAt {
+    margin: 20px 0 20px 0;
     font-size: 18px;
+    color: gray;
   }
 
   .description {

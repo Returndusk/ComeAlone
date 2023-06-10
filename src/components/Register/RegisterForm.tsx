@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import styles from './RegisterForm.module.scss';
-import { Errors, RegisterFormValues } from '../../types/UserTypes';
+import { RegisterFormErrors, RegisterFormValues } from './RegisterTypes';
+import { RegisterFormData } from '../../types/UserTypes';
 import TextField from '@mui/material/TextField';
 import {
   FormControlLabel,
@@ -11,8 +12,12 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
+import { checkNicknameDuplicate, registerUser } from '../../apis/UserAPI';
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router';
 
 function RegisterForm() {
+  const navigate = useNavigate();
   const initValues: RegisterFormValues = {
     email: '',
     password: '',
@@ -23,11 +28,21 @@ function RegisterForm() {
       month: new Date().getMonth() + 1,
       day: new Date().getDate()
     },
-    gender: 'male',
+    gender: '남성',
     phoneNumber: ''
   };
+  const initErrors: RegisterFormErrors = {
+    ...initValues,
+    gender: '',
+    birthDate: ''
+  };
   const [values, setValues] = useState<RegisterFormValues>(initValues);
-  const [errors, setErrors] = useState<Errors>({});
+  const [errors, setErrors] = useState<RegisterFormErrors>(initErrors);
+  const [nicknameDuplicate, setNicknameDuplicate] = useState({
+    isPass: false,
+    nickname: ''
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -77,22 +92,23 @@ function RegisterForm() {
 
   const checkEmptyInputFields = (
     values: RegisterFormValues,
-    errMsgs: Errors
+    errMsgs: RegisterFormErrors
   ) => {
     for (const [key, value] of Object.entries(values)) {
-      if (!value) errMsgs[key] = '빈칸을 입력해 주세요.';
+      const errorKey = key as keyof RegisterFormErrors;
+      if (!value) errMsgs[errorKey] = '빈칸을 입력해 주세요.';
     }
   };
 
-  const validateEmail = (email: string, errMsgs: Errors) => {
+  const validateEmail = (email: string, errMsgs: RegisterFormErrors) => {
     const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!pattern.test(email)) {
-      errMsgs.email = '유효한 이메일 주소가 아닙니다.';
+      return (errMsgs.email = '유효한 이메일 주소가 아닙니다.');
     }
   };
 
-  const validateNickname = (nickname: string, errMsgs: Errors) => {
+  const validateNickname = (nickname: string, errMsgs: RegisterFormErrors) => {
     const minLength = 2;
     const maxLength = 6;
     const hasAllowedChars = /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/;
@@ -109,9 +125,13 @@ function RegisterForm() {
       return (errMsgs.nickname =
         '닉네임은 알파벳 대소문자, 숫자, 한글만 사용할 수 있습니다.');
     }
+
+    if (!nicknameDuplicate.isPass || nicknameDuplicate.nickname !== nickname) {
+      return (errMsgs.nickname = '닉네임 중복 확인을 해주세요.');
+    }
   };
 
-  const validatePassword = (password: string, errMsgs: Errors) => {
+  const validatePassword = (password: string, errMsgs: RegisterFormErrors) => {
     const hasSpecialChar = /[-_!@#$%&*,.]/;
     const hasUpperCase = /[A-Z]/;
     const hasLowerCase = /[a-z]/;
@@ -141,14 +161,17 @@ function RegisterForm() {
   const validatePasswordConfirm = (
     password: string,
     passwordConfirm: string,
-    errMsgs: Errors
+    errMsgs: RegisterFormErrors
   ) => {
     if (password !== passwordConfirm) {
       errMsgs.passwordConfirm = '비밀번호가 일치하지 않습니다.';
     }
   };
 
-  const validatePhoneNumber = (phoneNumber: string, errMsgs: Errors) => {
+  const validatePhoneNumber = (
+    phoneNumber: string,
+    errMsgs: RegisterFormErrors
+  ) => {
     const pattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
     const hasAllowedChars = /^[0-9-]*$/;
 
@@ -163,7 +186,7 @@ function RegisterForm() {
 
   const validateBirthDate = (
     { year, month, day }: RegisterFormValues['birthDate'],
-    errMsgs: Errors
+    errMsgs: RegisterFormErrors
   ) => {
     const birthDate = new Date(year, month - 1, day);
     const isYearValid = birthDate.getFullYear() === year;
@@ -176,7 +199,7 @@ function RegisterForm() {
   };
 
   const validateForm = (values: RegisterFormValues) => {
-    const errMsgs: Errors = {};
+    const errMsgs: RegisterFormErrors = initErrors;
 
     checkEmptyInputFields(values, errMsgs);
     if (!errMsgs.email) validateEmail(values.email, errMsgs);
@@ -190,15 +213,82 @@ function RegisterForm() {
     return errMsgs;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCheckNickname = async () => {
+    const nickname = values.nickname;
+    if (!nickname) {
+      return setErrors((prev) => ({
+        ...prev,
+        nickname: '빈칸을 입력해주세요.'
+      }));
+    }
+
+    try {
+      const response = await checkNicknameDuplicate({ nickname });
+
+      if (response.status === 201) {
+        setNicknameDuplicate({ isPass: true, nickname });
+        setErrors((prev) => ({ ...prev, nickname: '' }));
+        alert('사용할 수 있는 닉네임입니다.');
+      }
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) {
+          const { message: errMsg } = err.response.data;
+
+          setNicknameDuplicate({ isPass: false, nickname: '' });
+          return setErrors((prev) => ({ ...prev, nickname: errMsg }));
+        }
+      }
+
+      console.log(err);
+      alert('닉네임 중복 확인에 실패하였습니다.');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = validateForm(values);
-    if (Object.keys(validationErrors).length === 0) {
-      alert('유효성 검사 통과!');
-      //회원가입 api 호출
-    } else {
-      setErrors(validationErrors);
+    setErrors(validationErrors);
+
+    if (Object.values(validationErrors).every((error) => !error)) {
+      const {
+        email,
+        nickname,
+        password,
+        phoneNumber,
+        birthDate: { year, month, day },
+        gender
+      } = values;
+
+      try {
+        const data: RegisterFormData = {
+          id: email,
+          password,
+          nickname,
+          birth_date: `${year}-${month}-${day}`,
+          phone_number: phoneNumber,
+          gender,
+          profile_image: ''
+        };
+
+        const response = await registerUser(data);
+
+        if (response.status === 201) {
+          alert('회원가입이 완료되었습니다!');
+          navigate('/login');
+        }
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 409) {
+            const { message: errMsg, field } = err.response.data;
+            return setErrors((prev) => ({ ...prev, [field]: errMsg }));
+          }
+        }
+
+        console.log(err);
+        alert('회원가입에 실패하였습니다.');
+      }
     }
   };
 
@@ -207,7 +297,7 @@ function RegisterForm() {
       <ul className={styles.inputs}>
         <li>
           <TextField
-            id='outlined-basic'
+            id='email'
             label='이메일'
             variant='outlined'
             name='email'
@@ -221,7 +311,7 @@ function RegisterForm() {
         <li>
           <div className={styles.nickname}>
             <TextField
-              id='outlined-basic'
+              id='nickname'
               label='닉네임'
               variant='outlined'
               name='nickname'
@@ -229,7 +319,9 @@ function RegisterForm() {
               onChange={handleChange}
               size='small'
             />
-            <button type='button'>중복확인</button>
+            <button type='button' onClick={handleCheckNickname}>
+              중복확인
+            </button>
           </div>
           {!errors.nickname && (
             <p className={styles.msg}>
@@ -242,7 +334,7 @@ function RegisterForm() {
         </li>
         <li>
           <TextField
-            id='outlined-basic'
+            id='password'
             label='비밀번호'
             type='password'
             variant='outlined'
@@ -263,7 +355,7 @@ function RegisterForm() {
         </li>
         <li>
           <TextField
-            id='outlined-basic'
+            id='passwordConfirm'
             label='비밀번호 확인'
             type='password'
             variant='outlined'
@@ -278,25 +370,25 @@ function RegisterForm() {
           )}
         </li>
         <li className={styles.radioGroup}>
-          <FormLabel id='demo-radio-buttons-group-label'>성별</FormLabel>
+          <FormLabel id='gender'>성별</FormLabel>
           <RadioGroup
-            aria-labelledby='demo-radio-buttons-group-label'
+            aria-labelledby='gender'
             defaultValue='male'
             name='gender'
             onChange={handleChange}
             row
           >
             <FormControlLabel
-              value='male'
+              value='남성'
               control={<Radio size='small' />}
               label='남성'
-              checked={values.gender === 'male'}
+              checked={values.gender === '남성'}
             />
             <FormControlLabel
-              value='female'
+              value='여성'
               control={<Radio size='small' />}
               label='여성'
-              checked={values.gender === 'female'}
+              checked={values.gender === '여성'}
             />
           </RadioGroup>
           {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
@@ -305,7 +397,7 @@ function RegisterForm() {
           <InputLabel id='birthDate-select-label'>생년월일</InputLabel>
           <Select
             labelId='birthDate-select-label'
-            id='demo-simple-select'
+            id='birthDateYear'
             value={values.birthDate.year}
             name='year'
             label='연도'
@@ -323,7 +415,7 @@ function RegisterForm() {
           </Select>
           <Select
             labelId='birthDate-select-label'
-            id='demo-simple-select'
+            id='birthDateMonth'
             value={values.birthDate.month}
             name='month'
             label='월'
@@ -342,7 +434,7 @@ function RegisterForm() {
           </Select>
           <Select
             labelId='birthDate-select-label'
-            id='demo-simple-select'
+            id='birthDateDay'
             value={values.birthDate.day}
             name='day'
             label='일'

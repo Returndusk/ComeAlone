@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import styles from './DestinationList.module.scss';
-import { DestinationsType } from '../../types/DestinationListTypes';
+import { MapWithWaypointsPropsType } from '../../types/DestinationListTypes';
 
 function DestinationList({
   destinations,
-  onChecked
+  onDestinationsChecked
 }: {
-  destinations: DestinationsType[][];
-  onChecked: (destination: DestinationsType[]) => void;
+  destinations: MapWithWaypointsPropsType[][];
+  onDestinationsChecked: Dispatch<SetStateAction<MapWithWaypointsPropsType[]>>;
 }) {
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
 
@@ -20,7 +20,7 @@ function DestinationList({
           checked={checkedDayIndex === -1}
           onChange={() => {
             setCheckedDayIndex(-1);
-            onChecked(destinations.flat());
+            onDestinationsChecked(destinations.flat());
           }}
         />
         전체 목적지 보기
@@ -34,21 +34,22 @@ function DestinationList({
               id={'day' + (index + 1).toString()}
             >
               <label>
-                <input
-                  className={styles.dayCheckBox}
-                  type='checkbox'
-                  checked={checkedDayIndex === index}
-                  onChange={() => {
-                    if (checkedDayIndex === index) {
-                      setCheckedDayIndex(-1);
-                      onChecked(destinations.flat());
-                    } else {
-                      setCheckedDayIndex(index);
-                      onChecked(destOfDay);
-                    }
-                  }}
-                />{' '}
-                Day {index + 1}
+                <div className={styles.destinationDayTitle}>
+                  <input
+                    type='checkbox'
+                    checked={checkedDayIndex === index}
+                    onChange={() => {
+                      if (checkedDayIndex === index) {
+                        setCheckedDayIndex(-1);
+                        onDestinationsChecked(destinations.flat());
+                      } else {
+                        setCheckedDayIndex(index);
+                        onDestinationsChecked(destOfDay);
+                      }
+                    }}
+                  />{' '}
+                  Day {index + 1}
+                </div>
               </label>
               {destOfDay.map((dest, index) => (
                 <li key={index}>{dest.title}</li>

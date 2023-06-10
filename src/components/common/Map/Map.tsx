@@ -1,6 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './Map.module.scss';
-import { MapPropsType } from '../../../types/DestinationListTypes';
+import {
+  MapPropsType,
+  specifiedCategoryDestinationsType
+} from '../../../types/DestinationListTypes';
 
 declare global {
   interface Window {
@@ -11,33 +14,20 @@ declare global {
 type MapPropsTypes = {
   markersLocations: MapPropsType[];
   setClickedDestination: React.Dispatch<
-    React.SetStateAction<MapPropsType | null>
+    React.SetStateAction<specifiedCategoryDestinationsType | null>
   >;
 };
 
-//제주도 시청을 map의 default 위치로 설정함.
 const DEFAULT_LOCATION = {
-  LATITUDE: 33.48907969999994,
-  LONGITUDE: 126.49932809999973
+  LATITUDE: 32.412348163024674,
+  LONGITUDE: 126.94951514124065
 };
 
 const { kakao } = window;
 
 function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
-  const markers = [...markersLocations];
-
-  // const prevMarkersLocations = useMemo(() => {
-  //   return markersLocations;
-  // }, [markersLocations]);
-
-  const cachingMarkers = useMemo(() => {
-    return markersLocations;
-  }, [markersLocations]);
-
-  // useEffect(() => {
-  //   markers =
-  //     markersLocations.length > 0 ? markersLocations : prevMarkersLocations;
-  // }, [markersLocations]);
+  const [renderedMap, setRenderedMap] = useState<any>(null);
+  const [markers, setMarkers] = useState<any>(null);
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -49,30 +39,50 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
       ),
       level: 3
     };
-
     const map = new kakao.maps.Map(container, options);
+    setRenderedMap(() => map);
+  }, []);
 
-    const bounds = new kakao.maps.LatLngBounds();
-
-    cachingMarkers?.forEach((marker) => {
-      const position = new kakao.maps.LatLng(
-        Number(marker?.mapy),
-        Number(marker?.mapx)
+  useEffect(() => {
+    if (renderedMap === null) {
+      return;
+    } else {
+      const positions = markersLocations?.map(
+        (marker) =>
+          new kakao.maps.LatLng(Number(marker?.mapy), Number(marker?.mapx))
       );
-      const newMarker = new kakao.maps.Marker({
-        title: marker.title,
-        position,
-        map
-      });
-      newMarker.setMap(map);
-      bounds.extend(position);
+      if (markers !== null) {
+        const removeMarkers = markers.map((marker: any) => marker.setMap(null));
+        setMarkers(removeMarkers);
+      }
+      const newMarkers = positions.map(
+        (position) =>
+          new kakao.maps.Marker({
+            position,
+            map: renderedMap
+          })
+      );
 
-      kakao.maps.event.addListener(newMarker, 'click', function () {
-        setClickedDestination(marker);
-      });
-    });
-    map.setBounds(bounds, 36, 32, 32, 650);
-  }, [cachingMarkers]);
+      setMarkers(newMarkers);
+
+      if (positions.length > 0) {
+        const bounds = positions.reduce(
+          (bounds, latlng) => bounds.extend(latlng),
+          new kakao.maps.LatLngBounds()
+        );
+        renderedMap?.setBounds(bounds, 36, 32, 32, 900);
+      }
+
+      // markers.setMap(renderedMap);
+      // bounds.extend(position);
+
+      // markers.map((marker: any) => {
+      //   kakao.maps.event.addListener(marker, 'click', function () {
+      //     setClickedDestination(marker);
+      //   });
+      // });
+    }
+  }, [markersLocations]);
 
   return (
     <>

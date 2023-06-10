@@ -1,23 +1,65 @@
-//dummy data 제거 후 옵션 -> 필수로 변경 예정
 export interface DestinationsType {
-  id?: number; // 구 contentid
-  category_id?: number; // 구 contenttypeid
+  id: number;
+  category_id: number;
   title: string;
-  homepage?: string;
-  tel?: string;
-  image1?: string;
-  image2?: string;
-  addr1?: string;
-  addr2?: string;
-  zipcode?: string;
-  mapx: number; //dummy data 제거 후 string으로 수정 예정 (API에서는 string)
-  mapy: number; //dummy data 제거 후 string으로 수정 예정 (API에서는 string)
-  overview?: string;
+  homepage: string;
+  tel: string;
+  image1: string;
+  image2: string;
+  addr1: string;
+  addr2: string;
+  zipcode: string;
+  mapx: string;
+  mapy: string;
+  overview: string;
+  destination_comments: DestinationsReviewType[] | [];
+  comment_count: number;
+  destination_likes: DestinationsPreferenceType[] | [];
+  destination_likes_count: number;
 }
 
-export type MapPropsType = Pick<DestinationsType, 'title' | 'mapx' | 'mapy'>;
+export interface specifiedCategoryDestinationsType extends DestinationsType {
+  category_name: string;
+}
+
+export interface User {
+  id: string;
+  nickname: string;
+  profile_image: string;
+}
+
+export interface CategoryListType {
+  id: number;
+  name: string;
+}
+
+export interface DestinationsReviewType {
+  comment_id: number;
+  comment: string;
+  created_at: string;
+  updated_at: string;
+  user: User;
+}
+
+export interface commentType {
+  comment: string | null;
+}
+
+export interface DestinationsPreferenceType {
+  destination_id: number;
+  user_id: string;
+  is_liked: boolean;
+  created_at: string;
+  updated_at: string;
+  user: User;
+}
+
+export type MapPropsType = Pick<
+  specifiedCategoryDestinationsType,
+  'title' | 'mapx' | 'mapy'
+>;
 
 export type MapWithWaypointsPropsType = Pick<
   DestinationsType,
-  'title' | 'mapx' | 'mapy'
+  'id' | 'title' | 'mapx' | 'mapy'
 >;

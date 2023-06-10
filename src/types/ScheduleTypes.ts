@@ -1,8 +1,8 @@
 interface Schedule {
-  id: string;
+  schedule_id: number;
   title: string;
   summary: string;
-  nickname: string;
+  user: { nickname: string };
   start_date: string;
   end_date: string;
   duration: number;
@@ -10,23 +10,33 @@ interface Schedule {
   destinations: string[][];
   image: string;
   status: string;
+  first_destination: string;
+  last_destination: string;
+  destination_count: number;
+  likes_count: number;
+  likes: { id: string }[];
 }
 
 export type ScheduleCardType = Pick<
   Schedule,
-  | 'id'
+  | 'schedule_id'
   | 'title'
   | 'summary'
-  | 'nickname'
+  | 'user'
   | 'duration'
   | 'created_at'
   | 'destinations'
   | 'image'
+  | 'first_destination'
+  | 'last_destination'
+  | 'destination_count'
+  | 'likes_count'
+  | 'likes'
 >;
 
 export type MyScheduleCardType = Pick<
   Schedule,
-  | 'id'
+  | 'schedule_id'
   | 'title'
   | 'summary'
   | 'start_date'
@@ -35,13 +45,10 @@ export type MyScheduleCardType = Pick<
   | 'created_at'
   | 'destinations'
   | 'image'
+  | 'first_destination'
+  | 'last_destination'
+  | 'destination_count'
 >;
 
 export type ScheduleListType = ScheduleCardType[];
 export type MyScheduleListType = MyScheduleCardType[];
-
-export type ScheduleCardProps = { schedule: ScheduleCardType; link: string };
-export type MyScheduleCardProps = {
-  schedule: MyScheduleCardType;
-  link: string;
-};

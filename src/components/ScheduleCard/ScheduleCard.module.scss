@@ -24,34 +24,93 @@
       z-index: 2;
 
       .scheduleText {
+        div {
+          width: 240px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
         div + div {
           margin-bottom: 15px;
+        }
+      }
+
+      .like {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .likeIcon {
+          margin-bottom: 20px;
+          font-size: 40px;
+        }
+
+        .trashIcon {
+          font-size: 30px;
         }
       }
     }
 
     .scheduleTitle {
-      margin-bottom: 30px;
-      font-size: 24px;
+      margin-bottom: 20px;
+      font-size: 22px;
       font-weight: bold;
     }
 
     .scheduleDestination {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
       padding: 30px;
       margin-bottom: 10px;
       z-index: 2;
 
-      .destinationCount {
-        padding: 10px;
-        width: auto;
-        height: auto;
-        border-radius: 20px;
-        color: white;
-        background-color: #ef6d00;
+      .destinationMap {
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .mapLineContainer {
+          display: flex;
+          flex-direction: column;
+          width: 88%;
+
+          .mapLine {
+            border-bottom: 5px dotted white;
+          }
+        }
+
+        .destinationCount {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          padding: 10px;
+          border-radius: 20px;
+          color: white;
+          background-color: #ef6d00;
+        }
       }
+
+      .destinationText {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      filter: brightness(60%);
+      z-index: 1;
     }
   }
 
@@ -60,14 +119,4 @@
     transform: translateY(-10px);
     transition: 0.5s ease-in-out;
   }
-}
-
-.image {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-  filter: brightness(60%);
-  z-index: 1;
 }

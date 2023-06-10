@@ -14,23 +14,8 @@
   margin: 0 0 20px 10px;
 }
 
-.publicStatus {
-  padding: 30px 0 0 0;
-  justify-self: self-end;
-}
-
 .mapContainer {
   grid-column: 2 / 4;
   height: 530px;
-
-  div {
-    font-size: 20px;
-    margin: 0 10px;
-  }
-}
-
-.confirmButtonWrapper {
-  grid-column: 1 / 2;
-  padding: 50px 0 0 0;
-  justify-self: self-start;
+  padding: 100px 0 0 0;
 }

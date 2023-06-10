@@ -1,5 +1,6 @@
 .scheduleContainer {
-  width: 1000px;
+  width: 1280px;
+  min-height: calc(100vh - 230px);
   margin: 20px auto;
   text-align: center;
 
@@ -12,15 +13,15 @@
 
   .scheduleCardContainer {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 40px;
-    gap: 40px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+    gap: 20px;
 
     .scheduleAdd {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 320px;
+      min-height: 200px;
       border-radius: 10px;
       background-color: lightgray;
       font-size: 40px;
