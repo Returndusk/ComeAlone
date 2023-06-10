@@ -12,13 +12,14 @@ import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
   defaultSchedule,
   reviewsAmount,
-  reviews
+  defaultScheduleReviews
 } from '../components/ScheduleDetail/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
   getScheduleDetailById,
   getDoesUserLikeById,
-  toggleUserLikeById
+  toggleUserLikeById,
+  getScheduleReviewsById
 } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
@@ -32,6 +33,7 @@ function ScheduleDetail() {
   const [doesUserLike, setDoesUserLike] = useState(false);
   const scheduleFetched = useRef(defaultSchedule);
   const userLikesCount = useRef(defaultSchedule.likesCount);
+  const scheduleReviews = useRef(defaultScheduleReviews);
   const reviewInput = useRef('');
 
   const getScheduleDetail = useCallback(async (id: string | undefined) => {
@@ -67,18 +69,24 @@ function ScheduleDetail() {
 
     userLikesCount.current = likesCount;
 
-    console.log('updated like', isLiked);
-
     setDoesUserLike(isLiked);
+  }, []);
+
+  const getScheduleReview = useCallback(async (id: string | undefined) => {
+    const response = await getScheduleReviewsById(id);
+
+    return response?.data;
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getScheduleDetail(scheduleId);
+      const fetchedDetail = await getScheduleDetail(scheduleId);
+      const fetchedReviews = await getScheduleReview(scheduleId);
 
-      scheduleFetched.current = data;
-      userLikesCount.current = data.likesCount;
-      setCheckedDestinations(data.destinations.flat());
+      scheduleFetched.current = fetchedDetail;
+      userLikesCount.current = fetchedDetail.likesCount;
+      scheduleReviews.current = fetchedReviews;
+      setCheckedDestinations(fetchedDetail.destinations.flat());
       setIsLoading(false);
 
       if (authState.isLoggedIn) {
@@ -87,7 +95,7 @@ function ScheduleDetail() {
         setDoesUserLike(doesUserLike);
       }
 
-      console.log('initial like', doesUserLike);
+      console.log(scheduleReviews.current);
     };
 
     fetchData();
@@ -158,7 +166,7 @@ function ScheduleDetail() {
       <div className={styles.mapContainer}>
         <MapWithWaypoints markersLocations={checkedDestinations} />
       </div>
-      <ReviewsSchedule reviews={reviews} />
+      <ReviewsSchedule scheduleReviews={scheduleReviews.current} />
       <InputReviewSchedule onReviewSubmit={handleReviewSubmit} />
     </div>
   );

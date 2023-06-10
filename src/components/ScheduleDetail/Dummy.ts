@@ -17,44 +17,76 @@ export const defaultSchedule: ScheduleFetchedType = {
   destinations: [[]]
 };
 
-export const reviews: ScheduleReviewPropsType[] = [
+export const defaultScheduleReviews: ScheduleReviewPropsType[] = [
   {
-    nickname: 'A',
+    user: {
+      id: 'abc@abc.com',
+      nickname: 'A',
+      profileImage: ''
+    },
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.',
     createdAt: '2023. 06. 01'
   },
   {
-    nickname: 'A',
+    user: {
+      id: 'abc@abc.com',
+      nickname: 'A',
+      profileImage: ''
+    },
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.',
     createdAt: '2023. 06. 01'
   },
   {
-    nickname: 'A',
+    user: {
+      id: 'abc@abc.com',
+      nickname: 'A',
+      profileImage: ''
+    },
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.',
     createdAt: '2023. 06. 01'
   },
   {
-    nickname: 'A',
+    user: {
+      id: 'abc@abc.com',
+      nickname: 'A',
+      profileImage: ''
+    },
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.',
     createdAt: '2023. 06. 01'
   },
   {
-    nickname: 'A',
+    user: {
+      id: 'abc@abc.com',
+      nickname: 'A',
+      profileImage: ''
+    },
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.',
     createdAt: '2023. 06. 01'
   },
   {
-    nickname: 'A',
+    user: {
+      id: 'abc@abc.com',
+      nickname: 'A',
+      profileImage: ''
+    },
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.',
     createdAt: '2023. 06. 01'
   },
   {
-    nickname: 'A',
+    user: {
+      id: 'abc@abc.com',
+      nickname: 'A',
+      profileImage: ''
+    },
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.',
     createdAt: '2023. 06. 01'
   },
   {
-    nickname: 'A',
+    user: {
+      id: 'abc@abc.com',
+      nickname: 'A',
+      profileImage: ''
+    },
     comment: '저렴한 비용으로 좋은 여행지 잘 다녀왔습니다.',
     createdAt: '2023. 06. 01'
   }

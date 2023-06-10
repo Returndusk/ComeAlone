@@ -49,14 +49,19 @@ export type IconsScheduleDetailType = {
 };
 
 interface ScheduleReviewType {
-  contentId: string;
-  commenterId: string;
-  nickname: string;
+  commentId: number;
+  scheduleId: number;
   comment: string;
   createdAt: string;
+  updatedAt: string;
+  user: {
+    id: string;
+    nickname: string;
+    profileImage: string;
+  };
 }
 
 export type ScheduleReviewPropsType = Pick<
   ScheduleReviewType,
-  'nickname' | 'comment' | 'createdAt'
+  'user' | 'comment' | 'createdAt'
 >;

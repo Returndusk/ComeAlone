@@ -36,3 +36,25 @@ export async function toggleUserLikeById(id: string | undefined) {
     console.log(err);
   }
 }
+
+export async function getScheduleReviewsById(id: string | undefined) {
+  try {
+    const response = await axios.get(`${baseUrl}/schedules/${id}/comments`);
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function addScheduleReviewById(id: string | undefined) {
+  try {
+    const response = await tokenInstance.post(
+      `${baseUrl}/schedules/${id}/comments`
+    );
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
