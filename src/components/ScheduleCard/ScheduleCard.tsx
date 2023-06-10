@@ -32,7 +32,7 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [schedule.schedule_id]);
 
   const postLike = useCallback(async () => {
     try {
@@ -45,11 +45,15 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
     } catch (error) {
       setShowLikeAlertModal(true);
     }
-  }, []);
+  }, [schedule.schedule_id]);
 
   useEffect(() => {
-    fetchLike();
-  }, [fetchLike]);
+    if (isLoggedIn) {
+      fetchLike();
+    } else {
+      setIsLiked(false);
+    }
+  }, [fetchLike, isLoggedIn]);
 
   function handleLike(e: React.MouseEvent<HTMLDivElement>) {
     e.preventDefault();

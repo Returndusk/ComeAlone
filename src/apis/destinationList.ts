@@ -4,28 +4,29 @@ import { commentType } from '../types/DestinationListTypes';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-export const getAllDestinationsList = async () => {
+export const getAllCategoryList = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/destinations`);
+    const response = await axios.get(`${baseUrl}/categories`);
     return response;
   } catch (error) {
-    console.error(error, '전체 여행지 리스트 정보를 받아오는데 실패했습니다.');
+    console.error(error, '전체 카테고리 정보를 받아오는데 실패했습니다.');
   }
 };
 
-export const getDestinationsListByCategoryId = async (
-  selectedCategory: number[]
+export const getDestinationListByTitleAndCategoryId = async (
+  categoryIds: number[],
+  title: string
 ) => {
   try {
-    const categryIdLists = selectedCategory.join();
+    const categoryIdsQuery = categoryIds.join();
     const response = await axios.get(
-      `${baseUrl}/categories/destinations?categoryIds=${categryIdLists}`
+      `${baseUrl}/destinations?categoryIds=${categoryIdsQuery}&title=${title}`
     );
     return response;
   } catch (error) {
     console.error(
       error,
-      '카테고리별 여행지 리스트 정보를 받아오는데 실패했습니다.'
+      '카테고리 및 목적지명에 맞는 여행지 리스트를 받아오는데 실패했습니다.'
     );
   }
 };
@@ -35,7 +36,7 @@ export const getDestinationDetailsByDestinationId = async (
 ) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/destinations-with-reviews/${destinationId}`
+      `${baseUrl}/destinations/${destinationId}`
     );
     return response;
   } catch (error) {
