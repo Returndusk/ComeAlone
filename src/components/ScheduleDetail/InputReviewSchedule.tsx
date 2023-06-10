@@ -19,9 +19,7 @@ function InputReviewSchedule({
     <>
       {authState.isLoggedIn ? (
         <div className={styles.reviewInputContainer}>
-          <Avatar className={styles.reviewsInputWriter}>
-            {authState.user?.nickname[0]}
-          </Avatar>
+          <Avatar>{authState.user?.nickname[0]}</Avatar>
           <textarea
             className={styles.reviewsInputText}
             onChange={handleChange}
