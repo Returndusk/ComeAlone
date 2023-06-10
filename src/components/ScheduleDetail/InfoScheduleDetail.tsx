@@ -14,6 +14,9 @@ function InfoScheduleDetail({
 }: ScheduleDetailInfoType) {
   return (
     <div className={styles.scheduleInfoContainer}>
+      <div className={styles.createdAt}>
+        작성일: {createdAt.toLocaleDateString('ko-KR')}
+      </div>
       <div className={styles.duration}>
         {`${startDate.toLocaleDateString(
           'ko-KR'
@@ -25,9 +28,6 @@ function InfoScheduleDetail({
           <Avatar>{nickname[0]}</Avatar>
         </span>
         {nickname}
-      </div>
-      <div className={styles.createdAt}>
-        작성일: {createdAt.toLocaleDateString('ko-KR')}
       </div>
       <p>{summary}</p>
     </div>
