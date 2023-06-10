@@ -75,7 +75,7 @@ function MyScheduleLists() {
 
   function sortSchedule() {
     const scheduleData = [...scheduleList];
-    if (scheduleSort == 'upcoming') {
+    if (scheduleSort === 'upcoming') {
       setShowScheduleList(sortUpcoming(scheduleData));
     } else {
       setShowScheduleList(sortPast(scheduleData));
