@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styles from './UserEditForm.module.scss';
-import { Errors, UserInfoValues } from '../../types/UserTypes';
+import { UserInfoErrors, UserInfoValues } from './UserEditTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
 import UserEditButtons from './UserEditButtons';
@@ -25,8 +25,12 @@ function UserEditForm() {
     gender: '',
     phoneNumber: ''
   };
+  const initErrors = {
+    ...initValues,
+    birthDate: ''
+  };
   const [values, setValues] = useState<UserInfoValues>(initValues);
-  const [errors, setErrors] = useState<Errors>({});
+  const [errors, setErrors] = useState<UserInfoErrors>(initErrors);
   const { updateAuthState } = useAuthState();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -50,7 +54,10 @@ function UserEditForm() {
     });
   };
 
-  const checkEmptyInputFields = (values: UserInfoValues, errMsgs: Errors) => {
+  const checkEmptyInputFields = (
+    values: UserInfoValues,
+    errMsgs: UserInfoErrors
+  ) => {
     for (const [key, value] of Object.entries(values)) {
       if (
         key === 'newPassword' ||
@@ -58,11 +65,12 @@ function UserEditForm() {
         key === 'profileImage'
       )
         return;
-      if (!value) errMsgs[key] = '빈칸을 입력해 주세요.';
+      const errorKey = key as keyof UserInfoErrors;
+      if (!value) errMsgs[errorKey] = '빈칸을 입력해 주세요.';
     }
   };
 
-  const validateNickname = (nickname: string, errMsgs: Errors) => {
+  const validateNickname = (nickname: string, errMsgs: UserInfoErrors) => {
     const minLength = 2;
     const maxLength = 6;
     const hasAllowedChars = /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/;
@@ -81,7 +89,7 @@ function UserEditForm() {
     }
   };
 
-  const validatePassword = (password: string, errMsgs: Errors) => {
+  const validatePassword = (password: string, errMsgs: UserInfoErrors) => {
     const hasSpecialChar = /[-_!@#$%&*,.]/;
     const hasUpperCase = /[A-Z]/;
     const hasLowerCase = /[a-z]/;
@@ -111,14 +119,17 @@ function UserEditForm() {
   const validatePasswordConfirm = (
     password: string,
     passwordConfirm: string,
-    errMsgs: Errors
+    errMsgs: UserInfoErrors
   ) => {
     if (password !== passwordConfirm) {
       errMsgs.passwordConfirm = '비밀번호가 일치하지 않습니다.';
     }
   };
 
-  const validatePhoneNumber = (phoneNumber: string, errMsgs: Errors) => {
+  const validatePhoneNumber = (
+    phoneNumber: string,
+    errMsgs: UserInfoErrors
+  ) => {
     const pattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
     const hasAllowedChars = /^[0-9-]*$/;
 
@@ -133,7 +144,7 @@ function UserEditForm() {
 
   const validateBirthDate = (
     { year, month, day }: UserInfoValues['birthDate'],
-    errMsgs: Errors
+    errMsgs: UserInfoErrors
   ) => {
     const birthDate = new Date(Number(year), Number(month) - 1, Number(day));
     const isYearValid = birthDate.getFullYear() === Number(year);
@@ -146,7 +157,7 @@ function UserEditForm() {
   };
 
   const validateForm = (values: UserInfoValues) => {
-    const errMsgs: Errors = {};
+    const errMsgs: UserInfoErrors = initErrors;
 
     checkEmptyInputFields(values, errMsgs);
     if (!errMsgs.nickname) validateNickname(values.nickname, errMsgs);
@@ -169,7 +180,7 @@ function UserEditForm() {
 
     const validationErrors = validateForm(values);
     setErrors(validationErrors);
-    if (Object.keys(validationErrors).length === 0) {
+    if (Object.values(validationErrors).every((error) => !error)) {
       try {
         const { year, month, day } = values.birthDate;
         const data = {

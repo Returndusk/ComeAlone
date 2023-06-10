@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styles from './UserEditForm.module.scss';
-import { UserInfoProps } from '../../types/UserTypes';
+import { UserInfoValues, UserInfoErrors } from './UserEditTypes';
 import TextField from '@mui/material/TextField';
 import {
   FormControlLabel,
@@ -11,6 +11,17 @@ import {
   MenuItem,
   InputLabel
 } from '@mui/material';
+
+type UserInfoProps = {
+  values: UserInfoValues;
+  errors: UserInfoErrors;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBirthDateChange: (
+    e:
+      | React.ChangeEvent<{ name: string; value: unknown }>
+      | { target: { name: string; value: string } }
+  ) => void;
+};
 
 function UserInfo({
   values,
@@ -137,7 +148,6 @@ function UserInfo({
             checked={values.gender === '여성'}
           />
         </RadioGroup>
-        {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
       </li>
       <li className={styles.birthDate}>
         <InputLabel id='birthDate-select-label'>생년월일</InputLabel>

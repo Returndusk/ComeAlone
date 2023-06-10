@@ -31,6 +31,15 @@ export type RegisterFormData = {
   profile_image: '';
 };
 
+export type UserEditFormData = {
+  password?: string;
+  nickname: string;
+  birth_date: string;
+  phone_number: string;
+  gender: string;
+  profile_image: string;
+};
+
 //Login/LoginForm
 export type LoginFormValues = {
   email: string;
@@ -49,51 +58,4 @@ export type MyPageButtonsProps = {
 //MyPage/DeleteAccountForm
 export type DeleteFormProps = {
   cancelDeleteAccount: () => void;
-};
-
-//UserEdit/UserInfo
-export type UserInfoProps = {
-  values: UserInfoValues;
-  errors: Errors;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleBirthDateChange: (
-    e:
-      | React.ChangeEvent<{ name: string; value: unknown }>
-      | { target: { name: string; value: string } }
-  ) => void;
-};
-
-export type UserEditFormData = {
-  password?: string;
-  nickname: string;
-  birth_date: string;
-  phone_number: string;
-  gender: string;
-  profile_image: string;
-};
-
-//UserEdit/UserInfoValues
-export type UserInfoValues = {
-  email: string;
-  profileImage: string;
-  nickname: string;
-  newPassword: string;
-  passwordConfirm: string;
-  birthDate: {
-    year: string;
-    month: string;
-    day: string;
-  };
-  gender: string;
-  phoneNumber: string;
-};
-
-//UserEdit/ProfileImage
-export type ProfileImageProps = {
-  url: string;
-};
-
-//UserEdit/UserConfirmForm
-export type UserConfirmFormProps = {
-  confirmUser: () => void;
 };
