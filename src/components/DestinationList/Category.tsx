@@ -70,6 +70,7 @@ function Category({
   }, [categoryList]);
 
   //카테고리 id => name 변환 함수
+
   const changeCategoryIdIntoName = useCallback(
     (destinationList: DestinationsType[]) => {
       const specifiedCatogory = destinationList?.map((el) => {
@@ -77,7 +78,7 @@ function Category({
           (category) => category?.id === el?.category_id
         );
 
-        return { ...el, category_name: categoryPair?.name ?? '' }; //예외처리 다시 수정
+        return { ...el, category_name: categoryPair?.name ?? '기타' }; //예외처리 다시 수정
       });
       return specifiedCatogory;
     },
