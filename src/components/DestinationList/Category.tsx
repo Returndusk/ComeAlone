@@ -167,9 +167,6 @@ function Category({
   ]);
 
   const getCategorizedSearchingData = useCallback(async () => {
-    if (selectedCategory.length <= 0) {
-      return;
-    }
     if (isUserSearched) {
       const res = await getDestinationListByTitleAndCategoryId(
         selectedCategory,
@@ -225,6 +222,11 @@ function Category({
                     selectedCategory?.includes(categoryId)
                       ? styles.activeSelectedButton
                       : styles.selectedButton
+                  }
+                  id={
+                    selectedCategory?.includes(categoryId)
+                      ? styles[`activeCategory-${categoryId}`]
+                      : styles[`Category-${categoryId}`]
                   }
                 >
                   {categoryList?.find(
