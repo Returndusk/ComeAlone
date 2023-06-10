@@ -1,7 +1,3 @@
-export type Errors = {
-  [key: string]: string;
-};
-
 export type UserData = {
   id: string;
   nickname: string;
@@ -40,11 +36,6 @@ export type UserEditFormData = {
   profile_image: string;
 };
 
-//Login/LoginForm
-export type LoginFormValues = {
-  email: string;
-  password: string;
-};
 export type LoginFormData = {
   id: string;
   password: string;
