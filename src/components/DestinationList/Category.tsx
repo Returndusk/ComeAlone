@@ -117,10 +117,6 @@ function Category({
     return;
   };
 
-  useEffect(() => {
-    console.log(selectedCategory);
-  }, [selectedCategory]);
-
   const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     setIsLoading(true);
     isSelectedAll

@@ -49,7 +49,7 @@ function Search() {
   */
 
   const getRankedDestinationsData = useCallback(async () => {
-    const res = await getDestinationDetailsByDestinationId(2853453); //임시 인기 목적지 지정
+    const res = await getDestinationDetailsByDestinationId(2906155); //임시 인기 목적지 지정
     const rankedDestinationsList = res?.data.destinations;
     setRankedDestinations(() => rankedDestinationsList);
   }, [setRankedDestinations]);
@@ -63,7 +63,8 @@ function Search() {
   }, [searchParams]);
 
   const isNullishSearchInput = (input: string) => {
-    return input === '' || input.trim() === '';
+    const trimmedInput = input.replace(/ /g, '');
+    return trimmedInput === '';
   };
 
   const handleSubmitQuery = (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -72,6 +73,7 @@ function Search() {
     const submittedQuery = e.target.searchQuery.value;
     if (isNullishSearchInput(submittedQuery)) {
       setIsShowAlert(true);
+      return;
     }
     const searchQueryString = encodeURIComponent(submittedQuery);
     if (searchQueryString !== null) {
