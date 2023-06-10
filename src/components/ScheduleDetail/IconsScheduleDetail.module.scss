@@ -3,6 +3,19 @@
   align-self: self-start;
   font-size: 26px;
 
+  #likesDisabled {
+    border: 0;
+    background-color: transparent;
+    font-size: 26px;
+    color: rgb(231, 49, 49);
+    cursor: not-allowed;
+
+    #likesIcon {
+      margin: 0 5px 0 0;
+      font-size: 20px;
+    }
+  }
+
   #likes {
     border: 0;
     background-color: transparent;

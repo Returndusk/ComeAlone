@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './IconsScheduleDetail.module.scss';
+import { useAuthState } from '../../contexts/AuthContext';
 import { FaRegHeart, FaHeart, FaCommentAlt } from 'react-icons/fa';
 import { IconsScheduleDetailType } from '../../types/ScheduleDetailTypes';
 
@@ -9,9 +10,20 @@ function IconsScheduleDetail({
   reviewsAmount,
   onUserLike
 }: IconsScheduleDetailType) {
+  const { authState } = useAuthState();
+
   return (
     <div className={styles.iconsContainer}>
-      <button id={styles.likes} onClick={() => onUserLike()}>
+      <button
+        id={authState.isLoggedIn ? styles.likes : styles.likesDisabled}
+        onClick={() => {
+          if (authState.isLoggedIn) {
+            onUserLike();
+          } else {
+            return;
+          }
+        }}
+      >
         {doesUserLike ? (
           <FaHeart id={styles.likesIcon} />
         ) : (

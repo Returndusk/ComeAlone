@@ -45,7 +45,7 @@ export type IconsScheduleDetailType = {
   doesUserLike: boolean;
   likesCount: number;
   reviewsAmount: number;
-  onUserLike: any;
+  onUserLike: () => void;
 };
 
 interface ScheduleReviewType {

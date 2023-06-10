@@ -75,13 +75,17 @@ function ScheduleDetail() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getScheduleDetail(scheduleId);
-      const doesUserLike = await getDoesUserLike(scheduleId);
 
       scheduleFetched.current = data;
       userLikesCount.current = data.likesCount;
-      setDoesUserLike(doesUserLike);
       setCheckedDestinations(data.destinations.flat());
       setIsLoading(false);
+
+      if (authState.isLoggedIn) {
+        const doesUserLike = await getDoesUserLike(scheduleId);
+
+        setDoesUserLike(doesUserLike);
+      }
 
       console.log('initial like', doesUserLike);
     };
