@@ -15,7 +15,7 @@ function Main() {
         <SliderBanner
           settings={{ autoplay: false }}
           api={`${apiBaseUrl}/ranking/destinations?count=12`}
-          urlTemplate='/destination/list/{id}?search={title}'
+          urlTemplate='/destination/list/{id}?search={destination_title}'
           idProperty='destination_id'
           titleProperty='destination_title'
           imageProperty='destination_image1'
@@ -32,7 +32,7 @@ function Main() {
         <SliderBanner
           settings={{ autoplay: false }}
           api={`${apiBaseUrl}/ranking/schedules?count=12`}
-          urlTemplate='/schedule/detail/{schedule_id}'
+          urlTemplate='/schedule/detail/{schedule_schedule_id}'
           idProperty='schedule_schedule_id'
           titleProperty='schedule_title'
           imageProperty='schedule_image'
