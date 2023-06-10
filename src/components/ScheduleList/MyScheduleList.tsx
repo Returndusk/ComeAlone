@@ -13,6 +13,9 @@ const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function MyScheduleLists() {
   const [scheduleList, setScheduleList] = useState<MyScheduleListType>([]);
+  const [showScheduleList, setShowScheduleList] = useState<MyScheduleListType>(
+    []
+  );
   const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -22,7 +25,9 @@ function MyScheduleLists() {
     setIsLoading(true);
     try {
       const response = await tokenInstance.get(`${baseUrl}/users/me/schedules`);
-      setScheduleList(response.data);
+      const scheduleData = response.data;
+      setScheduleList(scheduleData);
+      setShowScheduleList(sortUpcoming(scheduleData));
     } catch (error: unknown) {
       setShowAlertModal(true);
     }
@@ -33,9 +38,48 @@ function MyScheduleLists() {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    sortSchedule();
+  }, [scheduleSort]);
+
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     setScheduleSort(sortOption);
+  }
+
+  function sortUpcoming(scheduleData: MyScheduleCardType[]) {
+    return scheduleData
+      .filter((schedule: MyScheduleCardType) => {
+        const today = new Date();
+        const end_date = new Date(schedule.end_date);
+        return today.getTime() < end_date.getTime();
+      })
+      .sort(
+        (a, b) =>
+          new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+      );
+  }
+
+  function sortPast(scheduleData: MyScheduleCardType[]) {
+    return scheduleData
+      .filter((schedule: MyScheduleCardType) => {
+        const today = new Date();
+        const end_date = new Date(schedule.end_date);
+        return today.getTime() > end_date.getTime();
+      })
+      .sort(
+        (a, b) =>
+          new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
+      );
+  }
+
+  function sortSchedule() {
+    const scheduleData = [...scheduleList];
+    if (scheduleSort === 'upcoming') {
+      setShowScheduleList(sortUpcoming(scheduleData));
+    } else {
+      setShowScheduleList(sortPast(scheduleData));
+    }
   }
 
   function openModal() {
@@ -72,17 +116,6 @@ function MyScheduleLists() {
         >
           지난 일정
         </button>
-        <button
-          className={`${styles.sortButton} ${
-            scheduleSort === 'like' ? styles.selected : ''
-          }`}
-          onClick={(e) => {
-            handleSort(e);
-          }}
-          value='like'
-        >
-          좋아요 한 일정
-        </button>
       </div>
       {showAlertModal && (
         <AlertModal
@@ -100,7 +133,7 @@ function MyScheduleLists() {
           <CreateScheduleModal closeModal={() => setIsModalOpen(false)} />
         )}
         {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
-        {scheduleList.map((schedule: MyScheduleCardType, index: number) => (
+        {showScheduleList.map((schedule: MyScheduleCardType, index: number) => (
           <MyScheduleCard schedule={schedule} key={index} />
         ))}
       </div>
