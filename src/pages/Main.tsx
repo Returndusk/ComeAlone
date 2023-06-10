@@ -16,10 +16,10 @@ function Main() {
           settings={{ autoplay: false }}
           api={`${apiBaseUrl}/ranking/destinations?count=12`}
           urlTemplate='/destination/list/{id}?search={title}'
-          idProperty='id'
-          titleProperty='title'
-          imageProperty='image1'
-          overviewProperty='overview'
+          idProperty='destination_id'
+          titleProperty='destination_title'
+          imageProperty='destination_image1'
+          overviewProperty='destination_overview'
           showCategory={true}
           customClassName='BottomSlider'
           boxClassName='BottomBox'
@@ -33,10 +33,10 @@ function Main() {
           settings={{ autoplay: false }}
           api={`${apiBaseUrl}/ranking/schedules?count=12`}
           urlTemplate='/schedule/detail/{schedule_id}'
-          idProperty='schedule_id'
-          titleProperty='title'
-          imageProperty='image'
-          overviewProperty='summary'
+          idProperty='schedule_schedule_id'
+          titleProperty='schedule_title'
+          imageProperty='schedule_image'
+          overviewProperty='schedule_summary'
           customClassName='BottomSlider'
           boxClassName='BottomBox'
           imageContainerClassName='BottomImageContainer'
