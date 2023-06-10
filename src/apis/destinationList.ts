@@ -30,6 +30,24 @@ export const getDestinationsListByCategoryId = async (
   }
 };
 
+export const getDestinationListByTitleAndCategoryId = async (
+  categoryIds: number[],
+  title: string
+) => {
+  try {
+    const categoryIdsQuery = categoryIds.join();
+    const response = await axios.get(
+      `${baseUrl}/destinations/search?categoryIds=${categoryIdsQuery}&title=${title}`
+    );
+    return response;
+  } catch (error) {
+    console.error(
+      error,
+      '카테고리 및 목적지명에 맞는 여행지 리스트를 받아오는데 실패했습니다.'
+    );
+  }
+};
+
 export const getDestinationDetailsByDestinationId = async (
   destinationId: number
 ) => {

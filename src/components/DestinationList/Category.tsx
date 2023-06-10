@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DestinationsType } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
-import { getDestinationsListByCategoryId } from '../../apis/destinationList';
+import { getDestinationListByTitleAndCategoryId } from '../../apis/destinationList';
 import styles from './Category.module.scss';
 
 type CategoryPropsTypes = {
-  searchResults: DestinationsType[] | [];
+  rankedDestinations: DestinationsType[] | [];
+  isUserSearched: boolean;
+  searchQueryParam: string;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -24,20 +26,17 @@ const CATEGORIES_ID = new Map([
 const CATEGORIES_ID_LIST = Array.from(CATEGORIES_ID.keys());
 
 function Category({
-  searchResults,
+  rankedDestinations,
+  isUserSearched,
+  searchQueryParam,
   isLoading,
   setIsLoading
 }: CategoryPropsTypes) {
   const [selectedCategory, setSelectedCategory] = useState<number[]>([
     ...CATEGORIES_ID_LIST
   ]);
-
-  const [categorizedData, setCategorizedData] = useState<
-    DestinationsType[] | []
-  >([]);
-  const [filteredDestinations, setFilteredDestinations] = useState<
-    DestinationsType[] | []
-  >([]);
+  const [filteredDestinations, setFilteredDestinations] =
+    useState<DestinationsType[]>(rankedDestinations);
 
   const isSelectedAll = useMemo(() => {
     return selectedCategory.length === CATEGORIES_ID_LIST.length;
@@ -87,36 +86,43 @@ function Category({
     };
   }, [isLoading]);
 
-  const getCategorizedDestinationsData = useCallback(async () => {
-    if (selectedCategory.length > 0) {
-      const res = await getDestinationsListByCategoryId(selectedCategory);
-      const categorizedDestinationsList = res?.data.result;
-      setCategorizedData(() => categorizedDestinationsList);
-    } else {
-      setCategorizedData(() => []);
+  useEffect(() => {
+    if (selectedCategory.length <= 0) {
+      return;
     }
-  }, [selectedCategory]);
+    if (!isUserSearched) {
+      setIsLoading(true);
+      const categorizedRankingDestinations = rankedDestinations.filter(
+        (destination) => {
+          return selectedCategory.includes(destination.category_id);
+        }
+      );
+      setFilteredDestinations(() => categorizedRankingDestinations);
+      setIsLoading(false);
+    }
+    return;
+  }, [selectedCategory, rankedDestinations]);
+
+  const getCategorizedSearchingData = useCallback(async () => {
+    if (selectedCategory.length <= 0) {
+      return;
+    }
+    if (isUserSearched) {
+      const res = await getDestinationListByTitleAndCategoryId(
+        selectedCategory,
+        searchQueryParam
+      );
+      const categorizedSearchingDestinationsList = res?.data.destinations;
+      setFilteredDestinations(() => categorizedSearchingDestinationsList);
+    }
+    return;
+  }, [selectedCategory, searchQueryParam]);
 
   useEffect(() => {
     setIsLoading(true);
-    getCategorizedDestinationsData();
+    getCategorizedSearchingData();
     setIsLoading(false);
-  }, [getCategorizedDestinationsData]);
-
-  useEffect(() => {
-    if (searchResults.length > 0) {
-      const categorizedDataTitles = categorizedData.map(
-        (destination) => destination.title
-      );
-
-      const newDestinations = searchResults.filter((destination) =>
-        categorizedDataTitles.includes(destination.title)
-      );
-      setFilteredDestinations(() => newDestinations);
-    } else {
-      setFilteredDestinations(() => searchResults);
-    }
-  }, [categorizedData, searchResults]);
+  }, [getCategorizedSearchingData]);
 
   return (
     <>
@@ -154,7 +160,10 @@ function Category({
               ))}
             </div>
           </section>
-          <Destinations filteredDestinations={filteredDestinations} />
+          <Destinations
+            filteredDestinations={filteredDestinations}
+            isLoading={isLoading}
+          />
         </>
       )}
     </>

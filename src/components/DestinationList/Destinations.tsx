@@ -9,15 +9,13 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 type DestinationsPropsType = {
   filteredDestinations: DestinationsType[] | [];
-  // isLoading: boolean;
-  // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
 };
 
 function Destinations({
-  filteredDestinations
-}: // isLoading,
-// setIsLoading
-DestinationsPropsType) {
+  filteredDestinations,
+  isLoading
+}: DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
     DestinationsType[] | []
   >(filteredDestinations);
@@ -53,83 +51,83 @@ DestinationsPropsType) {
 
   return (
     <div className={styles.destinationContentsContainer}>
-      {/* {isLoading ? (
-        <div>로딩 중..</div>
-      ) : ( */}
-      <div className={styles.destinationsInfoContainer}>
-        <section className={styles.destinationsContainer}>
-          {filteredDestinations.length > 0 ? (
-            <>
-              {slicedDestinations.map(
-                (destination: DestinationsType, index) => (
-                  <div
-                    key={index}
-                    className={styles.destinations}
-                    onClick={() => handleDestinationClick(destination)}
-                  >
-                    <h2
-                      className={
-                        destination?.title.length >= 10
-                          ? styles.destinationExceedTitle
-                          : styles.destinationShortTitle
-                      }
+      {isLoading ? (
+        <div className={styles.destinationLoadingContainer}>로딩 중..</div>
+      ) : (
+        <div className={styles.destinationsInfoContainer}>
+          <section className={styles.destinationsContainer}>
+            {filteredDestinations.length > 0 ? (
+              <>
+                {slicedDestinations.map(
+                  (destination: DestinationsType, index) => (
+                    <div
+                      key={index}
+                      className={styles.destinations}
+                      onClick={() => handleDestinationClick(destination)}
                     >
-                      {destination?.title}
-                    </h2>
-                    <p className={styles.destinationAddress}>
-                      {destination?.addr1}
-                    </p>
-                    <p className={styles.destinationCategory}>
-                      {destination?.category_id}
-                    </p>
+                      <h2
+                        className={
+                          destination?.title.length >= 10
+                            ? styles.destinationExceedTitle
+                            : styles.destinationShortTitle
+                        }
+                      >
+                        {destination?.title}
+                      </h2>
+                      <p className={styles.destinationAddress}>
+                        {destination?.addr1}
+                      </p>
+                      <p className={styles.destinationCategory}>
+                        {destination?.category_id}
+                      </p>
 
-                    {imageError ? (
-                      <img
-                        id={styles.destinationImage}
-                        src={destination?.image1}
-                        alt={destination.title}
-                      />
-                    ) : (
-                      <img
-                        id={styles.destinationImage}
-                        src={destination?.image2}
-                        alt={destination.title}
-                        onError={handleImageError}
-                      />
-                    )}
-                  </div>
-                )
-              )}
-              <Pagination
-                filteredDestinations={filteredDestinations}
-                setSlicedDestinations={setSlicedDestinations}
-              />
-            </>
-          ) : (
-            <div className={styles.alertContainer}>
-              <CiCircleAlert className={styles.alertIcon} />
-              <p>검색 결과가 없습니다.</p>
-            </div>
-          )}
-        </section>
-        {isOpen &&
-          detailsDomRoot !== null &&
-          createPortal(
-            <section className={styles.detailsContainer}>
-              <Outlet />
-              <div className={styles.detailsButtonContainer}>
-                <button
-                  className={styles.detailsCloseButton}
-                  onClick={closeDetailPage}
-                >
-                  X
-                </button>
+                      {imageError ? (
+                        <img
+                          id={styles.destinationImage}
+                          src={destination?.image1}
+                          alt={destination.title}
+                        />
+                      ) : (
+                        <img
+                          id={styles.destinationImage}
+                          src={destination?.image2}
+                          alt={destination.title}
+                          onError={handleImageError}
+                        />
+                      )}
+                    </div>
+                  )
+                )}
+                <Pagination
+                  filteredDestinations={filteredDestinations}
+                  setSlicedDestinations={setSlicedDestinations}
+                />
+              </>
+            ) : (
+              <div className={styles.alertContainer}>
+                <CiCircleAlert className={styles.alertIcon} />
+                <p>검색 결과가 없습니다.</p>
               </div>
-            </section>,
-            detailsDomRoot
-          )}
-      </div>
-      {/* )} */}
+            )}
+          </section>
+          {isOpen &&
+            detailsDomRoot !== null &&
+            createPortal(
+              <section className={styles.detailsContainer}>
+                <Outlet />
+                <div className={styles.detailsButtonContainer}>
+                  <button
+                    className={styles.detailsCloseButton}
+                    onClick={closeDetailPage}
+                  >
+                    X
+                  </button>
+                </div>
+              </section>,
+              detailsDomRoot
+            )}
+        </div>
+      )}
       <Map
         markersLocations={
           clickedDestination !== null
