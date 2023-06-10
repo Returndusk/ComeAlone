@@ -38,18 +38,14 @@ function RegisterForm() {
   };
   const [values, setValues] = useState<RegisterFormValues>(initValues);
   const [errors, setErrors] = useState<RegisterFormErrors>(initErrors);
-  const [isNicknameDuplicate, setIsNicknameDuplicate] = useState<
-    boolean | null
-  >(null);
+  const [nicknameDuplicate, setNicknameDuplicate] = useState({
+    isPass: false,
+    nickname: ''
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
-
-    //닉네임 중복 확인 후 재입력시
-    if (name === 'nickname' && isNicknameDuplicate) {
-      setIsNicknameDuplicate(null);
-    }
   };
 
   const handleBirthDateChange = (
@@ -108,7 +104,7 @@ function RegisterForm() {
     const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!pattern.test(email)) {
-      errMsgs.email = '유효한 이메일 주소가 아닙니다.';
+      return (errMsgs.email = '유효한 이메일 주소가 아닙니다.');
     }
   };
 
@@ -128,6 +124,10 @@ function RegisterForm() {
     if (!hasAllowedChars.test(nickname)) {
       return (errMsgs.nickname =
         '닉네임은 알파벳 대소문자, 숫자, 한글만 사용할 수 있습니다.');
+    }
+
+    if (!nicknameDuplicate.isPass || nicknameDuplicate.nickname !== nickname) {
+      return (errMsgs.nickname = '닉네임 중복 확인을 해주세요.');
     }
   };
 
@@ -214,13 +214,20 @@ function RegisterForm() {
   };
 
   const handleCheckNickname = async () => {
-    //validateNickname();
+    const nickname = values.nickname;
+    if (!nickname) {
+      return setErrors((prev) => ({
+        ...prev,
+        nickname: '빈칸을 입력해주세요.'
+      }));
+    }
+
     try {
-      const data = { nickname: values.nickname };
-      const response = await checkNicknameDuplicate(data);
+      const response = await checkNicknameDuplicate({ nickname });
 
       if (response.status === 201) {
-        setIsNicknameDuplicate(false);
+        setNicknameDuplicate({ isPass: true, nickname });
+        setErrors((prev) => ({ ...prev, nickname: '' }));
         alert('사용할 수 있는 닉네임입니다.');
       }
     } catch (err: unknown) {
@@ -228,7 +235,7 @@ function RegisterForm() {
         if (err.response?.status === 409) {
           const { message: errMsg } = err.response.data;
 
-          setIsNicknameDuplicate(true);
+          setNicknameDuplicate({ isPass: false, nickname: '' });
           return setErrors((prev) => ({ ...prev, nickname: errMsg }));
         }
       }
