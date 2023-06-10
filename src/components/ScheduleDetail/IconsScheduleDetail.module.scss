@@ -4,8 +4,11 @@
   font-size: 26px;
 
   #likes {
+    border: 0;
+    background-color: transparent;
     font-size: 26px;
     color: rgb(231, 49, 49);
+    cursor: pointer;
 
     #likesIcon {
       margin: 0 5px 0 0;

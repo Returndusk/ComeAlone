@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { MapWithWaypointsPropsType } from './DestinationListTypes';
 export interface IScheduleDetail {
   scheduleId: number;
@@ -43,6 +44,7 @@ export type IconsScheduleDetailType = {
   doesUserLike: boolean;
   likesAmount: number;
   reviewsAmount: number;
+  onUserLike: any;
 };
 
 interface ScheduleReviewType {

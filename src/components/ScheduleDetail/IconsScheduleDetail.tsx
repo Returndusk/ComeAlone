@@ -6,18 +6,19 @@ import { IconsScheduleDetailType } from '../../types/ScheduleDetailTypes';
 function IconsScheduleDetail({
   doesUserLike,
   likesAmount,
-  reviewsAmount
+  reviewsAmount,
+  onUserLike
 }: IconsScheduleDetailType) {
   return (
     <div className={styles.iconsContainer}>
-      <span id={styles.likes}>
+      <button id={styles.likes} onClick={() => onUserLike()}>
         {doesUserLike ? (
           <FaHeart id={styles.likesIcon} />
         ) : (
           <FaRegHeart id={styles.likesIcon} />
         )}
         {likesAmount}
-      </span>
+      </button>
       <span id={styles.reviewNumber}>
         <FaCommentAlt id={styles.reviewNumberIcon} />
         {reviewsAmount}

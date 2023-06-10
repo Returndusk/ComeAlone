@@ -18,7 +18,8 @@ import {
 import { FaArrowLeft } from 'react-icons/fa';
 import {
   getScheduleDetailById,
-  getDoesUserLikedById
+  getDoesUserLikeById,
+  toggleUserLikeById
 } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
 
@@ -52,21 +53,33 @@ function ScheduleDetail() {
     return data;
   }, []);
 
-  const getIsUserLiked = useCallback(async (id: string | undefined) => {
-    const response = await getDoesUserLikedById(id);
+  const getDoesUserLike = useCallback(async (id: string | undefined) => {
+    const response = await getDoesUserLikeById(id);
 
     return response?.data.is_liked;
+  }, []);
+
+  const toggleUserLike = useCallback(async (id: string | undefined) => {
+    const response = await toggleUserLikeById(id);
+    const isLiked = response?.data.is_liked;
+    const likesCount = response?.data.likes_count_of_schedule;
+
+    console.log('updated like', isLiked);
+
+    setDoesUserLike(isLiked);
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getScheduleDetail(scheduleId);
-      const doesUserLike = await getIsUserLiked(scheduleId);
+      const doesUserLike = await getDoesUserLike(scheduleId);
 
       scheduleFetched.current = data;
       setDoesUserLike(doesUserLike);
       setCheckedDestinations(data.destinations.flat());
       setIsLoading(false);
+
+      console.log('initial like', doesUserLike);
     };
 
     fetchData();
@@ -88,6 +101,10 @@ function ScheduleDetail() {
   const handleReviewSubmit = (input: string) => {
     reviewInput.current = input;
     console.log(reviewInput.current);
+  };
+
+  const handleUserLike = () => {
+    toggleUserLike(scheduleId);
   };
 
   if (isLoading) {
@@ -124,6 +141,7 @@ function ScheduleDetail() {
         doesUserLike={doesUserLike}
         likesAmount={likesAmount}
         reviewsAmount={reviewsAmount}
+        onUserLike={handleUserLike}
       />
       <DestinationList
         destinations={destinations}

@@ -13,9 +13,21 @@ export async function getScheduleDetailById(id: string | undefined) {
   }
 }
 
-export async function getDoesUserLikedById(id: string | undefined) {
+export async function getDoesUserLikeById(id: string | undefined) {
   try {
     const response = await tokenInstance.get(
+      `${baseUrl}/schedules/${id}/likes`
+    );
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function toggleUserLikeById(id: string | undefined) {
+  try {
+    const response = await tokenInstance.post(
       `${baseUrl}/schedules/${id}/likes`
     );
 
