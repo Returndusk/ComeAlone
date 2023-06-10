@@ -16,10 +16,11 @@ function SliderBanner({
   titleProperty = 'title',
   imageProperty = 'image1',
   overviewProperty = 'overview',
-  className,
+  customClassName,
   boxClassName,
   imageContainerClassName,
-  textClassName
+  textClassName,
+  showCategory = false
 }: SliderBannerProps): JSX.Element {
   const defaultSettings = {
     arrows: true,
@@ -33,6 +34,17 @@ function SliderBanner({
   };
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
+
+  const categoryMapping: { [key: number]: string } = {
+    12: '관광지',
+    14: '문화시설',
+    15: '축제공연행사',
+    25: '여행코스',
+    28: '레포츠',
+    32: '숙박',
+    38: '쇼핑',
+    39: '음식점'
+  };
 
   useEffect(() => {
     if (api) {
@@ -65,17 +77,27 @@ function SliderBanner({
   };
 
   return (
-    <div className={`${styles.container} ${className || ''}`}>
+    <div
+      className={`${styles.container} ${
+        customClassName && styles[customClassName]
+          ? styles[customClassName]
+          : ''
+      }`}
+    >
       <Slider {...finalSettings}>
         {destinations.map((destination, index) => (
           <div
             key={`destination-${String(destination[idProperty]) || index}`}
-            className={`${styles.box} ${boxClassName || ''}`}
+            className={`${styles.box} ${
+              boxClassName && styles[boxClassName] ? styles[boxClassName] : ''
+            }`}
             onClick={() => handleBannerClick(destination)}
           >
             <div
               className={`${styles.imageContainer} ${
-                imageContainerClassName || ''
+                imageContainerClassName && styles[imageContainerClassName]
+                  ? styles[imageContainerClassName]
+                  : ''
               }`}
             >
               <img
@@ -86,9 +108,25 @@ function SliderBanner({
                     : 'https://image.utoimage.com/preview/cp872655/2021/05/202105029544_500.jpg'
                 }
                 alt={String(destination[titleProperty]) || ''}
-              />
+              ></img>
+              {showCategory && destination.category_id && (
+                <div
+                  className={`${styles.category} ${
+                    styles['category-' + destination.category_id]
+                  }`}
+                >
+                  {categoryMapping[Number(destination.category_id)]}
+                </div>
+              )}
+
               {showTitleAndOverview && (
-                <div className={`${styles.text} ${textClassName || ''}`}>
+                <div
+                  className={`${styles.text} ${
+                    textClassName && styles[textClassName]
+                      ? styles[textClassName]
+                      : ''
+                  }`}
+                >
                   <h3>{String(destination[titleProperty])}</h3>
                   <p>
                     {destination[overviewProperty] &&
