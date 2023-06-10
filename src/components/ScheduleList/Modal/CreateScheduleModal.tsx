@@ -2,31 +2,34 @@ import React, { useEffect, useState } from 'react';
 import styles from './CommonModalDesign.module.scss';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRange } from 'react-date-range';
+import { DateRange, RangeKeyDict } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 import { addDays, format, differenceInDays } from 'date-fns';
 import tokenInstance from '../../../apis/tokenInstance';
+import { MyScheduleCardType } from '../../../types/ScheduleTypes';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-function CreateScheduleModal(props: { closeModal: () => void }) {
-  /**
-   * TODO: 모달 창 밖을 클릭해도 닫히도록
-   * @param e 현재 지칭된 타겟(모달창 밖)
-   * @returns 창닫기 버튼이 아니라 밖을 클릭해도 닫히도록
-   * 
-  function handleCloseModal(e: React.MouseEvent<HTMLDivElement>) {
-    // function handleCloseModal(e: { target: any }) {
-    e.stopPropagation();
+function CreateScheduleModal(props: {
+  closeModal: () => void;
+  onAdd: (schedule: MyScheduleCardType) => void;
+}) {
+  // const modalRef = useRef<HTMLDivElement>(null);
 
-    const target = e.target as HTMLElement;
+  // useEffect(() => {
+  //   function handleClickBackground(e: React.MouseEvent<HTMLElement>) {
+  //     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+  //       props.closeModal();
+  //     }
+  //   }
 
-    if (target.classList.contains('modalBackground')) {
-      // console.log(target.classList);
-      closeModal();
-    }
-  }
-   */
+  //   document.addEventListener('mousedown', handleClickBackground);
+
+  //   return () => {
+  //     // cleanup - 컴포넌트 unmount 시 리스너 제거
+  //     document.removeEventListener('mousedown', handleClickBackground);
+  //   };
+  // }, []);
 
   const [date, setDate] = useState([
     {
@@ -39,13 +42,16 @@ function CreateScheduleModal(props: { closeModal: () => void }) {
   const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd');
   const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd');
 
-  /**
-   * TODO: any 타입 대신 적절한 타입으로 변환하기
-   * @param ranges 현재 찍힌 Date값(Object)
-   */
-  function handleDateRange(ranges: any) {
-    // console.log(ranges);
-    setDate([ranges.selection]);
+  function handleDateRange(ranges: RangeKeyDict) {
+    const { startDate, endDate } = ranges.selection;
+
+    setDate([
+      {
+        startDate: startDate || new Date(),
+        endDate: endDate || addDays(new Date(), 7),
+        key: 'selection'
+      }
+    ]);
   }
 
   useEffect(() => {
@@ -95,7 +101,11 @@ function CreateScheduleModal(props: { closeModal: () => void }) {
 
     try {
       console.log('formData', formData);
-      await tokenInstance.post(`${baseUrl}/schedules/basic`, formData);
+      const response = await tokenInstance.post(
+        `${baseUrl}/schedules/basic`,
+        formData
+      );
+      props.onAdd(response.data);
       // 여기에 득열님 alert 활용
       alert('일정이 추가되었습니다!');
       props.closeModal();

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ModalScheduleLists.module.scss';
-// import dummy from '../../ScheduleList/ScheduleListDummy';
 import ModalScheduleCard from './ModalScheduleCard';
 import {
   ModalScheduleCardType,
@@ -8,9 +7,11 @@ import {
 } from '../../../types/ModalScheduleTypes';
 import tokenInstance from '../../../apis/tokenInstance';
 
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
 async function getMyScheduleLists() {
   const response = await tokenInstance.get<MyScheduleListType>(
-    'https://vvhooping.com/api/users/me/schedules'
+    `${baseUrl}/users/me/schedules`
   );
   const data = response.data;
   // console.log(data);

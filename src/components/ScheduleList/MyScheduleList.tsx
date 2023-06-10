@@ -40,7 +40,7 @@ function MyScheduleLists() {
 
   useEffect(() => {
     sortSchedule();
-  }, [scheduleSort]);
+  }, [scheduleSort, scheduleList]);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
@@ -90,6 +90,10 @@ function MyScheduleLists() {
     setShowAlertModal(false);
   }
 
+  function handleAddToBrowser(schedule: MyScheduleCardType) {
+    setScheduleList((prev) => [...prev, schedule]);
+  }
+
   return (
     <div className={styles.scheduleContainer}>
       <div className={styles.scheduleListTitle}>나의 여행 일정</div>
@@ -130,7 +134,10 @@ function MyScheduleLists() {
           </button>
         )}
         {isModalOpen && (
-          <CreateScheduleModal closeModal={() => setIsModalOpen(false)} />
+          <CreateScheduleModal
+            closeModal={() => setIsModalOpen(false)}
+            onAdd={handleAddToBrowser}
+          />
         )}
         {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
         {showScheduleList.map((schedule: MyScheduleCardType, index: number) => (
