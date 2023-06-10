@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Pagination from './Pagination';
 import Map from '../common/Map/Map';
 import styles from './Destinations.module.scss';
-import { DestinationsType } from '../../types/DestinationListTypes';
+import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 import { CiCircleAlert } from 'react-icons/ci';
 import { createPortal } from 'react-dom';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 type DestinationsPropsType = {
-  filteredDestinations: DestinationsType[] | [];
+  filteredDestinations: specifiedCategoryDestinationsType[] | [];
   isLoading: boolean;
 };
 
@@ -17,10 +17,10 @@ function Destinations({
   isLoading
 }: DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
-    DestinationsType[] | []
-  >(filteredDestinations);
+    specifiedCategoryDestinationsType[] | []
+  >(filteredDestinations ?? []);
   const [clickedDestination, setClickedDestination] =
-    useState<DestinationsType | null>(null);
+    useState<specifiedCategoryDestinationsType | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [detailsDomRoot, setDetailsDomRoot] = useState<HTMLElement | null>(
     null
@@ -33,7 +33,9 @@ function Destinations({
     setDetailsDomRoot(() => document.getElementById('main'));
   }, []);
 
-  const handleDestinationClick = (destination: DestinationsType) => {
+  const handleDestinationClick = (
+    destination: specifiedCategoryDestinationsType
+  ) => {
     setClickedDestination(() => destination);
     navigate(`/destination/list/${destination.id}${search}`);
     setIsOpen(() => true);
@@ -56,10 +58,10 @@ function Destinations({
       ) : (
         <div className={styles.destinationsInfoContainer}>
           <section className={styles.destinationsContainer}>
-            {filteredDestinations.length > 0 ? (
+            {filteredDestinations?.length > 0 ? (
               <>
                 {slicedDestinations.map(
-                  (destination: DestinationsType, index) => (
+                  (destination: specifiedCategoryDestinationsType, index) => (
                     <div
                       key={index}
                       className={styles.destinations}

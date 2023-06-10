@@ -4,7 +4,7 @@ import Review from './Review';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getDestinationDetailsByDestinationId } from '../../apis/destinationList';
 import AlertModal from '../common/Alert/AlertModal';
-import { DestinationsDetailsType } from '../../types/DestinationListTypes';
+import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 import OpenModal from './Modal/OpenModal';
 
 const ALERT_PROPS = {
@@ -13,8 +13,9 @@ const ALERT_PROPS = {
 };
 
 function DestinationDetails() {
-  const [destinationDetails, setDestinationDetails] =
-    useState<DestinationsDetailsType | null>(null);
+  const [destinationDetails, setDestinationDetails] = useState<
+    specifiedCategoryDestinationsType | null
+  >(null);
 
   const { contentid } = useParams();
   const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);

@@ -4,7 +4,10 @@ import styles from './Search.module.scss';
 import Category from './Category';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { getRankedDestinationsByRankingNumber } from '../../apis/destinationList';
+import {
+  getDestinationDetailsByDestinationId,
+  getRankedDestinationsByRankingNumber
+} from '../../apis/destinationList';
 
 // 사용자 검색 X -> 랭킹 데이터를 props로 전송
 // 사용자 검색 O -> 검색 쿼리를 props로 전송
@@ -22,11 +25,23 @@ function Search() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   //인기 목적지 목록
+  /*
   const getRankedDestinationsData = useCallback(async () => {
     const res = await getRankedDestinationsByRankingNumber(
       RANKED_DESTINAIONS_NUMBER.count
     );
     const rankedDestinationsList = res?.data;
+    setRankedDestinations(() => rankedDestinationsList);
+  }, []);
+
+  useEffect(() => {
+    getRankedDestinationsData();
+  }, [getRankedDestinationsData]);
+  */
+
+  const getRankedDestinationsData = useCallback(async () => {
+    const res = await getDestinationDetailsByDestinationId(2853453); //임시 id
+    const rankedDestinationsList = res?.data.destinations;
     setRankedDestinations(() => rankedDestinationsList);
   }, []);
 

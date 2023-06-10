@@ -139,23 +139,25 @@ function Review() {
   created_at: string; */
 
   return (
-    <div>
-      <div className={styles.reviewContainer}>
-        <div>{`한 줄 리뷰(${reviewCount})`}</div>
-        <ul>
+    <>
+      <section className={styles.reviewContainer}>
+        <h3 className={styles.reviewBanner}>{`리뷰(${reviewCount})`}</h3>
+        <div className={styles.reviewBoxes}>
           {allReviewList?.map((review, index) => {
             return (
-              <div key={index}>
-                <p>{review.user.nickname}</p>
-                <p>{review.comment}</p>
-                <p>{review.created_at}</p>
+              <div key={index} className={styles.review}>
+                <p className={styles.reviewerNickname}>
+                  {review.user.nickname}
+                </p>
+                <p className={styles.reviewComment}>{review.comment}</p>
+                <p className={styles.reviewCreatedDate}>{review.created_at}</p>
               </div>
             );
           })}
-        </ul>
-        <form className={styles.reviewBar} onSubmit={handleReviewSubmit}>
+        </div>
+        <form className={styles.reviewInputBar} onSubmit={handleReviewSubmit}>
           <input
-            id={styles.reviewBar}
+            id={styles.reviewInputBar}
             type='text'
             name='review'
             placeholder={
@@ -168,13 +170,15 @@ function Review() {
             등록
           </button>
         </form>
-        <button
-          id={styles.usersReviewListButton}
-          onClick={handleUsersReviewClick}
-        >
-          내 리뷰 목록
-        </button>
-      </div>
+        <div className={styles.usersReviewListButtonContainer}>
+          <button
+            id={styles.usersReviewListButton}
+            onClick={handleUsersReviewClick}
+          >
+            내 리뷰 목록
+          </button>
+        </div>
+      </section>
       {isAccessUsersReview && <UsersReview />}
       {isShowAlert && (
         <AlertModal
@@ -197,7 +201,7 @@ function Review() {
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
-    </div>
+    </>
   );
 }
 
