@@ -94,7 +94,7 @@ function Search() {
               type='text'
               name='searchQuery'
               placeholder='목적지를 입력해주세요.'
-              defaultValue={searchQueryParam}
+              defaultValue={decodeURIComponent(searchQueryParam)}
             />
             <button id={styles.searchButton} type='submit'>
               <AiOutlineSearch />
