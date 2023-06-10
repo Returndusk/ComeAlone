@@ -39,7 +39,7 @@ function MyScheduleLists() {
   }, [fetchData]);
 
   useEffect(() => {
-    sortSchedule();
+    sortSchedule(scheduleSort);
   }, [scheduleSort]);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
@@ -73,9 +73,9 @@ function MyScheduleLists() {
       );
   }
 
-  function sortSchedule() {
+  function sortSchedule(sortOption: string) {
     const scheduleData = [...scheduleList];
-    if (scheduleSort === 'upcoming') {
+    if (sortOption === 'upcoming') {
       setShowScheduleList(sortUpcoming(scheduleData));
     } else {
       setShowScheduleList(sortPast(scheduleData));
