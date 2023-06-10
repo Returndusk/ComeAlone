@@ -22,7 +22,10 @@ export type ModalScheduleCardType = {
 };
 
 export type AddToScheduleModalType = {
-  destinations: string[];
-  onDestinationUpdate: (updatedDestination: string[]) => void;
+  // schedule: ModalMyScheduleType;
+  selectedDay: number;
   scheduleId: number;
+  destinations: string[][];
+  // onDestinationUpdate: (updatedDestination: string[]) => void;
+  // updatedDestinations: string[][];
 };
