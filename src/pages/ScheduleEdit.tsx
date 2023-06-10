@@ -134,7 +134,7 @@ function ScheduleEdit() {
     updatedSummary.current = summary;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const schedule_id = Number(scheduleId);
     const title = updatedTitle.current;
     const summary = updatedSummary.current;
@@ -145,7 +145,7 @@ function ScheduleEdit() {
     const image = '';
     const destinations = mapDestinationId(updatedDestinationList);
 
-    updateSchedule({
+    await updateSchedule({
       schedule_id,
       title,
       summary,
@@ -157,11 +157,13 @@ function ScheduleEdit() {
       destinations
     });
 
-    navigate(`/schedule/detail/${scheduleId}`);
+    navigate(`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`);
   };
 
   const handleDelete = async () => {
     await deleteScheduleById(scheduleId);
+
+    navigate(ROUTER.MYSCHEDULE_LIST);
   };
 
   if (isLoading) {

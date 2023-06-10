@@ -62,3 +62,15 @@ export async function addScheduleReviewById(
     console.log(err);
   }
 }
+
+export async function deleteScheduleReviewById(id: number | undefined) {
+  try {
+    const response = await tokenInstance.delete(
+      `${baseUrl}/schedules/comments/${id}`
+    );
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}

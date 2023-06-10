@@ -83,6 +83,7 @@ ModalScheduleCardType) {
       {isSelected && selectedDay !== null && (
         <AddToScheduleModal
           destinations={schedule.destinations}
+          destinationIds={schedule.destinationIds}
           // onDestinationUpdate={handleDestinationUpdate}
           // schedule={schedule}
           selectedDay={selectedDay}

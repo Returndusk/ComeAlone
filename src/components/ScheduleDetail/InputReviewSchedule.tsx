@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuthState } from '../../contexts/AuthContext';
 import styles from './InputReviewSchedule.module.scss';
+import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
 
 function InputReviewSchedule({
@@ -19,14 +20,13 @@ function InputReviewSchedule({
     <>
       {authState.isLoggedIn ? (
         <div className={styles.reviewInputContainer}>
-          <Avatar className={styles.reviewsInputWriter}>
-            {authState.user?.nickname[0]}
-          </Avatar>
-          <textarea
+          <Avatar>{authState.user?.nickname[0]}</Avatar>
+          <TextField
             className={styles.reviewsInputText}
             onChange={handleChange}
+            label='리뷰를 입력하세요.'
             value={reviewTyping}
-          ></textarea>
+          />
           <button
             className={styles.reviewsInputButton}
             onClick={() => {
