@@ -11,7 +11,6 @@ import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedul
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
   defaultSchedule,
-  reviewsAmount,
   defaultScheduleReviews
 } from '../components/ScheduleDetail/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -164,7 +163,7 @@ function ScheduleDetail() {
         userId={userId}
         doesUserLike={doesUserLike}
         likesCount={userLikesCount.current}
-        reviewsAmount={reviewsAmount}
+        reviewsCount={scheduleReviews.length}
         onUserLike={handleUserLike}
       />
       <DestinationList

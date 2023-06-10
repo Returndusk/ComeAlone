@@ -9,7 +9,7 @@ function IconsScheduleDetail({
   userId,
   doesUserLike,
   likesCount,
-  reviewsAmount,
+  reviewsCount,
   onUserLike
 }: IconsScheduleDetailType) {
   const { authState } = useAuthState();
@@ -32,7 +32,7 @@ function IconsScheduleDetail({
         </Tooltip>
         <span id={styles.reviewNumber}>
           <FaCommentAlt id={styles.reviewNumberIcon} />
-          {reviewsAmount}
+          {reviewsCount}
         </span>
       </div>
     );
@@ -54,7 +54,7 @@ function IconsScheduleDetail({
         </Tooltip>
         <span id={styles.reviewNumber}>
           <FaCommentAlt id={styles.reviewNumberIcon} />
-          {reviewsAmount}
+          {reviewsCount}
         </span>
       </div>
     );
@@ -77,7 +77,7 @@ function IconsScheduleDetail({
       </button>
       <span id={styles.reviewNumber}>
         <FaCommentAlt id={styles.reviewNumberIcon} />
-        {reviewsAmount}
+        {reviewsCount}
       </span>
     </div>
   );

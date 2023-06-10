@@ -45,7 +45,7 @@ export type IconsScheduleDetailType = {
   userId: string;
   doesUserLike: boolean;
   likesCount: number;
-  reviewsAmount: number;
+  reviewsCount: number;
   onUserLike: () => void;
 };
 
