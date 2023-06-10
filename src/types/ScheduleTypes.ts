@@ -14,7 +14,7 @@ interface Schedule {
   last_destination: string;
   destination_count: number;
   likes_count: number;
-  likes: string[];
+  likes: { id: string }[];
 }
 
 export type ScheduleCardType = Pick<
