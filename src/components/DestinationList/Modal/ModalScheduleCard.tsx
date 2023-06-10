@@ -26,25 +26,11 @@ ModalScheduleCardType) {
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
   // N일차
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  // const [updatedDestinations, setUpdatedDestinations] = useState<string[][]>([
-  //   ...schedule.destinations
-  // ]);
 
   function handleToggleDestinations(dayIndex: number) {
     // 선택시점에는 dayIndex !== selectedDay
     setSelectedDay(selectedDay === dayIndex ? null : dayIndex);
   }
-
-  // console.log(updatedDestination);
-  // function handleDestinationUpdate(updatedDestination: string[]) {
-  //   if (selectedDay !== null) {
-  //     setUpdatedDestinations((prevDestinations) => {
-  //       const updatedDestinations = [...prevDestinations];
-  //       updatedDestinations[selectedDay] = updatedDestination;
-  //       return updatedDestinations;
-  //     });
-  //   }
-  // }
 
   // console.log('schedule', schedule);
 
@@ -64,7 +50,7 @@ ModalScheduleCardType) {
             </div>
             <div className={styles.scheduleCreated}>등록 : {createdAt}</div>
           </div>
-          <div className={styles.scheduleLike}>❤ 좋아요 수</div>
+          {/* <div className={styles.scheduleLike}>❤ 좋아요 수</div> */}
         </div>
       </div>
       {isSelected && (
