@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { AxiosError } from 'axios';
 import { TextField } from '@mui/material';
-import { UserConfirmFormProps } from '../../types/UserTypes';
 import styles from './UserConfirmForm.module.scss';
 import { checkPassword } from '../../apis/UserAPI';
 import { useAuthState } from '../../contexts/AuthContext';
+
+type UserConfirmFormProps = {
+  confirmUser: () => void;
+};
 
 function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
   const { updateAuthState } = useAuthState();

@@ -24,7 +24,12 @@ function UserInfo({ user }: UserInfoProps) {
       </li>
       <li>
         <span className={styles.infoType}>생년월일</span>
-        <span className={styles.infoDetail}>{birthDate}</span>
+        <span className={styles.infoDetail}>
+          {`${birthDate.split('-')[0]}년 
+              ${birthDate.split('-')[1]}월 
+              ${birthDate.split('-')[2]}일
+          `}
+        </span>
       </li>
       <li>
         <span className={styles.infoType}>연락처</span>

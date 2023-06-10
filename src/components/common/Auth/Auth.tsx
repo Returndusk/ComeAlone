@@ -24,7 +24,7 @@ function Auth({ children, required }: AuthProps) {
         navigate(ROUTER.MAIN);
       }
     }
-  }, [navigate, isLoggedIn, required]);
+  }, [isLoggedIn]);
 
   return <>{children}</>;
 }
