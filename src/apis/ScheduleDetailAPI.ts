@@ -47,10 +47,14 @@ export async function getScheduleReviewsById(id: string | undefined) {
   }
 }
 
-export async function addScheduleReviewById(id: string | undefined) {
+export async function addScheduleReviewById(
+  id: string | undefined,
+  review: string
+) {
   try {
     const response = await tokenInstance.post(
-      `${baseUrl}/schedules/${id}/comments`
+      `${baseUrl}/schedules/${id}/comments`,
+      { comment: review }
     );
 
     return response;

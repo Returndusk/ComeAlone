@@ -25,11 +25,13 @@ function InputReviewSchedule({
           <textarea
             className={styles.reviewsInputText}
             onChange={handleChange}
+            value={reviewTyping}
           ></textarea>
           <button
             className={styles.reviewsInputButton}
             onClick={() => {
               onReviewSubmit(reviewTyping);
+              setReviewTyping('');
             }}
           >
             제출
