@@ -161,6 +161,7 @@ function ScheduleDetail() {
         ) : null}
       </div>
       <IconsScheduleDetail
+        userId={userId}
         doesUserLike={doesUserLike}
         likesCount={userLikesCount.current}
         reviewsAmount={reviewsAmount}
