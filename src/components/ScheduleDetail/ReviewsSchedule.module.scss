@@ -25,10 +25,21 @@
         margin: 0 20px 0 10px;
       }
 
-      .createdAt {
+      .buttonsContainer {
         margin-left: auto;
-        margin-right: 10px;
-        color: gray;
+
+        .updateButton {
+          margin: 0 10px 0 0;
+        }
+
+        .deleteButton {
+          margin: 0 10px 0 0;
+        }
+
+        .createdAt {
+          margin: 0 10px 0 0;
+          color: gray;
+        }
       }
     }
 
