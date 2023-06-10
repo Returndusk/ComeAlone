@@ -39,7 +39,7 @@ function ScheduleLists() {
   }, [fetchData]);
 
   useEffect(() => {
-    sortSchedule();
+    sortSchedule(scheduleSort);
   }, [scheduleSort]);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
@@ -72,13 +72,13 @@ function ScheduleLists() {
     });
   }
 
-  function sortSchedule() {
+  function sortSchedule(sortOption: string) {
     const scheduleData = [...scheduleList];
-    if (scheduleSort === 'likes') {
+    if (sortOption === 'likes') {
       setShowScheduleList(sortByScheduleLikes(scheduleData));
-    } else if (scheduleSort === 'recent') {
+    } else if (sortOption === 'recent') {
       setShowScheduleList(sortByScheduleRecent(scheduleData));
-    } else if (scheduleSort === 'liked') {
+    } else if (sortOption === 'liked') {
       setShowScheduleList(sortByScheduleIsLiked(scheduleData));
     }
   }
