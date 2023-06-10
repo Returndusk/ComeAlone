@@ -31,7 +31,7 @@ function ScheduleLists() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, isLoggedIn]);
+  }, [fetchData]);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
