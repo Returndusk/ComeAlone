@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './ReviewsSchedule.module.scss';
 import { useAuthState } from '../../contexts/AuthContext';
+import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
 
@@ -8,6 +9,8 @@ function ReviewsSchedule({
   scheduleReviews,
   onReviewDelete
 }: ScheduleReviewPropsType) {
+  const [isReviewUpdate, setIsReviewUpdate] = useState(false);
+  const [targetReviewId, setTargetReviewId] = useState(0);
   const loggedInUserId = useAuthState().authState.user?.id;
 
   return (
@@ -20,16 +23,26 @@ function ReviewsSchedule({
               <span className={styles.nickname}>
                 <Avatar>{review.user.nickname[0]}</Avatar>
               </span>
-              <span>{review.comment}</span>
+              {isReviewUpdate && targetReviewId === review.comment_id ? (
+                <TextField className={styles.reviewUpdateInput} />
+              ) : (
+                <span>{review.comment}</span>
+              )}
               <div className={styles.buttonsContainer}>
                 {loggedInUserId === review.user.id ? (
                   <>
-                    <button className={styles.updateButton}>수정하기</button>
+                    <button
+                      className={styles.updateButton}
+                      onClick={() => {
+                        setTargetReviewId(review.comment_id);
+                        setIsReviewUpdate(true);
+                      }}
+                    >
+                      수정하기
+                    </button>
                     <button
                       className={styles.deleteButton}
                       onClick={() => {
-                        console.log('clicked');
-
                         onReviewDelete(review.comment_id);
                       }}
                     >
