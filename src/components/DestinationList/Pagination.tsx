@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import styles from './Pagination.module.scss';
-import { DestinationsType } from '../../types/DestinationListTypes';
+import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 
 type PaginationProps = {
-  filteredDestinations: DestinationsType[];
+  filteredDestinations: specifiedCategoryDestinationsType[] | [];
   setSlicedDestinations: React.Dispatch<
-    React.SetStateAction<DestinationsType[]>
+    React.SetStateAction<specifiedCategoryDestinationsType[]>
   >;
 };
 
