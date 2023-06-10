@@ -29,8 +29,9 @@ export interface SliderBannerProps extends SliderComponentProps {
   titleProperty?: keyof Destination;
   imageProperty?: keyof Destination;
   overviewProperty?: keyof Destination;
-  className?: string;
+  customClassName?: string;
   boxClassName?: string;
   imageContainerClassName?: string;
   textClassName?: string;
+  showCategory?: boolean;
 }
