@@ -83,7 +83,7 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
               </div>
               <div>{getDate(schedule.start_date, schedule.end_date)}</div>
             </div>
-            <div className={styles.like}>
+            <div className={styles.icon}>
               <FaTrashAlt
                 className={styles.trashIcon}
                 onClick={(e) => {
