@@ -77,7 +77,7 @@ function Search() {
     }
     const searchQueryString = encodeURIComponent(submittedQuery);
     if (searchQueryString !== null) {
-      setSearchParams(`?search=${encodeURIComponent(searchQueryString)}`);
+      setSearchParams(`?search=${searchQueryString}`);
     }
     return;
   };
@@ -96,7 +96,7 @@ function Search() {
               type='text'
               name='searchQuery'
               placeholder='목적지를 입력해주세요.'
-              defaultValue={decodeURIComponent(searchQueryParam)}
+              defaultValue={searchQueryParam}
             />
             <button id={styles.searchButton} type='submit'>
               <AiOutlineSearch />
