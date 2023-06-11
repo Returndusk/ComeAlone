@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { BiCalendar, BiUserCircle } from 'react-icons/bi';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, MenuItem } from '@mui/material';
 import Weather from './Weather';
@@ -8,6 +7,7 @@ import { useAuthState } from '../../../contexts/AuthContext';
 import { Cookies } from 'react-cookie';
 import AlertModal from '../Alert/AlertModal';
 import { AiOutlineCalendar } from 'react-icons/ai';
+import Avatar from '@mui/material/Avatar';
 
 function Header() {
   const location = useLocation();
@@ -59,6 +59,10 @@ function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isActive]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <header
       className={`${styles.layout} 
@@ -83,14 +87,24 @@ function Header() {
         </div>
         <div className={styles.layoutRight}>
           <Weather />
-          {authState.isLoggedIn && (
+          {authState.isLoggedIn && authState.user && (
             <>
               <div className={styles.auth}>
                 <button onClick={() => navigate('/myschedule/list')}>
                   <AiOutlineCalendar />
                 </button>
                 <button onClick={handleUserIconClick}>
-                  <BiUserCircle />
+                  {authState.user.profile_image ? (
+                    <Avatar
+                      src={authState.user.profile_image}
+                      alt={authState.user.nickname}
+                      className={styles.Avatar}
+                    />
+                  ) : (
+                    <Avatar className={styles.Avatar}>
+                      {authState.user.nickname[0]}
+                    </Avatar>
+                  )}
                 </button>
                 <Menu
                   anchorEl={anchorEl}
@@ -120,7 +134,7 @@ function Header() {
               </div>
             </>
           )}
-          {!authState.isLoggedIn && (
+          {authState.isLoggedIn === false && (
             <div className={styles.auth}>
               <RouterLink to='/login'>
                 <span>로그인</span>
