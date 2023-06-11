@@ -66,7 +66,7 @@ function MyPage() {
     };
 
     getUserData();
-  }, []);
+  }, [updateAuthState]);
 
   return (
     <main className={styles.container}>
