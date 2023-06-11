@@ -1,4 +1,4 @@
-.reviewContainer {
+.reviewWrapper {
   display: flex;
   flex-direction: column;
 }
@@ -7,44 +7,69 @@
   font-weight: 600;
 }
 
-.reviewBoxes {
+.reviewContainer {
   margin: 20px 0;
 
-  .review {
-    margin: 10px 0;
-    .reviewerNickname {
-      font-size: 18px;
-    }
+  .reviewBox {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    //코멘트 구역 구분 가능한 class
 
+    .reviewUserInfo {
+      display: flex;
+      align-items: center;
+
+      .reviewerAvater {
+        width: 68px;
+        height: 68px;
+        margin: 5px;
+      }
+
+      .reviewInfo {
+        .reviewerNickname {
+          font-size: 22px;
+          padding: 3px;
+        }
+        .reviewDate {
+          display: flex;
+          padding: 3px;
+
+          span + span {
+            padding-left: 20px;
+          }
+        }
+      }
+    }
     .reviewComment {
-    }
-    .reviewCreatedDate {
-    }
-
-    div:not(:last-child) {
+      display: flex;
+      font-size: 24px;
+      padding: 20px;
       border-bottom: 1px solid #ccc;
     }
+
+    // div:not(:last-child) {
+    //   border-bottom: 1px solid #ccc;
+    // }
+  }
+}
+.reviewInputContainer {
+  display: flex;
+  align-items: center;
+
+  #reviewInputAvatar {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+  }
+
+  #reviewButton {
+    width: 50px;
+    height: 30px;
   }
 }
 
-#reviewInputBar {
-  border-radius: 12px;
-  border: 1px solid #c6cfe0;
-  padding: 10px;
-  padding-left: 20px;
-  padding-right: 50px;
-
-  min-height: 15px;
-  background: #fff;
-
-  font-size: 15px;
-}
-
-#reviewButton {
-  width: 50px;
-  height: 30px;
-}
-
+// 유저 리뷰
 .usersReviewListButtonContainer {
   display: flex;
 
