@@ -64,5 +64,6 @@ interface IScheduleReviewType {
 
 export type ScheduleReviewPropsType = {
   scheduleReviews: IScheduleReviewType[];
+  onReviewUpdate: (id: number, updateReview: string) => void;
   onReviewDelete: (id: number) => void;
 };

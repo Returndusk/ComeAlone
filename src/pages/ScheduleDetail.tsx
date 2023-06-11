@@ -17,6 +17,7 @@ import {
   toggleUserLikeById,
   getScheduleReviewsById,
   addScheduleReviewById,
+  updateScheduleReviewById,
   deleteScheduleReviewById
 } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
@@ -76,18 +77,24 @@ function ScheduleDetail() {
   }, []);
 
   const addScheduleReview = useCallback(
-    async (id: string | undefined, review: string) => {
-      await addScheduleReviewById(id, review);
+    async (id: string | undefined, newReview: string) => {
+      await addScheduleReviewById(id, newReview);
+      setScheduleReviews(await getScheduleReviews(scheduleId));
+    },
+    []
+  );
+
+  const updateScheduleReview = useCallback(
+    async (id: number | undefined, updateReview: string) => {
+      await updateScheduleReviewById(id, updateReview);
       setScheduleReviews(await getScheduleReviews(scheduleId));
     },
     []
   );
 
   const deleteScheduleReview = useCallback(async (id: number) => {
-    const response = await deleteScheduleReviewById(id);
+    await deleteScheduleReviewById(id);
     setScheduleReviews(await getScheduleReviews(scheduleId));
-
-    console.log(response);
   }, []);
 
   useEffect(() => {
@@ -178,6 +185,7 @@ function ScheduleDetail() {
       </div>
       <ReviewsSchedule
         scheduleReviews={scheduleReviews}
+        onReviewUpdate={updateScheduleReview}
         onReviewDelete={deleteScheduleReview}
       />
       <InputReviewSchedule onReviewSubmit={handleReviewSubmit} />

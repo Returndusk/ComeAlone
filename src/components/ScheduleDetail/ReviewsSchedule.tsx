@@ -8,12 +8,17 @@ import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
 
 function ReviewsSchedule({
   scheduleReviews,
+  onReviewUpdate,
   onReviewDelete
 }: ScheduleReviewPropsType) {
   const [reviewTyping, setReviewTyping] = useState('');
   const [isReviewUpdate, setIsReviewUpdate] = useState(false);
   const [targetReviewId, setTargetReviewId] = useState(0);
   const loggedInUserId = useAuthState().authState.user?.id;
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setReviewTyping(event.target.value);
+  };
 
   return (
     <div className={styles.reviewsContainer}>
@@ -29,6 +34,7 @@ function ReviewsSchedule({
                 <TextField
                   className={styles.updateInput}
                   value={reviewTyping}
+                  onChange={handleChange}
                 />
               ) : (
                 <span>{review.comment}</span>
@@ -36,7 +42,15 @@ function ReviewsSchedule({
               {isReviewUpdate ? (
                 targetReviewId === review.comment_id ? (
                   <div className={styles.updateButtonsContainer}>
-                    <button className={styles.updateReviewButton}>수정</button>
+                    <button
+                      className={styles.updateReviewButton}
+                      onClick={() => {
+                        onReviewUpdate(review.comment_id, reviewTyping);
+                        setIsReviewUpdate(false);
+                      }}
+                    >
+                      제출
+                    </button>
                     <button
                       className={styles.updateReviewCancelButton}
                       onClick={() => setIsReviewUpdate(false)}
