@@ -68,6 +68,27 @@
       white-space: normal;
     }
 
+    .iconContainer {
+      display: flex;
+      align-items: flex-end;
+      text-align: center;
+
+      .likeBox {
+        font-size: 24px;
+        color: rgb(231, 49, 49);
+        #likesCounter {
+          font-size: 18px;
+        }
+      }
+      .commentBox {
+        font-size: 24px;
+        color: rgb(75, 74, 74);
+        #commentCounter {
+          font-size: 18px;
+        }
+      }
+    }
+
     #destinationImage {
       width: 150px;
       height: 108px;

@@ -63,9 +63,14 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
   return (
     <>
       <div className={styles.usersLikesbox}>
-        <button onClick={handleLikeClick}>
-          {isUserLike ? <FaHeart /> : <FaRegHeart />}
+        <button className={styles.likesButton} onClick={handleLikeClick}>
+          {isUserLike ? (
+            <FaHeart id={styles.likesIcon} />
+          ) : (
+            <FaRegHeart id={styles.canceledLikesIcon} />
+          )}
         </button>
+        <span id={styles.likesLabel}>좋아요</span>
       </div>
       {isShowAlert && (
         <AlertModal

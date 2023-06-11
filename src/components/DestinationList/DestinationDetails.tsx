@@ -57,7 +57,9 @@ function DestinationDetails() {
             <h2 className={styles.destinationDetailsTitle}>
               {destinationDetails?.title}
             </h2>
-            <UsersLike destinationDetails={destinationDetails} />
+            <div className={styles.destinationDetailsLikes}>
+              <UsersLike destinationDetails={destinationDetails} />
+            </div>
             <p className={styles.destinationAddress}>
               주소:{' '}
               {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
