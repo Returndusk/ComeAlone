@@ -37,6 +37,17 @@
         }
       }
 
+      .whileUpdateContainer {
+        margin-left: auto;
+        text-align: end;
+        line-height: 20px;
+
+        .updateOther {
+          color: gray;
+          font-size: 14px;
+        }
+      }
+
       .buttonsContainer {
         display: flex;
         flex-direction: column;

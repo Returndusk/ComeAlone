@@ -44,6 +44,15 @@ function ReviewsSchedule({
                       취소
                     </button>
                   </div>
+                ) : loggedInUserId === review.user.id ? (
+                  <div className={styles.whileUpdateContainer}>
+                    <div className={styles.updateOther}>
+                      다른 리뷰를 수정 중입니다...
+                    </div>
+                    <span className={styles.createdAt}>
+                      {review.created_at.split('T')[0]}
+                    </span>
+                  </div>
                 ) : (
                   <span className={styles.createdAt}>
                     {review.created_at.split('T')[0]}
