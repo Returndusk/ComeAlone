@@ -10,6 +10,7 @@ import UsersLike from './UsersLike';
 import { useAuthState } from '../../contexts/AuthContext';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import { createPortal } from 'react-dom';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -24,7 +25,13 @@ function DestinationDetails() {
   const { contentid } = useParams();
   const [isShowScheduleModal, setIsShowScheduleModal] =
     useState<boolean>(false);
+  const [scheduleModalDomRoot, setScheduleModalDomRoot] =
+    useState<HTMLElement | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setScheduleModalDomRoot(() => document.getElementById('main'));
+  }, []);
 
   const getDestinationDetails = useCallback(async () => {
     const res = await getDestinationDetailsByDestinationId(Number(contentid));
@@ -102,9 +109,12 @@ function DestinationDetails() {
           </section>
         </div>
       )}
-      {isShowScheduleModal && (
-        <OpenModal closeModal={() => setIsShowScheduleModal(false)} />
-      )}
+      {isShowScheduleModal &&
+        scheduleModalDomRoot !== null &&
+        createPortal(
+          <OpenModal closeModal={() => setIsShowScheduleModal(false)} />,
+          scheduleModalDomRoot
+        )}
       {isShowAlert && (
         <AlertModal
           message={ALERT_PROPS.message}
