@@ -25,16 +25,28 @@
       filter: brightness(70%);
     }
 
-    p {
+    .updateMessage {
       display: block;
       position: absolute;
-      top: 50%;
+      top: 45%;
       left: 50%;
       transform: translate(-50%, -50%);
       color: #fff;
       z-index: 20;
       font-weight: bold;
       font-size: 40px;
+    }
+
+    .updateSizeMessage {
+      display: block;
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      z-index: 20;
+      font-weight: bold;
+      font-size: 20px;
     }
   }
 
@@ -46,6 +58,10 @@
   }
 
   p {
+    display: none;
+  }
+
+  input {
     display: none;
   }
 }

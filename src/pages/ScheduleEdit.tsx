@@ -51,6 +51,7 @@ function ScheduleEdit() {
     defaultSchedule.destinations
   );
   const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
+  const imagePath = useRef(defaultSchedule.image);
   const updatedTitle = useRef(defaultSchedule.title);
   const updatedSummary = useRef(defaultSchedule.summary);
   const createdAt = useRef(defaultSchedule.createdAt);
@@ -85,6 +86,7 @@ function ScheduleEdit() {
         endDate: data.endDate,
         duration: data.duration
       });
+      imagePath.current = data.image;
       updatedTitle.current = data.title;
       updatedSummary.current = data.summary;
       createdAt.current = data.createdAt;
@@ -178,7 +180,10 @@ function ScheduleEdit() {
         <FaArrowLeft />
         돌아가기
       </Link>
-      <ImageScheduleEdit image={defaultSchedule.image} />
+      <ImageScheduleEdit
+        scheduleId={scheduleId}
+        imagePath={imagePath.current}
+      />
       <DateScheduleEdit
         dateInfo={updatedDateInfo}
         onOpenModal={() => setShowDateModal(true)}
