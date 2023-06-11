@@ -51,23 +51,25 @@ function MyScheduleLists() {
     return scheduleData
       .filter((schedule: MyScheduleCardType) => {
         const today = new Date();
-        const yesterday = new Date(today.setDate(today.getDate() - 1));
         const end_date = new Date(schedule.end_date);
-        return yesterday < end_date;
+        end_date.setDate(end_date.getDate() + 1);
+        end_date.setHours(0);
+        return today < end_date;
       })
       .sort(
         (a, b) =>
           new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
       );
   }
-
+  
   function sortPast(scheduleData: MyScheduleCardType[]) {
     return scheduleData
       .filter((schedule: MyScheduleCardType) => {
         const today = new Date();
-        const yesterday = new Date(today.setDate(today.getDate() - 1));
         const end_date = new Date(schedule.end_date);
-        return yesterday > end_date;
+        end_date.setDate(end_date.getDate() + 1);
+        end_date.setHours(0);
+        return today > end_date;
       })
       .sort(
         (a, b) =>
