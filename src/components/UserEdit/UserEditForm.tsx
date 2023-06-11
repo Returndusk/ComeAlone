@@ -323,7 +323,7 @@ function UserEditForm() {
     };
 
     getUserData();
-  }, []);
+  }, [updateAuthState]);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>

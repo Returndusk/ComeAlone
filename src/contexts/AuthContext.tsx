@@ -27,9 +27,8 @@ export const AuthContext = createContext<AuthContextProps | null>(null);
 export function useAuthState() {
   const state = useContext(AuthContext);
   if (!state) throw new Error('AuthProvider를 찾을 수 없습니다.');
-  const { authState, updateAuthState } = state;
 
-  return { authState, updateAuthState };
+  return state;
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -84,6 +83,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
           const userInfo = await getUser();
           updateAuthState(true, userInfo.data);
+        } else {
+          alert(
+            '로그인 처리 중 알 수 없는 문제가 발생하였습니다. 계속 문제가 발생한다면 서비스 제공자에게 문의해주세요.'
+          );
         }
       } catch (error) {
         cookies.remove('accessToken', { path: '/' });
