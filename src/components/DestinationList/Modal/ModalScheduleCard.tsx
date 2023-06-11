@@ -3,12 +3,15 @@ import styles from './ModalScheduleCard.module.scss';
 import { ModalScheduleCardType } from '../../../types/ModalScheduleTypes';
 import AddToScheduleModal from './AddToScheduleModal';
 
-function getDate(dateString: string) {
-  const toDate = new Date(dateString);
-  const year = toDate.getFullYear();
-  const month = toDate.getMonth() + 1;
-  const day = toDate.getDate();
-  return `${year}년 ${month}월 ${day}일`;
+function getDate(startDateString: string, endDateString: string) {
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+  const startYear = startDate.getFullYear();
+  const startMonth = startDate.getMonth() + 1;
+  const startDay = startDate.getDate();
+  const endMonth = endDate.getMonth() + 1;
+  const endDay = endDate.getDate();
+  return `${startYear}년 ${startMonth}월 ${startDay}일 ~ ${endMonth}월 ${endDay}일`;
 }
 
 export default function ModalScheduleCard({
@@ -21,7 +24,7 @@ export default function ModalScheduleCard({
 ModalScheduleCardType) {
   const endDate = new Date(schedule.end_date);
   const startDate = new Date(schedule.start_date);
-  const createdAt = getDate(schedule.created_at);
+  // const createdAt = getDate(schedule.created_at);
   const diffTime = endDate.getTime() - startDate.getTime();
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
   // N일차
@@ -48,9 +51,9 @@ ModalScheduleCardType) {
             <div className={styles.scheduleDate}>
               {diffDate}박 {diffDate + 1}일
             </div>
-            <div className={styles.scheduleCreated}>등록 : {createdAt}</div>
+            <div>{getDate(schedule.start_date, schedule.end_date)}</div>
+            {/* <div className={styles.scheduleCreated}>등록 : {createdAt}</div> */}
           </div>
-          {/* <div className={styles.scheduleLike}>❤ 좋아요 수</div> */}
         </div>
       </div>
       {isSelected && (
