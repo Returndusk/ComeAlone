@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from './CommonModalDesign.module.scss';
 import { AddToScheduleModalType } from '../../../types/ModalScheduleTypes';
 import axios from 'axios';
@@ -13,8 +13,7 @@ function AddToScheduleModal({
   selectedDay,
   scheduleId
 }: AddToScheduleModalType) {
-  const location = useLocation();
-  const contentid = Number(location.pathname.split('/').pop());
+  const { contentid } = useParams();
   const [updatedDestinations, setUpdatedDestinations] = useState([
     ...destinations
   ]);
@@ -45,9 +44,12 @@ function AddToScheduleModal({
   }
 
   async function addToSelectedDay() {
-    const title = await getDestinationTitle(contentid);
+    const title = await getDestinationTitle(Number(contentid));
 
-    if (contentid && !updatedDestinations[selectedDay].includes(title)) {
+    if (
+      Number(contentid) &&
+      !updatedDestinations[selectedDay].includes(title)
+    ) {
       const copiedDestinations = [...updatedDestinations];
       // 기존에 목적지가 있거나 없는 경우
       copiedDestinations[selectedDay] = copiedDestinations[selectedDay] || [];
@@ -57,7 +59,7 @@ function AddToScheduleModal({
 
       const copiedContentIds = [...updatedContentIds];
       copiedContentIds[selectedDay] = copiedContentIds[selectedDay] || [];
-      copiedContentIds[selectedDay].push(contentid);
+      copiedContentIds[selectedDay].push(Number(contentid));
 
       // console.log('updatedContentIds', updatedContentIds);
 
@@ -69,16 +71,18 @@ function AddToScheduleModal({
           }
         );
 
-        console.log(response);
+        // console.log(response);
+        // alert('일정이 추가되었습니다!');
 
         setUpdatedDestinations(response.data.destinationTitles);
         setUpdatedContentIds(response.data.destinationIds);
       } catch (err) {
         console.error('Error: ', err);
       }
+    } else {
+      alert('이미 추가된 일정입니다.');
+      return;
     }
-    alert('이미 추가된 일정입니다.');
-    return;
   }
 
   return (

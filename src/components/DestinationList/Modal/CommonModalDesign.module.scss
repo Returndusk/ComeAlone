@@ -16,11 +16,13 @@
   padding: 20px;
   border: 1px solid #888;
   width: auto;
-  height: 70%;
+  max-height: 70%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .addScheduleBtn {
