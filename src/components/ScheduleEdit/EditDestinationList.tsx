@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, Dispatch, SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './EditDestinationList.module.scss';
-import { ScheduleEditDestinationListType } from '../../types/ScheduleEditTypes';
+import { MapWithWaypointsPropsType } from '../../types/DestinationListTypes';
 import {
   DragDropContext,
   Droppable,
@@ -17,10 +17,17 @@ function EditDestinationList({
   checkedDayIndex,
   onDestinationListUpdate,
   onCheckedDayIndexUpdate
-}: ScheduleEditDestinationListType) {
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const targetDeleteDayIndex = useRef(-1);
-  const targetDeleteDestIndex = useRef(-1);
+}: {
+  updatedDestinationList: MapWithWaypointsPropsType[][];
+  checkedDayIndex: number;
+  onDestinationListUpdate: Dispatch<
+    SetStateAction<MapWithWaypointsPropsType[][]>
+  >;
+  onCheckedDayIndexUpdate: Dispatch<SetStateAction<number>>;
+}) {
+  const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+  const targetDeleteDayIndex = useRef<number>(-1);
+  const targetDeleteDestIndex = useRef<number>(-1);
 
   const handleDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) {
@@ -29,31 +36,33 @@ function EditDestinationList({
 
     if (source.droppableId === destination.droppableId) {
       const dayIndex = Number(source.droppableId.split(' ')[1]);
-      const prevDestIndex = source.index;
-      const curDestIndex = destination.index;
-      const [removed] = updatedDestinationList[dayIndex].splice(
-        prevDestIndex,
-        1
-      );
+      const prevDestIndex: number = source.index;
+      const curDestIndex: number = destination.index;
+      const [removed]: MapWithWaypointsPropsType[] = updatedDestinationList[
+        dayIndex
+      ].splice(prevDestIndex, 1);
 
       updatedDestinationList[dayIndex].splice(curDestIndex, 0, removed);
 
-      const newDestinationList = [...updatedDestinationList];
+      const newDestinationList: MapWithWaypointsPropsType[][] = [
+        ...updatedDestinationList
+      ];
 
       onDestinationListUpdate(newDestinationList);
     } else {
       const prevDayIndex = Number(source.droppableId.split(' ')[1]);
-      const prevDestIndex = source.index;
+      const prevDestIndex: number = source.index;
       const curDayIndex = Number(destination.droppableId.split(' ')[1]);
-      const curDestIndex = destination.index;
-      const [removed] = updatedDestinationList[prevDayIndex].splice(
-        prevDestIndex,
-        1
-      );
+      const curDestIndex: number = destination.index;
+      const [removed]: MapWithWaypointsPropsType[] = updatedDestinationList[
+        prevDayIndex
+      ].splice(prevDestIndex, 1);
 
       updatedDestinationList[curDayIndex].splice(curDestIndex, 0, removed);
 
-      const newDestinationList = [...updatedDestinationList];
+      const newDestinationList: MapWithWaypointsPropsType[][] = [
+        ...updatedDestinationList
+      ];
 
       onDestinationListUpdate(newDestinationList);
     }
@@ -65,7 +74,9 @@ function EditDestinationList({
       1
     );
 
-    const newDestinations = [...updatedDestinationList];
+    const newDestinations: MapWithWaypointsPropsType[][] = [
+      ...updatedDestinationList
+    ];
 
     onDestinationListUpdate(newDestinations);
     setShowDeleteAlert(false);
