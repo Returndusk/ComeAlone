@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './DestinationDetails.module.scss';
 import Review from './Review';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import OpenModal from './Modal/OpenModal';
 import UsersLike from './UsersLike';
 import { useAuthState } from '../../contexts/AuthContext';
 import { BsFillTelephoneFill } from 'react-icons/bs';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaCommentAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import { createPortal } from 'react-dom';
 
 const ALERT_PROPS = {
@@ -28,6 +28,7 @@ function DestinationDetails() {
   const [scheduleModalDomRoot, setScheduleModalDomRoot] =
     useState<HTMLElement | null>(null);
   const navigate = useNavigate();
+  const scrollRef = useRef<HTMLOptionElement>(null);
 
   useEffect(() => {
     setScheduleModalDomRoot(() => document.getElementById('main'));
@@ -42,6 +43,19 @@ function DestinationDetails() {
   useEffect(() => {
     getDestinationDetails();
   }, [getDestinationDetails]);
+
+  /*
+  const handleReviewIconClick = () => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [handleReviewIconClick]);
+  */
 
   const handleOnConfirm = () => {
     setIsShowAlert(false);
@@ -72,8 +86,19 @@ function DestinationDetails() {
             <h2 className={styles.destinationDetailsTitle}>
               {destinationDetails?.title}
             </h2>
-            <div className={styles.destinationDetailsLikes}>
+            <div className={styles.destinationDetailsIcons}>
               <UsersLike destinationDetails={destinationDetails} />
+              <div className={styles.destinationReviewContainer}>
+                <button
+                  className={styles.reviewButton}
+                  // onClick={handleReviewIconClick}
+                >
+                  <FaCommentAlt id={styles.destinationReviewIcon} />
+                </button>
+                <span id={styles.reviewLabel}>
+                  {`리뷰ㆍ${destinationDetails?.comment_count}개`}
+                </span>
+              </div>
             </div>
             <span className={styles.destinationAddrContainer}>
               <FaMapMarkerAlt id={styles.destinationAddrIcon} />
@@ -104,7 +129,7 @@ function DestinationDetails() {
               </button>
             </div>
           </section>
-          <section className={styles.detailsReviewsContainer}>
+          <section className={styles.detailsReviewsContainer} ref={scrollRef}>
             <Review />
           </section>
         </div>
