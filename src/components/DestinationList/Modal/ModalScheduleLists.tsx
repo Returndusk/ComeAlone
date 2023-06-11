@@ -51,7 +51,6 @@ export default function ModalScheduleLists() {
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
-    // console.log(sortOption);
     setScheduleSort(sortOption);
   }
 
@@ -67,29 +66,29 @@ export default function ModalScheduleLists() {
 
   return (
     <div className={styles.scheduleContainer}>
-      <div className={styles.scheduleListTitle}>여행 일정</div>
+      {/* <div className={styles.scheduleListTitle}>여행 일정</div> */}
       <div className={styles.scheduleFilter}>
         <button
           className={`${styles.sortButton} ${
-            scheduleSort === 'likes' ? styles.selected : ''
+            scheduleSort === 'upcoming' ? styles.selected : ''
           }`}
           onClick={(e) => {
             handleSort(e);
           }}
-          value='likes'
+          value='upcoming'
         >
-          인기순
+          다가오는 일정
         </button>
         <button
           className={`${styles.sortButton} ${
-            scheduleSort === 'recent' ? styles.selected : ''
+            scheduleSort === 'past' ? styles.selected : ''
           }`}
           onClick={(e) => {
             handleSort(e);
           }}
-          value='recent'
+          value='past'
         >
-          최신순
+          지난 일정
         </button>
       </div>
       <div className={styles.scheduleCardContainer}>
