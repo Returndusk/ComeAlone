@@ -9,8 +9,9 @@ function InputReviewSchedule({
 }: {
   onReviewSubmit: (input: string) => void;
 }) {
-  const [reviewTyping, setReviewTyping] = useState('');
-  const { authState } = useAuthState();
+  const [reviewTyping, setReviewTyping] = useState<string>('');
+  const isLoggedIn: boolean = useAuthState().authState.isLoggedIn as boolean;
+  const nickname: string = useAuthState().authState.user?.nickname as string;
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewTyping(event.target.value);
@@ -18,11 +19,11 @@ function InputReviewSchedule({
 
   return (
     <>
-      {authState.isLoggedIn ? (
+      {isLoggedIn ? (
         <div className={styles.reviewInputContainer}>
-          <Avatar>{authState.user?.nickname[0]}</Avatar>
+          <Avatar>{nickname[0]}</Avatar>
           <TextField
-            className={styles.reviewsInputText}
+            className={styles.reviewsInput}
             onChange={handleChange}
             label='리뷰를 입력하세요.'
             value={reviewTyping}

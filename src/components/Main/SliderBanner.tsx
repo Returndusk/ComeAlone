@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -63,7 +64,7 @@ function SliderBanner({
   };
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
-
+  const navigate = useNavigate();
   const categoryMapping: { [key: number]: string } = {
     12: '관광지',
     14: '문화시설',
@@ -100,7 +101,7 @@ function SliderBanner({
       });
 
       if (url) {
-        window.location.href = url;
+        navigate(url);
       }
     }
   };

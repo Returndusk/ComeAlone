@@ -3,7 +3,7 @@ import styles from './IconsScheduleDetail.module.scss';
 import { useAuthState } from '../../contexts/AuthContext';
 import { Tooltip } from '@mui/material';
 import { FaRegHeart, FaHeart, FaCommentAlt } from 'react-icons/fa';
-import { IconsScheduleDetailType } from '../../types/ScheduleDetailTypes';
+import { ScheduleDetailIconsType } from '../../types/ScheduleDetailTypes';
 
 function IconsScheduleDetail({
   userId,
@@ -11,72 +11,55 @@ function IconsScheduleDetail({
   likesCount,
   reviewsCount,
   onUserLike
-}: IconsScheduleDetailType) {
-  const { authState } = useAuthState();
-  const { isLoggedIn } = authState;
-  const loggedInUserId = authState.user?.id;
+}: ScheduleDetailIconsType & { onUserLike: () => void }) {
+  const isLoggedIn: boolean = useAuthState().authState.isLoggedIn as boolean;
+  const loggedInUserId: string = useAuthState().authState.user?.id as string;
 
-  if (!isLoggedIn) {
-    return (
-      <div className={styles.iconsContainer}>
-        <Tooltip title='좋아요 하시려면 로그인해주세요.' placement='top'>
-          <button
-            id={styles.likesDisabled}
-            onClick={() => {
-              return;
-            }}
-          >
-            <FaRegHeart id={styles.likesIcon} />
-            {likesCount}
-          </button>
-        </Tooltip>
-        <span id={styles.reviewNumber}>
-          <FaCommentAlt id={styles.reviewNumberIcon} />
-          {reviewsCount}
-        </span>
-      </div>
-    );
-  }
-
-  if (userId === loggedInUserId) {
-    return (
+  return isLoggedIn ? (
+    userId === loggedInUserId ? (
       <div className={styles.iconsContainer}>
         <Tooltip title='자신의 일정에는 좋아요할 수 없습니다.' placement='top'>
-          <button
-            id={styles.likesDisabled}
-            onClick={() => {
-              return;
-            }}
-          >
+          <button id={styles.likesDisabled}>
             <FaRegHeart id={styles.likesIcon} />
             {likesCount}
           </button>
         </Tooltip>
-        <span id={styles.reviewNumber}>
-          <FaCommentAlt id={styles.reviewNumberIcon} />
+        <span id={styles.reviewsCount}>
+          <FaCommentAlt id={styles.reviewsCountIcon} />
           {reviewsCount}
         </span>
       </div>
-    );
-  }
-
-  return (
+    ) : (
+      <div className={styles.iconsContainer}>
+        <button
+          id={styles.likes}
+          onClick={() => {
+            onUserLike();
+          }}
+        >
+          {doesUserLike ? (
+            <FaHeart id={styles.likesIcon} />
+          ) : (
+            <FaRegHeart id={styles.likesIcon} />
+          )}
+          {likesCount}
+        </button>
+        <span id={styles.reviewsCount}>
+          <FaCommentAlt id={styles.reviewsCountIcon} />
+          {reviewsCount}
+        </span>
+      </div>
+    )
+  ) : (
     <div className={styles.iconsContainer}>
-      <button
-        id={styles.likes}
-        onClick={() => {
-          onUserLike();
-        }}
-      >
-        {doesUserLike ? (
-          <FaHeart id={styles.likesIcon} />
-        ) : (
+      <Tooltip title='좋아요 하시려면 로그인해주세요.' placement='top'>
+        <button id={styles.likesDisabled}>
           <FaRegHeart id={styles.likesIcon} />
-        )}
-        {likesCount}
-      </button>
-      <span id={styles.reviewNumber}>
-        <FaCommentAlt id={styles.reviewNumberIcon} />
+          {likesCount}
+        </button>
+      </Tooltip>
+      <span id={styles.reviewsCount}>
+        <FaCommentAlt id={styles.reviewsCountIcon} />
         {reviewsCount}
       </span>
     </div>
