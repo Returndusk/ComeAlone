@@ -1,6 +1,7 @@
 .scheduleCard {
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto;
   justify-content: space-between;
   height: 10%;
   padding: 30px;
@@ -35,6 +36,7 @@
 
   .scheduleDestination {
     margin-bottom: 10px;
+    flex: 0 0 auto;
   }
 
   &:hover {
