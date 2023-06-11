@@ -20,10 +20,14 @@ function Footer() {
         <div className={styles.layoutRight}>
           <p>
             공동대표 :{' '}
-            <a href='' target='_blank' rel='noreferrer'>
+            <a href='https://github.com/LL-SS' target='_blank' rel='noreferrer'>
               이선우
             </a>{' '}
-            <a href='' target='_blank' rel='noreferrer'>
+            <a
+              href='https://github.com/whoodongpyo'
+              target='_blank'
+              rel='noreferrer'
+            >
               표후동
             </a>{' '}
             <a
@@ -40,7 +44,11 @@ function Footer() {
             >
               김득열
             </a>{' '}
-            <a href='' target='_blank' rel='noreferrer'>
+            <a
+              href='https://github.com/JeLee-river'
+              target='_blank'
+              rel='noreferrer'
+            >
               이정은
             </a>{' '}
             <a
@@ -58,9 +66,9 @@ function Footer() {
               조정현
             </a>
           </p>
-          <p>사업자등록번호 : 123-45-567890</p>
           <p>주소 : 서울 성동구 아차산로17길 48 성수낙낙</p>
           <p>ⓒ ComeAlone Corp. All right Reserved</p>
+          <p>Thanks to : React, NestJS, MUI, 제주관광공사</p>
         </div>
       </div>
     </div>
