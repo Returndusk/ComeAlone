@@ -65,11 +65,11 @@ function Review() {
   //리뷰 등록일자 가공 매서드
   const changeCreatedAtIntoDate = (date: string) => {
     const reviewDate = new Date(date);
-    const year = reviewDate.getUTCFullYear();
-    const month = reviewDate.getUTCMonth() + 1;
-    const day = reviewDate.getUTCDate();
-    const hour = reviewDate.getUTCHours();
-    const minute = reviewDate.getUTCMinutes();
+    const year = reviewDate.getFullYear();
+    const month = reviewDate.getMonth() + 1;
+    const day = reviewDate.getDate();
+    const hour = reviewDate.getHours();
+    const minute = reviewDate.getMinutes();
     return `${year}.${month}.${day} ${hour}:${minute}`;
   };
 
