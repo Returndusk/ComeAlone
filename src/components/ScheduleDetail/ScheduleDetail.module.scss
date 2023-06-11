@@ -14,18 +14,6 @@
   margin: 0 0 20px 10px;
 }
 
-.editButtonContainer {
-  justify-self: self-end;
-  align-self: self-start;
-  margin-top: 20px;
-  padding: 20px 0 0 0;
-
-  .editButton {
-    width: 50%;
-    height: 40px;
-  }
-}
-
 .mapContainer {
   grid-column: 2 / 4;
   height: 530px;
