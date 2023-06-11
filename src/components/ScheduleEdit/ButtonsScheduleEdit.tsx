@@ -10,10 +10,16 @@ function ButtonsScheduleEdit({
   onDelete: () => void;
 }) {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [showUpdateAlert, setShowUpdateAlert] = useState(false);
 
   const handleDelete = () => {
     onDelete();
     setShowDeleteAlert(false);
+  };
+
+  const handleUpdate = () => {
+    onSubmit();
+    setShowUpdateAlert(false);
   };
 
   return (
@@ -24,7 +30,10 @@ function ButtonsScheduleEdit({
       >
         삭제하기
       </button>
-      <button className={styles.confirmButton} onClick={() => onSubmit()}>
+      <button
+        className={styles.confirmButton}
+        onClick={() => setShowUpdateAlert(true)}
+      >
         수정완료
       </button>
       {showDeleteAlert && (
@@ -33,6 +42,14 @@ function ButtonsScheduleEdit({
           showCancelButton={true}
           onConfirm={handleDelete}
           onCancel={() => setShowDeleteAlert(false)}
+        />
+      )}
+      {showUpdateAlert && (
+        <AlertModal
+          message='해당 일정을 입력하신 내용으로 수정하시겠습니까?'
+          showCancelButton={true}
+          onConfirm={handleUpdate}
+          onCancel={() => setShowUpdateAlert(false)}
         />
       )}
     </div>
