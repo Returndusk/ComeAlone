@@ -1,0 +1,11 @@
+.editButtonContainer {
+  justify-self: self-end;
+  align-self: self-start;
+  margin-top: 20px;
+  padding: 20px 0 0 0;
+
+  .editButton {
+    width: 50%;
+    height: 40px;
+  }
+}
