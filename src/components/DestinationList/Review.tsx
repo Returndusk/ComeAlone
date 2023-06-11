@@ -12,6 +12,7 @@ import {
   postReviewByDestinationId
 } from '../../apis/destinationList';
 import UsersReview from './UsersReview';
+import { Avatar, TextField } from '@mui/material';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -60,6 +61,17 @@ function Review() {
   useEffect(() => {
     getReviewList();
   }, [getReviewList]);
+
+  //리뷰 등록일자 가공 매서드
+  const changeCreatedAtIntoDate = (date: string) => {
+    const reviewDate = new Date(date);
+    const year = reviewDate.getUTCFullYear();
+    const month = reviewDate.getUTCMonth() + 1;
+    const day = reviewDate.getUTCDate();
+    const hour = reviewDate.getUTCHours();
+    const minute = reviewDate.getUTCMinutes();
+    return `${year}.${month}.${day} ${hour}:${minute}`;
+  };
 
   //리뷰 등록 메서드
   const addReview = useCallback(async () => {
@@ -140,36 +152,61 @@ function Review() {
 
   return (
     <>
-      <section className={styles.reviewContainer}>
+      <section className={styles.reviewWrapper}>
         <h3 className={styles.reviewBanner}>{`리뷰(${reviewCount})`}</h3>
-        <div className={styles.reviewBoxes}>
+        <div className={styles.reviewContainer}>
           {allReviewList?.map((review, index) => {
             return (
-              <div key={index} className={styles.review}>
-                <p className={styles.reviewerNickname}>
-                  {review.user.nickname}
-                </p>
+              <div key={index} className={styles.reviewBox}>
+                <div className={styles.reviewUserInfo}>
+                  <Avatar className={styles.reviewerAvater}>
+                    {review.user.nickname[0]}
+                  </Avatar>
+                  <div className={styles.reviewInfo}>
+                    <p className={styles.reviewerNickname}>
+                      {review.user.nickname}
+                    </p>
+                    <div className={styles.reviewDate}>
+                      <span
+                        id={styles.reviewCreatedDate}
+                      >{`작성 ${changeCreatedAtIntoDate(
+                        review.created_at
+                      )}`}</span>
+                      {review.created_at !== review.updated_at && (
+                        <span
+                          id={styles.reviewModifiedDate}
+                        >{`수정 ${changeCreatedAtIntoDate(
+                          review.updated_at
+                        )}`}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
                 <p className={styles.reviewComment}>{review.comment}</p>
-                <p className={styles.reviewCreatedDate}>{review.created_at}</p>
               </div>
             );
           })}
         </div>
-        <form className={styles.reviewInputBar} onSubmit={handleReviewSubmit}>
-          <input
-            id={styles.reviewInputBar}
-            type='text'
-            name='review'
-            placeholder={
-              authState.isLoggedIn
-                ? '리뷰를 작성해주세요.'
-                : '로그인이 필요합니다.'
-            }
-          />
-          <button id={styles.reviewButton} type='submit'>
-            등록
-          </button>
-        </form>
+        <div className={styles.reviewInputContainer}>
+          <Avatar id={styles.reviewInputAvatar}>
+            {authState.user?.nickname[0] ?? 'G'}
+          </Avatar>
+          <form className={styles.reviewInputBar} onSubmit={handleReviewSubmit}>
+            <TextField
+              id={styles.reviewInputBar}
+              type='text'
+              name='review'
+              label={
+                authState.isLoggedIn
+                  ? '리뷰를 작성해주세요.'
+                  : '로그인이 필요합니다.'
+              }
+            />
+            <button id={styles.reviewButton} type='submit'>
+              등록
+            </button>
+          </form>
+        </div>
         <div className={styles.usersReviewListButtonContainer}>
           <button
             id={styles.usersReviewListButton}

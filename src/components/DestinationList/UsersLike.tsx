@@ -16,8 +16,16 @@ const ALERT_PROPS = {
   showTitle: false
 };
 
+const COUNTS_PER_USER_CLICK = {
+  COUNT: 1,
+  DEFAULT_COUNT: 0
+};
+
 function UsersLike({ destinationDetails }: UsersLikePropsType) {
-  const [isUserLike, setIsUserLike] = useState<boolean>(false);
+  const [isUserClickLike, setIsUserClickLike] = useState<boolean>(false);
+  const [preferCounter, setPreferCounter] = useState<number>(
+    COUNTS_PER_USER_CLICK.DEFAULT_COUNT
+  );
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const { contentid } = useParams();
@@ -29,8 +37,8 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
     const accessUserPreferInfo = preferUserList.find(
       (user) => user.user_id === usersId
     );
-    setIsUserLike(() => accessUserPreferInfo?.is_liked ?? false);
-  }, [setIsUserLike, destinationDetails]);
+    setIsUserClickLike(() => accessUserPreferInfo?.is_liked ?? false);
+  }, [setIsUserClickLike, destinationDetails]);
 
   useEffect(() => {
     getUsersPreferData();
@@ -40,9 +48,15 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
     async (destinationId: number) => {
       const res = await postPreferredDestinationsByDestinationId(destinationId);
       const usersPreferData = res?.data.is_liked;
-      setIsUserLike(() => usersPreferData);
+      setIsUserClickLike(() => usersPreferData);
+      setPreferCounter(() =>
+        isUserClickLike
+          ? preferCounter - COUNTS_PER_USER_CLICK.COUNT
+          : preferCounter + COUNTS_PER_USER_CLICK.COUNT
+      );
+      return;
     },
-    [setIsUserLike]
+    [setIsUserClickLike, isUserClickLike, setPreferCounter, preferCounter]
   );
 
   const handleLikeClick = async () => {
@@ -50,10 +64,19 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
       setIsShowAlert(true);
       return;
     }
-    setIsUserLike(() => !destinationDetails?.destination_likes);
+    setIsUserClickLike(() => !destinationDetails?.destination_likes);
     await postUsersPreferData(Number(contentid));
     return;
   };
+
+  useEffect(() => {
+    setPreferCounter(() => {
+      return (
+        destinationDetails?.destination_likes_count ??
+        COUNTS_PER_USER_CLICK.DEFAULT_COUNT
+      );
+    });
+  }, [setPreferCounter, destinationDetails]);
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
@@ -64,13 +87,13 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
     <>
       <div className={styles.usersLikesbox}>
         <button className={styles.likesButton} onClick={handleLikeClick}>
-          {isUserLike ? (
+          {isUserClickLike ? (
             <FaHeart id={styles.likesIcon} />
           ) : (
             <FaRegHeart id={styles.canceledLikesIcon} />
           )}
         </button>
-        <span id={styles.likesLabel}>좋아요</span>
+        <span id={styles.likesLabel}>좋아요{`ㆍ${preferCounter}개`}</span>
       </div>
       {isShowAlert && (
         <AlertModal
