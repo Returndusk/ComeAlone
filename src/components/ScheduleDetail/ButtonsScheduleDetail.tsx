@@ -12,8 +12,8 @@ function ButtonsScheduleDetail({
   scheduleId
 }: {
   userId: string;
-  loggedInUserId: string | undefined;
-  scheduleId: string | undefined;
+  loggedInUserId: string;
+  scheduleId: string;
 }) {
   const navigate = useNavigate();
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);

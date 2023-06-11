@@ -27,7 +27,7 @@ function InfoScheduleEdit({
         required
         label='일정 소개'
         multiline
-        rows={3}
+        rows={4}
         defaultValue={updatedSummary}
         onChange={(event) => onSummaryUpdate(event.target.value)}
       />

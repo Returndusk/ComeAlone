@@ -26,37 +26,41 @@ function DestinationList({
         전체 목적지 보기
       </label>
       <div className={styles.destinationsList}>
-        {destinations.map((destOfDay, index) => {
-          return (
-            <ol
-              key={index}
-              className={styles.destinationsDay}
-              id={'day' + (index + 1).toString()}
-            >
-              <label>
-                <div className={styles.destinationDayTitle}>
-                  <input
-                    type='checkbox'
-                    checked={checkedDayIndex === index}
-                    onChange={() => {
-                      if (checkedDayIndex === index) {
-                        setCheckedDayIndex(-1);
-                        onDestinationsChecked(destinations.flat());
-                      } else {
-                        setCheckedDayIndex(index);
-                        onDestinationsChecked(destOfDay);
-                      }
-                    }}
-                  />{' '}
-                  Day {index + 1}
-                </div>
-              </label>
-              {destOfDay.map((dest, index) => (
-                <li key={index}>{dest.title}</li>
-              ))}
-            </ol>
-          );
-        })}
+        {destinations.map(
+          (destOfDay: MapWithWaypointsPropsType[], index: number) => {
+            return (
+              <ol
+                key={index}
+                className={styles.destinationsDay}
+                id={`day ${index + 1}`}
+              >
+                <label>
+                  <div className={styles.destinationDayTitle}>
+                    <input
+                      type='checkbox'
+                      checked={checkedDayIndex === index}
+                      onChange={() => {
+                        if (checkedDayIndex === index) {
+                          setCheckedDayIndex(-1);
+                          onDestinationsChecked(destinations.flat());
+                        } else {
+                          setCheckedDayIndex(index);
+                          onDestinationsChecked(destOfDay);
+                        }
+                      }}
+                    />{' '}
+                    Day {index + 1}
+                  </div>
+                </label>
+                {destOfDay.map(
+                  (dest: MapWithWaypointsPropsType, index: number) => (
+                    <li key={index}>{dest.title}</li>
+                  )
+                )}
+              </ol>
+            );
+          }
+        )}
       </div>
     </div>
   );
