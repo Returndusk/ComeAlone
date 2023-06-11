@@ -30,9 +30,36 @@
   height: 300px;
 }
 
-.destinationDetailsLikes {
+.destinationDetailsIcons {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 120px 30px 120px;
+
+  .destinationReviewContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .reviewButton {
+      border: none;
+      background: none;
+
+      &:hover {
+        transform: scale(1.2);
+        cursor: pointer;
+      }
+    }
+
+    #destinationReviewIcon {
+      font-size: 28px;
+    }
+
+    #reviewLabel {
+      padding: 1px 6px; // 좋아요의 default 패딩과 동일
+    }
+  }
 }
 
 .destinationAddrContainer {
