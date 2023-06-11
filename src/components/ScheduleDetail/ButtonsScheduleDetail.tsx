@@ -1,8 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './ButtonsScheduleDetail.module.scss';
+import { deleteScheduleById } from '../../apis/ScheduleEditAPI';
 import ROUTER from '../../constants/Router';
 import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import AlertModal from '../common/Alert/AlertModal';
 
 function ButtonsScheduleDetail({
   userId,
@@ -13,6 +15,15 @@ function ButtonsScheduleDetail({
   loggedInUserId: string | undefined;
   scheduleId: string | undefined;
 }) {
+  const navigate = useNavigate();
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+
+  const handleScheduleDelete = async () => {
+    await deleteScheduleById(scheduleId);
+
+    navigate(ROUTER.MYSCHEDULE_LIST);
+  };
+
   return (
     <div className={styles.buttonContainer}>
       {userId === loggedInUserId ? (
@@ -23,12 +34,23 @@ function ButtonsScheduleDetail({
               수정
             </Link>
           </button>
-          <button id={styles.deleteButton}>
+          <button
+            id={styles.deleteButton}
+            onClick={() => setShowDeleteAlert(true)}
+          >
             <FaTrashAlt className={styles.icon} />
             삭제
           </button>
         </>
       ) : null}
+      {showDeleteAlert && (
+        <AlertModal
+          message='해당 일정을 삭제하시겠습니까?'
+          showCancelButton={true}
+          onConfirm={handleScheduleDelete}
+          onCancel={() => setShowDeleteAlert(false)}
+        />
+      )}
     </div>
   );
 }
