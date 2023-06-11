@@ -55,23 +55,26 @@ function ScheduleEdit() {
   const updatedSummary = useRef(defaultSchedule.summary);
   const createdAt = useRef(defaultSchedule.createdAt);
 
-  const getScheduleEdit = useCallback(async (id: string | undefined) => {
-    const response = await getScheduleDetailById(id);
+  const getScheduleEdit = useCallback(
+    async (id: string | undefined) => {
+      const response = await getScheduleDetailById(id);
 
-    const data = {
-      title: response?.data.title,
-      summary: response?.data.summary,
-      duration: response?.data.duration,
-      startDate: new Date(response?.data.start_date),
-      endDate: new Date(response?.data.end_date),
-      image: response?.data.image,
-      createdAt: new Date(response?.data.created_at.split('T')[0]),
-      status: response?.data.status,
-      destinations: response?.data.destinationMaps
-    };
+      const data = {
+        title: response?.data.title,
+        summary: response?.data.summary,
+        duration: response?.data.duration,
+        startDate: new Date(response?.data.start_date),
+        endDate: new Date(response?.data.end_date),
+        image: response?.data.image,
+        createdAt: new Date(response?.data.created_at.split('T')[0]),
+        status: response?.data.status,
+        destinations: response?.data.destinationMaps
+      };
 
-    return data;
-  }, []);
+      return data;
+    },
+    [scheduleId]
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,7 +94,7 @@ function ScheduleEdit() {
     };
 
     fetchData();
-  }, []);
+  }, [getScheduleEdit]);
 
   useEffect(() => {
     const prevDuration = updatedDestinationList.length;
@@ -110,7 +113,7 @@ function ScheduleEdit() {
         updatedDestinationList.slice(0, updatedDuration)
       );
     }
-  }, [updatedDateInfo.duration]);
+  }, [updatedDestinationList, updatedDateInfo.duration]);
 
   const markersLocations = useMemo(() => {
     if (checkedDayIndex === -1) {
