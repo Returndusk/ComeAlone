@@ -39,7 +39,7 @@ function MyScheduleLists() {
   }, [fetchData]);
 
   useEffect(() => {
-    sortSchedule();
+    sortSchedule(scheduleSort);
   }, [scheduleSort, scheduleList]);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
@@ -51,8 +51,9 @@ function MyScheduleLists() {
     return scheduleData
       .filter((schedule: MyScheduleCardType) => {
         const today = new Date();
+        const yesterday = new Date(today.setDate(today.getDate() - 1));
         const end_date = new Date(schedule.end_date);
-        return today.getTime() < end_date.getTime();
+        return yesterday < end_date;
       })
       .sort(
         (a, b) =>
@@ -64,8 +65,9 @@ function MyScheduleLists() {
     return scheduleData
       .filter((schedule: MyScheduleCardType) => {
         const today = new Date();
+        const yesterday = new Date(today.setDate(today.getDate() - 1));
         const end_date = new Date(schedule.end_date);
-        return today.getTime() > end_date.getTime();
+        return yesterday > end_date;
       })
       .sort(
         (a, b) =>
@@ -73,9 +75,9 @@ function MyScheduleLists() {
       );
   }
 
-  function sortSchedule() {
+  function sortSchedule(sortOption: string) {
     const scheduleData = [...scheduleList];
-    if (scheduleSort === 'upcoming') {
+    if (sortOption === 'upcoming') {
       setShowScheduleList(sortUpcoming(scheduleData));
     } else {
       setShowScheduleList(sortPast(scheduleData));

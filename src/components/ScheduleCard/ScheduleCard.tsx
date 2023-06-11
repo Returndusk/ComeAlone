@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { ScheduleCardType } from '../../types/ScheduleTypes';
-import { FaHeart, FaRegHeart, FaRegDotCircle } from 'react-icons/fa';
+import { FaHeart, FaRegDotCircle, FaCommentAlt } from 'react-icons/fa';
 import { useAuthState } from '../../contexts/AuthContext';
 import ROUTER from '../../constants/Router';
 import tokenInstance from '../../apis/tokenInstance';
@@ -95,16 +95,30 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
               </div>
               <div>작성자 : {schedule.user.nickname}</div>
             </div>
-            <div className={styles.like}>
-              <div
-                className={styles.likeIcon}
-                onClick={(e) => {
-                  handleLike(e);
-                }}
-              >
-                {isLiked ? <FaHeart /> : <FaRegHeart />}
+            <div className={styles.icon}>
+              <div className={styles.like}>
+                <div
+                  className={styles.likeIcon}
+                  onClick={(e) => {
+                    handleLike(e);
+                  }}
+                >
+                  {isLiked ? (
+                    <FaHeart className={styles.isLiked} />
+                  ) : (
+                    <FaHeart />
+                  )}
+                </div>
+                <div className={styles.likesCount}>
+                  {isLoggedIn ? likeCount : schedule.likes_count}
+                </div>
               </div>
-              {isLoggedIn ? likeCount : schedule.likes_count}
+              <div className={styles.comment}>
+                <FaCommentAlt className={styles.commentIcon} />
+                <div className={styles.commentsCount}>
+                  {schedule.comments_count}
+                </div>
+              </div>
             </div>
           </div>
           <div className={styles.scheduleDestination}>

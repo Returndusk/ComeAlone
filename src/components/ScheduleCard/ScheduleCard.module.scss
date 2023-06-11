@@ -35,14 +35,44 @@
         }
       }
 
-      .like {
+      .icon {
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        .likeIcon {
+        .like {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
           margin-bottom: 20px;
-          font-size: 40px;
+
+          .likeIcon {
+            margin-right: 10px;
+            font-size: 30px;
+
+            .isLiked {
+              color: #ff0000;
+            }
+          }
+
+          .likesCount {
+            font-size: 20px;
+          }
+        }
+
+        .comment {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .commentIcon {
+            margin-right: 10px;
+            font-size: 30px;
+          }
+
+          .commentsCount {
+            font-size: 20px;
+          }
         }
 
         .trashIcon {
@@ -52,6 +82,7 @@
     }
 
     .scheduleTitle {
+      height: 30px;
       margin-bottom: 20px;
       font-size: 22px;
       font-weight: bold;

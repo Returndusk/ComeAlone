@@ -10,12 +10,14 @@ function InfoScheduleDetail({
   duration,
   startDate,
   endDate,
-  createdAt
+  createdAt,
+  updatedAt
 }: ScheduleDetailInfoType) {
   return (
     <div className={styles.scheduleInfoContainer}>
-      <div className={styles.createdAt}>
-        작성일: {createdAt.toLocaleDateString('ko-KR')}
+      <div className={styles.date}>
+        <p>작성일: {createdAt.toLocaleDateString('ko-KR')}</p>
+        <p>수정일: {updatedAt.toLocaleDateString('ko-KR')}</p>
       </div>
       <div className={styles.duration}>
         {`${startDate.toLocaleDateString(

@@ -39,6 +39,7 @@ function Main() {
           overviewProperty='schedule_summary'
           customClassName='BottomSlider'
           boxClassName='BottomBox'
+          textClassName='text2'
           imageContainerClassName='BottomImageContainer'
         />
       </div>

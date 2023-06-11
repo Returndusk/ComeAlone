@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiCalendar, BiUserCircle } from 'react-icons/bi';
-import { Link as RouterLink } from 'react-router-dom';
-import { Menu, MenuItem, IconButton } from '@mui/material';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, MenuItem } from '@mui/material';
 import Weather from './Weather';
 import styles from './Header.module.scss';
 import { useAuthState } from '../../../contexts/AuthContext';
 import { Cookies } from 'react-cookie';
 import AlertModal from '../Alert/AlertModal';
+import { AiOutlineCalendar } from 'react-icons/ai';
 
 function Header() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isActive, setIsActive] = useState(false);
+  const isFloat = location.pathname === '/';
   const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLElement) | null>(
     null
   );
@@ -42,8 +47,24 @@ function Header() {
     handleClose();
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const isActiveHeight = window.scrollY > 0;
+      if (isActiveHeight !== isActive) {
+        setIsActive((prev) => !prev);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isActive]);
+
   return (
-    <div className={styles.layout}>
+    <header
+      className={`${styles.layout} 
+      ${isFloat ? (isActive ? styles.active : styles.float) : ''}
+        `}
+    >
       <div className={styles.body}>
         <div className={styles.layoutLeft}>
           <RouterLink to='/' className={styles.logo}>
@@ -51,8 +72,12 @@ function Header() {
           </RouterLink>
           <nav>
             <ul>
-              <RouterLink to='/destination/list'>목적지</RouterLink>
-              <RouterLink to='/schedule/list'>여행일정</RouterLink>
+              <li>
+                <RouterLink to='/destination/list'>목적지</RouterLink>
+              </li>
+              <li>
+                <RouterLink to='/schedule/list'>여행일정</RouterLink>
+              </li>
             </ul>
           </nav>
         </div>
@@ -60,17 +85,26 @@ function Header() {
           <Weather />
           {authState.isLoggedIn && (
             <>
-              <RouterLink to='/myschedule/list'>
-                <BiCalendar className={styles.calendar} />
-              </RouterLink>
               <div className={styles.auth}>
-                <IconButton onClick={handleUserIconClick}>
-                  <BiUserCircle className={styles.userIcon} />
-                </IconButton>
+                <button onClick={() => navigate('/myschedule/list')}>
+                  <AiOutlineCalendar />
+                </button>
+                <button onClick={handleUserIconClick}>
+                  <BiUserCircle />
+                </button>
                 <Menu
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
+                  disableScrollLock={true}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right'
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
                 >
                   <MenuItem
                     onClick={handleClose}
@@ -107,7 +141,7 @@ function Header() {
           )}
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 
