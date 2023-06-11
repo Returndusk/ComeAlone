@@ -16,6 +16,22 @@ export async function updateSchedule(updatedSchedule: ScheduleEditSubmitType) {
   }
 }
 
+export async function updateScheduleImageById(
+  id: string | undefined,
+  formData: FormData
+) {
+  try {
+    const response = await tokenInstance.post(
+      `${baseUrl}/upload/schedules/${id}`,
+      formData
+    );
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export async function deleteScheduleById(id: string | undefined) {
   try {
     await tokenInstance.delete(`${baseUrl}/schedules/${id}`);
