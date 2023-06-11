@@ -48,6 +48,7 @@ function ScheduleDetail() {
       endDate: new Date(response?.data.end_date),
       image: response?.data.image,
       createdAt: new Date(response?.data.created_at.split('T')[0]),
+      updatedAt: new Date(response?.data.updated_at.split('T')[0]),
       destinations: response?.data.destinationMaps
     };
 
@@ -128,6 +129,7 @@ function ScheduleDetail() {
     endDate,
     image,
     createdAt,
+    updatedAt,
     destinations
   } = scheduleFetched.current;
 
@@ -158,6 +160,7 @@ function ScheduleDetail() {
         startDate={startDate}
         endDate={endDate}
         createdAt={createdAt}
+        updatedAt={updatedAt}
       />
       <div className={styles.editButtonContainer}>
         {userId === authState.user?.id ? (
