@@ -6,6 +6,7 @@ import { getDestinationDetailsByDestinationId } from '../../apis/destinationList
 import AlertModal from '../common/Alert/AlertModal';
 import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 import OpenModal from './Modal/OpenModal';
+import UsersLike from './UsersLike';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -56,7 +57,9 @@ function DestinationDetails() {
             <h2 className={styles.destinationDetailsTitle}>
               {destinationDetails?.title}
             </h2>
-
+            <div className={styles.destinationDetailsLikes}>
+              <UsersLike destinationDetails={destinationDetails} />
+            </div>
             <p className={styles.destinationAddress}>
               주소:{' '}
               {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}

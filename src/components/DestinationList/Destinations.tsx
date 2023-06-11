@@ -6,6 +6,7 @@ import { specifiedCategoryDestinationsType } from '../../types/DestinationListTy
 import { CiCircleAlert } from 'react-icons/ci';
 import { createPortal } from 'react-dom';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { FaHeart, FaCommentAlt } from 'react-icons/fa';
 
 type DestinationsPropsType = {
   filteredDestinations: specifiedCategoryDestinationsType[] | [];
@@ -67,21 +68,37 @@ function Destinations({
                       className={styles.destinations}
                       onClick={() => handleDestinationClick(destination)}
                     >
-                      <h2
-                        className={
-                          destination?.title.length >= 10
-                            ? styles.destinationExceedTitle
-                            : styles.destinationShortTitle
-                        }
-                      >
-                        {destination?.title}
-                      </h2>
-                      <p className={styles.destinationAddress}>
-                        {destination?.addr1}
-                      </p>
-                      <p className={styles.destinationCategory}>
-                        {destination?.category_name}
-                      </p>
+                      <div className={styles.destinationTextWrapper}>
+                        <h2
+                          className={
+                            destination?.title.length >= 10
+                              ? styles.destinationExceedTitle
+                              : styles.destinationShortTitle
+                          }
+                        >
+                          {destination?.title}
+                        </h2>
+                        <p className={styles.destinationAddress}>
+                          {destination?.addr1}
+                        </p>
+                        <p className={styles.destinationCategory}>
+                          {destination?.category_name}
+                        </p>
+                      </div>
+                      <div className={styles.iconContainer}>
+                        <div className={styles.likeBox}>
+                          <FaHeart />
+                          <span id={styles.likesCounter}>
+                            {destination?.destination_likes_count}
+                          </span>
+                        </div>
+                        <div className={styles.commentBox}>
+                          <FaCommentAlt />
+                          <span id={styles.commentCounter}>
+                            {destination?.comment_count}
+                          </span>
+                        </div>
+                      </div>
 
                       {imageError ? (
                         <img
