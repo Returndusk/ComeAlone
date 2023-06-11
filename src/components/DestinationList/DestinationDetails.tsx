@@ -7,6 +7,7 @@ import AlertModal from '../common/Alert/AlertModal';
 import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 import OpenModal from './Modal/OpenModal';
 import UsersLike from './UsersLike';
+import { useAuthState } from '../../contexts/AuthContext';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -16,9 +17,9 @@ const ALERT_PROPS = {
 function DestinationDetails() {
   const [destinationDetails, setDestinationDetails] =
     useState<specifiedCategoryDestinationsType | null>(null);
-
+  const { authState } = useAuthState();
+  const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const { contentid } = useParams();
-  const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
   const [isShowScheduleModal, setIsShowScheduleModal] =
     useState<boolean>(false);
   const navigate = useNavigate();
@@ -34,12 +35,17 @@ function DestinationDetails() {
   }, [getDestinationDetails]);
 
   const handleOnConfirm = () => {
-    setIsOpenAlert(false);
+    setIsShowAlert(false);
     navigate('/login');
   };
 
   const handleShowModalClick = () => {
+    if (!authState.isLoggedIn) {
+      setIsShowAlert(true);
+      return;
+    }
     setIsShowScheduleModal(true);
+    return;
   };
 
   return (
@@ -93,7 +99,7 @@ function DestinationDetails() {
       {isShowScheduleModal && (
         <OpenModal closeModal={() => setIsShowScheduleModal(false)} />
       )}
-      {isOpenAlert && (
+      {isShowAlert && (
         <AlertModal
           message={ALERT_PROPS.message}
           onConfirm={handleOnConfirm}
