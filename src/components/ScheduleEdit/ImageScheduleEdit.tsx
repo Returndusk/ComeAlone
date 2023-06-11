@@ -38,7 +38,10 @@ function ImageScheduleEdit({
           src={updatedImagePath.current}
           alt='representative-image'
         />
-        <p>대표 이미지 수정하기</p>
+        <div className={styles.updateMessage}>대표 이미지 수정하기</div>
+        <div className={styles.updateSizeMessage}>
+          (5MB 미만의 이미지 파일만 가능)
+        </div>
       </label>
       <input
         type='file'
