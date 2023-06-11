@@ -1,10 +1,12 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import styles from './DateModalScheduleEdit.module.scss';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 import { DateInfoType, DateSelectionType } from '../../types/ScheduleEditTypes';
+
+const SECONDS_OF_DAY = 1000 * 60 * 60 * 24;
 
 function DateModalScheduleEdit({
   openModal,
@@ -30,7 +32,7 @@ function DateModalScheduleEdit({
 
     if (startDate && endDate) {
       const diffDay =
-        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) + 1;
+        (endDate.getTime() - startDate.getTime()) / SECONDS_OF_DAY + 1;
 
       onDateInfoUpdate({ startDate, endDate, duration: diffDay });
     }

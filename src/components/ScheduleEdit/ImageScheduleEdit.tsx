@@ -9,11 +9,11 @@ function ImageScheduleEdit({
   scheduleId,
   imagePath
 }: {
-  scheduleId: string | undefined;
+  scheduleId: string;
   imagePath: string;
 }) {
-  const [showUpdateAlert, setShowUpdateAlert] = useState(false);
-  const [showImageSizeAlert, setShowImageSizeAlert] = useState(false);
+  const [showUpdateAlert, setShowUpdateAlert] = useState<boolean>(false);
+  const [showImageSizeAlert, setShowImageSizeAlert] = useState<boolean>(false);
   const updatedImagePath = useRef<string>(imagePath);
   const updatedImageFile = useRef<Blob>();
 

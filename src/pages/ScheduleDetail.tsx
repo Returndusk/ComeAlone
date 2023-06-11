@@ -10,7 +10,6 @@ import DestinationList from '../components/ScheduleDetail/DestinationList';
 import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import { defaultSchedule } from '../components/ScheduleDetail/Dummy';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
   getScheduleDetailById,
@@ -22,21 +21,27 @@ import {
   deleteScheduleReviewById
 } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
+import {
+  IScheduleReview,
+  ScheduleFetchedType
+} from '../types/ScheduleDetailTypes';
+import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 
 function ScheduleDetail() {
-  const { scheduleId } = useParams();
-  const { authState } = useAuthState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [checkedDestinations, setCheckedDestinations] = useState(
-    defaultSchedule.destinations.flat()
-  );
-  const [doesUserLike, setDoesUserLike] = useState(false);
-  const [scheduleReviews, setScheduleReviews] = useState([]);
-  const scheduleFetched = useRef(defaultSchedule);
-  const userLikesCount = useRef(defaultSchedule.likesCount);
+  const scheduleId: string = useParams().scheduleId as string;
+  const isLoggedIn: boolean = useAuthState().authState.isLoggedIn as boolean;
+  const loggedInUserId: string = useAuthState().authState.user?.id as string;
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [checkedDestinations, setCheckedDestinations] = useState<
+    MapWithWaypointsPropsType[]
+  >([]);
+  const [doesUserLike, setDoesUserLike] = useState<boolean>(false);
+  const [scheduleReviews, setScheduleReviews] = useState<IScheduleReview[]>([]);
+  const scheduleFetched = useRef<ScheduleFetchedType>();
+  const userLikesCount = useRef<number>(0);
 
-  const getScheduleDetail = useCallback(async (id: string | undefined) => {
-    const response = await getScheduleDetailById(id);
+  const getScheduleDetail = useCallback(async (scheduleId: string) => {
+    const response = await getScheduleDetailById(scheduleId);
 
     const data = {
       userId: response?.data.user.id,
@@ -56,53 +61,57 @@ function ScheduleDetail() {
     return data;
   }, []);
 
-  const getDoesUserLike = useCallback(async (id: string | undefined) => {
-    const response = await getDoesUserLikeById(id);
+  const getDoesUserLike = useCallback(async (scheduleId: string) => {
+    const response = await getDoesUserLikeById(scheduleId);
 
     return response?.data.is_liked;
   }, []);
 
-  const toggleUserLike = useCallback(async (id: string | undefined) => {
-    const response = await toggleUserLikeById(id);
-    const isLiked = response?.data.is_liked;
-    const likesCount = response?.data.likes_count_of_schedule;
+  const toggleUserLike = useCallback(async (scheduleId: string) => {
+    const response = await toggleUserLikeById(scheduleId);
+    const isLiked: boolean = response?.data.is_liked;
+    const likesCount: number = response?.data.likes_count_of_schedule;
 
     userLikesCount.current = likesCount;
 
     setDoesUserLike(isLiked);
   }, []);
 
-  const getScheduleReviews = useCallback(async (id: string | undefined) => {
-    const response = await getScheduleReviewsById(id);
+  const getScheduleReviews = useCallback(async (scheduleId: string) => {
+    const response = await getScheduleReviewsById(scheduleId);
 
     return response?.data;
   }, []);
 
   const addScheduleReview = useCallback(
-    async (id: string | undefined, newReview: string) => {
-      await addScheduleReviewById(id, newReview);
+    async (scheduleId: string, newReview: string) => {
+      await addScheduleReviewById(scheduleId, newReview);
       setScheduleReviews(await getScheduleReviews(scheduleId));
     },
     []
   );
 
   const updateScheduleReview = useCallback(
-    async (id: number | undefined, updateReview: string) => {
-      await updateScheduleReviewById(id, updateReview);
+    async (reviewId: number, updateReview: string) => {
+      await updateScheduleReviewById(reviewId, updateReview);
       setScheduleReviews(await getScheduleReviews(scheduleId));
     },
     []
   );
 
-  const deleteScheduleReview = useCallback(async (id: number) => {
-    await deleteScheduleReviewById(id);
+  const deleteScheduleReview = useCallback(async (reviewId: number) => {
+    await deleteScheduleReviewById(reviewId);
     setScheduleReviews(await getScheduleReviews(scheduleId));
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedDetail = await getScheduleDetail(scheduleId);
-      const fetchedReviews = await getScheduleReviews(scheduleId);
+      const fetchedDetail: ScheduleFetchedType = await getScheduleDetail(
+        scheduleId
+      );
+      const fetchedReviews: IScheduleReview[] = await getScheduleReviews(
+        scheduleId
+      );
 
       scheduleFetched.current = fetchedDetail;
       userLikesCount.current = fetchedDetail.likesCount;
@@ -110,7 +119,7 @@ function ScheduleDetail() {
       setCheckedDestinations(fetchedDetail.destinations.flat());
       setIsLoading(false);
 
-      if (authState.isLoggedIn) {
+      if (isLoggedIn) {
         const doesUserLike = await getDoesUserLike(scheduleId);
 
         setDoesUserLike(doesUserLike);
@@ -119,6 +128,18 @@ function ScheduleDetail() {
 
     fetchData();
   }, []);
+
+  const handleReviewSubmit = (input: string) => {
+    addScheduleReview(scheduleId, input);
+  };
+
+  const handleUserLike = () => {
+    toggleUserLike(scheduleId);
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const {
     userId,
@@ -132,19 +153,7 @@ function ScheduleDetail() {
     createdAt,
     updatedAt,
     destinations
-  } = scheduleFetched.current;
-
-  const handleReviewSubmit = (input: string) => {
-    addScheduleReview(scheduleId, input);
-  };
-
-  const handleUserLike = () => {
-    toggleUserLike(scheduleId);
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  } = scheduleFetched.current as ScheduleFetchedType;
 
   return (
     <div className={styles.container}>
@@ -165,7 +174,7 @@ function ScheduleDetail() {
       />
       <ButtonsScheduleDetail
         userId={userId}
-        loggedInUserId={authState.user?.id}
+        loggedInUserId={loggedInUserId}
         scheduleId={scheduleId}
       />
       <IconsScheduleDetail
