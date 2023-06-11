@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import styles from './ReviewsSchedule.module.scss';
 import { useAuthState } from '../../contexts/AuthContext';
 import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { FaPen, FaTrashAlt } from 'react-icons/fa';
 import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
+import AlertModal from '../common/Alert/AlertModal';
 
 function ReviewsSchedule({
   scheduleReviews,
@@ -13,11 +14,27 @@ function ReviewsSchedule({
 }: ScheduleReviewPropsType) {
   const [reviewTyping, setReviewTyping] = useState('');
   const [isReviewUpdate, setIsReviewUpdate] = useState(false);
-  const [targetReviewId, setTargetReviewId] = useState(0);
+  const [showUpdateAlert, setShowUpdateAlert] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const targetReviewId = useRef(0);
   const loggedInUserId = useAuthState().authState.user?.id;
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReviewTyping(event.target.value);
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setReviewTyping(event.target.value);
+    },
+    []
+  );
+
+  const handleReviewUpdate = () => {
+    onReviewUpdate(targetReviewId.current, reviewTyping);
+    setIsReviewUpdate(false);
+    setShowUpdateAlert(false);
+  };
+
+  const handleReviewDelete = () => {
+    onReviewDelete(targetReviewId.current);
+    setShowDeleteAlert(false);
   };
 
   return (
@@ -30,7 +47,8 @@ function ReviewsSchedule({
               <span className={styles.nickname}>
                 <Avatar>{review.user.nickname[0]}</Avatar>
               </span>
-              {isReviewUpdate && targetReviewId === review.comment_id ? (
+              {isReviewUpdate &&
+              targetReviewId.current === review.comment_id ? (
                 <TextField
                   className={styles.updateInput}
                   value={reviewTyping}
@@ -40,13 +58,12 @@ function ReviewsSchedule({
                 <span>{review.comment}</span>
               )}
               {isReviewUpdate ? (
-                targetReviewId === review.comment_id ? (
+                targetReviewId.current === review.comment_id ? (
                   <div className={styles.updateButtonsContainer}>
                     <button
                       className={styles.updateReviewButton}
                       onClick={() => {
-                        onReviewUpdate(review.comment_id, reviewTyping);
-                        setIsReviewUpdate(false);
+                        setShowUpdateAlert(true);
                       }}
                     >
                       제출
@@ -77,8 +94,8 @@ function ReviewsSchedule({
                   <button
                     className={styles.updateButton}
                     onClick={() => {
+                      targetReviewId.current = review.comment_id;
                       setIsReviewUpdate(true);
-                      setTargetReviewId(review.comment_id);
                       setReviewTyping(review.comment);
                     }}
                   >
@@ -87,7 +104,8 @@ function ReviewsSchedule({
                   <button
                     className={styles.deleteButton}
                     onClick={() => {
-                      onReviewDelete(review.comment_id);
+                      targetReviewId.current = review.comment_id;
+                      setShowDeleteAlert(true);
                     }}
                   >
                     <FaTrashAlt /> 삭제
@@ -105,6 +123,22 @@ function ReviewsSchedule({
           );
         })}
       </div>
+      {showDeleteAlert && (
+        <AlertModal
+          message='해당 리뷰를 삭제하시겠습니까?'
+          showCancelButton={true}
+          onConfirm={handleReviewDelete}
+          onCancel={() => setShowDeleteAlert(false)}
+        />
+      )}
+      {showUpdateAlert && (
+        <AlertModal
+          message='해당 리뷰를 입력하신 내용으로 수정하시겠습니까?'
+          showCancelButton={true}
+          onConfirm={handleReviewUpdate}
+          onCancel={() => setShowUpdateAlert(false)}
+        />
+      )}
     </div>
   );
 }

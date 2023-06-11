@@ -48,16 +48,6 @@ function Search() {
   }, [getRankedDestinationsData]);
   */
 
-  const getRankedDestinationsData = useCallback(async () => {
-    const res = await getDestinationDetailsByDestinationId(2906155); //임시 인기 목적지 지정
-    const rankedDestinationsList = res?.data.destinations;
-    setRankedDestinations(() => rankedDestinationsList);
-  }, [setRankedDestinations]);
-
-  useEffect(() => {
-    getRankedDestinationsData();
-  }, [getRankedDestinationsData]);
-
   const searchQueryParam = useMemo(() => {
     return searchParams.get('search') ?? '';
   }, [searchParams]);

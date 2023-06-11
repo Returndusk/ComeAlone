@@ -1,0 +1,28 @@
+.buttonContainer {
+  justify-self: self-end;
+  align-self: center;
+
+  a {
+    text-decoration: none;
+    color: rgba(0, 0, 255, 0.76);
+  }
+
+  button {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .icon {
+    margin: 0 10px 0 0;
+  }
+
+  #editButton {
+    margin: 0 20px 0 0;
+  }
+
+  #deleteButton {
+    color: rgb(231, 49, 49);
+  }
+}
