@@ -25,25 +25,59 @@
         margin: 0 20px 0 10px;
       }
 
-      .reviewUpdateInput {
-        width: 100%;
+      .updateInput {
+        width: 80%;
+      }
+
+      .updateButtonsContainer {
+        margin: 0 auto 0 auto;
+
+        .updateReviewButton {
+          margin: 0 10px 0 0;
+        }
+      }
+
+      .whileUpdateContainer {
+        margin-left: auto;
+        text-align: end;
+        line-height: 20px;
+
+        .updateOther {
+          color: gray;
+          font-size: 14px;
+        }
       }
 
       .buttonsContainer {
+        display: flex;
+        flex-direction: column;
+        justify-items: end;
         margin-left: auto;
+        gap: 10px;
+        font-size: 14px;
 
         .updateButton {
-          margin: 0 10px 0 0;
+          border: 0;
+          background: transparent;
+          cursor: pointer;
         }
 
         .deleteButton {
-          margin: 0 10px 0 0;
+          border: 0;
+          background: transparent;
+          cursor: pointer;
         }
 
         .createdAt {
-          margin: 0 10px 0 0;
           color: gray;
         }
+      }
+
+      .createdAt {
+        margin-left: auto;
+        margin-right: 10px;
+        color: gray;
+        font-size: 14px;
       }
     }
 

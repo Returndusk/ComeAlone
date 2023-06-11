@@ -68,7 +68,7 @@ function Weather() {
           rel='noreferrer'
         >
           <img src={imgSrc} alt='Weather Icon' />
-          {temp}°C
+          {temp}°
         </a>
       </div>
     );

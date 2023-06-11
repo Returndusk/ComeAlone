@@ -10,6 +10,7 @@ export interface IScheduleDetail {
   endDate: Date;
   duration: number;
   createdAt: Date;
+  updatedAt: Date;
   destinations: MapWithWaypointsPropsType[][];
   image: string;
   status: string;
@@ -26,6 +27,7 @@ export type ScheduleFetchedType = Pick<
   | 'endDate'
   | 'duration'
   | 'createdAt'
+  | 'updatedAt'
   | 'destinations'
   | 'image'
 >;
@@ -39,6 +41,7 @@ export type ScheduleDetailInfoType = Pick<
   | 'endDate'
   | 'duration'
   | 'createdAt'
+  | 'updatedAt'
 >;
 
 export type IconsScheduleDetailType = {
@@ -64,5 +67,6 @@ interface IScheduleReviewType {
 
 export type ScheduleReviewPropsType = {
   scheduleReviews: IScheduleReviewType[];
+  onReviewUpdate: (id: number, updateReview: string) => void;
   onReviewDelete: (id: number) => void;
 };

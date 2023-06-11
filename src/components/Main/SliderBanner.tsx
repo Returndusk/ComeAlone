@@ -5,6 +5,33 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './SliderBanner.module.scss';
 import { SliderBannerProps, Destination } from '../../types/SliderBannerTypes';
+import { SlArrowRight, SlArrowLeft } from 'react-icons/sl';
+
+interface NextArrowProps {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+function NextArrow({ onClick }: NextArrowProps) {
+  return (
+    <button
+      className={`${styles.arrowBtn} ${styles.nextBtn}`}
+      onClick={onClick}
+    >
+      <SlArrowRight />
+    </button>
+  );
+}
+
+function PrevArrow({ onClick }: NextArrowProps) {
+  return (
+    <button
+      className={`${styles.arrowBtn} ${styles.prevBtn}`}
+      onClick={onClick}
+    >
+      <SlArrowLeft />
+    </button>
+  );
+}
 
 function SliderBanner({
   settings,
@@ -30,7 +57,9 @@ function SliderBanner({
     slidesToShow: 3,
     slidesToScroll: 3,
     autoplay: true,
-    autoplaySpeed: 5000
+    autoplaySpeed: 5000,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />
   };
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -94,10 +123,10 @@ function SliderBanner({
             onClick={() => handleBannerClick(destination)}
           >
             <div
-              className={`${styles.imageContainer} ${
+              className={`${
                 imageContainerClassName && styles[imageContainerClassName]
                   ? styles[imageContainerClassName]
-                  : ''
+                  : styles.imageContainer
               }`}
             >
               <img
@@ -110,13 +139,13 @@ function SliderBanner({
                 alt={String(destination[titleProperty]) || ''}
               ></img>
               {showCategory && destination.destination_category_id && (
-                <div
+                <span
                   className={`${styles.category} ${
                     styles['category-' + destination.destination_category_id]
                   }`}
                 >
                   {categoryMapping[Number(destination.destination_category_id)]}
-                </div>
+                </span>
               )}
 
               {showTitleAndOverview && (
@@ -130,14 +159,8 @@ function SliderBanner({
                   <h3>{String(destination[titleProperty])}</h3>
                   <p>
                     {destination[overviewProperty] &&
-                    typeof destination[overviewProperty] === 'string'
-                      ? (destination[overviewProperty] as string).length > 20
-                        ? (destination[overviewProperty] as string).slice(
-                            0,
-                            62
-                          ) + '...'
-                        : destination[overviewProperty]
-                      : String(destination[overviewProperty])}
+                      typeof destination[overviewProperty] === 'string' &&
+                      String(destination[overviewProperty])}
                   </p>
                 </div>
               )}
