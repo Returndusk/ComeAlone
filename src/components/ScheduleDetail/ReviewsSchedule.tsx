@@ -12,12 +12,12 @@ function ReviewsSchedule({
   onReviewUpdate,
   onReviewDelete
 }: ScheduleReviewPropsType) {
-  const [reviewTyping, setReviewTyping] = useState('');
-  const [isReviewUpdate, setIsReviewUpdate] = useState(false);
-  const [showUpdateAlert, setShowUpdateAlert] = useState(false);
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const targetReviewId = useRef(0);
-  const loggedInUserId = useAuthState().authState.user?.id;
+  const [reviewTyping, setReviewTyping] = useState<string>('');
+  const [isReviewUpdate, setIsReviewUpdate] = useState<boolean>(false);
+  const [showUpdateAlert, setShowUpdateAlert] = useState<boolean>(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+  const targetReviewId = useRef<number>(0);
+  const loggedInUserId: string = useAuthState().authState.user?.id as string;
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -42,23 +42,27 @@ function ReviewsSchedule({
       <div className={styles.reviewsTitle}>리뷰 리스트</div>
       <div className={styles.reviewsList}>
         {scheduleReviews.map((review, index) => {
+          const commentId: number = review.comment_id;
+          const commenterId: string = review.user.id;
+          const comment: string = review.comment;
+          const createdAt: string = review.created_at.split('T')[0];
+
           return (
             <div key={`review ${index}`} className={styles.review}>
               <span className={styles.nickname}>
                 <Avatar>{review.user.nickname[0]}</Avatar>
               </span>
-              {isReviewUpdate &&
-              targetReviewId.current === review.comment_id ? (
+              {isReviewUpdate && targetReviewId.current === commentId ? (
                 <TextField
                   className={styles.updateInput}
                   value={reviewTyping}
                   onChange={handleChange}
                 />
               ) : (
-                <span>{review.comment}</span>
+                <span>{comment}</span>
               )}
               {isReviewUpdate ? (
-                targetReviewId.current === review.comment_id ? (
+                targetReviewId.current === commentId ? (
                   <div className={styles.updateButtonsContainer}>
                     <button
                       className={styles.updateReviewButton}
@@ -75,26 +79,22 @@ function ReviewsSchedule({
                       취소
                     </button>
                   </div>
-                ) : loggedInUserId === review.user.id ? (
+                ) : loggedInUserId === commenterId ? (
                   <div className={styles.whileUpdateContainer}>
                     <div className={styles.updateOther}>
                       다른 리뷰를 수정 중입니다...
                     </div>
-                    <span className={styles.createdAt}>
-                      {review.created_at.split('T')[0]}
-                    </span>
+                    <span className={styles.createdAt}>{createdAt}</span>
                   </div>
                 ) : (
-                  <span className={styles.createdAt}>
-                    {review.created_at.split('T')[0]}
-                  </span>
+                  <span className={styles.createdAt}>{createdAt}</span>
                 )
-              ) : loggedInUserId === review.user.id ? (
+              ) : loggedInUserId === commenterId ? (
                 <div className={styles.buttonsContainer}>
                   <button
                     className={styles.updateButton}
                     onClick={() => {
-                      targetReviewId.current = review.comment_id;
+                      targetReviewId.current = commentId;
                       setIsReviewUpdate(true);
                       setReviewTyping(review.comment);
                     }}
@@ -104,20 +104,16 @@ function ReviewsSchedule({
                   <button
                     className={styles.deleteButton}
                     onClick={() => {
-                      targetReviewId.current = review.comment_id;
+                      targetReviewId.current = commentId;
                       setShowDeleteAlert(true);
                     }}
                   >
                     <FaTrashAlt /> 삭제
                   </button>
-                  <span className={styles.createdAt}>
-                    {review.created_at.split('T')[0]}
-                  </span>
+                  <span className={styles.createdAt}>{createdAt}</span>
                 </div>
               ) : (
-                <span className={styles.createdAt}>
-                  {review.created_at.split('T')[0]}
-                </span>
+                <span className={styles.createdAt}>{createdAt}</span>
               )}
             </div>
           );

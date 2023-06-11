@@ -44,15 +44,14 @@ export type ScheduleDetailInfoType = Pick<
   | 'updatedAt'
 >;
 
-export type IconsScheduleDetailType = {
+export type ScheduleDetailIconsType = {
   userId: string;
   doesUserLike: boolean;
   likesCount: number;
   reviewsCount: number;
-  onUserLike: () => void;
 };
 
-interface IScheduleReviewType {
+export interface IScheduleReview {
   comment_id: number;
   scheduleId: number;
   comment: string;
@@ -66,7 +65,7 @@ interface IScheduleReviewType {
 }
 
 export type ScheduleReviewPropsType = {
-  scheduleReviews: IScheduleReviewType[];
+  scheduleReviews: IScheduleReview[];
   onReviewUpdate: (id: number, updateReview: string) => void;
   onReviewDelete: (id: number) => void;
 };
