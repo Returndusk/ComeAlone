@@ -3,12 +3,14 @@ import styles from './ReviewsSchedule.module.scss';
 import { useAuthState } from '../../contexts/AuthContext';
 import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import { FaPen, FaTrashAlt } from 'react-icons/fa';
 import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
 
 function ReviewsSchedule({
   scheduleReviews,
   onReviewDelete
 }: ScheduleReviewPropsType) {
+  const [reviewTyping, setReviewTyping] = useState('');
   const [isReviewUpdate, setIsReviewUpdate] = useState(false);
   const [targetReviewId, setTargetReviewId] = useState(0);
   const loggedInUserId = useAuthState().authState.user?.id;
@@ -24,36 +26,58 @@ function ReviewsSchedule({
                 <Avatar>{review.user.nickname[0]}</Avatar>
               </span>
               {isReviewUpdate && targetReviewId === review.comment_id ? (
-                <TextField className={styles.reviewUpdateInput} />
+                <TextField
+                  className={styles.updateInput}
+                  value={reviewTyping}
+                />
               ) : (
                 <span>{review.comment}</span>
               )}
-              <div className={styles.buttonsContainer}>
-                {loggedInUserId === review.user.id ? (
-                  <>
+              {isReviewUpdate ? (
+                targetReviewId === review.comment_id ? (
+                  <div className={styles.updateButtonsContainer}>
+                    <button className={styles.updateReviewButton}>수정</button>
                     <button
-                      className={styles.updateButton}
-                      onClick={() => {
-                        setTargetReviewId(review.comment_id);
-                        setIsReviewUpdate(true);
-                      }}
+                      className={styles.updateReviewCancelButton}
+                      onClick={() => setIsReviewUpdate(false)}
                     >
-                      수정하기
+                      취소
                     </button>
-                    <button
-                      className={styles.deleteButton}
-                      onClick={() => {
-                        onReviewDelete(review.comment_id);
-                      }}
-                    >
-                      삭제하기
-                    </button>
-                  </>
-                ) : null}
+                  </div>
+                ) : (
+                  <span className={styles.createdAt}>
+                    {review.created_at.split('T')[0]}
+                  </span>
+                )
+              ) : loggedInUserId === review.user.id ? (
+                <div className={styles.buttonsContainer}>
+                  <button
+                    className={styles.updateButton}
+                    onClick={() => {
+                      setIsReviewUpdate(true);
+                      setTargetReviewId(review.comment_id);
+                      setReviewTyping(review.comment);
+                    }}
+                  >
+                    <FaPen /> 수정
+                  </button>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => {
+                      onReviewDelete(review.comment_id);
+                    }}
+                  >
+                    <FaTrashAlt /> 삭제
+                  </button>
+                  <span className={styles.createdAt}>
+                    {review.created_at.split('T')[0]}
+                  </span>
+                </div>
+              ) : (
                 <span className={styles.createdAt}>
                   {review.created_at.split('T')[0]}
                 </span>
-              </div>
+              )}
             </div>
           );
         })}
