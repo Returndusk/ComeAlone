@@ -1,5 +1,11 @@
 .scheduleContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
   width: 1000px;
+  height: auto;
   margin: 20px auto;
   text-align: center;
 
