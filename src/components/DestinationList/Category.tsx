@@ -164,24 +164,25 @@ function Category({
   ]);
 
   const getCategorizedSearchingData = useCallback(async () => {
-    if (isUserSearched) {
-      const res = await getDestinationListByTitleAndCategoryId(
-        selectedCategory,
-        searchQueryParam
-      );
-      const categorizedSearchingDestinationsList = res?.data.destinations;
-      setFilteredDestinations(() =>
-        changeCategoryIdIntoName(categorizedSearchingDestinationsList)
-      );
-      setFilteredCount(() => categorizedSearchingDestinationsList.length);
-    }
+    setIsLoading(true);
+    const res = await getDestinationListByTitleAndCategoryId(
+      selectedCategory,
+      isUserSearched ? searchQueryParam : '' //랭킹순 추가 시 수정예정
+    );
+    const categorizedSearchingDestinationsList = res?.data.destinations;
+    setFilteredDestinations(() =>
+      changeCategoryIdIntoName(categorizedSearchingDestinationsList)
+    );
+    setFilteredCount(() => categorizedSearchingDestinationsList.length);
+    setIsLoading(false);
     return;
   }, [
     selectedCategory,
     searchQueryParam,
     setFilteredDestinations,
     setFilteredCount,
-    isUserSearched
+    isUserSearched,
+    setIsLoading
   ]);
 
   useEffect(() => {
@@ -234,7 +235,9 @@ function Category({
             </div>
           </section>
           <div className={styles.filteredCounterWraper}>
-            <p id={styles.filteredCounter}>{`전체ㆍ${filteredCount ?? 0}`}</p>
+            <p id={styles.filteredCounter}>{`전체ㆍ${
+              filteredCount ?? '로딩 중...'
+            }`}</p>
           </div>
           <Destinations
             filteredDestinations={filteredDestinations}
