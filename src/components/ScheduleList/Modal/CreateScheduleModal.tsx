@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styles from './CommonModalDesign.module.scss';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { TextField } from '@mui/material';
+import { TfiClose } from 'react-icons/tfi';
 import { DateRange, RangeKeyDict } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
 import { addDays, format, differenceInDays } from 'date-fns';
@@ -39,8 +41,8 @@ function CreateScheduleModal(props: {
     }
   ]);
 
-  const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd');
-  const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd');
+  const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd').split('/');
+  const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd').split('/');
 
   function handleDateRange(ranges: RangeKeyDict) {
     const { startDate, endDate } = ranges.selection;
@@ -123,36 +125,66 @@ function CreateScheduleModal(props: {
           name='schedule_input'
           onSubmit={handleSubmit}
         >
-          <label>여행 제목 : </label>
-          <input
-            type='text'
-            name='title'
-            value={formData.title}
-            onChange={handleFormData}
-          />
-          <br />
-          <label>한 줄 소개 : </label>
-          <input
-            type='text'
-            name='summary'
-            value={formData.summary}
-            onChange={handleFormData}
-          />
-          <div>여행 날짜</div>
+          <h1>여행 날짜 선택</h1>
           <DateRange
             locale={ko}
             editableDateInputs={true}
             onChange={handleDateRange}
             moveRangeOnFirstSelection={false}
+            className={styles.calendar}
             months={2}
             ranges={date}
             direction='horizontal'
+            rangeColors={['#ef6d00']}
           />
-          <p>여행 첫 날 : {startDateFormatted}</p>
-          <p>여행 마지막 날 : {endDateFormatted}</p>
-          <input type='submit' value='일정 추가하기' id='submitButton' />
+          <div className={styles.textContainer}>
+            <div className={styles.texts}>
+              <TextField
+                id='title'
+                variant='outlined'
+                label='일정 제목'
+                name='title'
+                value={formData.title}
+                onChange={handleFormData}
+                size='small'
+                style={{ width: '100%' }}
+              />
+              <TextField
+                id='summary'
+                variant='outlined'
+                label='일정 소개'
+                name='summary'
+                value={formData.summary}
+                rows={3}
+                multiline
+                onChange={handleFormData}
+                size='small'
+                style={{ width: '100%' }}
+              />
+            </div>
+            <div className={styles.dates}>
+              <p>
+                <span>여행 시작 일자</span>
+                {startDateFormatted[0]}년 {startDateFormatted[1]}월{' '}
+                {startDateFormatted[2]}일
+              </p>
+              <p>
+                <span>여행 종료 일자</span>
+                {endDateFormatted[0]}년 {endDateFormatted[1]}월{' '}
+                {endDateFormatted[2]}일
+              </p>
+              <input
+                type='submit'
+                value='새로운 일정 추가'
+                id='submitButton'
+                className={styles.submitBtn}
+              />
+            </div>
+          </div>
         </form>
-        <button onClick={props.closeModal}>창 닫기</button>
+        <button className={styles.closeBtn} onClick={props.closeModal}>
+          <TfiClose />
+        </button>
       </div>
     </div>
   );
