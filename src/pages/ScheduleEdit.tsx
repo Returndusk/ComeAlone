@@ -40,7 +40,7 @@ function ScheduleEdit() {
   const { scheduleId } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
+  const [showDateModal, setShowDateModal] = useState(false);
   const [updatedDateInfo, setUpdatedDateInfo] = useState({
     startDate: defaultSchedule.startDate,
     endDate: defaultSchedule.endDate,
@@ -125,10 +125,6 @@ function ScheduleEdit() {
     }
   }, [checkedDayIndex, updatedDestinationList]);
 
-  const handleModelOpen = () => setOpenModal(true);
-
-  const handleModalClose = () => setOpenModal(false);
-
   const handleTitleUpdate = (title: string) => {
     updatedTitle.current = title;
   };
@@ -185,7 +181,7 @@ function ScheduleEdit() {
       <ImageScheduleEdit image={defaultSchedule.image} />
       <DateScheduleEdit
         dateInfo={updatedDateInfo}
-        onOpenModal={handleModelOpen}
+        onOpenModal={() => setShowDateModal(true)}
       />
       <PublicStatusScheduleEdit
         updatedStatus={updatedStatus}
@@ -209,10 +205,10 @@ function ScheduleEdit() {
       </div>
       <ButttonsScheduleEdit onSubmit={handleSubmit} onDelete={handleDelete} />
       <DateModalScheduleEdit
-        openModal={openModal}
+        openModal={showDateModal}
         dateInfo={updatedDateInfo}
         onDateInfoUpdate={setUpdatedDateInfo}
-        onModalClose={handleModalClose}
+        onModalClose={() => setShowDateModal(false)}
       />
     </div>
   );

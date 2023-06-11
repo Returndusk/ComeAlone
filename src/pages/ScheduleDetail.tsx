@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
 import InfoScheduleDetail from '../components/ScheduleDetail/InfoScheduleDetail';
+import ButtonsScheduleDetail from '../components/ScheduleDetail/ButtonsScheduleDetail';
 import IconsScheduleDetail from '../components/ScheduleDetail/IconsScheduleDetail';
 import DestinationList from '../components/ScheduleDetail/DestinationList';
 import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
@@ -162,16 +163,11 @@ function ScheduleDetail() {
         createdAt={createdAt}
         updatedAt={updatedAt}
       />
-      <div className={styles.editButtonContainer}>
-        {userId === authState.user?.id ? (
-          <Link
-            to={`${ROUTER.SCHEDULE_EDIT}/${scheduleId}`}
-            className={styles.editButton}
-          >
-            수정하기
-          </Link>
-        ) : null}
-      </div>
+      <ButtonsScheduleDetail
+        userId={userId}
+        loggedInUserId={authState.user?.id}
+        scheduleId={scheduleId}
+      />
       <IconsScheduleDetail
         userId={userId}
         doesUserLike={doesUserLike}

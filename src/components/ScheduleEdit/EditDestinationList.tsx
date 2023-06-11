@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './EditDestinationList.module.scss';
 import { ScheduleEditDestinationListType } from '../../types/ScheduleEditTypes';
@@ -9,6 +9,7 @@ import {
   DropResult
 } from '@hello-pangea/dnd';
 import { FaGripLines } from 'react-icons/fa';
+import AlertModal from '../common/Alert/AlertModal';
 import ROUTER from '../../constants/Router';
 
 function EditDestinationList({
@@ -17,6 +18,10 @@ function EditDestinationList({
   onDestinationListUpdate,
   onCheckedDayIndexUpdate
 }: ScheduleEditDestinationListType) {
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const targetDeleteDayIndex = useRef(-1);
+  const targetDeleteDestIndex = useRef(-1);
+
   const handleDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) {
       return;
@@ -52,6 +57,18 @@ function EditDestinationList({
 
       onDestinationListUpdate(newDestinationList);
     }
+  };
+
+  const handleDestinationDelete = () => {
+    updatedDestinationList[targetDeleteDayIndex.current].splice(
+      targetDeleteDestIndex.current,
+      1
+    );
+
+    const newDestinations = [...updatedDestinationList];
+
+    onDestinationListUpdate(newDestinations);
+    setShowDeleteAlert(false);
   };
 
   return (
@@ -119,14 +136,9 @@ function EditDestinationList({
                             {dest.title}
                             <button
                               onClick={() => {
-                                updatedDestinationList[dayIndex].splice(
-                                  destIndex,
-                                  1
-                                );
-                                const newDestinations = [
-                                  ...updatedDestinationList
-                                ];
-                                onDestinationListUpdate(newDestinations);
+                                targetDeleteDayIndex.current = dayIndex;
+                                targetDeleteDestIndex.current = destIndex;
+                                setShowDeleteAlert(true);
                               }}
                             >
                               삭제
@@ -143,6 +155,14 @@ function EditDestinationList({
           })}
         </div>
       </DragDropContext>
+      {showDeleteAlert && (
+        <AlertModal
+          message='해당 목적지를 삭제하시겠습니까?'
+          showCancelButton={true}
+          onConfirm={handleDestinationDelete}
+          onCancel={() => setShowDeleteAlert(false)}
+        />
+      )}
     </div>
   );
 }
