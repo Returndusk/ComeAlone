@@ -8,6 +8,8 @@ import { specifiedCategoryDestinationsType } from '../../types/DestinationListTy
 import OpenModal from './Modal/OpenModal';
 import UsersLike from './UsersLike';
 import { useAuthState } from '../../contexts/AuthContext';
+import { BsFillTelephoneFill } from 'react-icons/bs';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -66,17 +68,21 @@ function DestinationDetails() {
             <div className={styles.destinationDetailsLikes}>
               <UsersLike destinationDetails={destinationDetails} />
             </div>
-            <p className={styles.destinationAddress}>
-              주소:{' '}
-              {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
-            </p>
+            <span className={styles.destinationAddrContainer}>
+              <FaMapMarkerAlt id={styles.destinationAddrIcon} />
+              <p className={styles.destinationAddress}>
+                {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
+              </p>
+            </span>
 
-            <p className={styles.destinationTelNumber}>
-              Tel:{' '}
-              {destinationDetails?.tel
-                ? destinationDetails?.tel
-                : '정보가 제공되고 있지 않습니다.'}
-            </p>
+            <span className={styles.destinationTelContainer}>
+              <BsFillTelephoneFill id={styles.destinationTelIcon} />
+              <p className={styles.destinationTelNumber}>
+                {destinationDetails?.tel
+                  ? destinationDetails?.tel
+                  : '정보가 제공되고 있지 않습니다.'}{' '}
+              </p>
+            </span>
 
             <div className={styles.destinationOverview}>
               {destinationDetails?.overview}
