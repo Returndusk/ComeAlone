@@ -1,9 +1,20 @@
 import React from 'react';
 import styles from './Footer.module.scss';
+import { useLocation } from 'react-router';
+import ROUTER from '../../../constants/Router';
 
 function Footer() {
+  const location = useLocation();
+  const targetPages = [
+    ROUTER.MYPAGE,
+    ROUTER.LOGIN,
+    ROUTER.MYPAGE_EDIT,
+    ROUTER.REGISTER
+  ];
+  const isTargetPage = targetPages.includes(location.pathname);
+
   return (
-    <div className={styles.layout}>
+    <div className={`${styles.layout} ${isTargetPage ? styles.whiteBg : ''}`}>
       <div className={styles.body}>
         <div className={styles.layoutLeft}>혼자옵서예</div>
         <div className={styles.layoutRight}>
