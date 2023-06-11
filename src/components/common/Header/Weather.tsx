@@ -58,7 +58,7 @@ function Weather() {
   const imgSrc = icon;
 
   if (loading) {
-    return <p>Loading</p>;
+    return null;
   } else {
     return (
       <div className={styles.weather}>

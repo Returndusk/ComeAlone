@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 import styles from './SearchArea.module.scss';
 import {
-  Container,
   InputAdornment,
   TextField,
   IconButton
