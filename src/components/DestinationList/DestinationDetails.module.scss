@@ -35,16 +35,26 @@
   justify-content: center;
 }
 
-.destinationAddress {
+.destinationAddrContainer {
+  display: flex;
   font-size: 18px;
   padding: 10px 0;
   border-bottom: 1px solid #ccc;
+
+  #destinationAddrIcon {
+    padding: 0 5px;
+  }
 }
 
-.destinationTelNumber {
+.destinationTelContainer {
+  display: flex;
   font-size: 18px;
   padding: 10px 0;
   border-bottom: 1px solid #ccc;
+
+  #destinationTelIcon {
+    padding: 0 5px;
+  }
 }
 
 .destinationOverview {

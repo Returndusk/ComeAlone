@@ -7,6 +7,10 @@ import AlertModal from '../common/Alert/AlertModal';
 import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 import OpenModal from './Modal/OpenModal';
 import UsersLike from './UsersLike';
+import { useAuthState } from '../../contexts/AuthContext';
+import { BsFillTelephoneFill } from 'react-icons/bs';
+import { FaMapMarkerAlt } from 'react-icons/fa';
+import { createPortal } from 'react-dom';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -16,12 +20,18 @@ const ALERT_PROPS = {
 function DestinationDetails() {
   const [destinationDetails, setDestinationDetails] =
     useState<specifiedCategoryDestinationsType | null>(null);
-
+  const { authState } = useAuthState();
+  const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const { contentid } = useParams();
-  const [isOpenAlert, setIsOpenAlert] = useState<boolean>(false);
   const [isShowScheduleModal, setIsShowScheduleModal] =
     useState<boolean>(false);
+  const [scheduleModalDomRoot, setScheduleModalDomRoot] =
+    useState<HTMLElement | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setScheduleModalDomRoot(() => document.getElementById('main'));
+  }, []);
 
   const getDestinationDetails = useCallback(async () => {
     const res = await getDestinationDetailsByDestinationId(Number(contentid));
@@ -34,12 +44,17 @@ function DestinationDetails() {
   }, [getDestinationDetails]);
 
   const handleOnConfirm = () => {
-    setIsOpenAlert(false);
+    setIsShowAlert(false);
     navigate('/login');
   };
 
   const handleShowModalClick = () => {
+    if (!authState.isLoggedIn) {
+      setIsShowAlert(true);
+      return;
+    }
     setIsShowScheduleModal(true);
+    return;
   };
 
   return (
@@ -60,17 +75,21 @@ function DestinationDetails() {
             <div className={styles.destinationDetailsLikes}>
               <UsersLike destinationDetails={destinationDetails} />
             </div>
-            <p className={styles.destinationAddress}>
-              주소:{' '}
-              {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
-            </p>
+            <span className={styles.destinationAddrContainer}>
+              <FaMapMarkerAlt id={styles.destinationAddrIcon} />
+              <p className={styles.destinationAddress}>
+                {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
+              </p>
+            </span>
 
-            <p className={styles.destinationTelNumber}>
-              Tel:{' '}
-              {destinationDetails?.tel
-                ? destinationDetails?.tel
-                : '정보가 제공되고 있지 않습니다.'}
-            </p>
+            <span className={styles.destinationTelContainer}>
+              <BsFillTelephoneFill id={styles.destinationTelIcon} />
+              <p className={styles.destinationTelNumber}>
+                {destinationDetails?.tel
+                  ? destinationDetails?.tel
+                  : '정보가 제공되고 있지 않습니다.'}{' '}
+              </p>
+            </span>
 
             <div className={styles.destinationOverview}>
               {destinationDetails?.overview}
@@ -90,10 +109,13 @@ function DestinationDetails() {
           </section>
         </div>
       )}
-      {isShowScheduleModal && (
-        <OpenModal closeModal={() => setIsShowScheduleModal(false)} />
-      )}
-      {isOpenAlert && (
+      {isShowScheduleModal &&
+        scheduleModalDomRoot !== null &&
+        createPortal(
+          <OpenModal closeModal={() => setIsShowScheduleModal(false)} />,
+          scheduleModalDomRoot
+        )}
+      {isShowAlert && (
         <AlertModal
           message={ALERT_PROPS.message}
           onConfirm={handleOnConfirm}
