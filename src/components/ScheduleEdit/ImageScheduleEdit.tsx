@@ -3,6 +3,8 @@ import styles from './ImageScheduleEdit.module.scss';
 import { updateScheduleImageById } from '../../apis/ScheduleEditAPI';
 import AlertModal from '../common/Alert/AlertModal';
 
+const MAXIMUM_IMAGE_SIZE = 625000;
+
 function ImageScheduleEdit({
   scheduleId,
   imagePath
@@ -11,6 +13,7 @@ function ImageScheduleEdit({
   imagePath: string;
 }) {
   const [showUpdateAlert, setShowUpdateAlert] = useState(false);
+  const [showImageSizeAlert, setShowImageSizeAlert] = useState(false);
   const updatedImagePath = useRef<string>(imagePath);
   const updatedImageFile = useRef<Blob>();
 
@@ -26,8 +29,14 @@ function ImageScheduleEdit({
   }, []);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    updatedImageFile.current = (event.target.files as FileList)[0];
-    setShowUpdateAlert(true);
+    const uploadedImage = (event.target.files as FileList)[0];
+
+    if (uploadedImage.size >= MAXIMUM_IMAGE_SIZE) {
+      setShowImageSizeAlert(true);
+    } else {
+      updatedImageFile.current = uploadedImage;
+      setShowUpdateAlert(true);
+    }
   };
 
   return (
@@ -55,6 +64,12 @@ function ImageScheduleEdit({
           showCancelButton={true}
           onConfirm={() => updateScheduleImage()}
           onCancel={() => setShowUpdateAlert(false)}
+        />
+      )}
+      {showImageSizeAlert && (
+        <AlertModal
+          message='업로드하신 이미지가 5MB를 초과합니다.'
+          onConfirm={() => setShowImageSizeAlert(false)}
         />
       )}
     </div>
