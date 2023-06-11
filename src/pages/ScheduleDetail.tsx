@@ -17,6 +17,7 @@ import {
   toggleUserLikeById,
   getScheduleReviewsById,
   addScheduleReviewById,
+  updateScheduleReviewById,
   deleteScheduleReviewById
 } from '../apis/ScheduleDetailAPI';
 import ROUTER from '../constants/Router';
@@ -47,6 +48,7 @@ function ScheduleDetail() {
       endDate: new Date(response?.data.end_date),
       image: response?.data.image,
       createdAt: new Date(response?.data.created_at.split('T')[0]),
+      updatedAt: new Date(response?.data.updated_at.split('T')[0]),
       destinations: response?.data.destinationMaps
     };
 
@@ -76,18 +78,24 @@ function ScheduleDetail() {
   }, []);
 
   const addScheduleReview = useCallback(
-    async (id: string | undefined, review: string) => {
-      await addScheduleReviewById(id, review);
+    async (id: string | undefined, newReview: string) => {
+      await addScheduleReviewById(id, newReview);
+      setScheduleReviews(await getScheduleReviews(scheduleId));
+    },
+    []
+  );
+
+  const updateScheduleReview = useCallback(
+    async (id: number | undefined, updateReview: string) => {
+      await updateScheduleReviewById(id, updateReview);
       setScheduleReviews(await getScheduleReviews(scheduleId));
     },
     []
   );
 
   const deleteScheduleReview = useCallback(async (id: number) => {
-    const response = await deleteScheduleReviewById(id);
+    await deleteScheduleReviewById(id);
     setScheduleReviews(await getScheduleReviews(scheduleId));
-
-    console.log(response);
   }, []);
 
   useEffect(() => {
@@ -121,6 +129,7 @@ function ScheduleDetail() {
     endDate,
     image,
     createdAt,
+    updatedAt,
     destinations
   } = scheduleFetched.current;
 
@@ -151,6 +160,7 @@ function ScheduleDetail() {
         startDate={startDate}
         endDate={endDate}
         createdAt={createdAt}
+        updatedAt={updatedAt}
       />
       <div className={styles.editButtonContainer}>
         {userId === authState.user?.id ? (
@@ -178,6 +188,7 @@ function ScheduleDetail() {
       </div>
       <ReviewsSchedule
         scheduleReviews={scheduleReviews}
+        onReviewUpdate={updateScheduleReview}
         onReviewDelete={deleteScheduleReview}
       />
       <InputReviewSchedule onReviewSubmit={handleReviewSubmit} />

@@ -11,5 +11,6 @@ export const defaultSchedule: ScheduleFetchedType = {
   endDate: new Date(),
   image: '',
   createdAt: new Date(),
+  updatedAt: new Date(),
   destinations: [[]]
 };
