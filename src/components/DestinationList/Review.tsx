@@ -159,7 +159,10 @@ function Review() {
             return (
               <div key={index} className={styles.reviewBox}>
                 <div className={styles.reviewUserInfo}>
-                  <Avatar className={styles.reviewerAvater}>
+                  <Avatar
+                    className={styles.reviewerAvater}
+                    src={review.user.profile_image}
+                  >
                     {review.user.nickname[0]}
                   </Avatar>
                   <div className={styles.reviewInfo}>
@@ -188,7 +191,10 @@ function Review() {
           })}
         </div>
         <div className={styles.reviewInputContainer}>
-          <Avatar id={styles.reviewInputAvatar}>
+          <Avatar
+            id={styles.reviewInputAvatar}
+            src={authState?.user?.profile_image}
+          >
             {authState.user?.nickname[0] ?? 'G'}
           </Avatar>
           <form className={styles.reviewInputBar} onSubmit={handleReviewSubmit}>
