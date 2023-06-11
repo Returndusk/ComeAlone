@@ -104,7 +104,11 @@ export default function ModalScheduleLists() {
   }
 
   function handleShowDestinations(day: number) {
-    setSelectedCardIdx(day);
+    if (selectedCardIdx === day) {
+      setSelectedCardIdx(null);
+    } else {
+      setSelectedCardIdx(day);
+    }
   }
   // console.log(selectedCardIdx);
 

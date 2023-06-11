@@ -28,14 +28,20 @@ ModalScheduleCardType) {
   const diffTime = endDate.getTime() - startDate.getTime();
   const diffDate = Math.floor(diffTime / (24 * 60 * 60 * 1000));
   // N일차
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedDay, setSelectedDay] = useState<number | null>(0);
+  // const [selectedDay, setSelectedDay] = useState<number>(0);
 
   function handleToggleDestinations(dayIndex: number) {
-    // 선택시점에는 dayIndex !== selectedDay
-    setSelectedDay(selectedDay === dayIndex ? null : dayIndex);
+    setSelectedDay(dayIndex);
+    // setSelectedDay(selectedDay === dayIndex ? 0 : dayIndex);
   }
 
   // console.log('schedule', schedule);
+
+  // const visibleDays = 5; // 보이는 일차 수
+  // const totalDays = schedule.destinations.length; // 총 일정 일차 수
+  // const startDay = Math.max(0, selectedDay - Math.floor(visibleDays / 2)); // 시작 일차 인덱스
+  // const endDay = Math.min(totalDays - 1, startDay + visibleDays - 1); // 마지막 일차 인덱스
 
   return (
     <>
@@ -58,15 +64,37 @@ ModalScheduleCardType) {
       </div>
       {isSelected && (
         <div className={styles.scheduleDestination}>
+          {/* {startDay > 0 && (
+            <button
+              className={styles.arrowButton}
+              onClick={() => handleToggleDestinations(startDay - 1)}
+            >
+              &lt;
+            </button>
+          )} */}
+          {/* {schedule.destinations.slice(startDay, endDay + 1).map((_, idx) => ( */}
           {schedule.destinations.map((_, idx) => (
             <button
               key={idx}
               className={styles.dayButton}
+              // className={`${styles.dayButton} ${
+              //   selectedDay === startDay + idx ? styles.selected : ''
+              // }`}
               onClick={() => handleToggleDestinations(idx)}
+              // onClick={() => handleToggleDestinations(startDay + idx)}
             >
               {`${idx + 1}일차`}
+              {/* {`${startDay + idx + 1}일차`} */}
             </button>
           ))}
+          {/* {totalDays > visibleDays && endDay < totalDays - 1 && (
+            <button
+              className={styles.arrowButton}
+              onClick={() => handleToggleDestinations(endDay + 1)}
+            >
+              &gt;
+            </button>
+          )} */}
         </div>
       )}
       {isSelected && selectedDay !== null && (
