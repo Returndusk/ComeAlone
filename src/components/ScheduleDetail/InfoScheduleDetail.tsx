@@ -27,7 +27,7 @@ function InfoScheduleDetail({
       <div className={styles.title}>{title}</div>
       <div className={styles.nickname}>
         <span className={styles.avatar}>
-          <Avatar>{nickname[0]}</Avatar>
+          <Avatar sx={{ width: 50, height: 50 }}>{nickname[0]}</Avatar>
         </span>
         {nickname}
       </div>
