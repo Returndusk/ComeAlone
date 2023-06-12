@@ -88,6 +88,7 @@ function ScheduleLists() {
         />
         <div className={styles.scheduleListTitle}>
           <h1>여행 일정</h1>
+          <h2>마음에 드는 일정을 찾아보세요</h2>
         </div>
       </div>
       <div className={styles.scheduleContainer}>

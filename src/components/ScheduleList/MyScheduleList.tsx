@@ -109,6 +109,7 @@ function MyScheduleLists() {
         />
         <div className={styles.scheduleListTitle}>
           <h1>나의 여행 일정</h1>
+          <h2>일정을 만들고 공유해보세요</h2>
         </div>
       </div>
       <div className={styles.scheduleContainer}>
