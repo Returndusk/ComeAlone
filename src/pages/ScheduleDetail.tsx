@@ -10,7 +10,6 @@ import DestinationList from '../components/ScheduleDetail/DestinationList';
 import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import { FaArrowLeft } from 'react-icons/fa';
 import {
   getScheduleDetailById,
   getDoesUserLikeById,
@@ -46,6 +45,7 @@ function ScheduleDetail() {
     const data = {
       userId: response?.data.user.id,
       nickname: response?.data.user.nickname,
+      profileImage: response?.data.user.profile_image,
       title: response?.data.title,
       summary: response?.data.summary,
       likesCount: response?.data.likes_count,
@@ -144,6 +144,7 @@ function ScheduleDetail() {
   const {
     userId,
     nickname,
+    profileImage,
     title,
     summary,
     duration,
@@ -157,15 +158,20 @@ function ScheduleDetail() {
 
   return (
     <div className={styles.container}>
-      <button className={styles.backButton}>
-        <Link to={ROUTER.SCHEDULE_LIST}>
-          <FaArrowLeft className={styles.backIcon} />
-          돌아가기
-        </Link>
-      </button>
+      <div>
+        <button className={styles.toListButton}>
+          <Link to={ROUTER.SCHEDULE_LIST}>일정 목록 보기</Link>
+        </button>
+        {userId === loggedInUserId && (
+          <button className={styles.toMyListButton}>
+            <Link to={ROUTER.MYSCHEDULE_LIST}>내 일정 목록 보기</Link>
+          </button>
+        )}
+      </div>
       <ImageScheduleDetail image={image} />
       <InfoScheduleDetail
         nickname={nickname}
+        profileImage={profileImage}
         title={title}
         summary={summary}
         duration={duration}

@@ -40,10 +40,22 @@
   font-weight: 600;
   padding: 30px;
 }
+.destinationDetailsImgContainer {
+  display: flex;
+  position: relative;
 
-#destinationDetailsImage {
-  width: 450px;
-  height: 300px;
+  #destinationDetailsImage {
+    width: 450px;
+    height: 300px;
+  }
+
+  #categoryNameTag {
+    //추후 id별로 수정
+    display: flex;
+    position: absolute;
+    color: #31e974;
+    font-size: 30px;
+  }
 }
 
 .destinationDetailsIcons {
