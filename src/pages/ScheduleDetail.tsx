@@ -157,10 +157,12 @@ function ScheduleDetail() {
 
   return (
     <div className={styles.container}>
-      <Link to={ROUTER.SCHEDULE_LIST} className={styles.backButton}>
-        <FaArrowLeft />
-        돌아가기
-      </Link>
+      <button className={styles.backButton}>
+        <Link to={ROUTER.SCHEDULE_LIST}>
+          <FaArrowLeft className={styles.backIcon} />
+          돌아가기
+        </Link>
+      </button>
       <ImageScheduleDetail image={image} />
       <InfoScheduleDetail
         nickname={nickname}

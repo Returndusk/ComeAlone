@@ -10,8 +10,26 @@
 }
 
 .backButton {
+  all: unset;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 35%;
+  margin: 0 0 20px 0;
+  padding: 10px 5px;
   font-size: 20px;
-  margin: 0 0 20px 10px;
+  background-color: var(--main-color);
+  border-radius: 10px;
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  .backIcon {
+    margin: 0 10px 0 0;
+  }
 }
 
 .mapContainer {
