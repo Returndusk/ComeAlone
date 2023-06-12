@@ -30,10 +30,26 @@
       }
 
       .updateButtonsContainer {
+        display: flex;
+        flex-direction: column;
         margin: 0 auto 0 auto;
 
-        .updateReviewButton {
-          margin: 0 10px 0 0;
+        button {
+          all: unset;
+          cursor: pointer;
+          padding: 3px 20px;
+          border-radius: 5px;
+
+          &.updateReviewButton {
+            margin: 0 0 10px 0;
+            color: #4f94d4;
+            border: 1px solid #4f94d4;
+          }
+
+          &.updateReviewCancelButton {
+            color: #d63638;
+            border: 1px solid #d63638;
+          }
         }
       }
 
@@ -57,14 +73,12 @@
         font-size: 14px;
 
         .updateButton {
-          border: 0;
-          background: transparent;
+          all: unset;
           cursor: pointer;
         }
 
         .deleteButton {
-          border: 0;
-          background: transparent;
+          all: unset;
           cursor: pointer;
         }
 
@@ -96,5 +110,9 @@
     &::-webkit-scrollbar-track {
       background: #ffffff;
     }
+  }
+
+  .noComments {
+    font-size: 20px;
   }
 }

@@ -39,7 +39,7 @@ function ReviewsSchedule({
 
   return (
     <div className={styles.reviewsContainer}>
-      <div className={styles.reviewsTitle}>리뷰 리스트</div>
+      <div className={styles.reviewsTitle}>댓글 리스트</div>
       {scheduleReviews.length > 0 ? (
         <div className={styles.reviewsList}>
           {scheduleReviews.map((review, index) => {
@@ -93,7 +93,7 @@ function ReviewsSchedule({
                   ) : loggedInUserId === commenterId ? (
                     <div className={styles.whileUpdateContainer}>
                       <div className={styles.updateOther}>
-                        다른 리뷰를 수정 중입니다...
+                        다른 댓글을 수정 중입니다...
                       </div>
                       <span className={styles.createdAt}>{createdAt}</span>
                     </div>
@@ -131,11 +131,11 @@ function ReviewsSchedule({
           })}
         </div>
       ) : (
-        <div>등록된 리뷰가 없습니다.</div>
+        <div className={styles.noComments}>등록된 댓글이 없습니다.</div>
       )}
       {showDeleteAlert && (
         <AlertModal
-          message='해당 리뷰를 삭제하시겠습니까?'
+          message='해당 댓글을 삭제하시겠습니까?'
           showCancelButton={true}
           onConfirm={handleReviewDelete}
           onCancel={() => setShowDeleteAlert(false)}
@@ -143,7 +143,7 @@ function ReviewsSchedule({
       )}
       {showUpdateAlert && (
         <AlertModal
-          message='해당 리뷰를 입력하신 내용으로 수정하시겠습니까?'
+          message='해당 댓글을 입력하신 내용으로 수정하시겠습니까?'
           showCancelButton={true}
           onConfirm={handleReviewUpdate}
           onCancel={() => setShowUpdateAlert(false)}
