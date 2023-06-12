@@ -19,9 +19,9 @@ export type DateInfoType = Pick<
 >;
 
 export type DateSelectionType = {
-  startDate?: Date;
-  endDate?: Date;
-  key?: string;
+  startDate: Date;
+  endDate: Date;
+  key: string;
 };
 
 export type ScheduleEditInfoType = Pick<IScheduleDetail, 'createdAt'> & {
@@ -40,5 +40,6 @@ export type ScheduleEditSubmitType = {
   start_date: string;
   end_date: string;
   status: string;
+  image: string;
   destinations: number[][];
 };
