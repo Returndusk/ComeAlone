@@ -125,10 +125,6 @@ function RegisterForm() {
       return (errMsgs.nickname =
         '닉네임은 알파벳 대소문자, 숫자, 한글만 사용할 수 있습니다.');
     }
-
-    if (!nicknameDuplicate.isPass || nicknameDuplicate.nickname !== nickname) {
-      return (errMsgs.nickname = '닉네임 중복 확인을 해주세요.');
-    }
   };
 
   const validatePassword = (password: string, errMsgs: RegisterFormErrors) => {
@@ -203,7 +199,16 @@ function RegisterForm() {
 
     checkEmptyInputFields(values, errMsgs);
     if (!errMsgs.email) validateEmail(values.email, errMsgs);
-    if (!errMsgs.nickname) validateNickname(values.nickname, errMsgs);
+    if (!errMsgs.nickname) {
+      validateNickname(values.nickname, errMsgs);
+
+      if (
+        !nicknameDuplicate.isPass ||
+        nicknameDuplicate.nickname !== values.nickname
+      ) {
+        errMsgs.nickname = '닉네임 중복 확인을 해주세요.';
+      }
+    }
     if (!errMsgs.password) validatePassword(values.password, errMsgs);
     if (!errMsgs.passwordConfirm)
       validatePasswordConfirm(values.password, values.passwordConfirm, errMsgs);
@@ -221,6 +226,9 @@ function RegisterForm() {
         nickname: '빈칸을 입력해주세요.'
       }));
     }
+    const errMsgs = { ...errors };
+    const nicknameError = validateNickname(values.nickname, errMsgs);
+    if (nicknameError) return setErrors(errMsgs);
 
     try {
       const response = await checkNicknameDuplicate({ nickname });
