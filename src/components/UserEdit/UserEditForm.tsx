@@ -43,6 +43,14 @@ function UserEditForm() {
     setValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleImageChange = (imagePath: string) => {
+    setValues((prev) => ({ ...prev, profileImage: imagePath }));
+  };
+
+  const handleImageRemove = () => {
+    setValues((prev) => ({ ...prev, profileImage: '' }));
+  };
+
   const handleBirthDateChange = (
     e:
       | React.ChangeEvent<{ name: string; value: unknown }>
@@ -327,7 +335,11 @@ function UserEditForm() {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <ProfileImage url={values.profileImage} />
+      <ProfileImage
+        handleChange={handleImageChange}
+        handleImageRemove={handleImageRemove}
+        image={values.profileImage}
+      />
       <UserInfo
         values={values}
         errors={errors}
