@@ -16,6 +16,7 @@ function ReviewsSchedule({
   const [isReviewUpdate, setIsReviewUpdate] = useState<boolean>(false);
   const [showUpdateAlert, setShowUpdateAlert] = useState<boolean>(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+  const [showEmptyAlert, setShowEmptyAlert] = useState<boolean>(false);
   const targetReviewId = useRef<number>(0);
   const loggedInUserId: string = useAuthState().authState.user?.id as string;
 
@@ -78,7 +79,11 @@ function ReviewsSchedule({
                       <button
                         className={styles.updateReviewButton}
                         onClick={() => {
-                          setShowUpdateAlert(true);
+                          if (!reviewTyping) {
+                            setShowEmptyAlert(true);
+                          } else {
+                            setShowUpdateAlert(true);
+                          }
                         }}
                       >
                         제출
@@ -137,7 +142,7 @@ function ReviewsSchedule({
         <AlertModal
           message='해당 댓글을 삭제하시겠습니까?'
           showCancelButton={true}
-          onConfirm={handleReviewDelete}
+          onConfirm={() => handleReviewDelete()}
           onCancel={() => setShowDeleteAlert(false)}
         />
       )}
@@ -145,8 +150,14 @@ function ReviewsSchedule({
         <AlertModal
           message='해당 댓글을 입력하신 내용으로 수정하시겠습니까?'
           showCancelButton={true}
-          onConfirm={handleReviewUpdate}
+          onConfirm={() => handleReviewUpdate()}
           onCancel={() => setShowUpdateAlert(false)}
+        />
+      )}
+      {showEmptyAlert && (
+        <AlertModal
+          message='수정하실 댓글 내용을 입력해주세요.'
+          onConfirm={() => setShowEmptyAlert(false)}
         />
       )}
     </div>
