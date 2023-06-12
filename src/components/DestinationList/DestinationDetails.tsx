@@ -1,10 +1,22 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import styles from './DestinationDetails.module.scss';
 import Review from './Review';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getDestinationDetailsByDestinationId } from '../../apis/destinationList';
+import {
+  getAllCategoryList,
+  getDestinationDetailsByDestinationId
+} from '../../apis/destinationList';
 import AlertModal from '../common/Alert/AlertModal';
-import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
+import {
+  CategoryListType,
+  specifiedCategoryDestinationsType
+} from '../../types/DestinationListTypes';
 import OpenModal from './Modal/OpenModal';
 import UsersLike from './UsersLike';
 import { useAuthState } from '../../contexts/AuthContext';
@@ -27,6 +39,9 @@ function DestinationDetails() {
     useState<boolean>(false);
   const [scheduleModalDomRoot, setScheduleModalDomRoot] =
     useState<HTMLElement | null>(null);
+  const [categoryList, setCategoryList] = useState<CategoryListType[] | null>(
+    null
+  );
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLOptionElement>(null);
 
@@ -43,6 +58,32 @@ function DestinationDetails() {
   useEffect(() => {
     getDestinationDetails();
   }, [getDestinationDetails]);
+
+  const getAllCategoryData = useCallback(async () => {
+    const res = await getAllCategoryList();
+    const categoryListData = res?.data;
+    setCategoryList(() => categoryListData);
+    return;
+  }, [setCategoryList]);
+
+  useEffect(() => {
+    getAllCategoryData();
+  }, [getAllCategoryData]);
+
+  //카테고리 id => name 변환 함수
+
+  const changeCategoryIdIntoName = useCallback(
+    (categoryId: number) => {
+      const targetCategory = categoryList?.filter(
+        (category) => category.id === categoryId
+      );
+      if (targetCategory) {
+        return targetCategory[0].name ?? '기타';
+      }
+      return;
+    },
+    [categoryList]
+  );
 
   /*
   const handleReviewIconClick = () => {
@@ -99,12 +140,15 @@ function DestinationDetails() {
       {destinationDetails !== null && (
         <div className={styles.destinationDetailsContainer}>
           <section className={styles.destinationDetails}>
-            <div>
+            <div className={styles.destinationDetailsImgContainer}>
               <img
                 id={styles.destinationDetailsImage}
                 src={destinationDetails.image1}
                 alt={destinationDetails.title}
               />
+              <span id={styles.categoryNameTag}>
+                {changeCategoryIdIntoName(destinationDetails?.category_id)}
+              </span>
             </div>
             <h2 className={styles.destinationDetailsTitle}>
               {destinationDetails?.title}
@@ -122,10 +166,6 @@ function DestinationDetails() {
                   {`리뷰ㆍ${destinationDetails?.comment_count}개`}
                 </span>
               </div>
-            </div>
-
-            <div className={styles.destinationCategoryContainer}>
-              {destinationDetails?.category_name}
             </div>
 
             <span className={styles.destinationAddrContainer}>

@@ -100,13 +100,7 @@ function Destinations({
                         </div>
                       </div>
 
-                      {imageError ? (
-                        <img
-                          id={styles.destinationImage}
-                          src={destination?.image1}
-                          alt={destination.title}
-                        />
-                      ) : (
+                      {destination?.image1 && (
                         <img
                           id={styles.destinationImage}
                           src={destination?.image2}
