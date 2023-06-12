@@ -8,6 +8,7 @@ import { Cookies } from 'react-cookie';
 import AlertModal from '../Alert/AlertModal';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import Avatar from '@mui/material/Avatar';
+import Router from '../../../constants/Router';
 
 function Header() {
   const location = useLocation();
@@ -71,16 +72,16 @@ function Header() {
     >
       <div className={styles.body}>
         <div className={styles.layoutLeft}>
-          <RouterLink to='/' className={styles.logo}>
+          <RouterLink to={Router.MAIN} className={styles.logo}>
             혼자옵서예
           </RouterLink>
           <nav>
             <ul>
               <li>
-                <RouterLink to='/destination/list'>목적지</RouterLink>
+                <RouterLink to={Router.DESTINATION_LIST}>목적지</RouterLink>
               </li>
               <li>
-                <RouterLink to='/schedule/list'>여행일정</RouterLink>
+                <RouterLink to={Router.SCHEDULE_LIST}>여행일정</RouterLink>
               </li>
             </ul>
           </nav>
@@ -90,7 +91,7 @@ function Header() {
           {authState.isLoggedIn && authState.user && (
             <>
               <div className={styles.auth}>
-                <button onClick={() => navigate('/myschedule/list')}>
+                <button onClick={() => navigate(Router.MYSCHEDULE_LIST)}>
                   <AiOutlineCalendar />
                 </button>
                 <button onClick={handleUserIconClick}>
@@ -123,9 +124,16 @@ function Header() {
                   <MenuItem
                     onClick={handleClose}
                     component={RouterLink}
-                    to='/mypage'
+                    to={Router.MYPAGE}
                   >
                     마이페이지
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleClose}
+                    component={RouterLink}
+                    to={Router.MYREVIEW}
+                  >
+                    내 리뷰
                   </MenuItem>
                   <MenuItem onClick={handleLogoutButtonClick}>
                     로그아웃
@@ -136,11 +144,11 @@ function Header() {
           )}
           {authState.isLoggedIn === false && (
             <div className={styles.auth}>
-              <RouterLink to='/login'>
+              <RouterLink to={Router.LOGIN}>
                 <span>로그인</span>
               </RouterLink>
               {' | '}
-              <RouterLink to='/register'>
+              <RouterLink to={Router.REGISTER}>
                 <span>회원 가입</span>
               </RouterLink>
             </div>
