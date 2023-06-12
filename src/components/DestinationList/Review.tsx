@@ -56,7 +56,7 @@ function Review() {
     const res = await getReviewByDestinationId(Number(contentid));
     const reviewList = res?.data;
     setAllReviewList(() => reviewList);
-  }, [contentid]);
+  }, [contentid, setAllReviewList]);
 
   useEffect(() => {
     getReviewList();
@@ -65,28 +65,29 @@ function Review() {
   //리뷰 등록일자 가공 매서드
   const changeCreatedAtIntoDate = (date: string) => {
     const reviewDate = new Date(date);
-    const year = reviewDate.getUTCFullYear();
-    const month = reviewDate.getUTCMonth() + 1;
-    const day = reviewDate.getUTCDate();
-    const hour = reviewDate.getUTCHours();
-    const minute = reviewDate.getUTCMinutes();
+    const year = reviewDate.getFullYear();
+    const month = reviewDate.getMonth() + 1;
+    const day = reviewDate.getDate();
+    const hour = reviewDate.getHours().toString().padStart(2, '0');
+    const minute = reviewDate.getMinutes().toString().padStart(2, '0');
     return `${year}.${month}.${day} ${hour}:${minute}`;
   };
 
   //리뷰 등록 메서드
-  const addReview = useCallback(async () => {
-    const res = await postReviewByDestinationId(
-      Number(contentid),
-      submittedReview
-    );
-    const status = res?.status;
-    if (status === RESPONSE_STATUS.POST_SUCCESS) {
-      setIsShowSuccessAlert(true);
-      await getReviewList();
+  const addReview = useCallback(
+    async (contentid: number) => {
+      const res = await postReviewByDestinationId(contentid, submittedReview);
+      const status = res?.status;
+      if (status === RESPONSE_STATUS.POST_SUCCESS) {
+        setIsShowSuccessAlert(true);
+        await getReviewList();
+        return;
+      }
+      setIsShowSuccessAlert(false);
       return;
-    }
-    setIsShowSuccessAlert(false);
-  }, [contentid, getReviewList, submittedReview]);
+    },
+    [contentid, getReviewList, submittedReview, setIsShowSuccessAlert]
+  );
 
   //리뷰 수
   const reviewCount = useMemo(() => {
@@ -107,20 +108,34 @@ function Review() {
     const userReview = e.target.review.value;
     if (isNullishReviewInput(userReview)) {
       alert(`내용을 ${REVIEW_STANDARDS.MIN_LENGTH}자 이상 입력해주세요.`);
+      return;
     }
 
     setSubmittedReview(() => {
       return { comment: userReview };
     });
     e.target.review.value = null;
+    return;
   };
 
   useEffect(() => {
     if (submittedReview.comment !== null) {
-      addReview();
-      return;
+      addReview(Number(contentid));
+      setSubmittedReview(() => {
+        return { comment: null };
+      });
     }
-  }, [submittedReview.comment, addReview]);
+  }, [submittedReview.comment, setSubmittedReview, addReview]);
+
+  //유저의 댓글인지 확인하는 매서드
+  const isUserReviewer = useCallback(
+    (review: DestinationsReviewType) => {
+      if (review?.user?.id) {
+        return review?.user?.id === authState.user?.id;
+      }
+    },
+    [authState]
+  );
 
   //사용자 리뷰 목록 조회 시도
   const handleUsersReviewClick = () => {
@@ -159,7 +174,10 @@ function Review() {
             return (
               <div key={index} className={styles.reviewBox}>
                 <div className={styles.reviewUserInfo}>
-                  <Avatar className={styles.reviewerAvater}>
+                  <Avatar
+                    className={styles.reviewerAvatar}
+                    src={review.user.profile_image}
+                  >
                     {review.user.nickname[0]}
                   </Avatar>
                   <div className={styles.reviewInfo}>
@@ -183,12 +201,21 @@ function Review() {
                   </div>
                 </div>
                 <p className={styles.reviewComment}>{review.comment}</p>
+                {isUserReviewer(review) && (
+                  <div className={styles.reviewHandlebox}>
+                    <button id={styles.reviewModifyButton}>수정</button>
+                    <button id={styles.reviewDeleteButton}>삭제</button>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
         <div className={styles.reviewInputContainer}>
-          <Avatar id={styles.reviewInputAvatar}>
+          <Avatar
+            id={styles.reviewInputAvatar}
+            src={authState?.user?.profile_image}
+          >
             {authState.user?.nickname[0] ?? 'G'}
           </Avatar>
           <form className={styles.reviewInputBar} onSubmit={handleReviewSubmit}>
