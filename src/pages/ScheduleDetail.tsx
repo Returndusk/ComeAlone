@@ -46,6 +46,7 @@ function ScheduleDetail() {
     const data = {
       userId: response?.data.user.id,
       nickname: response?.data.user.nickname,
+      profileImage: response?.data.user.profile_image,
       title: response?.data.title,
       summary: response?.data.summary,
       likesCount: response?.data.likes_count,
@@ -144,6 +145,7 @@ function ScheduleDetail() {
   const {
     userId,
     nickname,
+    profileImage,
     title,
     summary,
     duration,
@@ -166,6 +168,7 @@ function ScheduleDetail() {
       <ImageScheduleDetail image={image} />
       <InfoScheduleDetail
         nickname={nickname}
+        profileImage={profileImage}
         title={title}
         summary={summary}
         duration={duration}
