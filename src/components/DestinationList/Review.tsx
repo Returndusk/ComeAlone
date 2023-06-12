@@ -28,10 +28,6 @@ const RESPONSE_STATUS = {
   POST_SUCCESS: 201
 };
 
-const REVIEW_STANDARDS = {
-  MIN_LENGTH: 5
-};
-
 function Review() {
   const [submittedReview, setSubmittedReview] = useState<commentType>({
     comment: null
@@ -93,7 +89,7 @@ function Review() {
   }, [allReviewList]);
 
   const isNullishReviewInput = (input: string) => {
-    return input === '' || input.length <= REVIEW_STANDARDS.MIN_LENGTH;
+    return input === '';
   };
 
   //리뷰 등록 시도
@@ -105,7 +101,7 @@ function Review() {
     }
     const userReview = e.target.review.value;
     if (isNullishReviewInput(userReview)) {
-      alert(`내용을 ${REVIEW_STANDARDS.MIN_LENGTH}자 이상 입력해주세요.`);
+      alert(`내용을 입력해주세요.`);
       return;
     }
 

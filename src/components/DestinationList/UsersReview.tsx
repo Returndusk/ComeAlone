@@ -31,10 +31,6 @@ const RESPONSE_STATUS = {
   DELETE_SUCCESS: 200
 };
 
-const REVIEW_STANDARDS = {
-  MIN_LENGTH: 5
-};
-
 function UsersReview() {
   const [usersReview, setUsersReview] = useState<
     DestinationsReviewType[] | null
@@ -43,6 +39,7 @@ function UsersReview() {
     comment: null
   });
   const [isEditing, setIsEditing] = useState<boolean[] | null>(null);
+  const [targetComment, setTargetComment] = useState<number | null>(null);
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isShowModifySuccess, setIsShowModifySuccess] =
@@ -87,11 +84,8 @@ function UsersReview() {
     async (commentid: number, content: commentType) => {
       const res = await modifyReviewByCommentId(commentid, content);
       const status = res?.status;
-      console.log(modifiedReview);
       if (status === RESPONSE_STATUS.MODIFY_SUCCESS) {
         setModifiedReview(() => ({ comment: null }));
-        setIsShowModifySuccess(true);
-        await getUserReviewList();
         return;
       }
       setIsShowModifyFailed(true);
@@ -99,10 +93,11 @@ function UsersReview() {
     },
     [
       modifiedReview,
-      setIsShowModifySuccess,
-      getUserReviewList,
+      // setIsShowModifySuccess,
+      // getUserReviewList,
       setIsShowModifyFailed,
-      modifyReviewByCommentId
+      modifyReviewByCommentId,
+      setModifiedReview
     ]
   );
 
@@ -130,7 +125,7 @@ function UsersReview() {
   useEffect(() => console.log(modifiedReview), [modifiedReview]);
 
   const isNullishReviewInput = (input: string) => {
-    return input === '' || input.length <= REVIEW_STANDARDS.MIN_LENGTH;
+    return input === '';
   };
 
   //수정할 내용을 제출했을때 실행할 로직
@@ -146,17 +141,24 @@ function UsersReview() {
     const eventTarget = e.target as HTMLFormElement;
     const submittedModifiedReview = eventTarget.userReview.value;
     if (isNullishReviewInput(submittedModifiedReview)) {
-      alert(
-        `수정할 내용을 ${REVIEW_STANDARDS.MIN_LENGTH}자 이상 입력해주세요.`
-      );
+      alert(`수정할 내용을 입력해주세요.`);
       return;
     }
+    setTargetComment(() => commentid);
     setModifiedReview(() => {
       return { comment: submittedModifiedReview };
     });
-    await modifyReview(commentid, modifiedReview);
     return;
   };
+
+  useEffect(() => {
+    if (targetComment) {
+      modifyReview(targetComment, modifiedReview);
+      setTargetComment(null);
+      setIsShowModifySuccess(true);
+      getUserReviewList();
+    }
+  }, [modifiedReview, targetComment, setTargetComment]);
 
   // 수정 버튼 클릭 이벤트 (수정 시작)
   const handleModifiedButtonOnClick = (index: number) => {
@@ -171,21 +173,6 @@ function UsersReview() {
       return;
     }
   };
-
-  //수정 submit 이벤트 (수정 완료)
-  // const handleModifiedDone = async (index: number, commentid: number) => {
-  //   if (modifiedReview.comment !== null) {
-  //     await modifyReview(commentid, modifiedReview);
-  //   }
-  //   if (isEditing) {
-  //     const newIsEditing = [...isEditing];
-  //     newIsEditing[index] = false;
-  //     setIsEditing(() => newIsEditing);
-  //     return;
-  //   }
-  //   setModifiedReview(() => ({ comment: null }));
-  //   return;
-  // };
 
   const handleDeleteOnClick = async (index: number, commentid: number) => {
     if (!authState.isLoggedIn) {
@@ -231,17 +218,16 @@ function UsersReview() {
   id: number;
   commenter_id: string;
   comment: string;
-  created_at: string; */
+  created_at: string; 
+  */
 
   return (
     <div>
       <div className={styles.usersReviewContainer}>
-        <div>{`[내 리뷰 목록]`}</div>
-
         {usersReview?.map((review, index) => {
           return isEditing !== null && !isEditing[index] ? (
             <div key={index} className={styles.usersReviewBox}>
-              <p>{review.comment_id}</p>
+              <p>{index}</p>
               <p>{review.comment}</p>
               <p>{review.created_at}</p>
               <p>{review.updated_at}</p>
