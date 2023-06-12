@@ -11,7 +11,7 @@ import { useAuthState } from '../../contexts/AuthContext';
 
 function UserEditForm() {
   const navigate = useNavigate();
-  const { updateAuthState } = useAuthState();
+  const { authState, updateAuthState } = useAuthState();
   const initValues: UserInfoValues = {
     email: '',
     profileImage: '',
@@ -280,59 +280,61 @@ function UserEditForm() {
   };
 
   useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const response = await getUser();
-        if (response.status === 200) {
-          const {
-            id,
-            birth_date,
-            gender,
-            nickname,
-            phone_number,
-            profile_image
-          } = response.data;
+    if (authState.isLoggedIn) {
+      const getUserData = async () => {
+        try {
+          const response = await getUser();
+          if (response.status === 200) {
+            const {
+              id,
+              birth_date,
+              gender,
+              nickname,
+              phone_number,
+              profile_image
+            } = response.data;
 
-          const [year, month, day] = birth_date.split('-');
+            const [year, month, day] = birth_date.split('-');
 
-          setValues((prev: UserInfoValues) => ({
-            ...prev,
-            email: id,
-            birthDate: {
-              year,
-              month,
-              day
-            },
-            gender,
-            nickname,
-            phoneNumber: phone_number,
-            profileImage: profile_image
-          }));
-          setNicknameDuplicate((prev) => ({
-            ...prev,
-            prevValue: nickname
-          }));
-        }
-      } catch (err: unknown) {
-        if (err instanceof AxiosError) {
-          if (err.response?.status === 401) {
-            if (
-              err.response.data.reason === 'INVALID' ||
-              err.response.data.reason === 'EXPIRED'
-            ) {
-              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
-              return updateAuthState(false);
+            setValues((prev: UserInfoValues) => ({
+              ...prev,
+              email: id,
+              birthDate: {
+                year,
+                month,
+                day
+              },
+              gender,
+              nickname,
+              phoneNumber: phone_number,
+              profileImage: profile_image
+            }));
+            setNicknameDuplicate((prev) => ({
+              ...prev,
+              prevValue: nickname
+            }));
+          }
+        } catch (err: unknown) {
+          if (err instanceof AxiosError) {
+            if (err.response?.status === 401) {
+              if (
+                err.response.data.reason === 'INVALID' ||
+                err.response.data.reason === 'EXPIRED'
+              ) {
+                alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+                return updateAuthState(false);
+              }
             }
           }
+
+          console.log(err);
+          alert('회원 정보 불러오기에 실패하였습니다.');
         }
+      };
 
-        console.log(err);
-        alert('회원 정보 불러오기에 실패하였습니다.');
-      }
-    };
-
-    getUserData();
-  }, [updateAuthState]);
+      getUserData();
+    }
+  }, [authState.isLoggedIn, updateAuthState]);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
