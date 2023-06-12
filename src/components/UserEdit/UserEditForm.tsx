@@ -34,8 +34,7 @@ function UserEditForm() {
   const [errors, setErrors] = useState<UserInfoErrors>(initErrors);
   const [nicknameDuplicate, setNicknameDuplicate] = useState({
     isPass: false,
-    newNickname: '',
-    prevNickname: ''
+    prevValue: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,13 +99,6 @@ function UserEditForm() {
     if (!hasAllowedChars.test(nickname)) {
       return (errMsgs.nickname =
         '닉네임은 알파벳 대소문자, 숫자, 한글만 사용할 수 있습니다.');
-    }
-
-    if (
-      !nicknameDuplicate.isPass ||
-      nicknameDuplicate.newNickname !== nickname
-    ) {
-      return (errMsgs.nickname = '닉네임 중복 확인을 해주세요.');
     }
   };
 
@@ -181,7 +173,17 @@ function UserEditForm() {
     const errMsgs: UserInfoErrors = initErrors;
 
     checkEmptyInputFields(values, errMsgs);
-    if (!errMsgs.nickname) validateNickname(values.nickname, errMsgs);
+    if (!errMsgs.nickname) {
+      validateNickname(values.nickname, errMsgs);
+
+      if (
+        !nicknameDuplicate.isPass &&
+        nicknameDuplicate.prevValue !== values.nickname
+      ) {
+        errMsgs.nickname = '닉네임 중복 확인을 해주세요.';
+      }
+    }
+
     if (!errMsgs.newPassword && values.newPassword)
       validatePassword(values.newPassword, errMsgs);
     if (!errMsgs.passwordConfirm && values.newPassword)
@@ -204,16 +206,15 @@ function UserEditForm() {
         nickname: '빈칸을 입력해주세요.'
       }));
     }
+    const errMsgs = { ...errors };
+    const nicknameError = validateNickname(values.nickname, errMsgs);
+    if (nicknameError) return setErrors(errMsgs);
 
     try {
       const response = await checkNicknameDuplicate({ nickname });
 
       if (response.status === 201) {
-        setNicknameDuplicate((prev) => ({
-          ...prev,
-          isPass: true,
-          newNickname: nickname
-        }));
+        setNicknameDuplicate((prev) => ({ ...prev, isPass: true }));
         setErrors((prev) => ({ ...prev, nickname: '' }));
         alert('사용할 수 있는 닉네임입니다.');
       }
@@ -309,7 +310,7 @@ function UserEditForm() {
           }));
           setNicknameDuplicate((prev) => ({
             ...prev,
-            prevNickname: nickname
+            prevValue: nickname
           }));
         }
       } catch (err: unknown) {
@@ -343,7 +344,7 @@ function UserEditForm() {
       <UserInfo
         values={values}
         errors={errors}
-        isNicknameNew={values.nickname !== nicknameDuplicate.prevNickname}
+        isNicknameNew={values.nickname !== nicknameDuplicate.prevValue}
         handleChange={handleChange}
         handleCheckNickname={handleCheckNickname}
         handleBirthDateChange={handleBirthDateChange}
