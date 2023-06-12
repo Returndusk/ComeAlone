@@ -1,15 +1,27 @@
-.scheduleContainer {
-  width: 1280px;
-  min-height: calc(100vh - 230px);
-  margin: 20px auto;
-  text-align: center;
+.imageContainer {
+  position: relative;
+
+  .scheduleListImage {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
 
   .scheduleListTitle {
-    margin: 20px;
-    text-align: left;
-    font-size: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 55px;
     font-weight: bold;
+    color: white;
   }
+}
+.scheduleContainer {
+  width: 1280px;
+  min-height: calc(100vh - 630px);
+  margin: 20px auto;
+  text-align: center;
 
   .scheduleCardContainer {
     display: grid;
