@@ -5,6 +5,7 @@ import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
+import images from '../../constants/image';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -84,58 +85,69 @@ function ScheduleLists() {
   }
 
   return (
-    <div className={styles.scheduleContainer}>
-      <div className={styles.scheduleListTitle}>여행 일정</div>
-      <div className={styles.scheduleFilter}>
-        <button
-          className={`${styles.sortButton} ${
-            scheduleSort === 'likes' ? styles.selected : ''
-          }`}
-          onClick={(e) => {
-            handleSort(e);
-          }}
-          value='likes'
-        >
-          인기순
-        </button>
-        <button
-          className={`${styles.sortButton} ${
-            scheduleSort === 'recent' ? styles.selected : ''
-          }`}
-          onClick={(e) => {
-            handleSort(e);
-          }}
-          value='recent'
-        >
-          최신순
-        </button>
-        {isLoggedIn && (
+    <>
+      <div className={styles.imageContainer}>
+        <img
+          src={images[3]}
+          alt='일정 메인 이미지'
+          className={styles.scheduleListImage}
+        />
+        <div className={styles.scheduleListTitle}>
+          <h1>여행 일정</h1>
+        </div>
+      </div>
+      <div className={styles.scheduleContainer}>
+        <div className={styles.scheduleFilter}>
           <button
             className={`${styles.sortButton} ${
-              scheduleSort === 'liked' ? styles.selected : ''
+              scheduleSort === 'likes' ? styles.selected : ''
             }`}
             onClick={(e) => {
               handleSort(e);
             }}
-            value='liked'
+            value='likes'
           >
-            좋아요 한 일정
+            인기순
           </button>
+          <button
+            className={`${styles.sortButton} ${
+              scheduleSort === 'recent' ? styles.selected : ''
+            }`}
+            onClick={(e) => {
+              handleSort(e);
+            }}
+            value='recent'
+          >
+            최신순
+          </button>
+          {isLoggedIn && (
+            <button
+              className={`${styles.sortButton} ${
+                scheduleSort === 'liked' ? styles.selected : ''
+              }`}
+              onClick={(e) => {
+                handleSort(e);
+              }}
+              value='liked'
+            >
+              좋아요 한 일정
+            </button>
+          )}
+        </div>
+        {showAlertModal && (
+          <AlertModal
+            message='여행 일정을 불러올 수 없습니다.'
+            onConfirm={handleOnConfirm}
+          />
         )}
+        {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
+        <div className={styles.scheduleCardContainer}>
+          {showScheduleList.map((schedule: ScheduleCardType, index: number) => (
+            <ScheduleCard schedule={schedule} key={index} />
+          ))}
+        </div>
       </div>
-      {showAlertModal && (
-        <AlertModal
-          message='여행 일정을 불러올 수 없습니다.'
-          onConfirm={handleOnConfirm}
-        />
-      )}
-      {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
-      <div className={styles.scheduleCardContainer}>
-        {showScheduleList.map((schedule: ScheduleCardType, index: number) => (
-          <ScheduleCard schedule={schedule} key={index} />
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
 
