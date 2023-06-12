@@ -24,6 +24,7 @@
       z-index: 2;
 
       .scheduleText {
+        font-size: 20px;
         div {
           width: 240px;
           white-space: nowrap;
@@ -82,9 +83,9 @@
     }
 
     .scheduleTitle {
-      height: 30px;
+      height: 40px;
       margin-bottom: 20px;
-      font-size: 22px;
+      font-size: 30px;
       font-weight: bold;
     }
 
@@ -131,6 +132,7 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        font-size: 18px;
       }
     }
 
