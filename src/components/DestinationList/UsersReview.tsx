@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   getUsersReview,
-  modifyReviewByDestinationId
+  modifyReviewByCommentId
 } from '../../apis/destinationList';
 
 const ALERT_PROPS = {
@@ -58,7 +58,7 @@ function UsersReview() {
     const res = await getUsersReview();
     const usersReviewList = res?.data;
     setUsersReview(() => usersReviewList);
-  }, []);
+  }, [setUsersReview]);
 
   useEffect(() => {
     getUserReviewList();
@@ -77,7 +77,7 @@ function UsersReview() {
   //리뷰 수정 요청 메서드
   const modifyReview = useCallback(
     async (commentid: number) => {
-      const res = await modifyReviewByDestinationId(commentid, modifiedReview);
+      const res = await modifyReviewByCommentId(commentid, modifiedReview);
       const status = res?.status;
       if (status === RESPONSE_STATUS.MODIFY_SUCCESS) {
         setIsShowModifySuccess(true);
