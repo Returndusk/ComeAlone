@@ -8,19 +8,7 @@ import {
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import SliderBanner from './SliderBanner';
-
-const images = [
-  require('../../assets/1.jpg'),
-  require('../../assets/2.jpg'),
-  require('../../assets/3.jpg'),
-  require('../../assets/4.jpg'),
-  require('../../assets/5.jpg'),
-  require('../../assets/6.jpg'),
-  require('../../assets/7.jpg'),
-  require('../../assets/8.jpg'),
-  require('../../assets/9.jpg'),
-  require('../../assets/10.jpg')
-];
+import image from '../../constants/image';
 
 function SearchArea() {
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
@@ -53,7 +41,7 @@ function SearchArea() {
     }
   };
 
-  const destinations = images.map((image, index) => ({
+  const destinations = image.map((image, index) => ({
     id: index,
     image1: image,
     title: ''
