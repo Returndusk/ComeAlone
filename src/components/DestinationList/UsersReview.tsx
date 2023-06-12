@@ -61,14 +61,6 @@ function UsersReview() {
     getUserReviewList();
   }, [getUserReviewList]);
 
-  useEffect(() => {
-    console.log(isEditing);
-  }, [isEditing]);
-
-  useEffect(() => {
-    console.log(modifiedReview);
-  }, [modifiedReview]);
-
   //유저 리뷰목록을 상태관리할 배열 생성
   useEffect(() => {
     const userReviewCount = usersReview?.length ?? 0;
@@ -93,8 +85,6 @@ function UsersReview() {
     },
     [
       modifiedReview,
-      // setIsShowModifySuccess,
-      // getUserReviewList,
       setIsShowModifyFailed,
       modifyReviewByCommentId,
       setModifiedReview
@@ -121,8 +111,6 @@ function UsersReview() {
       deleteReviewByDestinationId
     ]
   );
-
-  useEffect(() => console.log(modifiedReview), [modifiedReview]);
 
   const isNullishReviewInput = (input: string) => {
     return input === '';
