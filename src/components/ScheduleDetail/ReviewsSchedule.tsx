@@ -47,7 +47,7 @@ function ReviewsSchedule({
             const commenterId: string = review.user.id;
             const comment: string = review.comment;
             const createdAt: string = review.created_at.split('T')[0];
-            const profileImagePath: string = review.user.profileImage;
+            const profileImagePath: string = review.user.profile_image;
 
             return (
               <div key={`review ${index}`} className={styles.review}>

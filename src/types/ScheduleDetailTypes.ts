@@ -63,7 +63,7 @@ export interface IScheduleReview {
   user: {
     id: string;
     nickname: string;
-    profileImage: string;
+    profile_image: string;
   };
 }
 
