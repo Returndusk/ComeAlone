@@ -6,7 +6,8 @@ import { IoMdSettings } from 'react-icons/io';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { Avatar } from '@mui/material';
 import styles from './ProfileImage.module.scss';
-import { IMAGE_MAX_SIZE } from '../../constants/Image';
+
+const IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
 type ProfileImageProps = {
   handleChange: (imagePath: string) => void;
