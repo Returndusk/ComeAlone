@@ -17,6 +17,7 @@ function ImageScheduleEdit({
 }) {
   const [showUpdateAlert, setShowUpdateAlert] = useState<boolean>(false);
   const [showImageSizeAlert, setShowImageSizeAlert] = useState<boolean>(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   const updatedImageFile = useRef<Blob>();
   const updatedImagePath = useRef<string>(imagePath);
 
@@ -31,6 +32,12 @@ function ImageScheduleEdit({
     onImageUpdate(response?.data.imagePath);
     setShowUpdateAlert(false);
   }, []);
+
+  const handleDelete = () => {
+    onImageUpdate('');
+    updatedImagePath.current = '';
+    setShowDeleteAlert(false);
+  };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const uploadedImage = (event.target.files as FileList)[0];
@@ -55,10 +62,13 @@ function ImageScheduleEdit({
         <div className={styles.updateSizeMessage}>
           (5MB 미만의 이미지 파일만 가능)
         </div>
-        <div className={styles.deleteButton}>
-          <FaTrashAlt />
-        </div>
       </label>
+      <div
+        className={styles.deleteButton}
+        onClick={() => setShowDeleteAlert(true)}
+      >
+        <FaTrashAlt />
+      </div>
       <input
         type='file'
         id='fileInput'
@@ -77,6 +87,14 @@ function ImageScheduleEdit({
         <AlertModal
           message='업로드하신 이미지가 5MB를 초과합니다.'
           onConfirm={() => setShowImageSizeAlert(false)}
+        />
+      )}
+      {showDeleteAlert && (
+        <AlertModal
+          message='대표 이미지를 기본 이미지로 변경하시겠습니까?'
+          showCancelButton={true}
+          onConfirm={() => handleDelete()}
+          onCancel={() => setShowDeleteAlert(false)}
         />
       )}
     </div>
