@@ -170,13 +170,12 @@ function ScheduleEdit() {
 
   return (
     <div className={styles.container}>
-      <Link
-        to={`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`}
-        className={styles.backButton}
-      >
-        <FaArrowLeft />
-        돌아가기
-      </Link>
+      <button className={styles.backButton}>
+        <Link to={`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`}>
+          <FaArrowLeft className={styles.backIcon} />
+          돌아가기
+        </Link>
+      </button>
       <ImageScheduleEdit
         imagePath={updatedImagePath.current}
         onImageUpdate={handleImageUpdate}

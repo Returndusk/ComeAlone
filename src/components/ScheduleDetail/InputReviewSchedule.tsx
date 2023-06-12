@@ -31,7 +31,7 @@ function InputReviewSchedule({
           <TextField
             className={styles.reviewsInput}
             onChange={handleChange}
-            label='리뷰를 입력하세요.'
+            label='댓글을 입력하세요.'
             value={reviewTyping}
           />
           <button
@@ -46,7 +46,9 @@ function InputReviewSchedule({
         </div>
       ) : (
         <div className={styles.reviewInputContainer}>
-          리뷰를 남기시려면 로그인해주세요.
+          <div className={styles.notLoggedIn}>
+            댓글을 남기시려면 로그인해주세요.
+          </div>
         </div>
       )}
     </>
