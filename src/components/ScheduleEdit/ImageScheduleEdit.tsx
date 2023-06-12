@@ -4,6 +4,8 @@ import { updateScheduleImageById } from '../../apis/ScheduleEditAPI';
 import AlertModal from '../common/Alert/AlertModal';
 import { FaTrashAlt } from 'react-icons/fa';
 
+const defaultScheduleImagePath =
+  process.env.REACT_APP_SCHEDULE_DEFAULT_IMAGE_URL;
 const MAXIMUM_IMAGE_SIZE = 5242880;
 
 function ImageScheduleEdit({
@@ -33,8 +35,7 @@ function ImageScheduleEdit({
 
   const handleDelete = () => {
     onImageUpdate('');
-    updatedImagePath.current =
-      'https://vvhooping.com/img/default/default-background.jpeg';
+    updatedImagePath.current = defaultScheduleImagePath as string;
     setShowDeleteAlert(false);
   };
 
