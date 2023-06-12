@@ -8,7 +8,7 @@ import {
   Draggable,
   DropResult
 } from '@hello-pangea/dnd';
-import { FaGripLines } from 'react-icons/fa';
+import { FaGripLines, FaTrashAlt } from 'react-icons/fa';
 import AlertModal from '../common/Alert/AlertModal';
 import ROUTER from '../../constants/Router';
 
@@ -85,20 +85,18 @@ function EditDestinationList({
   return (
     <div className={styles.destinationsContainer}>
       <div className={styles.destinationsTitle}>목적지 리스트</div>
-      <Link to={ROUTER.DESTINATION_LIST}>
-        <div className={styles.addDestinationButton}>
-          + 새로운 목적지 추가하기
-        </div>
-      </Link>
+      <div className={styles.addDestinationButton}>
+        <Link to={ROUTER.DESTINATION_LIST}>+ 새로운 목적지 추가하기</Link>
+      </div>
       <label>
         <input
-          type='checkbox'
+          type='radio'
           checked={checkedDayIndex === -1}
           onChange={() => {
             onCheckedDayIndexUpdate(-1);
           }}
         />
-        전체 목적지 보기
+        <span>전체 목적지 보기</span>
       </label>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className={styles.destinationsList}>
@@ -115,9 +113,9 @@ function EditDestinationList({
                     {...droppableProvided.droppableProps}
                   >
                     <label>
-                      <div className={styles.destinationDayTitle}>
+                      <div>
                         <input
-                          type='checkbox'
+                          type='radio'
                           checked={checkedDayIndex === dayIndex}
                           onChange={() => {
                             if (checkedDayIndex === dayIndex) {
@@ -127,37 +125,44 @@ function EditDestinationList({
                             }
                           }}
                         />{' '}
-                        Day {dayIndex + 1}
+                        <span>Day {dayIndex + 1}</span>
                       </div>
                     </label>
-                    {destOfDay.map((dest, destIndex) => (
-                      <Draggable
-                        key={`${dayIndex} ${destIndex}`}
-                        draggableId={`${dayIndex} ${destIndex}`}
-                        index={destIndex}
-                      >
-                        {(draggableProvided) => (
-                          <div
-                            className={styles.destination}
-                            ref={draggableProvided.innerRef}
-                            {...draggableProvided.draggableProps}
-                            {...draggableProvided.dragHandleProps}
-                          >
-                            <FaGripLines className={styles.gripIcon} />
-                            {dest.title}
-                            <button
-                              onClick={() => {
-                                targetDeleteDayIndex.current = dayIndex;
-                                targetDeleteDestIndex.current = destIndex;
-                                setShowDeleteAlert(true);
-                              }}
+                    {destOfDay.length > 0 ? (
+                      destOfDay.map((dest, destIndex) => (
+                        <Draggable
+                          key={`${dayIndex} ${destIndex}`}
+                          draggableId={`${dayIndex} ${destIndex}`}
+                          index={destIndex}
+                        >
+                          {(draggableProvided) => (
+                            <div
+                              className={styles.destination}
+                              ref={draggableProvided.innerRef}
+                              {...draggableProvided.draggableProps}
+                              {...draggableProvided.dragHandleProps}
                             >
-                              삭제
-                            </button>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
+                              <FaGripLines className={styles.gripIcon} />
+                              {dest.title}
+                              <button
+                                className={styles.deleteButton}
+                                onClick={() => {
+                                  targetDeleteDayIndex.current = dayIndex;
+                                  targetDeleteDestIndex.current = destIndex;
+                                  setShowDeleteAlert(true);
+                                }}
+                              >
+                                <FaTrashAlt />
+                              </button>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))
+                    ) : (
+                      <div className={styles.noDestination}>
+                        목적지가 존재하지 않습니다.
+                      </div>
+                    )}
                     {droppableProvided.placeholder}
                   </div>
                 )}
