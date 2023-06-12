@@ -8,16 +8,13 @@
   overflow: hidden;
 }
 
-.backButton {
+.toListButton {
   all: unset;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 35%;
-  margin: 0 0 20px 0;
+  width: 40%;
+  margin: 0 20px 20px 0;
   padding: 8px 3px;
   font-size: 18px;
+  text-align: center;
   background-color: var(--main-color);
   border-radius: 10px;
 
@@ -25,9 +22,21 @@
     text-decoration: none;
     color: #ffffff;
   }
+}
 
-  .backIcon {
-    margin: 0 10px 0 0;
+.toMyListButton {
+  all: unset;
+  width: 40%;
+  margin: 0 0 20px 0;
+  padding: 8px 3px;
+  font-size: 18px;
+  text-align: center;
+  background-color: var(--main-color);
+  border-radius: 10px;
+
+  a {
+    text-decoration: none;
+    color: #ffffff;
   }
 }
 
