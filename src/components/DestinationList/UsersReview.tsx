@@ -28,7 +28,7 @@ const SUCCESS_ALERT_PROPS = {
 
 const RESPONSE_STATUS = {
   MODIFY_SUCCESS: 200,
-  DELETE_SUCCESS: 201
+  DELETE_SUCCESS: 200
 };
 
 const REVIEW_STANDARDS = {
@@ -45,9 +45,12 @@ function UsersReview() {
   const [isEditing, setIsEditing] = useState<boolean[] | null>(null);
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
-  const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
-    null
-  );
+  const [isShowModifySuccess, setIsShowModifySuccess] =
+    useState<boolean>(false);
+  const [isShowDeleteSuccess, setIsShowDeleteSuccess] =
+    useState<boolean>(false);
+  const [isShowModifyFailed, setIsShowModifyFailed] = useState<boolean>(false);
+  const [isShowDeleteFailed, setIsShowDeleteFailed] = useState<boolean>(false);
   const navigate = useNavigate();
 
   //유저의 리뷰 조회
@@ -68,9 +71,8 @@ function UsersReview() {
       const editingArray = Array.from({ length: userReviewCount }, () => false);
       setIsEditing(editingArray);
     }
-    console.log('editingArray 배열 생성');
     return;
-  }, [usersReview]);
+  }, [usersReview, setIsEditing]);
 
   //리뷰 수정 요청 메서드
   const modifyReview = useCallback(
@@ -78,25 +80,41 @@ function UsersReview() {
       const res = await modifyReviewByDestinationId(commentid, modifiedReview);
       const status = res?.status;
       if (status === RESPONSE_STATUS.MODIFY_SUCCESS) {
-        setIsShowSuccessAlert(true);
+        setIsShowModifySuccess(true);
+        await getUserReviewList();
         return;
       }
-      setIsShowSuccessAlert(false);
+      setIsShowModifyFailed(true);
+      return;
     },
-    [modifiedReview]
+    [
+      modifiedReview,
+      setIsShowModifySuccess,
+      getUserReviewList,
+      setIsShowModifyFailed
+    ]
   );
 
   //리뷰 삭제 요청 메서드
-  const deleteReview = async (commentid: number) => {
-    const res = await deleteReviewByDestinationId(commentid);
-    const status = res?.status;
-    if (status === RESPONSE_STATUS.DELETE_SUCCESS) {
-      setIsShowSuccessAlert(true);
+  const deleteReview = useCallback(
+    async (commentid: number) => {
+      const res = await deleteReviewByDestinationId(commentid);
+      const status = res?.status;
+      if (status === RESPONSE_STATUS.DELETE_SUCCESS) {
+        setIsShowDeleteSuccess(true);
+        await getUserReviewList();
+        return;
+      }
+      setIsShowDeleteFailed(true);
       return;
-    }
-    setIsShowSuccessAlert(false);
-    return;
-  };
+    },
+    [
+      setIsShowDeleteSuccess,
+      getUserReviewList,
+      setIsShowDeleteFailed,
+      deleteReviewByDestinationId
+    ]
+  );
 
   useEffect(() => console.log(modifiedReview), [modifiedReview]);
 
@@ -118,6 +136,7 @@ function UsersReview() {
       alert(
         `수정할 내용을 ${REVIEW_STANDARDS.MIN_LENGTH}자 이상 입력해주세요.`
       );
+      return;
     }
     setModifiedReview(() => {
       return { comment: submittedModifiedReview };
@@ -173,8 +192,24 @@ function UsersReview() {
     navigate('/login');
   };
 
-  const handleOnReviewConfirm = () => {
-    setIsShowSuccessAlert(null);
+  const handleModifySuccessConfirm = () => {
+    setIsShowModifySuccess(false);
+    return;
+  };
+
+  const handleModifyFailedConfirm = () => {
+    setIsShowModifyFailed(false);
+    return;
+  };
+
+  const handleDeleteSuccessConfirm = () => {
+    setIsShowDeleteSuccess(false);
+    return;
+  };
+
+  const handleDeleteFailedConfirm = () => {
+    setIsShowDeleteFailed(false);
+    return;
   };
 
   /*
@@ -240,17 +275,31 @@ function UsersReview() {
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
-      {isShowSuccessAlert && (
+      {isShowModifySuccess && (
         <AlertModal
           message={SUCCESS_ALERT_PROPS.successModifyingMessage}
-          onConfirm={handleOnReviewConfirm}
+          onConfirm={handleModifySuccessConfirm}
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
-      {isShowSuccessAlert === false && (
+      {isShowModifyFailed && (
         <AlertModal
           message={SUCCESS_ALERT_PROPS.failedModifyingMessage}
-          onConfirm={handleOnReviewConfirm}
+          onConfirm={handleModifyFailedConfirm}
+          showTitle={ALERT_PROPS.showTitle}
+        />
+      )}
+      {isShowDeleteSuccess && (
+        <AlertModal
+          message={SUCCESS_ALERT_PROPS.successDeleteMessage}
+          onConfirm={handleDeleteSuccessConfirm}
+          showTitle={ALERT_PROPS.showTitle}
+        />
+      )}
+      {isShowDeleteFailed && (
+        <AlertModal
+          message={SUCCESS_ALERT_PROPS.failedDeleteMessage}
+          onConfirm={handleDeleteFailedConfirm}
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
