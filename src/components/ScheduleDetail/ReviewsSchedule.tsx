@@ -46,11 +46,21 @@ function ReviewsSchedule({
           const commenterId: string = review.user.id;
           const comment: string = review.comment;
           const createdAt: string = review.created_at.split('T')[0];
+          const profileImagePath: string = review.user.profileImage;
 
           return (
             <div key={`review ${index}`} className={styles.review}>
-              <span className={styles.nickname}>
-                <Avatar>{review.user.nickname[0]}</Avatar>
+              <span className={styles.avatar}>
+                {profileImagePath ? (
+                  <Avatar
+                    sx={{ width: 45, height: 45 }}
+                    src={profileImagePath}
+                  />
+                ) : (
+                  <Avatar sx={{ width: 45, height: 45 }}>
+                    {review.user.nickname[0]}
+                  </Avatar>
+                )}
               </span>
               {isReviewUpdate && targetReviewId.current === commentId ? (
                 <TextField
