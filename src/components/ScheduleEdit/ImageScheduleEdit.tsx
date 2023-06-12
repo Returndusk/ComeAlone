@@ -3,7 +3,7 @@ import styles from './ImageScheduleEdit.module.scss';
 import { updateScheduleImageById } from '../../apis/ScheduleEditAPI';
 import AlertModal from '../common/Alert/AlertModal';
 
-const MAXIMUM_IMAGE_SIZE = 625000;
+const MAXIMUM_IMAGE_SIZE = 5242880;
 
 function ImageScheduleEdit({
   scheduleId,
