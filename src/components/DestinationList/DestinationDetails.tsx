@@ -9,7 +9,7 @@ import OpenModal from './Modal/OpenModal';
 import UsersLike from './UsersLike';
 import { useAuthState } from '../../contexts/AuthContext';
 import { BsFillTelephoneFill } from 'react-icons/bs';
-import { FaCommentAlt, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaCommentAlt, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 import { createPortal } from 'react-dom';
 
 const ALERT_PROPS = {
@@ -57,6 +57,29 @@ function DestinationDetails() {
   }, [handleReviewIconClick]);
   */
 
+  const changeStringIntoHTML = (stringHTML: string) => {
+    const removedBackslashString = stringHTML.replace(/\\/g, '');
+    const regex = /"(.*?)"/g;
+    const filteredString = removedBackslashString.match(regex);
+    const filteredArray = filteredString?.map((str: string) =>
+      str.replace(/"/g, '')
+    );
+    if (filteredArray) {
+      const [stringLink, stringTitle] = filteredArray;
+      return (
+        <a
+          href={stringLink}
+          target='_blank'
+          title={stringTitle}
+          rel='_ noreferrer'
+        >
+          {stringLink}
+        </a>
+      );
+    }
+    return '';
+  };
+
   const handleOnConfirm = () => {
     setIsShowAlert(false);
     navigate('/login');
@@ -100,6 +123,11 @@ function DestinationDetails() {
                 </span>
               </div>
             </div>
+
+            <div className={styles.destinationCategoryContainer}>
+              {destinationDetails?.category_name}
+            </div>
+
             <span className={styles.destinationAddrContainer}>
               <FaMapMarkerAlt id={styles.destinationAddrIcon} />
               <p className={styles.destinationAddress}>
@@ -112,6 +140,15 @@ function DestinationDetails() {
               <p className={styles.destinationTelNumber}>
                 {destinationDetails?.tel
                   ? destinationDetails?.tel
+                  : '정보가 제공되고 있지 않습니다.'}{' '}
+              </p>
+            </span>
+
+            <span className={styles.destinationHomeContainer}>
+              <FaHome id={styles.destinationHomeIcon} />
+              <p className={styles.destinationHomePage}>
+                {destinationDetails?.homepage
+                  ? changeStringIntoHTML(destinationDetails?.homepage)
                   : '정보가 제공되고 있지 않습니다.'}{' '}
               </p>
             </span>

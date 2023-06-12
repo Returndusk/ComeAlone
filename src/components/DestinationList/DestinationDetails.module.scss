@@ -15,6 +15,22 @@
   height: calc(100vh + 49px);
   box-sizing: border-box;
   box-shadow: 2px 0 0 0 rgba(96, 101, 105, 0.3);
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    background: #ffffff;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3.5px;
+    background-color: #ced4da;
+
+    &:hover {
+      background-color: #adb5bd;
+    }
+  }
+  &::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
 }
 
 .destinationDetailsTitle {
@@ -89,6 +105,22 @@
   #destinationTelIcon {
     padding: 0 5px;
     height: 25px;
+  }
+}
+
+.destinationHomeContainer {
+  display: flex;
+  font-size: 18px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+
+  text-align: center;
+  line-height: 25px;
+  #destinationHomeIcon {
+    padding: 0 5px;
+    height: 25px;
+  }
+  .destinationHomePage {
   }
 }
 
