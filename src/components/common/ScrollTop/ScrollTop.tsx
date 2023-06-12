@@ -9,9 +9,9 @@ function ScrollTop() {
 
   return (
     <div className={styles.scrollButtonBox}>
-      <button className={styles.scrollTopButton} onClick={scrollToTop}>
+      <div className={styles.scrollTopButton} onClick={scrollToTop}>
         <FaArrowCircleUp />
-      </button>
+      </div>
     </div>
   );
 }

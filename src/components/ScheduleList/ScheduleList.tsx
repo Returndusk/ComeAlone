@@ -7,6 +7,7 @@ import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
 import images from '../../constants/image';
 import tokenInstance from '../../apis/tokenInstance';
+import { FaExclamationCircle } from 'react-icons/fa';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -88,6 +89,7 @@ function ScheduleLists() {
         />
         <div className={styles.scheduleListTitle}>
           <h1>여행 일정</h1>
+          <h2>마음에 드는 일정을 찾아보세요</h2>
         </div>
       </div>
       <div className={styles.scheduleContainer}>
@@ -136,9 +138,18 @@ function ScheduleLists() {
         )}
         {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
         <div className={styles.scheduleCardContainer}>
-          {showScheduleList.map((schedule: ScheduleCardType, index: number) => (
-            <ScheduleCard schedule={schedule} key={index} />
-          ))}
+          {showScheduleList.length ? (
+            showScheduleList.map(
+              (schedule: ScheduleCardType, index: number) => (
+                <ScheduleCard schedule={schedule} key={index} />
+              )
+            )
+          ) : (
+            <div className={styles.noSchedule}>
+              <FaExclamationCircle />
+              <div>좋아요 한 일정이 없습니다</div>
+            </div>
+          )}
         </div>
       </div>
     </>

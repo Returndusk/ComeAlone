@@ -23,6 +23,7 @@ import {
 } from '../types/ScheduleEditTypes';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import { updateSchedule, deleteScheduleById } from '../apis/ScheduleEditAPI';
+import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
 
 function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
@@ -44,6 +45,10 @@ function ScheduleEdit() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showDateModal, setShowDateModal] = useState<boolean>(false);
+  const [showTitleEmptyAlert, setShowTitleEmptyAlert] =
+    useState<boolean>(false);
+  const [showSummaryEmptyAlert, setShowSummaryEmptyAlert] =
+    useState<boolean>(false);
   const [updatedDateInfo, setUpdatedDateInfo] = useState<DateInfoType>({
     startDate: new Date(),
     endDate: new Date(),
@@ -142,7 +147,17 @@ function ScheduleEdit() {
     updatedSummary.current = summary;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
+    if (!updatedTitle.current) {
+      setShowTitleEmptyAlert(true);
+    } else if (!updatedSummary.current) {
+      setShowSummaryEmptyAlert(true);
+    } else {
+      handleSubmitConfirm();
+    }
+  };
+
+  const handleSubmitConfirm = async () => {
     await updateSchedule({
       schedule_id: Number(scheduleId),
       title: updatedTitle.current,
@@ -211,6 +226,18 @@ function ScheduleEdit() {
         onDateInfoUpdate={setUpdatedDateInfo}
         onModalClose={() => setShowDateModal(false)}
       />
+      {showTitleEmptyAlert && (
+        <AlertModal
+          message='수정하실 제목을 입력해주세요.'
+          onConfirm={() => setShowTitleEmptyAlert(false)}
+        />
+      )}
+      {showSummaryEmptyAlert && (
+        <AlertModal
+          message='수정하실 일정 소개를 입력해주세요.'
+          onConfirm={() => setShowSummaryEmptyAlert(false)}
+        />
+      )}
     </div>
   );
 }

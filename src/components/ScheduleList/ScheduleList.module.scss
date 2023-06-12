@@ -12,11 +12,22 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
     font-size: 55px;
     font-weight: bold;
     color: white;
+
+    h1 {
+      margin-bottom: 20px;
+      font-family: 'WandoHopeR';
+    }
+
+    h2 {
+      font-size: 20px;
+    }
   }
 }
+
 .scheduleContainer {
   width: 1280px;
   min-height: calc(100vh - 630px);
@@ -28,6 +39,19 @@
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 20px;
     gap: 20px;
+
+    .noSchedule {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      text-align: center;
+      font-size: 40px;
+
+      div {
+        margin-top: 20px;
+        font-size: 30px;
+      }
+    }
 
     .scheduleAdd {
       display: flex;
@@ -64,7 +88,8 @@
 }
 
 .selected {
-  background-color: lightgray;
+  color: white;
+  background-color: #ef6d00;
 }
 
 .loading {

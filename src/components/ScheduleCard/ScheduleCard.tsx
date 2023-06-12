@@ -91,7 +91,9 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
               </div>
               <div>{schedule.summary ? schedule.summary : '여행 소개'}</div>
               <div>
-                {schedule.duration - 1}박 {schedule.duration}일
+                {schedule.duration > 1
+                  ? `${schedule.duration - 1}박 ${schedule.duration}일`
+                  : '당일치기'}
               </div>
               <div>작성자 : {schedule.user.nickname}</div>
             </div>
