@@ -10,13 +10,12 @@ function Main() {
   return (
     <div className={styles.wrapper}>
       <SearchArea />
-
       <div className={styles.destinationRank}>
         <h2>📌 인기 목적지</h2>
         <SliderBanner
           settings={{ autoplay: false }}
           api={`${apiBaseUrl}/ranking/destinations?count=12`}
-          urlTemplate={`${Router.DESTINATION_LIST}/{id}?search={destination_title}`}
+          urlTemplate={`${Router.DESTINATION_LIST}/{destination_id}?search={destination_title}`}
           idProperty='destination_id'
           titleProperty='destination_title'
           imageProperty='destination_image1'
@@ -27,7 +26,6 @@ function Main() {
           imageContainerClassName='BottomImageContainer'
         />
       </div>
-
       <div className={styles.scheduleRank}>
         <h2>🌍 인기 일정</h2>
         <SliderBanner
