@@ -35,7 +35,7 @@ function DestinationList({
                 id={`day ${index + 1}`}
               >
                 <label>
-                  <div className={styles.destinationDayTitle}>
+                  <div>
                     <input
                       type='radio'
                       checked={checkedDayIndex === index}
