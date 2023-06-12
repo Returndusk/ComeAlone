@@ -178,7 +178,6 @@ function ScheduleEdit() {
         돌아가기
       </Link>
       <ImageScheduleEdit
-        scheduleId={scheduleId}
         imagePath={updatedImagePath.current}
         onImageUpdate={handleImageUpdate}
       />

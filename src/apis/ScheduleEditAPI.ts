@@ -16,13 +16,10 @@ export async function updateSchedule(updatedSchedule: ScheduleEditSubmitType) {
   }
 }
 
-export async function updateScheduleImageById(
-  id: string | undefined,
-  formData: FormData
-) {
+export async function updateScheduleImageById(formData: FormData) {
   try {
     const response = await tokenInstance.post(
-      `${baseUrl}/upload/schedules/${id}`,
+      `${baseUrl}/upload/schedules/image`,
       formData
     );
 

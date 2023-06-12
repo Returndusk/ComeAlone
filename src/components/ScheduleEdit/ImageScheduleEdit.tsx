@@ -7,11 +7,9 @@ import { FaTrashAlt } from 'react-icons/fa';
 const MAXIMUM_IMAGE_SIZE = 5242880;
 
 function ImageScheduleEdit({
-  scheduleId,
   imagePath,
   onImageUpdate
 }: {
-  scheduleId: string;
   imagePath: string;
   onImageUpdate: (imagePath: string) => void;
 }) {
@@ -26,7 +24,7 @@ function ImageScheduleEdit({
 
     formData.append('file', updatedImageFile.current as Blob);
 
-    const response = await updateScheduleImageById(scheduleId, formData);
+    const response = await updateScheduleImageById(formData);
 
     updatedImagePath.current = response?.data.imagePath;
     onImageUpdate(response?.data.imagePath);
@@ -35,12 +33,15 @@ function ImageScheduleEdit({
 
   const handleDelete = () => {
     onImageUpdate('');
-    updatedImagePath.current = '';
+    updatedImagePath.current =
+      'https://vvhooping.com/img/default/default-background.jpeg';
     setShowDeleteAlert(false);
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const uploadedImage = (event.target.files as FileList)[0];
+
+    console.log(updatedImageFile);
 
     if (!uploadedImage) {
       return;
