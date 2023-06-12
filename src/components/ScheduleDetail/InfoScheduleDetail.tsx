@@ -5,6 +5,7 @@ import { ScheduleDetailInfoType } from '../../types/ScheduleDetailTypes';
 
 function InfoScheduleDetail({
   nickname,
+  profileImage,
   title,
   summary,
   duration,
@@ -26,9 +27,15 @@ function InfoScheduleDetail({
       </div>
       <div className={styles.title}>{title}</div>
       <div className={styles.nickname}>
-        <span className={styles.avatar}>
-          <Avatar sx={{ width: 50, height: 50 }}>{nickname[0]}</Avatar>
-        </span>
+        {profileImage ? (
+          <span className={styles.avatar}>
+            <Avatar src={profileImage} sx={{ width: 50, height: 50 }} />
+          </span>
+        ) : (
+          <span className={styles.avatar}>
+            <Avatar sx={{ width: 50, height: 50 }}>{nickname[0]}</Avatar>
+          </span>
+        )}
         {nickname}
       </div>
       <p>{summary}</p>
