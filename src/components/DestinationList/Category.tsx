@@ -71,6 +71,7 @@ function Category({
 
   //카테고리 id => name 변환 함수
 
+  /*
   const changeCategoryIdIntoName = useCallback(
     (destinationList: DestinationsType[]) => {
       const specifiedCatogory = destinationList?.map((el) => {
@@ -83,6 +84,18 @@ function Category({
       return specifiedCatogory;
     },
     [categoryList]
+  );
+*/
+
+  const changeCategoryIdIntoName = useCallback(
+    (destinationList: DestinationsType[]) => {
+      const specifiedCatogory = destinationList?.map((el) => {
+        const categoryName = CATEGORIES_ID.get(el.category_id) ?? '로딩 중..';
+        return { ...el, category_name: categoryName }; //예외처리 다시 수정
+      });
+      return specifiedCatogory;
+    },
+    [CATEGORIES_ID]
   );
 
   //체크박스 로직
