@@ -9,19 +9,17 @@ type ProfileImageProps = {
 
 function ProfileImage({ image, nickname }: ProfileImageProps) {
   return (
-    <div className={styles.profileImage}>
-      {!image && (
-        <Avatar
-          style={{
-            width: '150px',
-            height: '150px',
-            fontSize: '80px'
-          }}
-        >
-          {nickname[0]}
-        </Avatar>
-      )}
-      {image && <div className={styles.image}></div>}
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        {image && (
+          <Avatar src={image} className={styles.image} alt='프로필 이미지' />
+        )}
+        {!image && (
+          <Avatar className={styles.image} alt='프로필 이미지'>
+            <span>{nickname[0]}</span>
+          </Avatar>
+        )}
+      </div>
     </div>
   );
 }
