@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthState } from '../../contexts/AuthContext';
 import styles from './InputReviewSchedule.module.scss';
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
+import ROUTER from '../../constants/Router';
 
 function InputReviewSchedule({
   onReviewSubmit
@@ -47,7 +49,7 @@ function InputReviewSchedule({
       ) : (
         <div className={styles.reviewInputContainer}>
           <div className={styles.notLoggedIn}>
-            댓글을 남기시려면 로그인해주세요.
+            댓글을 남기시려면 <Link to={ROUTER.LOGIN}>로그인</Link>해주세요.
           </div>
         </div>
       )}
