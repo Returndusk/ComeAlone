@@ -54,7 +54,7 @@ function ScheduleEdit() {
     MapWithWaypointsPropsType[][]
   >([]);
   const [checkedDayIndex, setCheckedDayIndex] = useState<number>(-1);
-  const imagePath = useRef<string>('');
+  const updatedImagePath = useRef<string>('');
   const updatedTitle = useRef<string>('');
   const updatedSummary = useRef<string>('');
   const createdAt = useRef<Date>(new Date());
@@ -89,7 +89,7 @@ function ScheduleEdit() {
         endDate: fetchedData.endDate,
         duration: fetchedData.duration
       });
-      imagePath.current = fetchedData.image;
+      updatedImagePath.current = fetchedData.image;
       updatedTitle.current = fetchedData.title;
       updatedSummary.current = fetchedData.summary;
       createdAt.current = fetchedData.createdAt;
@@ -130,6 +130,10 @@ function ScheduleEdit() {
     }
   }, [checkedDayIndex, updatedDestinationList]);
 
+  const handleImageUpdate = (imagePath: string) => {
+    updatedImagePath.current = imagePath;
+  };
+
   const handleTitleUpdate = (title: string) => {
     updatedTitle.current = title;
   };
@@ -147,6 +151,7 @@ function ScheduleEdit() {
       start_date: stringifyDate(updatedDateInfo.startDate),
       end_date: stringifyDate(updatedDateInfo.endDate),
       status: updatedStatus,
+      image: updatedImagePath.current,
       destinations: mapDestinationId(updatedDestinationList)
     });
 
@@ -174,7 +179,8 @@ function ScheduleEdit() {
       </Link>
       <ImageScheduleEdit
         scheduleId={scheduleId}
-        imagePath={imagePath.current}
+        imagePath={updatedImagePath.current}
+        onImageUpdate={handleImageUpdate}
       />
       <DateScheduleEdit
         dateInfo={updatedDateInfo}

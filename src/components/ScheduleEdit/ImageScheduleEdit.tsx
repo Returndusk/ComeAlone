@@ -7,15 +7,17 @@ const MAXIMUM_IMAGE_SIZE = 5242880;
 
 function ImageScheduleEdit({
   scheduleId,
-  imagePath
+  imagePath,
+  onImageUpdate
 }: {
   scheduleId: string;
   imagePath: string;
+  onImageUpdate: (imagePath: string) => void;
 }) {
   const [showUpdateAlert, setShowUpdateAlert] = useState<boolean>(false);
   const [showImageSizeAlert, setShowImageSizeAlert] = useState<boolean>(false);
-  const updatedImagePath = useRef<string>(imagePath);
   const updatedImageFile = useRef<Blob>();
+  const updatedImagePath = useRef<string>(imagePath);
 
   const updateScheduleImage = useCallback(async () => {
     const formData = new FormData();
@@ -25,6 +27,7 @@ function ImageScheduleEdit({
     const response = await updateScheduleImageById(scheduleId, formData);
 
     updatedImagePath.current = response?.data.imagePath;
+    onImageUpdate(response?.data.imagePath);
     setShowUpdateAlert(false);
   }, []);
 
@@ -49,7 +52,7 @@ function ImageScheduleEdit({
         <img
           className={styles.image}
           src={updatedImagePath.current}
-          alt='representative-image'
+          alt='representative image'
         />
         <div className={styles.updateMessage}>대표 이미지 수정하기</div>
         <div className={styles.updateSizeMessage}>

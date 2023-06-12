@@ -40,5 +40,6 @@ export type ScheduleEditSubmitType = {
   start_date: string;
   end_date: string;
   status: string;
+  image: string;
   destinations: number[][];
 };
