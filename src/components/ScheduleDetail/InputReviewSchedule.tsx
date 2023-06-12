@@ -12,6 +12,8 @@ function InputReviewSchedule({
   const [reviewTyping, setReviewTyping] = useState<string>('');
   const isLoggedIn: boolean = useAuthState().authState.isLoggedIn as boolean;
   const nickname: string = useAuthState().authState.user?.nickname as string;
+  const profileImage: string = useAuthState().authState.user
+    ?.profile_image as string;
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewTyping(event.target.value);
@@ -21,7 +23,11 @@ function InputReviewSchedule({
     <>
       {isLoggedIn ? (
         <div className={styles.reviewInputContainer}>
-          <Avatar>{nickname[0]}</Avatar>
+          {profileImage ? (
+            <Avatar sx={{ width: 50, height: 50 }} src={profileImage} />
+          ) : (
+            <Avatar sx={{ width: 50, height: 50 }}>{nickname[0]}</Avatar>
+          )}
           <TextField
             className={styles.reviewsInput}
             onChange={handleChange}
