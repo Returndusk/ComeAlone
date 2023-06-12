@@ -43,6 +43,7 @@ function UsersReview() {
     comment: null
   });
   const [isEditing, setIsEditing] = useState<boolean[] | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isShowModifySuccess, setIsShowModifySuccess] =
@@ -64,6 +65,14 @@ function UsersReview() {
     getUserReviewList();
   }, [getUserReviewList]);
 
+  useEffect(() => {
+    console.log(isEditing);
+  }, [isEditing]);
+
+  useEffect(() => {
+    console.log(modifiedReview);
+  }, [modifiedReview]);
+
   //유저 리뷰목록을 상태관리할 배열 생성
   useEffect(() => {
     const userReviewCount = usersReview?.length ?? 0;
@@ -76,8 +85,8 @@ function UsersReview() {
 
   //리뷰 수정 요청 메서드
   const modifyReview = useCallback(
-    async (commentid: number) => {
-      const res = await modifyReviewByCommentId(commentid, modifiedReview);
+    async (commentid: number, content: commentType) => {
+      const res = await modifyReviewByCommentId(commentid, content);
       const status = res?.status;
       if (status === RESPONSE_STATUS.MODIFY_SUCCESS) {
         setIsShowModifySuccess(true);
@@ -154,7 +163,7 @@ function UsersReview() {
     if (isEditing && isEditing.length > 0) {
       const newIsEditing = [...isEditing];
       newIsEditing[index] = true;
-      setIsEditing(newIsEditing);
+      setIsEditing(() => newIsEditing);
       return;
     }
   };
@@ -162,14 +171,15 @@ function UsersReview() {
   //수정 submit 이벤트 (수정 완료)
   const handleModifiedDone = async (index: number, commentid: number) => {
     if (modifiedReview.comment !== null) {
-      await modifyReview(commentid);
+      await modifyReview(commentid, modifiedReview);
     }
-    if (isEditing && isEditing.length > 0) {
+    if (isEditing) {
       const newIsEditing = [...isEditing];
       newIsEditing[index] = false;
-      setIsEditing(newIsEditing);
+      setIsEditing(() => newIsEditing);
       return;
     }
+    setModifiedReview(() => ({ comment: null }));
     return;
   };
 
