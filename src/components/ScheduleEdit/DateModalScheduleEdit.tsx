@@ -67,6 +67,7 @@ function DateModalScheduleEdit({
             className={styles.durationEditModalDate}
             locale={ko}
             editableDateInputs={true}
+            rangeColors={['#ef6d00']}
             onChange={(range) => {
               if (
                 range['selection'].startDate === undefined ||

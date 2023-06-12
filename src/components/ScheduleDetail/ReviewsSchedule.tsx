@@ -39,99 +39,103 @@ function ReviewsSchedule({
 
   return (
     <div className={styles.reviewsContainer}>
-      <div className={styles.reviewsTitle}>리뷰 리스트</div>
-      <div className={styles.reviewsList}>
-        {scheduleReviews.map((review, index) => {
-          const commentId: number = review.comment_id;
-          const commenterId: string = review.user.id;
-          const comment: string = review.comment;
-          const createdAt: string = review.created_at.split('T')[0];
-          const profileImagePath: string = review.user.profileImage;
+      <div className={styles.reviewsTitle}>댓글 리스트</div>
+      {scheduleReviews.length > 0 ? (
+        <div className={styles.reviewsList}>
+          {scheduleReviews.map((review, index) => {
+            const commentId: number = review.comment_id;
+            const commenterId: string = review.user.id;
+            const comment: string = review.comment;
+            const createdAt: string = review.created_at.split('T')[0];
+            const profileImagePath: string = review.user.profileImage;
 
-          return (
-            <div key={`review ${index}`} className={styles.review}>
-              <span className={styles.avatar}>
-                {profileImagePath ? (
-                  <Avatar
-                    sx={{ width: 45, height: 45 }}
-                    src={profileImagePath}
+            return (
+              <div key={`review ${index}`} className={styles.review}>
+                <span className={styles.avatar}>
+                  {profileImagePath ? (
+                    <Avatar
+                      sx={{ width: 45, height: 45 }}
+                      src={profileImagePath}
+                    />
+                  ) : (
+                    <Avatar sx={{ width: 45, height: 45 }}>
+                      {review.user.nickname[0]}
+                    </Avatar>
+                  )}
+                </span>
+                {isReviewUpdate && targetReviewId.current === commentId ? (
+                  <TextField
+                    className={styles.updateInput}
+                    value={reviewTyping}
+                    onChange={handleChange}
                   />
                 ) : (
-                  <Avatar sx={{ width: 45, height: 45 }}>
-                    {review.user.nickname[0]}
-                  </Avatar>
+                  <span>{comment}</span>
                 )}
-              </span>
-              {isReviewUpdate && targetReviewId.current === commentId ? (
-                <TextField
-                  className={styles.updateInput}
-                  value={reviewTyping}
-                  onChange={handleChange}
-                />
-              ) : (
-                <span>{comment}</span>
-              )}
-              {isReviewUpdate ? (
-                targetReviewId.current === commentId ? (
-                  <div className={styles.updateButtonsContainer}>
+                {isReviewUpdate ? (
+                  targetReviewId.current === commentId ? (
+                    <div className={styles.updateButtonsContainer}>
+                      <button
+                        className={styles.updateReviewButton}
+                        onClick={() => {
+                          setShowUpdateAlert(true);
+                        }}
+                      >
+                        제출
+                      </button>
+                      <button
+                        className={styles.updateReviewCancelButton}
+                        onClick={() => setIsReviewUpdate(false)}
+                      >
+                        취소
+                      </button>
+                    </div>
+                  ) : loggedInUserId === commenterId ? (
+                    <div className={styles.whileUpdateContainer}>
+                      <div className={styles.updateOther}>
+                        다른 댓글을 수정 중입니다...
+                      </div>
+                      <span className={styles.createdAt}>{createdAt}</span>
+                    </div>
+                  ) : (
+                    <span className={styles.createdAt}>{createdAt}</span>
+                  )
+                ) : loggedInUserId === commenterId ? (
+                  <div className={styles.buttonsContainer}>
                     <button
-                      className={styles.updateReviewButton}
+                      className={styles.updateButton}
                       onClick={() => {
-                        setShowUpdateAlert(true);
+                        targetReviewId.current = commentId;
+                        setIsReviewUpdate(true);
+                        setReviewTyping(review.comment);
                       }}
                     >
-                      제출
+                      <FaPen /> 수정
                     </button>
                     <button
-                      className={styles.updateReviewCancelButton}
-                      onClick={() => setIsReviewUpdate(false)}
+                      className={styles.deleteButton}
+                      onClick={() => {
+                        targetReviewId.current = commentId;
+                        setShowDeleteAlert(true);
+                      }}
                     >
-                      취소
+                      <FaTrashAlt /> 삭제
                     </button>
-                  </div>
-                ) : loggedInUserId === commenterId ? (
-                  <div className={styles.whileUpdateContainer}>
-                    <div className={styles.updateOther}>
-                      다른 리뷰를 수정 중입니다...
-                    </div>
                     <span className={styles.createdAt}>{createdAt}</span>
                   </div>
                 ) : (
                   <span className={styles.createdAt}>{createdAt}</span>
-                )
-              ) : loggedInUserId === commenterId ? (
-                <div className={styles.buttonsContainer}>
-                  <button
-                    className={styles.updateButton}
-                    onClick={() => {
-                      targetReviewId.current = commentId;
-                      setIsReviewUpdate(true);
-                      setReviewTyping(review.comment);
-                    }}
-                  >
-                    <FaPen /> 수정
-                  </button>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => {
-                      targetReviewId.current = commentId;
-                      setShowDeleteAlert(true);
-                    }}
-                  >
-                    <FaTrashAlt /> 삭제
-                  </button>
-                  <span className={styles.createdAt}>{createdAt}</span>
-                </div>
-              ) : (
-                <span className={styles.createdAt}>{createdAt}</span>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={styles.noComments}>등록된 댓글이 없습니다.</div>
+      )}
       {showDeleteAlert && (
         <AlertModal
-          message='해당 리뷰를 삭제하시겠습니까?'
+          message='해당 댓글을 삭제하시겠습니까?'
           showCancelButton={true}
           onConfirm={handleReviewDelete}
           onCancel={() => setShowDeleteAlert(false)}
@@ -139,7 +143,7 @@ function ReviewsSchedule({
       )}
       {showUpdateAlert && (
         <AlertModal
-          message='해당 리뷰를 입력하신 내용으로 수정하시겠습니까?'
+          message='해당 댓글을 입력하신 내용으로 수정하시겠습니까?'
           showCancelButton={true}
           onConfirm={handleReviewUpdate}
           onCancel={() => setShowUpdateAlert(false)}

@@ -18,8 +18,14 @@
   }
 
   .durationEditModalConfirm {
+    all: unset;
+    cursor: pointer;
     position: absolute;
     top: 90%;
-    left: 90%;
+    left: 87%;
+    padding: 10px 20px;
+    background-color: var(--main-color);
+    color: #ffffff;
+    border-radius: 10px;
   }
 }
