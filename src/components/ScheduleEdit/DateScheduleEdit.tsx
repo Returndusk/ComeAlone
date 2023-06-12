@@ -24,7 +24,7 @@ function DateScheduleEdit({
         }일)`}
       </span>
       <Tooltip title='날짜 수정하기' placement='right'>
-        <IconButton onClick={onOpenModal}>
+        <IconButton onClick={onOpenModal} className={styles.dateIcon}>
           <FaCalendarAlt className={styles.durationEdit} />
         </IconButton>
       </Tooltip>

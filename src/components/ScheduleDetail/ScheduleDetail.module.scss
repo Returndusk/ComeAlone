@@ -3,19 +3,36 @@
   width: 1000px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  column-gap: 10px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
 .backButton {
-  font-size: 20px;
-  margin: 0 0 20px 10px;
+  all: unset;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 35%;
+  margin: 0 0 20px 0;
+  padding: 8px 3px;
+  font-size: 18px;
+  background-color: var(--main-color);
+  border-radius: 10px;
+
+  a {
+    text-decoration: none;
+    color: #ffffff;
+  }
+
+  .backIcon {
+    margin: 0 10px 0 0;
+  }
 }
 
 .mapContainer {
   grid-column: 2 / 4;
   height: 530px;
-  padding: 90px 0 0 0;
+  padding: 130px 0 0 0;
 }
