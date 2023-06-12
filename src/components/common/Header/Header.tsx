@@ -91,9 +91,13 @@ function Header() {
           {authState.isLoggedIn && authState.user && (
             <>
               <div className={styles.auth}>
-                <button onClick={() => navigate(Router.MYSCHEDULE_LIST)}>
+                <button
+                  title='내 일정'
+                  onClick={() => navigate(Router.MYSCHEDULE_LIST)}
+                >
                   <AiOutlineCalendar />
                 </button>
+
                 <button onClick={handleUserIconClick}>
                   {authState.user.profile_image ? (
                     <Avatar
@@ -122,20 +126,26 @@ function Header() {
                   }}
                 >
                   <MenuItem
-                    onClick={handleClose}
-                    component={RouterLink}
-                    to={Router.MYPAGE}
+                  style={{fontSize: '14px', display: 'flex', justifyContent:'center'}}
+                    onClick={() => {
+                      navigate(Router.MYPAGE);
+                      handleClose();
+                    }}
                   >
                     마이페이지
                   </MenuItem>
                   <MenuItem
-                    onClick={handleClose}
-                    component={RouterLink}
-                    to={Router.MYREVIEW}
+                  style={{fontSize: '14px', display: 'flex', justifyContent:'center'}}
+                    onClick={() => {
+                      navigate(Router.MYREVIEW);
+                      handleClose();
+                    }}
                   >
-                    내 리뷰
+                    나의 리뷰
                   </MenuItem>
-                  <MenuItem onClick={handleLogoutButtonClick}>
+                  <MenuItem
+                  style={{fontSize: '14px', display: 'flex', justifyContent:'center'}}
+                  onClick={handleLogoutButtonClick}>
                     로그아웃
                   </MenuItem>
                 </Menu>
