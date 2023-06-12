@@ -22,6 +22,12 @@ export interface specifiedCategoryDestinationsType extends DestinationsType {
   category_name: string;
 }
 
+export interface CountedCategoryItemsType {
+  category_id: number;
+  category_name: string;
+  count: number;
+}
+
 export interface User {
   id: string;
   nickname: string;
