@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback, ChangeEvent } from 'react';
 import styles from './ImageScheduleEdit.module.scss';
 import { updateScheduleImageById } from '../../apis/ScheduleEditAPI';
 import AlertModal from '../common/Alert/AlertModal';
+import { FaTrashAlt } from 'react-icons/fa';
 
 const MAXIMUM_IMAGE_SIZE = 5242880;
 
@@ -49,14 +50,13 @@ function ImageScheduleEdit({
   return (
     <div className={styles.imageContainer}>
       <label htmlFor='fileInput'>
-        <img
-          className={styles.image}
-          src={updatedImagePath.current}
-          alt='representative image'
-        />
+        <img src={updatedImagePath.current} alt='representative image' />
         <div className={styles.updateMessage}>대표 이미지 수정하기</div>
         <div className={styles.updateSizeMessage}>
           (5MB 미만의 이미지 파일만 가능)
+        </div>
+        <div className={styles.deleteButton}>
+          <FaTrashAlt />
         </div>
       </label>
       <input
