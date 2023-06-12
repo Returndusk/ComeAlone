@@ -6,6 +6,7 @@ import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
 import images from '../../constants/image';
+import tokenInstance from '../../apis/tokenInstance';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -63,24 +64,17 @@ function ScheduleLists() {
     );
   }
 
-  function sortByScheduleIsLiked(scheduleData: ScheduleCardType[]) {
-    return scheduleData.filter((schedule) => {
-      return schedule.likes.some((like) => {
-        if (authState.user) {
-          return like.id === authState.user.id;
-        }
-      });
-    });
-  }
-
-  function sortSchedule(sortOption: string) {
+  async function sortSchedule(sortOption: string) {
     const scheduleData = [...scheduleList];
     if (sortOption === 'likes') {
       setShowScheduleList(sortByScheduleLikes(scheduleData));
     } else if (sortOption === 'recent') {
       setShowScheduleList(sortByScheduleRecent(scheduleData));
     } else if (sortOption === 'liked') {
-      setShowScheduleList(sortByScheduleIsLiked(scheduleData));
+      const liked = await tokenInstance.get(
+        `${baseUrl}/users/me/liked-schedules`
+      );
+      setShowScheduleList(liked.data);
     }
   }
 
