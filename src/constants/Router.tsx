@@ -4,6 +4,7 @@ export default {
   REGISTER: '/register',
   MYPAGE: '/mypage',
   MYPAGE_EDIT: '/mypage/edit',
+  MYREVIEW: '/myreview',
   DESTINATION_LIST: '/destination/list',
   SCHEDULE_LIST: '/schedule/list',
   MYSCHEDULE_LIST: '/myschedule/list',

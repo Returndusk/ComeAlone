@@ -13,6 +13,7 @@ import ScheduleDetail from './pages/ScheduleDetail';
 import ScheduleEdit from './pages/ScheduleEdit';
 import ScheduleList from './pages/ScheduleList';
 import MyScheduleList from './pages/MyScheduleList';
+import MyReview from './pages/MyReview';
 import Header from './components/common/Header/Header';
 import Footer from './components/common/Footer/Footer';
 import DestinationDetails from './components/DestinationList/DestinationDetails';
@@ -94,6 +95,14 @@ function App() {
             element={
               <Auth required={true}>
                 <MyScheduleList />
+              </Auth>
+            }
+          />
+          <Route
+            path={ROUTER.MYREVIEW}
+            element={
+              <Auth required={true}>
+                <MyReview />
               </Auth>
             }
           />
