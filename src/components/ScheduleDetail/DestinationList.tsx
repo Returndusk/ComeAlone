@@ -52,10 +52,14 @@ function DestinationList({
                     Day {index + 1}
                   </div>
                 </label>
-                {destOfDay.map(
-                  (dest: MapWithWaypointsPropsType, index: number) => (
-                    <li key={index}>{dest.title}</li>
+                {destOfDay.length > 0 ? (
+                  destOfDay.map(
+                    (dest: MapWithWaypointsPropsType, index: number) => (
+                      <li key={index}>{dest.title}</li>
+                    )
                   )
+                ) : (
+                  <div>목적지가 존재하지 않습니다.</div>
                 )}
               </ol>
             );
