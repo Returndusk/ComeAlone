@@ -65,7 +65,10 @@ export const deleteUser = async () => {
   return response;
 };
 
-export const testUserToken = async (accessToken: string) => {
-  const response = await axios.post(`${baseUrl}/auth/tokenTest`, accessToken);
+export const uploadProfileImage = async (formData: FormData) => {
+  const response = await tokenInstance.post(
+    `${baseUrl}/upload/profile/image`,
+    formData
+  );
   return response;
 };
