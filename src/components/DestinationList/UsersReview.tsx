@@ -43,7 +43,6 @@ function UsersReview() {
     comment: null
   });
   const [isEditing, setIsEditing] = useState<boolean[] | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isShowModifySuccess, setIsShowModifySuccess] =
@@ -88,7 +87,9 @@ function UsersReview() {
     async (commentid: number, content: commentType) => {
       const res = await modifyReviewByCommentId(commentid, content);
       const status = res?.status;
+      console.log(modifiedReview);
       if (status === RESPONSE_STATUS.MODIFY_SUCCESS) {
+        setModifiedReview(() => ({ comment: null }));
         setIsShowModifySuccess(true);
         await getUserReviewList();
         return;
@@ -100,7 +101,8 @@ function UsersReview() {
       modifiedReview,
       setIsShowModifySuccess,
       getUserReviewList,
-      setIsShowModifyFailed
+      setIsShowModifyFailed,
+      modifyReviewByCommentId
     ]
   );
 
@@ -132,15 +134,17 @@ function UsersReview() {
   };
 
   //수정할 내용을 제출했을때 실행할 로직
-  const handleModifiedReviewSubmit = (
-    e: React.ChangeEvent<HTMLFormElement>
+  const handleModifiedReviewSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    commentid: number
   ) => {
     e.preventDefault();
     if (!authState.isLoggedIn) {
       setIsShowAlert(true);
       return;
     }
-    const submittedModifiedReview = e.target.userReview.value;
+    const eventTarget = e.target as HTMLFormElement;
+    const submittedModifiedReview = eventTarget.userReview.value;
     if (isNullishReviewInput(submittedModifiedReview)) {
       alert(
         `수정할 내용을 ${REVIEW_STANDARDS.MIN_LENGTH}자 이상 입력해주세요.`
@@ -150,7 +154,7 @@ function UsersReview() {
     setModifiedReview(() => {
       return { comment: submittedModifiedReview };
     });
-    //목록으로 돌려보내기
+    await modifyReview(commentid, modifiedReview);
     return;
   };
 
@@ -169,19 +173,19 @@ function UsersReview() {
   };
 
   //수정 submit 이벤트 (수정 완료)
-  const handleModifiedDone = async (index: number, commentid: number) => {
-    if (modifiedReview.comment !== null) {
-      await modifyReview(commentid, modifiedReview);
-    }
-    if (isEditing) {
-      const newIsEditing = [...isEditing];
-      newIsEditing[index] = false;
-      setIsEditing(() => newIsEditing);
-      return;
-    }
-    setModifiedReview(() => ({ comment: null }));
-    return;
-  };
+  // const handleModifiedDone = async (index: number, commentid: number) => {
+  //   if (modifiedReview.comment !== null) {
+  //     await modifyReview(commentid, modifiedReview);
+  //   }
+  //   if (isEditing) {
+  //     const newIsEditing = [...isEditing];
+  //     newIsEditing[index] = false;
+  //     setIsEditing(() => newIsEditing);
+  //     return;
+  //   }
+  //   setModifiedReview(() => ({ comment: null }));
+  //   return;
+  // };
 
   const handleDeleteOnClick = async (index: number, commentid: number) => {
     if (!authState.isLoggedIn) {
@@ -258,7 +262,9 @@ function UsersReview() {
             >
               <form
                 className={styles.reviewBar}
-                onSubmit={handleModifiedReviewSubmit}
+                onSubmit={async (e) =>
+                  await handleModifiedReviewSubmit(e, review.comment_id)
+                }
               >
                 <input
                   id={styles.usersReviewBar}
@@ -266,11 +272,7 @@ function UsersReview() {
                   name='userReview'
                   defaultValue={review.comment}
                 />
-                <button
-                  id={styles.reviewSubmmitButton}
-                  type='submit'
-                  onClick={() => handleModifiedDone(index, review.comment_id)}
-                >
+                <button id={styles.reviewSubmmitButton} type='submit'>
                   완료
                 </button>
               </form>
