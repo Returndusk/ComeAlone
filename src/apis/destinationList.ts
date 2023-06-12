@@ -100,7 +100,7 @@ export const postReviewByDestinationId = async (
   }
 };
 
-export const modifyReviewByDestinationId = async (
+export const modifyReviewByCommentId = async (
   commentId: number,
   comment: commentType
 ) => {
