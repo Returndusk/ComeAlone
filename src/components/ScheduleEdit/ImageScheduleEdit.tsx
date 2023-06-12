@@ -31,6 +31,10 @@ function ImageScheduleEdit({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const uploadedImage = (event.target.files as FileList)[0];
 
+    if (!uploadedImage) {
+      return;
+    }
+
     if (uploadedImage.size >= MAXIMUM_IMAGE_SIZE) {
       setShowImageSizeAlert(true);
     } else {
