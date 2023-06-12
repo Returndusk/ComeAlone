@@ -6,12 +6,11 @@ import {
 } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   getReviewByDestinationId,
   postReviewByDestinationId
 } from '../../apis/destinationList';
-import UsersReview from './UsersReview';
 import { Avatar, TextField } from '@mui/material';
 
 const ALERT_PROPS = {
@@ -40,8 +39,7 @@ function Review() {
   const [allReviewList, setAllReviewList] = useState<
     DestinationsReviewType[] | null
   >(null);
-  const [isAccessUsersReview, setIsAccessUsersReview] =
-    useState<boolean>(false);
+
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
@@ -137,16 +135,6 @@ function Review() {
     [authState]
   );
 
-  //사용자 리뷰 목록 조회 시도
-  const handleUsersReviewClick = () => {
-    if (authState.isLoggedIn) {
-      setIsAccessUsersReview(true);
-      return;
-    }
-    setIsShowAlert(true);
-    return;
-  };
-
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
     navigate('/login');
@@ -203,8 +191,7 @@ function Review() {
                 <p className={styles.reviewComment}>{review.comment}</p>
                 {isUserReviewer(review) && (
                   <div className={styles.reviewHandlebox}>
-                    <button id={styles.reviewModifyButton}>수정</button>
-                    <button id={styles.reviewDeleteButton}>삭제</button>
+                    <NavLink to='/MyReview'>내 리뷰 관리</NavLink>
                   </div>
                 )}
               </div>
@@ -234,16 +221,7 @@ function Review() {
             </button>
           </form>
         </div>
-        <div className={styles.usersReviewListButtonContainer}>
-          <button
-            id={styles.usersReviewListButton}
-            onClick={handleUsersReviewClick}
-          >
-            내 리뷰 목록
-          </button>
-        </div>
       </section>
-      {isAccessUsersReview && <UsersReview />}
       {isShowAlert && (
         <AlertModal
           message={ALERT_PROPS.message}
