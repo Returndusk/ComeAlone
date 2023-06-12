@@ -79,7 +79,9 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
               </div>
               <div>{schedule.summary ? schedule.summary : '여행 소개'}</div>
               <div>
-                {schedule.duration - 1}박 {schedule.duration}일
+                {schedule.duration > 1
+                  ? `${schedule.duration - 1}박 ${schedule.duration}일`
+                  : '당일치기'}
               </div>
               <div>{getDate(schedule.start_date, schedule.end_date)}</div>
             </div>
