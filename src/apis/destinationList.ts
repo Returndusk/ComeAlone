@@ -13,6 +13,21 @@ export const getAllCategoryList = async () => {
   }
 };
 
+export const countEachCategoryItemsByQuery = async (
+  searchQuery: string,
+  categoryIdList: number[]
+) => {
+  try {
+    const categoryId = categoryIdList.join();
+    const response = await axios.get(
+      `${baseUrl}/categories/search-counts?title=${searchQuery}&categoryIds=${categoryId}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error, '카테고리별 데이터 갯수를 받아오는데 실패했습니다.');
+  }
+};
+
 export const getDestinationListByTitleAndCategoryId = async (
   categoryIds: number[],
   title: string

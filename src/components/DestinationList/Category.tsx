@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CategoryListType,
+  CountedCategoryItemsType,
   DestinationsType,
   specifiedCategoryDestinationsType
 } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
 import {
+  countEachCategoryItemsByQuery,
   getAllCategoryList,
   getDestinationListByTitleAndCategoryId
 } from '../../apis/destinationList';
@@ -49,6 +51,9 @@ function Category({
   const [categoryList, setCategoryList] = useState<CategoryListType[] | null>(
     null
   );
+  const [countedCategoryItems, setCountedCategoryItems] = useState<
+    CountedCategoryItemsType[] | []
+  >([]);
 
   const getAllCategoryData = useCallback(async () => {
     const res = await getAllCategoryList();
@@ -61,32 +66,29 @@ function Category({
     getAllCategoryData();
   }, [getAllCategoryData]);
 
-  const categoryIdList = useMemo(() => {
-    if (categoryList !== null) {
-      return categoryList?.map((categoryPair) => {
-        return categoryPair.id;
-      });
-    }
-  }, [categoryList]);
+  //카테고리별 데이터 수 받아오기
+  const countEachCategoryItems = useCallback(async () => {
+    const res = await countEachCategoryItemsByQuery(
+      searchQueryParam,
+      selectedCategory
+    );
+    const categoryCount = res?.data.counts_by_category;
+    setCountedCategoryItems(categoryCount);
+  }, [searchQueryParam, selectedCategory, setCountedCategoryItems]);
+
+  useEffect(() => {
+    countEachCategoryItems();
+  }, [countEachCategoryItems, searchQueryParam, selectedCategory]);
+
+  //카테고리 id로 카테고리 아이템 수를 찾는 함수
+  const findCategoryCountByCategoryId = (categoryid: number) => {
+    const targetCategory = countedCategoryItems.find(
+      (category) => category.category_id === categoryid
+    );
+    return targetCategory;
+  };
 
   //카테고리 id => name 변환 함수
-
-  /*
-  const changeCategoryIdIntoName = useCallback(
-    (destinationList: DestinationsType[]) => {
-      const specifiedCatogory = destinationList?.map((el) => {
-        const categoryPair = categoryList?.find(
-          (category) => category?.id === el?.category_id
-        );
-
-        return { ...el, category_name: categoryPair?.name ?? '기타' }; //예외처리 다시 수정
-      });
-      return specifiedCatogory;
-    },
-    [categoryList]
-  );
-*/
-
   const changeCategoryIdIntoName = useCallback(
     (destinationList: DestinationsType[]) => {
       const specifiedCatogory = destinationList?.map((el) => {
@@ -135,7 +137,7 @@ function Category({
     setIsLoading(true);
     isSelectedAll
       ? setSelectedCategory([])
-      : setSelectedCategory(categoryIdList ?? []); //오류가능성
+      : setSelectedCategory(CATEGORIES_ID_LIST ?? []); //오류가능성
     setIsLoading(false);
     return;
   };
@@ -223,7 +225,7 @@ function Category({
               >
                 전체
               </button>
-              {categoryIdList?.map((categoryId, index) => (
+              {CATEGORIES_ID_LIST?.map((categoryId, index) => (
                 <button
                   key={index}
                   value={categoryId}
@@ -240,9 +242,12 @@ function Category({
                       : styles[`Category-${categoryId}`]
                   }
                 >
-                  {categoryList?.find(
+                  {/* {categoryList?.find(
                     (categoryPair) => categoryPair.id === categoryId
-                  )?.name ?? ''}
+                  )?.name ?? ''} */}
+                  {`${
+                    findCategoryCountByCategoryId(categoryId)?.category_name
+                  }ㆍ${findCategoryCountByCategoryId(categoryId)?.count}`}
                 </button>
               ))}
             </div>
