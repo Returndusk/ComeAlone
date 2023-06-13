@@ -7,6 +7,7 @@ import { CiCircleAlert } from 'react-icons/ci';
 import { createPortal } from 'react-dom';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { FaHeart, FaCommentAlt } from 'react-icons/fa';
+import { TfiClose } from 'react-icons/tfi';
 
 type DestinationsPropsType = {
   filteredDestinations: specifiedCategoryDestinationsType[] | [];
@@ -57,7 +58,7 @@ function Destinations({
       {isLoading ? (
         <div className={styles.destinationLoadingContainer}>로딩 중..</div>
       ) : (
-        <div className={styles.destinationsInfoContainer}>
+        <>
           <section className={styles.destinationsContainer}>
             {filteredDestinations?.length > 0 ? (
               <>
@@ -69,40 +70,36 @@ function Destinations({
                       onClick={() => handleDestinationClick(destination)}
                     >
                       <div className={styles.destinationTextWrapper}>
-                        <h2
-                          className={
-                            destination?.title.length >= 10
-                              ? styles.destinationExceedTitle
-                              : styles.destinationShortTitle
-                          }
-                        >
+                        <h2 className={styles.destinationTitle}>
                           {destination?.title}
                         </h2>
                         <p className={styles.destinationAddress}>
                           {destination?.addr1}
                         </p>
-                        <p className={styles.destinationCategory}>
-                          {destination?.category_name}
-                        </p>
-                      </div>
-                      <div className={styles.iconContainer}>
-                        <div className={styles.likeBox}>
-                          <FaHeart />
-                          <span id={styles.likesCounter}>
-                            {destination?.destination_likes_count}
+                        <div className={styles.destinationExtraInfo}>
+                          <span className={styles.destinationCategory}>
+                            {destination?.category_name}
                           </span>
-                        </div>
-                        <div className={styles.commentBox}>
-                          <FaCommentAlt />
-                          <span id={styles.commentCounter}>
-                            {destination?.comment_count}
-                          </span>
+                          <div className={styles.iconContainer}>
+                            <div className={styles.likeBox}>
+                              <FaHeart />
+                              <span className={styles.likesCounter}>
+                                {destination?.destination_likes_count}
+                              </span>
+                            </div>
+                            <div className={styles.commentBox}>
+                              <FaCommentAlt />
+                              <span className={styles.commentCounter}>
+                                {destination?.comment_count}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
                       {destination?.image1 && (
                         <img
-                          id={styles.destinationImage}
+                          className={styles.destinationImage}
                           src={destination?.image2}
                           alt={destination.title}
                           onError={handleImageError}
@@ -111,10 +108,6 @@ function Destinations({
                     </div>
                   )
                 )}
-                <Pagination
-                  filteredDestinations={filteredDestinations}
-                  setSlicedDestinations={setSlicedDestinations}
-                />
               </>
             ) : (
               <div className={styles.alertContainer}>
@@ -123,6 +116,11 @@ function Destinations({
               </div>
             )}
           </section>
+
+          <Pagination
+            filteredDestinations={filteredDestinations}
+            setSlicedDestinations={setSlicedDestinations}
+          />
           {isOpen &&
             detailsDomRoot !== null &&
             createPortal(
@@ -133,13 +131,13 @@ function Destinations({
                     className={styles.detailsCloseButton}
                     onClick={closeDetailPage}
                   >
-                    X
+                    <TfiClose />
                   </button>
                 </div>
               </section>,
               detailsDomRoot
             )}
-        </div>
+        </>
       )}
       <Map
         markersLocations={

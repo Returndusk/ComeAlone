@@ -252,11 +252,11 @@ function Category({
               ))}
             </div>
           </section>
-          <div className={styles.filteredCounterWraper}>
-            <p id={styles.filteredCounter}>{`전체ㆍ${
+          {/* <div className={styles.filteredCounterWraper}>
+            <p className={styles.filteredCounter}>{`전체ㆍ${
               filteredCount ?? '로딩 중...'
             }`}</p>
-          </div>
+          </div> */}
           <Destinations
             filteredDestinations={filteredDestinations}
             isLoading={isLoading}
