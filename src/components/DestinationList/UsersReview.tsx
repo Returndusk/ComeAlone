@@ -1,16 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './UsersReview.module.scss';
-import {
-  DestinationsReviewType,
-  commentType
-} from '../../types/DestinationListTypes';
+import { DestinationsReviewType } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
 import { useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
-  getUsersReview,
-  modifyReviewByCommentId
+  getUsersReview
 } from '../../apis/destinationList';
 import { FaTrashAlt } from 'react-icons/fa';
 import { CiCircleAlert } from 'react-icons/ci';
