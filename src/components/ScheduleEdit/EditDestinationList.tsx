@@ -8,7 +8,7 @@ import {
   Draggable,
   DropResult
 } from '@hello-pangea/dnd';
-import { FaGripLines, FaTrashAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaGripLines, FaTrashAlt } from 'react-icons/fa';
 import AlertModal from '../common/Alert/AlertModal';
 import ROUTER from '../../constants/Router';
 
@@ -83,37 +83,40 @@ function EditDestinationList({
   };
 
   return (
-    <div className={styles.destinationsContainer}>
-      <div className={styles.destinationsTitle}>목적지 리스트</div>
+    <>
+      <div className={styles.destinationsTitle}>
+        <FaMapMarkerAlt className={styles.destinationsIcon} />
+        목적지
+      </div>
       <div className={styles.addDestinationButton}>
         <Link to={ROUTER.DESTINATION_LIST}>+ 새로운 목적지 추가하기</Link>
       </div>
-      <label>
-        <input
-          type='radio'
-          checked={checkedDayIndex === -1}
-          onChange={() => {
-            onCheckedDayIndexUpdate(-1);
-          }}
-        />
-        <span>전체 목적지 보기</span>
-      </label>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <div className={styles.destinationsList}>
-          {updatedDestinationList.map((destOfDay, dayIndex) => {
-            return (
-              <Droppable
-                droppableId={`day ${dayIndex}`}
-                key={`day ${dayIndex}`}
-              >
-                {(droppableProvided) => (
-                  <div
-                    className={styles.destinationsDay}
-                    ref={droppableProvided.innerRef}
-                    {...droppableProvided.droppableProps}
-                  >
-                    <label>
-                      <div>
+      <div className={styles.destinationsContainer}>
+        <label>
+          <input
+            type='radio'
+            checked={checkedDayIndex === -1}
+            onChange={() => {
+              onCheckedDayIndexUpdate(-1);
+            }}
+          />
+          <span>전체 목적지 보기</span>
+        </label>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div className={styles.destinationsList}>
+            {updatedDestinationList.map((destOfDay, dayIndex) => {
+              return (
+                <Droppable
+                  droppableId={`day ${dayIndex}`}
+                  key={`day ${dayIndex}`}
+                >
+                  {(droppableProvided) => (
+                    <div
+                      className={styles.destinationsDay}
+                      ref={droppableProvided.innerRef}
+                      {...droppableProvided.droppableProps}
+                    >
+                      <label>
                         <input
                           type='radio'
                           checked={checkedDayIndex === dayIndex}
@@ -126,10 +129,11 @@ function EditDestinationList({
                           }}
                         />{' '}
                         <span>Day {dayIndex + 1}</span>
-                      </div>
-                    </label>
-                    {destOfDay.length > 0 ? (
-                      destOfDay.map((dest, destIndex) => (
+                        {destOfDay.length > 0 ? null : (
+                          <p>(목적지가 존재하지 않습니다.)</p>
+                        )}
+                      </label>
+                      {destOfDay.map((dest, destIndex) => (
                         <Draggable
                           key={`${dayIndex} ${destIndex}`}
                           draggableId={`${dayIndex} ${destIndex}`}
@@ -157,29 +161,25 @@ function EditDestinationList({
                             </div>
                           )}
                         </Draggable>
-                      ))
-                    ) : (
-                      <div className={styles.noDestination}>
-                        목적지가 존재하지 않습니다.
-                      </div>
-                    )}
-                    {droppableProvided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            );
-          })}
-        </div>
-      </DragDropContext>
-      {showDeleteAlert && (
-        <AlertModal
-          message='해당 목적지를 삭제하시겠습니까?'
-          showCancelButton={true}
-          onConfirm={handleDestinationDelete}
-          onCancel={() => setShowDeleteAlert(false)}
-        />
-      )}
-    </div>
+                      ))}
+                      {droppableProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              );
+            })}
+          </div>
+        </DragDropContext>
+        {showDeleteAlert && (
+          <AlertModal
+            message='해당 목적지를 삭제하시겠습니까?'
+            showCancelButton={true}
+            onConfirm={handleDestinationDelete}
+            onCancel={() => setShowDeleteAlert(false)}
+          />
+        )}
+      </div>
+    </>
   );
 }
 

@@ -43,6 +43,15 @@ function InputReviewSchedule({
           )}
           <TextField
             className={styles.reviewsInput}
+            sx={{
+              '& label.Mui-focused': { color: '#ef6d00' },
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#fe9036',
+                  borderWidth: '1px'
+                }
+              }
+            }}
             onChange={handleChange}
             label='댓글을 입력하세요.'
             value={reviewTyping}
