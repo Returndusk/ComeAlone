@@ -74,11 +74,6 @@
           color: var(--sub-1-color);
         }
       }
-
-      .noDestination {
-        margin: 14px 0 0 10px;
-        font-size: 16px;
-      }
     }
   }
 
@@ -124,6 +119,14 @@
         transition: 0.25s ease;
         box-shadow: inset 0 0 0 0.125em #ef6d00;
       }
+    }
+
+    p {
+      align-self: center;
+      margin-left: auto;
+      margin-right: 10px;
+      font-size: 14px;
+      font-weight: 400;
     }
   }
 }
