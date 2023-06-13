@@ -27,6 +27,7 @@ function Destinations({
   const [detailsDomRoot, setDetailsDomRoot] = useState<HTMLElement | null>(
     null
   );
+  const [mapDomRoot, setMapDomRoot] = useState<HTMLElement | null>(null);
   const [imageError, setImageError] = useState<boolean>(false);
   const { search } = useLocation();
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ function Destinations({
 
   useEffect(() => {
     setDetailsDomRoot(() => document.getElementById('main'));
+    setMapDomRoot(() => document.getElementById('main'));
   }, []);
 
   const handleDestinationClick = (
@@ -147,14 +149,18 @@ function Destinations({
             )}
         </>
       )}
-      <Map
-        markersLocations={
-          clickedDestination !== null
-            ? [clickedDestination]
-            : slicedDestinations
-        }
-        setClickedDestination={setClickedDestination}
-      />
+      {mapDomRoot !== null &&
+        createPortal(
+          <Map
+            markersLocations={
+              clickedDestination !== null
+                ? [clickedDestination]
+                : slicedDestinations
+            }
+            setClickedDestination={setClickedDestination}
+          />,
+          mapDomRoot
+        )}
     </div>
   );
 }
