@@ -1,16 +1,34 @@
+.destinationsTitle {
+  grid-row: 5;
+  grid-column: 1 / 4;
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 20px 0;
+  font-weight: bold;
+  font-size: 26px;
+
+  .destinationsIcon {
+    margin: 0 14px 0 0;
+  }
+
+  .destinationCount {
+    color: var(--main-color);
+    margin: 0 0 0 10px;
+  }
+}
+
 .destinationsContainer {
+  grid-row: 6;
   grid-column: 1 / 2;
   height: 500px;
 
-  .destinationsTitle {
+  .allDestinations {
     margin: 0 0 20px 0;
-    font-weight: bold;
-    font-size: 24px;
   }
 
   .destinationsList {
     height: 95%;
-    margin: 20px 10px 0 0;
+    margin: 0 10px 0 0;
     overflow-x: hidden;
     overflow-y: scroll;
 

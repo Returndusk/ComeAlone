@@ -5,17 +5,17 @@ import React, {
   useCallback,
   useRef
 } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
+import BackButtonScheduleEdit from '../components/ScheduleEdit/BackButtonScheduleEdit';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
 import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
 import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusScheduleEdit';
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
-import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import ButttonsScheduleEdit from '../components/ScheduleEdit/ButtonsScheduleEdit';
+import DestinationsMap from '../components/ScheduleEdit/DestinationsMap';
+import ButtonsScheduleEdit from '../components/ScheduleEdit/ButtonsScheduleEdit';
 import DateModalScheduleEdit from '../components/ScheduleEdit/DateModalScheduleEdit';
-import { FaArrowLeft } from 'react-icons/fa';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import {
   ScheduleEditFetchedType,
@@ -185,12 +185,7 @@ function ScheduleEdit() {
 
   return (
     <div className={styles.container}>
-      <button className={styles.backButton}>
-        <Link to={`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`}>
-          <FaArrowLeft className={styles.backIcon} />
-          돌아가기
-        </Link>
-      </button>
+      <BackButtonScheduleEdit scheduleId={scheduleId} />
       <ImageScheduleEdit
         imagePath={updatedImagePath.current}
         onImageUpdate={handleImageUpdate}
@@ -216,10 +211,8 @@ function ScheduleEdit() {
         onDestinationListUpdate={setUpdatedDestinationList}
         onCheckedDayIndexUpdate={setCheckedDayIndex}
       />
-      <div className={styles.mapContainer}>
-        <MapWithWaypoints markersLocations={markersLocations} />
-      </div>
-      <ButttonsScheduleEdit onSubmit={handleSubmit} onDelete={handleDelete} />
+      <DestinationsMap markersLocations={markersLocations} />
+      <ButtonsScheduleEdit onSubmit={handleSubmit} onDelete={handleDelete} />
       <DateModalScheduleEdit
         openModal={showDateModal}
         dateInfo={updatedDateInfo}

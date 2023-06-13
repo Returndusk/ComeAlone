@@ -1,9 +1,22 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import styles from './PublicStatusScheduleEdit.module.scss';
+import { alpha, styled } from '@mui/material/styles';
 import { FormGroup, FormControlLabel, Switch } from '@mui/material';
 
 const IS_SCHEDULE_PUBLIC = 'PUBLIC';
 const IS_SCHEDULE_PRIVATE = 'PRIVATE';
+
+const CustomSwitch = styled(Switch)(({ theme }) => ({
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: '#ef6d00',
+    '&:hover': {
+      backgroundColor: alpha('#ef6d00', theme.palette.action.hoverOpacity)
+    }
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: '#ef6d00'
+  }
+}));
 
 function PublicStatusScheduleEdit({
   updatedStatus,
@@ -17,7 +30,7 @@ function PublicStatusScheduleEdit({
       <FormGroup>
         <FormControlLabel
           control={
-            <Switch
+            <CustomSwitch
               className={styles.statusSwitch}
               checked={updatedStatus === IS_SCHEDULE_PUBLIC ? true : false}
               onClick={() => {

@@ -8,6 +8,13 @@ import ProfileImage from '../components/MyPage/ProfileImage';
 import styles from '../components/MyPage/MyPage.module.scss';
 import MyPageButtons from '../components/MyPage/MyPageButtons';
 import DeleteAccountForm from '../components/MyPage/DeleteAccountForm';
+import AlertModal from '../components/common/Alert/AlertModal';
+
+type AlertOption = {
+  isOpen: boolean;
+  message: string;
+  onConfirm: null | (() => void);
+};
 
 function MyPage() {
   const { authState, updateAuthState } = useAuthState();
@@ -19,7 +26,12 @@ function MyPage() {
     phoneNumber: '',
     profileImage: ''
   };
-
+  const initAlert = {
+    isOpen: false,
+    message: '',
+    onConfirm: null
+  };
+  const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
   const [user, setUser] = useState(initValues);
   const [deleteAccountAttempt, setDeleteAccountAttempt] = useState(false);
 
@@ -55,14 +67,21 @@ function MyPage() {
                 err.response.data.reason === 'INVALID' ||
                 err.response.data.reason === 'EXPIRED'
               ) {
-                alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
-                return updateAuthState(false);
+                return setAlertModal({
+                  isOpen: true,
+                  message: '로그인 상태가 아닙니다. 다시 로그인해주세요.',
+                  onConfirm: () => updateAuthState(false)
+                });
               }
             }
           }
 
           console.log(err);
-          alert('회원 정보 불러오기에 실패하였습니다.');
+          setAlertModal({
+            isOpen: true,
+            message: '회원 정보 불러오기에 실패하였습니다.',
+            onConfirm: () => setAlertModal(initAlert)
+          });
         }
       };
 
@@ -71,29 +90,40 @@ function MyPage() {
   }, [authState.isLoggedIn, updateAuthState]);
 
   return (
-    <main className={styles.container}>
-      <div className={styles.wrapper}>
-        <h1>마이페이지</h1>
-        {!deleteAccountAttempt && (
-          <>
-            <ProfileImage image={user.profileImage} nickname={user.nickname} />
-            <UserInfo user={user} />
-            <MyPageButtons
-              attemptDeleteAccount={() => {
-                setDeleteAccountAttempt(true);
+    <>
+      <main className={styles.container}>
+        <div className={styles.wrapper}>
+          <h1>마이페이지</h1>
+          {!deleteAccountAttempt && (
+            <>
+              <ProfileImage
+                image={user.profileImage}
+                nickname={user.nickname}
+              />
+              <UserInfo user={user} />
+              <MyPageButtons
+                attemptDeleteAccount={() => {
+                  setDeleteAccountAttempt(true);
+                }}
+              />
+            </>
+          )}
+          {deleteAccountAttempt && (
+            <DeleteAccountForm
+              cancelDeleteAccount={() => {
+                setDeleteAccountAttempt(false);
               }}
             />
-          </>
-        )}
-        {deleteAccountAttempt && (
-          <DeleteAccountForm
-            cancelDeleteAccount={() => {
-              setDeleteAccountAttempt(false);
-            }}
-          />
-        )}
-      </div>
-    </main>
+          )}
+        </div>
+      </main>
+      {alertModal.isOpen && alertModal.onConfirm && (
+        <AlertModal
+          message={alertModal.message}
+          onConfirm={alertModal.onConfirm}
+        />
+      )}
+    </>
   );
 }
 
