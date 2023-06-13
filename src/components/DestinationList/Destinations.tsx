@@ -5,7 +5,7 @@ import styles from './Destinations.module.scss';
 import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 import { CiCircleAlert } from 'react-icons/ci';
 import { createPortal } from 'react-dom';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { FaHeart, FaCommentAlt } from 'react-icons/fa';
 import { TfiClose } from 'react-icons/tfi';
 
@@ -30,6 +30,12 @@ function Destinations({
   const [imageError, setImageError] = useState<boolean>(false);
   const { search } = useLocation();
   const navigate = useNavigate();
+  const { contentid } = useParams();
+
+  //contentid가 url에 있으면, 상세페이지가 열리도록 하기
+  useEffect(() => {
+    contentid && setIsOpen(true);
+  }, [contentid]);
 
   useEffect(() => {
     setDetailsDomRoot(() => document.getElementById('main'));
