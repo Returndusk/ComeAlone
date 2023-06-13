@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import { uploadProfileImage } from '../../apis/UserAPI';
 import { useAuthState } from '../../contexts/AuthContext';
 import { IoMdSettings } from 'react-icons/io';
-import { RiDeleteBin5Line } from 'react-icons/ri';
+import { FaTrashAlt } from 'react-icons/fa';
 import { Avatar } from '@mui/material';
 import styles from './ProfileImage.module.scss';
 
@@ -108,7 +108,7 @@ function ProfileImage({
                 alt='프로필 이미지'
               />
               <div className={styles.deleteImage} onClick={handleDeleteImage}>
-                <RiDeleteBin5Line />
+                <FaTrashAlt />
               </div>
             </>
           )}
