@@ -25,6 +25,7 @@ import {
   ScheduleFetchedType
 } from '../types/ScheduleDetailTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
+import DestinationsMap from '../components/ScheduleDetail/DestinationsMap';
 
 function ScheduleDetail() {
   const scheduleId: string = useParams().scheduleId as string;
@@ -192,9 +193,7 @@ function ScheduleDetail() {
         destinationCount={destinationCount}
         onDestinationsChecked={setCheckedDestinations}
       />
-      <div className={styles.mapContainer}>
-        <MapWithWaypoints markersLocations={checkedDestinations} />
-      </div>
+      <DestinationsMap checkedDestinations={checkedDestinations} />
       <ReviewsSchedule
         scheduleReviews={scheduleReviews}
         commentsCount={commentsCount}
