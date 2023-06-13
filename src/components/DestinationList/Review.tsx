@@ -165,54 +165,66 @@ function Review() {
                     {review.user.nickname[0]}
                   </Avatar>
                   <div className={styles.reviewInfo}>
-                    <p className={styles.reviewerNickname}>
-                      {review.user.nickname}
-                    </p>
+                    <div className={styles.reviewerInfo}>
+                      <span className={styles.reviewerNickname}>
+                        {review.user.nickname}
+                      </span>
+                      {isUserReviewer(review) && (
+                        <span className={styles.reviewHandlebox}>
+                          <NavLink to='/MyReview'>내 리뷰 관리</NavLink>
+                        </span>
+                      )}
+                    </div>
+
                     <div className={styles.reviewDate}>
-                      <span
-                        id={styles.reviewCreatedDate}
-                      >{`작성 ${changeCreatedAtIntoDate(
-                        review.created_at
-                      )}`}</span>
+                      <span id={styles.reviewCreatedDate}>
+                        {changeCreatedAtIntoDate(review.created_at)}
+                      </span>
                       {review.created_at !== review.updated_at && (
-                        <span
-                          id={styles.reviewModifiedDate}
-                        >{`수정 ${changeCreatedAtIntoDate(
-                          review.updated_at
-                        )}`}</span>
+                        <span className={styles.reviewModifiedDate}>
+                          수정됨
+                        </span>
                       )}
                     </div>
                   </div>
                 </div>
                 <p className={styles.reviewComment}>{review.comment}</p>
-                {isUserReviewer(review) && (
-                  <div className={styles.reviewHandlebox}>
-                    <NavLink to='/MyReview'>내 리뷰 관리</NavLink>
-                  </div>
-                )}
               </div>
             );
           })}
         </div>
         <div className={styles.reviewInputContainer}>
           <Avatar
-            id={styles.reviewInputAvatar}
+            className={styles.reviewInputAvatar}
             src={authState?.user?.profile_image}
           >
             {authState.user?.nickname[0] ?? 'G'}
           </Avatar>
-          <form className={styles.reviewInputBar} onSubmit={handleReviewSubmit}>
+          <form
+            className={styles.reviewInputForm}
+            onSubmit={handleReviewSubmit}
+          >
             <TextField
-              id={styles.reviewInputBar}
+              className={styles.reviewInputBar}
               type='text'
               name='review'
+              size='small'
               label={
                 authState.isLoggedIn
                   ? '리뷰를 작성해주세요.'
                   : '로그인이 필요합니다.'
               }
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
+                }
+              }}
             />
-            <button id={styles.reviewButton} type='submit'>
+            <button className={styles.reviewButton} type='submit'>
               등록
             </button>
           </form>

@@ -141,12 +141,14 @@ function DestinationDetails() {
         <div className={styles.destinationDetailsContainer}>
           <section className={styles.destinationDetails}>
             <div className={styles.destinationDetailsImgContainer}>
-              <img
-                id={styles.destinationDetailsImage}
-                src={destinationDetails.image1}
-                alt={destinationDetails.title}
-              />
-              <span id={styles.categoryNameTag}>
+              {destinationDetails.image1 && (
+                <img
+                  className={styles.destinationDetailsImage}
+                  src={destinationDetails.image1}
+                  alt={destinationDetails.title}
+                />
+              )}
+              <span className={styles.categoryNameTag}>
                 {changeCategoryIdIntoName(destinationDetails?.category_id)}
               </span>
             </div>
@@ -168,30 +170,32 @@ function DestinationDetails() {
               </div>
             </div>
 
-            <span className={styles.destinationAddrContainer}>
-              <FaMapMarkerAlt id={styles.destinationAddrIcon} />
-              <p className={styles.destinationAddress}>
-                {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
+            <div className={styles.destinationInfoContainer}>
+              <p className={styles.destinationInfo}>
+                <FaMapMarkerAlt id={styles.destinationAddrIcon} />
+                <p className={styles.destinationAddress}>
+                  {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
+                </p>
               </p>
-            </span>
 
-            <span className={styles.destinationTelContainer}>
-              <BsFillTelephoneFill id={styles.destinationTelIcon} />
-              <p className={styles.destinationTelNumber}>
-                {destinationDetails?.tel
-                  ? destinationDetails?.tel
-                  : '정보가 제공되고 있지 않습니다.'}{' '}
+              <p className={styles.destinationInfo}>
+                <BsFillTelephoneFill id={styles.destinationTelIcon} />
+                <p className={styles.destinationTelNumber}>
+                  {destinationDetails?.tel
+                    ? destinationDetails?.tel
+                    : '제공된 정보 없음'}{' '}
+                </p>
               </p>
-            </span>
 
-            <span className={styles.destinationHomeContainer}>
-              <FaHome id={styles.destinationHomeIcon} />
-              <p className={styles.destinationHomePage}>
-                {destinationDetails?.homepage
-                  ? changeStringIntoHTML(destinationDetails?.homepage)
-                  : '정보가 제공되고 있지 않습니다.'}{' '}
+              <p className={styles.destinationInfo}>
+                <FaHome id={styles.destinationHomeIcon} />
+                <p className={styles.destinationHomePage}>
+                  {destinationDetails?.homepage
+                    ? changeStringIntoHTML(destinationDetails?.homepage)
+                    : '제공된 정보 없음'}{' '}
+                </p>
               </p>
-            </span>
+            </div>
 
             <div className={styles.destinationOverview}>
               {destinationDetails?.overview}
@@ -199,7 +203,7 @@ function DestinationDetails() {
 
             <div className={styles.scheduleModalButtonContainer}>
               <button
-                id={styles.scheduleModalButton}
+                className={styles.scheduleModalButton}
                 onClick={handleShowModalClick}
               >
                 내 일정에 추가

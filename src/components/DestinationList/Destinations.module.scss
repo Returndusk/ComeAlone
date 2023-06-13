@@ -1,27 +1,13 @@
 .destinationContentsContainer {
   display: flex;
-  flex-direction: row;
-}
-
-.destinationsContainer {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(10, 200px);
-  background-color: #fff;
-  width: 550px; //search bar, category container와 동일
-  height: calc(
-    100vh - 149px
-  ); // map과 맞추기(추후 변경 가능성 있음- border 1px)
-
-  // max-height: 550px; //추후 삭제
-  // min-height: 550px; 상의 후 결정
+  flex-direction: column;
+  width: 100%;
+  // height: calc(100% - 194px); //추후 변경 가능
   overflow-x: hidden;
   overflow-y: auto;
-  position: relative;
-  z-index: 1000;
 
   &::-webkit-scrollbar {
-    width: 12px;
+    width: 5px;
     background: #ffffff;
   }
   &::-webkit-scrollbar-thumb {
@@ -35,85 +21,108 @@
   &::-webkit-scrollbar-track {
     background: #ffffff;
   }
+}
+
+.destinationsContainer {
+  display: grid;
+  // grid-template-columns: 1fr;
+  // grid-template-rows: repeat(10, 200px);
+  width: 100%; //search bar, category container와 동일
+
+  box-sizing: border-box;
+  // max-height: 550px; //추후 삭제
+  // min-height: 550px; 상의 후 결정
 
   .destinations {
     display: flex;
-    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
 
-    border: 1px solid #ccc;
-    margin: 15px 30px;
-    padding: 30px;
-
-    &:hover {
-      cursor: pointer;
-    }
-
-    h2 {
-      font-weight: 600;
-    }
-
-    h2 + p {
-      margin-top: 15px;
-    }
-
-    p + p {
-      margin-top: 18px;
+    &:hover,
+    &.active {
+      background-color: #f8f8f8;
     }
 
     .destinationTextWrapper {
+      width: calc(100% - 100px);
+      height: 100px;
       display: flex;
       flex-direction: column;
+      box-sizing: border-box;
+      padding-right: 20px;
     }
 
-    .destinationExceedTitle {
-      font-size: 20px;
+    .destinationTitle {
+      font-size: 18px;
+      letter-spacing: 1px;
+      line-height: 1.3;
       font-weight: 600;
-    }
-
-    .destinationShortTitle {
-      font-size: 25px;
-      font-weight: 600;
+      color: var(--main-color);
+      margin-bottom: 5px;
     }
 
     .destinationAddress {
-      font-size: 18px;
-
-      width: 190px;
-      height: 30px;
-
-      white-space: normal;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 10px;
     }
 
-    .iconContainer {
+    .destinationExtraInfo {
+      width: 100%;
       display: flex;
-      align-items: flex-end;
-      text-align: center;
+      justify-content: space-between;
+      margin-top: auto;
 
-      .likeBox {
-        font-size: 24px;
-        color: rgb(231, 49, 49);
-        #likesCounter {
-          font-size: 18px;
-        }
+      .destinationCategory {
+        font-size: 14px;
+        color: #8f8f8f;
       }
-      .commentBox {
-        font-size: 24px;
-        color: rgb(75, 74, 74);
-        #commentCounter {
-          font-size: 18px;
+
+      .iconContainer {
+        display: flex;
+
+        .likeBox {
+          display: flex;
+          align-items: center;
+          font-size: 16px;
+          color: rgb(231, 49, 49);
+          margin-right: 10px;
+
+          .likesCounter {
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 5px;
+          }
+        }
+        .commentBox {
+          display: flex;
+          align-items: center;
+          font-size: 16px;
+          color: rgb(75, 74, 74);
+
+          .commentCounter {
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 5px;
+          }
         }
       }
     }
 
-    #destinationImage {
-      width: 150px;
-      height: 108px;
+    .destinationImage {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
     }
   }
 }
 
 .destinationsInfoContainer {
+  width: 100%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
 }
 
 .alertContainer {
@@ -133,33 +142,34 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 1000;
 
   .detailsButtonContainer {
+    position: absolute;
+    top: 5px;
+    right: -42px;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
+    border-radius: 0px 3px 3px 0px;
+    border: 1px solid #bbb;
+    border-left: 1px solid transparent;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 
     .detailsCloseButton {
-      position: absolute;
-      top: 2%;
-      right: 6%;
-      width: 35px;
-      height: 35px;
-      z-index: 1000;
-
-      box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      color: #777;
+      opacity: 0.7;
+      background-color: transparent;
+      padding: 0px;
       font-weight: 600;
-      font-size: 20px;
+      font-size: 25px;
       border: none;
-
-      background: #ccc;
-      opacity: 0.8;
-      color: var(--main-color);
-
-      &:hover {
-        cursor: pointer;
-      }
+      cursor: pointer;
     }
   }
 }
