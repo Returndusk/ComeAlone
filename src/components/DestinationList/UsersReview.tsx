@@ -12,6 +12,8 @@ import {
   getUsersReview,
   modifyReviewByCommentId
 } from '../../apis/destinationList';
+import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import { CiCircleAlert } from 'react-icons/ci';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -176,6 +178,17 @@ function UsersReview() {
     }
   };
 
+  //리뷰 등록일자 가공 매서드
+  const changeCreatedAtIntoDate = (date: string) => {
+    const reviewDate = new Date(date);
+    const year = reviewDate.getFullYear();
+    const month = reviewDate.getMonth() + 1;
+    const day = reviewDate.getDate();
+    const hour = reviewDate.getHours().toString().padStart(2, '0');
+    const minute = reviewDate.getMinutes().toString().padStart(2, '0');
+    return `${year}.${month}.${day} ${hour}:${minute}`;
+  };
+
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
     navigate('/login');
@@ -212,47 +225,87 @@ function UsersReview() {
   return (
     <div>
       <div className={styles.usersReviewContainer}>
-        {usersReview?.map((review, index) => {
-          return isEditing !== null && !isEditing[index] ? (
-            <div key={index} className={styles.usersReviewBox}>
-              <p>{index}</p>
-              <p>{review.comment}</p>
-              <p>{review.created_at}</p>
-              <p>{review.updated_at}</p>
-              <button onClick={() => handleModifiedButtonOnClick(index)}>
-                수정
-              </button>
-              <button
-                onClick={() => handleDeleteOnClick(index, review.comment_id)}
-              >
-                삭제
-              </button>
-            </div>
-          ) : (
-            <div
-              key={index}
-              className={styles.usersReviewBox}
-              id={styles.modifyReviewBox}
-            >
-              <form
-                className={styles.reviewBar}
-                onSubmit={async (e) =>
-                  await handleModifiedReviewSubmit(e, review.comment_id)
-                }
-              >
-                <input
-                  id={styles.usersReviewBar}
-                  type='text'
-                  name='userReview'
-                  defaultValue={review.comment}
-                />
-                <button id={styles.reviewSubmmitButton} type='submit'>
-                  완료
-                </button>
-              </form>
-            </div>
-          );
-        })}
+        <span
+          className={styles.usersReviewCounter}
+        >{`전체ㆍ${usersReview?.length}`}</span>
+        {Array.isArray(usersReview) && usersReview?.length > 0 && (
+          <>
+            {usersReview?.map((review, index) => {
+              return isEditing !== null && !isEditing[index] ? (
+                <div key={index} className={styles.usersReviewBox}>
+                  <div className={styles.destinationInfo}>
+                    {review?.destination.image2 ? (
+                      <img
+                        id={styles.reviewImage}
+                        src={review?.destination.image2}
+                        alt={review.destination.title}
+                      />
+                    ) : (
+                      <span></span>
+                    )}
+
+                    <p className={styles.usersReviewTitle}>
+                      {review.destination.title}
+                    </p>
+                    {!isEditing.includes(true) && (
+                      <div className={styles.reviewHandleButtonContainer}>
+                        {/* <button
+                          className={styles.modifyButton}
+                          onClick={() => handleModifiedButtonOnClick(index)}
+                        >
+                          <FaPen />
+                        </button> */}
+                        <button
+                          className={styles.deleteButton}
+                          onClick={() =>
+                            handleDeleteOnClick(index, review.comment_id)
+                          }
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <p className={styles.usersReviewCreatedDate}>
+                    {changeCreatedAtIntoDate(review.created_at)}
+                  </p>
+
+                  <p className={styles.usersReviewComment}>{review.comment}</p>
+                </div>
+              ) : (
+                <div
+                  key={index}
+                  className={styles.usersReviewBox}
+                  id={styles.modifyReviewBox}
+                >
+                  <form
+                    className={styles.reviewBar}
+                    onSubmit={async (e) =>
+                      await handleModifiedReviewSubmit(e, review.comment_id)
+                    }
+                  >
+                    <input
+                      id={styles.usersReviewBar}
+                      type='text'
+                      name='userReview'
+                      defaultValue={review.comment}
+                    />
+                    <button id={styles.reviewSubmmitButton} type='submit'>
+                      완료
+                    </button>
+                  </form>
+                </div>
+              );
+            })}
+          </>
+        )}
+        {Array.isArray(usersReview) && usersReview?.length === 0 && (
+          <div className={styles.alertContainer}>
+            <CiCircleAlert className={styles.alertIcon} />
+            <p>작성하신 리뷰가 없습니다.</p>
+          </div>
+        )}
       </div>
       {isShowAlert && (
         <AlertModal
