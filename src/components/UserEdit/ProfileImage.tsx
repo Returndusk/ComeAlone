@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AxiosError } from 'axios';
 import { uploadProfileImage } from '../../apis/UserAPI';
 import { useAuthState } from '../../contexts/AuthContext';
 import { IoMdSettings } from 'react-icons/io';
-import { RiDeleteBin5Line } from 'react-icons/ri';
+import { FaTrashAlt } from 'react-icons/fa';
 import { Avatar } from '@mui/material';
 import styles from './ProfileImage.module.scss';
+import AlertModal from '../common/Alert/AlertModal';
 
 const IMAGE_MAX_SIZE = 5 * 1024 * 1024;
+
+type AlertOption = {
+  isOpen: boolean;
+  message: string;
+  onConfirm: null | (() => void);
+};
 
 type ProfileImageProps = {
   handleChange: (imagePath: string) => void;
@@ -21,6 +28,13 @@ function ProfileImage({
   image
 }: ProfileImageProps) {
   const { authState, updateAuthState } = useAuthState();
+  const initAlert = {
+    isOpen: false,
+    message: '',
+    onConfirm: null
+  };
+  const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
+
   const handleDeleteImage = async () => {
     if (window.confirm('정말 삭제하시겠습니까?')) {
       handleImageRemove();
@@ -32,13 +46,11 @@ function ProfileImage({
     const fileType = file.name.split('.').pop()?.toLowerCase();
 
     if (!fileType || !allowedTypes.includes(fileType)) {
-      return alert(
-        '허용되지 않은 파일 형식입니다. PNG, JPG, JPEG 파일만 업로드해주세요.'
-      );
+      return '허용되지 않은 파일 형식입니다. PNG, JPG, JPEG 파일만 업로드해주세요.';
     }
 
     if (file.size > IMAGE_MAX_SIZE) {
-      return alert('파일 크기가 5MB를 초과합니다.');
+      return '파일 크기가 5MB를 초과합니다.';
     }
   };
 
@@ -46,7 +58,14 @@ function ProfileImage({
     if (!e.target.files || e.target.files.length === 0) return;
 
     const selectedFile = e.target.files[0];
-    validateFile(selectedFile);
+    const validationError = validateFile(selectedFile);
+    if (validationError) {
+      return setAlertModal({
+        isOpen: true,
+        message: validationError,
+        onConfirm: () => setAlertModal(initAlert)
+      });
+    }
 
     try {
       const data = new FormData();
@@ -64,62 +83,81 @@ function ProfileImage({
             err.response.data.reason === 'INVALID' ||
             err.response.data.reason === 'EXPIRED'
           ) {
-            alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
-            return updateAuthState(false);
+            return setAlertModal({
+              isOpen: true,
+              message: '로그인 상태가 아닙니다. 다시 로그인해주세요.',
+              onConfirm: () => updateAuthState(false)
+            });
           }
         }
 
         if (err.response?.status === 415) {
-          alert(err.response.data.message);
+          return setAlertModal({
+            isOpen: true,
+            message: err.response.data.message,
+            onConfirm: () => setAlertModal(initAlert)
+          });
         }
       }
 
       console.log(err);
-      alert('프로필 이미지 업로드에 실패하였습니다.');
+      setAlertModal({
+        isOpen: true,
+        message: '프로필 이미지 업로드에 실패하였습니다.',
+        onConfirm: () => setAlertModal(initAlert)
+      });
     }
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <div className={styles.buttonBox}>
-          <label
-            htmlFor='profileImage'
-            className={styles.imageChangeBtn}
-            title='JPG, JPEG, PNG 파일 (5MB 이하)'
-          >
-            <IoMdSettings />
-          </label>
-          <input
-            type='file'
-            name='profileImage'
-            id='profileImage'
-            accept='image/*'
-            className={styles.hidden}
-            onChange={handleUpload}
-          />
-        </div>
-        <div className={styles.imageBox}>
-          {image && (
-            <>
-              <Avatar
-                src={image}
-                className={styles.image}
-                alt='프로필 이미지'
-              />
-              <div className={styles.deleteImage} onClick={handleDeleteImage}>
-                <RiDeleteBin5Line />
-              </div>
-            </>
-          )}
-          {!image && (
-            <Avatar className={styles.image} alt='프로필 이미지'>
-              <span>{authState?.user?.nickname[0]}</span>
-            </Avatar>
-          )}
+    <>
+      <div className={styles.container}>
+        <div className={styles.wrapper}>
+          <div className={styles.buttonBox}>
+            <label
+              htmlFor='profileImage'
+              className={styles.imageChangeBtn}
+              title='JPG, JPEG, PNG 파일 (5MB 이하)'
+            >
+              <IoMdSettings />
+            </label>
+            <input
+              type='file'
+              name='profileImage'
+              id='profileImage'
+              accept='image/*'
+              className={styles.hidden}
+              onChange={handleUpload}
+            />
+          </div>
+          <div className={styles.imageBox}>
+            {image && (
+              <>
+                <Avatar
+                  src={image}
+                  className={styles.image}
+                  alt='프로필 이미지'
+                />
+                <div className={styles.deleteImage} onClick={handleDeleteImage}>
+                  <FaTrashAlt />
+                </div>
+              </>
+            )}
+            {!image && (
+              <Avatar className={styles.image} alt='프로필 이미지'>
+                <span>{authState?.user?.nickname[0]}</span>
+              </Avatar>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+      {alertModal.isOpen && alertModal.onConfirm && (
+        <AlertModal
+          message={alertModal.message}
+          onConfirm={alertModal.onConfirm}
+        />
+      )}
+    </>
   );
 }
 
