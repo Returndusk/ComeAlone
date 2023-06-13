@@ -2,6 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import styles from './Pagination.module.scss';
 import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
+import {
+  MdOutlineKeyboardArrowLeft,
+  MdOutlineKeyboardArrowRight,
+  MdOutlineKeyboardDoubleArrowLeft,
+  MdOutlineKeyboardDoubleArrowRight
+} from 'react-icons/md';
 
 type PaginationProps = {
   filteredDestinations: specifiedCategoryDestinationsType[] | [];
@@ -118,40 +124,46 @@ function Pagination({
 
   return (
     <div className={styles.paginationBar}>
-      <button onClick={handleFirstPageClick}>{`<<`}</button>
-      <button onClick={handlePreviousPageClick}>{`<`}</button>
+      <button onClick={handleFirstPageClick}>
+        <MdOutlineKeyboardDoubleArrowLeft />
+      </button>
+      <button onClick={handlePreviousPageClick}>
+        <MdOutlineKeyboardArrowLeft />
+      </button>
 
-      {pageNumbers
-        .slice(
-          slicePageIdx - PAGES.START_INDEX_OF_PAGE,
-          slicePageIdx +
-            PAGES.PAGES_TO_SHOW_IN_NAVBAR -
-            PAGES.START_INDEX_OF_PAGE
-        )
-        .map((pageNumber) =>
-          page === pageNumber ? (
-            <span
-              key={pageNumber}
-              className={styles.pageNumber}
-              id={styles.selected}
-            >
-              {pageNumber}
-            </span>
-          ) : (
-            <NavLink
-              to={
-                searchQueryParam !== null
-                  ? `?page=${pageNumber}&search=${searchQueryParam}`
-                  : `?page=${pageNumber}`
-              }
-              className={styles.pageNumber}
-              key={pageNumber}
-              onClick={() => handlePageClick(pageNumber)}
-            >
-              {pageNumber}
-            </NavLink>
+      <ul className={styles.pageNumbers}>
+        {pageNumbers
+          .slice(
+            slicePageIdx - PAGES.START_INDEX_OF_PAGE,
+            slicePageIdx +
+              PAGES.PAGES_TO_SHOW_IN_NAVBAR -
+              PAGES.START_INDEX_OF_PAGE
           )
-        )}
+          .map((pageNumber) =>
+            page === pageNumber ? (
+              <li key={pageNumber}>
+                <span className={`${styles.pageNumber} ${styles.selected}`}>
+                  {pageNumber}
+                </span>
+              </li>
+            ) : (
+              <li key={pageNumber}>
+                <NavLink
+                  to={
+                    searchQueryParam !== null
+                      ? `?page=${pageNumber}&search=${searchQueryParam}`
+                      : `?page=${pageNumber}`
+                  }
+                  className={styles.pageNumber}
+                  key={pageNumber}
+                  onClick={() => handlePageClick(pageNumber)}
+                >
+                  {pageNumber}
+                </NavLink>
+              </li>
+            )
+          )}
+      </ul>
       {pageNumbers
         .slice(
           slicePageIdx - PAGES.START_INDEX_OF_PAGE,
@@ -165,8 +177,12 @@ function Pagination({
         <span className={styles.reducedNumber}>...</span>
       )}
 
-      <button onClick={handleNextPageClick}>{`>`}</button>
-      <button onClick={handleLastPageClick}>{`>>`}</button>
+      <button onClick={handleNextPageClick}>
+        <MdOutlineKeyboardArrowRight />
+      </button>
+      <button onClick={handleLastPageClick}>
+        <MdOutlineKeyboardDoubleArrowRight />
+      </button>
     </div>
   );
 }
