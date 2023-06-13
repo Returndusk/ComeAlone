@@ -126,7 +126,11 @@ function Header() {
                   }}
                 >
                   <MenuItem
-                  style={{fontSize: '14px', display: 'flex', justifyContent:'center'}}
+                    style={{
+                      fontSize: '14px',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
                     onClick={() => {
                       navigate(Router.MYPAGE);
                       handleClose();
@@ -135,7 +139,11 @@ function Header() {
                     마이페이지
                   </MenuItem>
                   <MenuItem
-                  style={{fontSize: '14px', display: 'flex', justifyContent:'center'}}
+                    style={{
+                      fontSize: '14px',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
                     onClick={() => {
                       navigate(Router.MYREVIEW);
                       handleClose();
@@ -144,8 +152,13 @@ function Header() {
                     나의 리뷰
                   </MenuItem>
                   <MenuItem
-                  style={{fontSize: '14px', display: 'flex', justifyContent:'center'}}
-                  onClick={handleLogoutButtonClick}>
+                    style={{
+                      fontSize: '14px',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
+                    onClick={handleLogoutButtonClick}
+                  >
                     로그아웃
                   </MenuItem>
                 </Menu>
@@ -165,7 +178,7 @@ function Header() {
           )}
           {showLogoutModal && (
             <AlertModal
-              message='로그아웃하시겠습니까?'
+              message='로그아웃 하시겠습니까?'
               onConfirm={handleLogoutConfirm}
               onCancel={handleLogoutCancel}
               showCancelButton={true}
