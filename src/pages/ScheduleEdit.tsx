@@ -13,8 +13,8 @@ import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
 import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusScheduleEdit';
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
-import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import ButttonsScheduleEdit from '../components/ScheduleEdit/ButtonsScheduleEdit';
+import DestinationsMap from '../components/ScheduleEdit/DestinationsMap';
+import ButtonsScheduleEdit from '../components/ScheduleEdit/ButtonsScheduleEdit';
 import DateModalScheduleEdit from '../components/ScheduleEdit/DateModalScheduleEdit';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import {
@@ -211,10 +211,8 @@ function ScheduleEdit() {
         onDestinationListUpdate={setUpdatedDestinationList}
         onCheckedDayIndexUpdate={setCheckedDayIndex}
       />
-      <div className={styles.mapContainer}>
-        <MapWithWaypoints markersLocations={markersLocations} />
-      </div>
-      <ButttonsScheduleEdit onSubmit={handleSubmit} onDelete={handleDelete} />
+      <DestinationsMap markersLocations={markersLocations} />
+      <ButtonsScheduleEdit onSubmit={handleSubmit} onDelete={handleDelete} />
       <DateModalScheduleEdit
         openModal={showDateModal}
         dateInfo={updatedDateInfo}
