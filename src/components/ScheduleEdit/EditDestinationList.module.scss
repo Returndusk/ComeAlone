@@ -3,16 +3,19 @@
   height: 500px;
 
   .destinationsTitle {
-    margin: 0 0 20px 0;
+    margin: 0 0 24px 0;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .addDestinationButton {
-    margin: 20px 0;
+    width: 70%;
+    margin: 20px 0 24px 0;
     padding: 12px 0;
     background-color: #ef6c00;
     text-align: center;
+    font-size: 18px;
+    font-weight: 500;
     border-radius: 10px;
 
     a {
