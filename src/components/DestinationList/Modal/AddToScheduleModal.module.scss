@@ -1,0 +1,32 @@
+.destinationList {
+  // margin-bottom: 10px;
+  display: flex;
+  // flex-direction: column;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  // position: relative;
+  // height: 600px;
+  width: 80%;
+  overflow-y: auto;
+  margin-top: 10px;
+  // padding-top: 50px;
+}
+
+.destination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 86%;
+  font-size: 16px;
+  margin: 10px 0 10px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.addDestinationBtn {
+  margin: 10px 0;
+}
