@@ -71,6 +71,15 @@ function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
           onChange={handleChange}
           size='small'
           style={{ width: '100%' }}
+          sx={{
+            '& label.Mui-focused': { color: '#ef6d00' },
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': {
+                borderColor: '#fe9036',
+                borderWidth: '1px'
+              }
+            }
+          }}
         />
         {!error && (
           <p className={styles.msg}>

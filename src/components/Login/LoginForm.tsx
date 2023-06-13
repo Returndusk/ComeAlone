@@ -116,6 +116,15 @@ function LoginForm() {
             onChange={handleChange}
             size='small'
             style={{ width: '100%' }}
+            sx={{
+              '& label.Mui-focused': { color: '#ef6d00' },
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#fe9036',
+                  borderWidth: '1px'
+                }
+              }
+            }}
           />
           {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
         </li>
@@ -130,6 +139,15 @@ function LoginForm() {
             onChange={handleChange}
             size='small'
             style={{ width: '100%' }}
+            sx={{
+              '& label.Mui-focused': { color: '#ef6d00' },
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#fe9036',
+                  borderWidth: '1px'
+                }
+              }
+            }}
           />
           {errors.password && (
             <p className={styles.errMsg}>{errors.password}</p>
