@@ -172,30 +172,30 @@ function DestinationDetails() {
             </div>
 
             <div className={styles.destinationInfoContainer}>
-              <p className={styles.destinationInfo}>
+              <span className={styles.destinationInfo}>
                 <FaMapMarkerAlt id={styles.destinationAddrIcon} />
                 <p className={styles.destinationAddress}>
                   {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
                 </p>
-              </p>
+              </span>
 
-              <p className={styles.destinationInfo}>
+              <span className={styles.destinationInfo}>
                 <BsFillTelephoneFill id={styles.destinationTelIcon} />
                 <p className={styles.destinationTelNumber}>
                   {destinationDetails?.tel
                     ? destinationDetails?.tel
                     : '제공된 정보 없음'}{' '}
                 </p>
-              </p>
+              </span>
 
-              <p className={styles.destinationInfo}>
+              <span className={styles.destinationInfo}>
                 <FaHome id={styles.destinationHomeIcon} />
                 <p>
                   {destinationDetails?.homepage
                     ? changeStringIntoHTML(destinationDetails?.homepage)
                     : '제공된 정보 없음'}{' '}
                 </p>
-              </p>
+              </span>
             </div>
 
             <div className={styles.destinationOverview}>
