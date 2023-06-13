@@ -1,10 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 import styles from './SearchArea.module.scss';
-import {
-  InputAdornment,
-  TextField,
-  IconButton
-} from '@mui/material';
+import { InputAdornment, TextField, IconButton } from '@mui/material';
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import SliderBanner from './SliderBanner';
@@ -87,7 +83,8 @@ function SearchArea() {
           onChange={handleChange}
           onKeyDown={handleSearch}
           sx={{
-            width: '100%'
+            width: '100%',
+            '& label.Mui-focused': { display: 'none' }
           }}
           error={hasError}
           helperText={hasError ? '빈 칸을 채워주세요.' : ''}
