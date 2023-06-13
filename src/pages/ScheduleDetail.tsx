@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuthState } from '../contexts/AuthContext';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
+import BackButtonsScheduleDetail from '../components/ScheduleDetail/BackButtonsScheduleDetail';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
 import InfoScheduleDetail from '../components/ScheduleDetail/InfoScheduleDetail';
 import ButtonsScheduleDetail from '../components/ScheduleDetail/ButtonsScheduleDetail';
@@ -19,12 +20,12 @@ import {
   updateScheduleReviewById,
   deleteScheduleReviewById
 } from '../apis/ScheduleDetailAPI';
-import ROUTER from '../constants/Router';
 import {
   IScheduleReview,
   ScheduleFetchedType
 } from '../types/ScheduleDetailTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
+import DestinationsMap from '../components/ScheduleDetail/DestinationsMap';
 
 function ScheduleDetail() {
   const scheduleId: string = useParams().scheduleId as string;
@@ -55,6 +56,8 @@ function ScheduleDetail() {
       image: response?.data.image,
       createdAt: new Date(response?.data.created_at.split('T')[0]),
       updatedAt: new Date(response?.data.updated_at.split('T')[0]),
+      commentsCount: response?.data.comments_count,
+      destinationCount: response?.data.destination_count,
       destinations: response?.data.destinationMaps
     };
 
@@ -153,21 +156,14 @@ function ScheduleDetail() {
     image,
     createdAt,
     updatedAt,
+    commentsCount,
+    destinationCount,
     destinations
   } = scheduleFetched.current as ScheduleFetchedType;
 
   return (
     <div className={styles.container}>
-      <div>
-        <button className={styles.toListButton}>
-          <Link to={ROUTER.SCHEDULE_LIST}>일정 목록 보기</Link>
-        </button>
-        {userId === loggedInUserId && (
-          <button className={styles.toMyListButton}>
-            <Link to={ROUTER.MYSCHEDULE_LIST}>내 일정 목록 보기</Link>
-          </button>
-        )}
-      </div>
+      <BackButtonsScheduleDetail userId={userId} />
       <ImageScheduleDetail image={image} />
       <InfoScheduleDetail
         nickname={nickname}
@@ -194,13 +190,13 @@ function ScheduleDetail() {
       />
       <DestinationList
         destinations={destinations}
+        destinationCount={destinationCount}
         onDestinationsChecked={setCheckedDestinations}
       />
-      <div className={styles.mapContainer}>
-        <MapWithWaypoints markersLocations={checkedDestinations} />
-      </div>
+      <DestinationsMap checkedDestinations={checkedDestinations} />
       <ReviewsSchedule
         scheduleReviews={scheduleReviews}
+        commentsCount={commentsCount}
         onReviewUpdate={updateScheduleReview}
         onReviewDelete={deleteScheduleReview}
       />

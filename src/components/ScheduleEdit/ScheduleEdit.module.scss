@@ -8,32 +8,3 @@
   justify-content: center;
   overflow: hidden;
 }
-
-.backButton {
-  all: unset;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 35%;
-  margin: 0 0 20px 0;
-  padding: 8px 3px;
-  font-size: 18px;
-  background-color: var(--main-color);
-  border-radius: 10px;
-
-  a {
-    text-decoration: none;
-    color: #ffffff;
-  }
-
-  .backIcon {
-    margin: 0 10px 0 0;
-  }
-}
-
-.mapContainer {
-  grid-column: 2 / 4;
-  height: 530px;
-  padding: 200px 0 0 0;
-}

@@ -3,12 +3,22 @@ import styles from './ReviewsSchedule.module.scss';
 import { useAuthState } from '../../contexts/AuthContext';
 import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import { FaPen, FaTrashAlt, FaCommentAlt } from 'react-icons/fa';
 import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
 import AlertModal from '../common/Alert/AlertModal';
 
+function stringifyDate(date: string) {
+  const onlyDate: string[] = date.split('T')[0].split('-');
+  const year = onlyDate[0];
+  const month = onlyDate[1];
+  const day = onlyDate[2];
+
+  return `${year}년 ${month}월 ${day}일`;
+}
+
 function ReviewsSchedule({
   scheduleReviews,
+  commentsCount,
   onReviewUpdate,
   onReviewDelete
 }: ScheduleReviewPropsType) {
@@ -39,128 +49,140 @@ function ReviewsSchedule({
   };
 
   return (
-    <div className={styles.reviewsContainer}>
-      <div className={styles.reviewsTitle}>댓글 리스트</div>
-      {scheduleReviews.length > 0 ? (
-        <div className={styles.reviewsList}>
-          {scheduleReviews.map((review, index) => {
-            const commentId: number = review.comment_id;
-            const commenterId: string = review.user.id;
-            const comment: string = review.comment;
-            const createdAt: string = review.created_at.split('T')[0];
-            const profileImagePath: string = review.user.profile_image;
+    <>
+      <div className={styles.reviewsTitle}>
+        <FaCommentAlt className={styles.commentsIcon} />
+        댓글 <div className={styles.commentsCount}>{commentsCount}</div>
+      </div>
+      <div className={styles.reviewsContainer}>
+        {scheduleReviews.length > 0 ? (
+          <div className={styles.reviewsList}>
+            {scheduleReviews.map((review, index) => {
+              const commentId: number = review.comment_id;
+              const commenterId: string = review.user.id;
+              const comment: string = review.comment;
+              const createdAt: string = review.created_at;
+              const profileImagePath: string = review.user.profile_image;
 
-            return (
-              <div key={`review ${index}`} className={styles.review}>
-                <span className={styles.avatar}>
-                  {profileImagePath ? (
-                    <Avatar
-                      sx={{ width: 45, height: 45 }}
-                      src={profileImagePath}
+              return (
+                <div key={`review ${index}`} className={styles.review}>
+                  <div className={styles.commentHeader}>
+                    {profileImagePath ? (
+                      <Avatar
+                        sx={{ width: 45, height: 45 }}
+                        src={profileImagePath}
+                      />
+                    ) : (
+                      <Avatar sx={{ width: 45, height: 45 }}>
+                        {review.user.nickname[0]}
+                      </Avatar>
+                    )}
+                    <div className={styles.commentSubheader}>
+                      <span>{review.user.nickname}</span>
+                      <span className={styles.createdAt}>
+                        {stringifyDate(createdAt)}
+                      </span>
+                    </div>
+                    {isReviewUpdate ? (
+                      targetReviewId.current === commentId ? (
+                        <div>
+                          <button
+                            className={styles.updateReviewCancelButton}
+                            onClick={() => setIsReviewUpdate(false)}
+                          >
+                            취소
+                          </button>
+                          <button
+                            className={styles.updateReviewButton}
+                            onClick={() => {
+                              if (!reviewTyping) {
+                                setShowEmptyAlert(true);
+                              } else {
+                                setShowUpdateAlert(true);
+                              }
+                            }}
+                          >
+                            제출
+                          </button>
+                        </div>
+                      ) : loggedInUserId === commenterId ? (
+                        <div className={styles.updateOther}>
+                          다른 댓글을 수정 중입니다...
+                        </div>
+                      ) : null
+                    ) : loggedInUserId === commenterId ? (
+                      <div>
+                        <button
+                          className={styles.updateButton}
+                          onClick={() => {
+                            targetReviewId.current = commentId;
+                            setIsReviewUpdate(true);
+                            setReviewTyping(review.comment);
+                          }}
+                        >
+                          <FaPen />
+                        </button>
+                        <button
+                          className={styles.deleteButton}
+                          onClick={() => {
+                            targetReviewId.current = commentId;
+                            setShowDeleteAlert(true);
+                          }}
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                  {isReviewUpdate && targetReviewId.current === commentId ? (
+                    <TextField
+                      className={styles.updateInput}
+                      sx={{
+                        '& label.Mui-focused': { color: '#ef6d00' },
+                        '& .MuiOutlinedInput-root': {
+                          '&.Mui-focused fieldset': {
+                            borderColor: '#fe9036',
+                            borderWidth: '1px'
+                          }
+                        }
+                      }}
+                      value={reviewTyping}
+                      onChange={handleChange}
                     />
                   ) : (
-                    <Avatar sx={{ width: 45, height: 45 }}>
-                      {review.user.nickname[0]}
-                    </Avatar>
+                    <div className={styles.comment}>{comment}</div>
                   )}
-                </span>
-                {isReviewUpdate && targetReviewId.current === commentId ? (
-                  <TextField
-                    className={styles.updateInput}
-                    value={reviewTyping}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{comment}</span>
-                )}
-                {isReviewUpdate ? (
-                  targetReviewId.current === commentId ? (
-                    <div className={styles.updateButtonsContainer}>
-                      <button
-                        className={styles.updateReviewButton}
-                        onClick={() => {
-                          if (!reviewTyping) {
-                            setShowEmptyAlert(true);
-                          } else {
-                            setShowUpdateAlert(true);
-                          }
-                        }}
-                      >
-                        제출
-                      </button>
-                      <button
-                        className={styles.updateReviewCancelButton}
-                        onClick={() => setIsReviewUpdate(false)}
-                      >
-                        취소
-                      </button>
-                    </div>
-                  ) : loggedInUserId === commenterId ? (
-                    <div className={styles.whileUpdateContainer}>
-                      <div className={styles.updateOther}>
-                        다른 댓글을 수정 중입니다...
-                      </div>
-                      <span className={styles.createdAt}>{createdAt}</span>
-                    </div>
-                  ) : (
-                    <span className={styles.createdAt}>{createdAt}</span>
-                  )
-                ) : loggedInUserId === commenterId ? (
-                  <div className={styles.buttonsContainer}>
-                    <button
-                      className={styles.updateButton}
-                      onClick={() => {
-                        targetReviewId.current = commentId;
-                        setIsReviewUpdate(true);
-                        setReviewTyping(review.comment);
-                      }}
-                    >
-                      <FaPen /> 수정
-                    </button>
-                    <button
-                      className={styles.deleteButton}
-                      onClick={() => {
-                        targetReviewId.current = commentId;
-                        setShowDeleteAlert(true);
-                      }}
-                    >
-                      <FaTrashAlt /> 삭제
-                    </button>
-                    <span className={styles.createdAt}>{createdAt}</span>
-                  </div>
-                ) : (
-                  <span className={styles.createdAt}>{createdAt}</span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className={styles.noComments}>등록된 댓글이 없습니다.</div>
-      )}
-      {showDeleteAlert && (
-        <AlertModal
-          message='해당 댓글을 삭제하시겠습니까?'
-          showCancelButton={true}
-          onConfirm={() => handleReviewDelete()}
-          onCancel={() => setShowDeleteAlert(false)}
-        />
-      )}
-      {showUpdateAlert && (
-        <AlertModal
-          message='해당 댓글을 입력하신 내용으로 수정하시겠습니까?'
-          showCancelButton={true}
-          onConfirm={() => handleReviewUpdate()}
-          onCancel={() => setShowUpdateAlert(false)}
-        />
-      )}
-      {showEmptyAlert && (
-        <AlertModal
-          message='수정하실 댓글 내용을 입력해주세요.'
-          onConfirm={() => setShowEmptyAlert(false)}
-        />
-      )}
-    </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className={styles.noComments}>등록된 댓글이 없습니다.</div>
+        )}
+        {showDeleteAlert && (
+          <AlertModal
+            message='해당 댓글을 삭제하시겠습니까?'
+            showCancelButton={true}
+            onConfirm={() => handleReviewDelete()}
+            onCancel={() => setShowDeleteAlert(false)}
+          />
+        )}
+        {showUpdateAlert && (
+          <AlertModal
+            message='해당 댓글을 입력하신 내용으로 수정하시겠습니까?'
+            showCancelButton={true}
+            onConfirm={() => handleReviewUpdate()}
+            onCancel={() => setShowUpdateAlert(false)}
+          />
+        )}
+        {showEmptyAlert && (
+          <AlertModal
+            message='수정하실 댓글 내용을 입력해주세요.'
+            onConfirm={() => setShowEmptyAlert(false)}
+          />
+        )}
+      </div>
+    </>
   );
 }
 
