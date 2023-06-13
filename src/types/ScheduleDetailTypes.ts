@@ -12,6 +12,7 @@ export interface IScheduleDetail {
   duration: number;
   createdAt: Date;
   updatedAt: Date;
+  destinationCount: number;
   destinations: MapWithWaypointsPropsType[][];
   image: string;
   status: string;
@@ -30,6 +31,7 @@ export type ScheduleFetchedType = Pick<
   | 'duration'
   | 'createdAt'
   | 'updatedAt'
+  | 'destinationCount'
   | 'destinations'
   | 'image'
 >;

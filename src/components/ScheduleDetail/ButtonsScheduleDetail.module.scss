@@ -5,7 +5,7 @@
 
   a {
     text-decoration: none;
-    color: #4f94d4;
+    color: var(--sub-1-color);
   }
 
   button {
@@ -13,6 +13,7 @@
     background: transparent;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 500;
   }
 
   .icon {
@@ -23,13 +24,13 @@
     margin: 0 20px 0 0;
     padding: 5px 10px;
     border-radius: 10px;
-    border: 1px solid #4f94d4;
+    border: 2px solid var(--sub-1-color);
   }
 
   #deleteButton {
     padding: 5px 10px;
-    color: #d63638;
+    color: var(--main-color);
     border-radius: 10px;
-    border: 1px solid #d63638;
+    border: 2px solid var(--main-color);
   }
 }
