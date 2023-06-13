@@ -117,10 +117,12 @@ function Destinations({
             )}
           </section>
 
-          <Pagination
-            filteredDestinations={filteredDestinations}
-            setSlicedDestinations={setSlicedDestinations}
-          />
+          {filteredDestinations?.length > 0 && (
+            <Pagination
+              filteredDestinations={filteredDestinations}
+              setSlicedDestinations={setSlicedDestinations}
+            />
+          )}
           {isOpen &&
             detailsDomRoot !== null &&
             createPortal(

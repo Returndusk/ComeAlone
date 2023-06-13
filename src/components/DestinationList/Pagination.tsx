@@ -164,18 +164,6 @@ function Pagination({
             )
           )}
       </ul>
-      {pageNumbers
-        .slice(
-          slicePageIdx - PAGES.START_INDEX_OF_PAGE,
-          slicePageIdx +
-            PAGES.PAGES_TO_SHOW_IN_NAVBAR -
-            PAGES.START_INDEX_OF_PAGE
-        )
-        .includes(totalPages) ? (
-        <span></span>
-      ) : (
-        <span className={styles.reducedNumber}>...</span>
-      )}
 
       <button onClick={handleNextPageClick}>
         <MdOutlineKeyboardArrowRight />
