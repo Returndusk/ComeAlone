@@ -136,6 +136,15 @@ function ReviewsSchedule({
                   {isReviewUpdate && targetReviewId.current === commentId ? (
                     <TextField
                       className={styles.updateInput}
+                      sx={{
+                        '& label.Mui-focused': { color: '#ef6d00' },
+                        '& .MuiOutlinedInput-root': {
+                          '&.Mui-focused fieldset': {
+                            borderColor: '#fe9036',
+                            borderWidth: '1px'
+                          }
+                        }
+                      }}
                       value={reviewTyping}
                       onChange={handleChange}
                     />
