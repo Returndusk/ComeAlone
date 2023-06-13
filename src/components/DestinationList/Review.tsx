@@ -19,12 +19,6 @@ const ALERT_PROPS = {
   showTitle: false
 };
 
-const SUCCESS_ALERT_PROPS = {
-  successMessage: '리뷰 등록에 성공했습니다.',
-  failedMessage: '리뷰 등록에 실패했습니다. 다시 등록해주세요',
-  showTitle: false
-};
-
 const RESPONSE_STATUS = {
   POST_SUCCESS: 201
 };
@@ -39,9 +33,6 @@ function Review() {
 
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
-  const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
-    null
-  );
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [targetComment, setTargetComment] = useState<number | null>(null);
   const { contentid } = useParams();
@@ -82,14 +73,11 @@ function Review() {
       const res = await postReviewByDestinationId(contentid, submittedReview);
       const status = res?.status;
       if (status === RESPONSE_STATUS.POST_SUCCESS) {
-        setIsShowSuccessAlert(true);
         await getReviewList();
-        return;
       }
-      setIsShowSuccessAlert(false);
       return;
     },
-    [contentid, getReviewList, submittedReview, setIsShowSuccessAlert]
+    [contentid, getReviewList, submittedReview]
   );
 
   //리뷰 수
@@ -143,11 +131,6 @@ function Review() {
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
     navigate('/login');
-    return;
-  };
-
-  const handleOnReviewConfirm = () => {
-    setIsShowSuccessAlert(null);
     return;
   };
 
@@ -250,20 +233,6 @@ function Review() {
         <AlertModal
           message={ALERT_PROPS.message}
           onConfirm={handleOnLoginConfirm}
-          showTitle={ALERT_PROPS.showTitle}
-        />
-      )}
-      {isShowSuccessAlert && (
-        <AlertModal
-          message={SUCCESS_ALERT_PROPS.successMessage}
-          onConfirm={handleOnReviewConfirm}
-          showTitle={ALERT_PROPS.showTitle}
-        />
-      )}
-      {isShowSuccessAlert === false && (
-        <AlertModal
-          message={SUCCESS_ALERT_PROPS.failedMessage}
-          onConfirm={handleOnReviewConfirm}
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
