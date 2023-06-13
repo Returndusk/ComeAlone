@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
-import BackButtonScheduleEdit from '../components/ScheduleEdit/BackButtonScheduleEdit';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
 import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
 import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusScheduleEdit';
@@ -22,7 +21,7 @@ import {
   DateInfoType
 } from '../types/ScheduleEditTypes';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
-import { updateSchedule, deleteScheduleById } from '../apis/ScheduleEditAPI';
+import { updateSchedule } from '../apis/ScheduleEditAPI';
 import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
 
@@ -173,19 +172,12 @@ function ScheduleEdit() {
     navigate(`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`);
   };
 
-  const handleDelete = async () => {
-    await deleteScheduleById(scheduleId);
-
-    navigate(ROUTER.MYSCHEDULE_LIST);
-  };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.container}>
-      <BackButtonScheduleEdit scheduleId={scheduleId} />
       <ImageScheduleEdit
         imagePath={updatedImagePath.current}
         onImageUpdate={handleImageUpdate}
@@ -212,7 +204,7 @@ function ScheduleEdit() {
         onCheckedDayIndexUpdate={setCheckedDayIndex}
       />
       <DestinationsMap markersLocations={markersLocations} />
-      <ButtonsScheduleEdit onSubmit={handleSubmit} onDelete={handleDelete} />
+      <ButtonsScheduleEdit scheduleId={scheduleId} onSubmit={handleSubmit} />
       <DateModalScheduleEdit
         openModal={showDateModal}
         dateInfo={updatedDateInfo}

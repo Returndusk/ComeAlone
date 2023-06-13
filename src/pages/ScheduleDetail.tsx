@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuthState } from '../contexts/AuthContext';
 import { useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
-import BackButtonsScheduleDetail from '../components/ScheduleDetail/BackButtonsScheduleDetail';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
 import InfoScheduleDetail from '../components/ScheduleDetail/InfoScheduleDetail';
 import ButtonsScheduleDetail from '../components/ScheduleDetail/ButtonsScheduleDetail';
@@ -10,7 +9,6 @@ import IconsScheduleDetail from '../components/ScheduleDetail/IconsScheduleDetai
 import DestinationList from '../components/ScheduleDetail/DestinationList';
 import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
-import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
 import {
   getScheduleDetailById,
   getDoesUserLikeById,
@@ -156,14 +154,12 @@ function ScheduleDetail() {
     image,
     createdAt,
     updatedAt,
-    commentsCount,
     destinationCount,
     destinations
   } = scheduleFetched.current as ScheduleFetchedType;
 
   return (
     <div className={styles.container}>
-      <BackButtonsScheduleDetail userId={userId} />
       <ImageScheduleDetail image={image} />
       <InfoScheduleDetail
         nickname={nickname}
@@ -185,7 +181,6 @@ function ScheduleDetail() {
         userId={userId}
         doesUserLike={doesUserLike}
         likesCount={userLikesCount.current}
-        reviewsCount={scheduleReviews.length}
         onUserLike={handleUserLike}
       />
       <DestinationList
@@ -196,7 +191,7 @@ function ScheduleDetail() {
       <DestinationsMap checkedDestinations={checkedDestinations} />
       <ReviewsSchedule
         scheduleReviews={scheduleReviews}
-        commentsCount={commentsCount}
+        reviewsCount={scheduleReviews.length}
         onReviewUpdate={updateScheduleReview}
         onReviewDelete={deleteScheduleReview}
       />

@@ -1,37 +1,55 @@
-.scheduleInfoContainer {
+.date {
+  grid-row: 2;
+  grid-column: 1 / 2;
+  margin: 30px 0 0 0;
+  font-size: 16px;
+  color: gray;
+
+  p + p {
+    margin: 10px 0 0 0;
+  }
+}
+
+.duration {
+  grid-row: 3;
   grid-column: 1 / 3;
-  grid-row: 3 / 5;
-  margin: 30px 0 200px 0;
+  margin: 30px 0 0 0;
+  font-size: 24px;
+}
 
-  .duration {
-    font-size: 24px;
+.title {
+  grid-row: 4;
+  grid-column: 1 / 4;
+  margin: 30px 0 0 0;
+  font-size: 40px;
+  font-weight: bold;
+  overflow-wrap: break-word;
+}
+
+.nickname {
+  grid-row: 5;
+  grid-column: 1 / 2;
+  margin: 30px 0 0 0;
+  display: flex;
+  flex-direction: row;
+  font-size: 20px;
+  font-weight: 500;
+  align-items: center;
+
+  .avatar {
+    margin: 0 20px 0 10px;
   }
+}
 
-  .title {
-    margin: 30px 0 30px 0;
-    font-size: 40px;
-    font-weight: bold;
-  }
+.summary {
+  grid-row: 6;
+  grid-column: 1 / 4;
+  height: 150px;
+  margin: 30px 0;
+  overflow-wrap: break-word;
+  overflow-y: scroll;
 
-  .nickname {
-    display: flex;
-    flex-direction: row;
-    margin: 0 0 30px 0;
-    font-size: 20px;
-    align-items: center;
-
-    .avatar {
-      margin: 0 20px 0 10px;
-    }
-  }
-
-  .date {
-    margin: 0 0 30px 0;
-    font-size: 16px;
-    color: gray;
-
-    p + p {
-      margin: 10px 0 0 0;
-    }
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

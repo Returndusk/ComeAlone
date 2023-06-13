@@ -1,6 +1,7 @@
 .iconsContainer {
+  grid-row: 3;
   justify-self: self-end;
-  align-self: self-start;
+  align-self: self-end;
   font-size: 26px;
 
   #likesDisabled {
@@ -25,16 +26,6 @@
 
     #likesIcon {
       margin: 0 5px 0 0;
-      font-size: 20px;
-    }
-  }
-
-  #reviewsCount {
-    font-size: 26px;
-    color: rgb(75, 74, 74);
-
-    #reviewsCountIcon {
-      margin: 0 10px 0 20px;
       font-size: 20px;
     }
   }
