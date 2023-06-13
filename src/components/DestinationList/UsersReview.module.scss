@@ -34,10 +34,25 @@
 
     .destinationInfo {
       display: flex;
+      position: relative;
       align-items: center;
       padding-bottom: 10px;
 
+      &::before {
+        content: 'NO IMAGE';
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 60px;
+        color: #fff;
+        background-color: #ddd;
+        border-radius: 10px;
+        font-size: 10px;
+        letter-spacing: 1px;
+      }
       #reviewImage {
+        position: absolute;
         width: 60px;
         height: 60px;
         border-radius: 10px;

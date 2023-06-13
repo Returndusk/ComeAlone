@@ -234,14 +234,12 @@ function UsersReview() {
               return isEditing !== null && !isEditing[index] ? (
                 <div key={index} className={styles.usersReviewBox}>
                   <div className={styles.destinationInfo}>
-                    {review?.destination.image2 ? (
+                    {review?.destination.image2 && (
                       <img
                         id={styles.reviewImage}
                         src={review?.destination.image2}
                         alt={review.destination.title}
                       />
-                    ) : (
-                      <span></span>
                     )}
 
                     <p className={styles.usersReviewTitle}>
