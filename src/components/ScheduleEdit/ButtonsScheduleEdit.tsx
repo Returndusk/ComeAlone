@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './ButtonsScheduleEdit.module.scss';
 import AlertModal from '../common/Alert/AlertModal';
+import ROUTER from '../../constants/Router';
 
 function ButtonsScheduleEdit({
-  onSubmit,
-  onDelete
+  scheduleId,
+  onSubmit
 }: {
+  scheduleId: string;
   onSubmit: () => void;
-  onDelete: () => void;
 }) {
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showUpdateAlert, setShowUpdateAlert] = useState(false);
-
-  const handleDelete = () => {
-    onDelete();
-    setShowDeleteAlert(false);
-  };
 
   const handleUpdate = () => {
     onSubmit();
@@ -24,11 +20,8 @@ function ButtonsScheduleEdit({
 
   return (
     <div className={styles.buttonsContainer}>
-      <button
-        className={styles.deleteButton}
-        onClick={() => setShowDeleteAlert(true)}
-      >
-        삭제하기
+      <button className={styles.cancelButton}>
+        <Link to={`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`}>취소하기</Link>
       </button>
       <button
         className={styles.confirmButton}
@@ -36,14 +29,6 @@ function ButtonsScheduleEdit({
       >
         수정완료
       </button>
-      {showDeleteAlert && (
-        <AlertModal
-          message='해당 일정을 삭제하시겠습니까?'
-          showCancelButton={true}
-          onConfirm={handleDelete}
-          onCancel={() => setShowDeleteAlert(false)}
-        />
-      )}
       {showUpdateAlert && (
         <AlertModal
           message='해당 일정을 입력하신 내용으로 수정하시겠습니까?'
