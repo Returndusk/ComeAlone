@@ -85,10 +85,10 @@ function EditDestinationList({
   return (
     <>
       <div className={styles.destinationsTitle}>목적지 리스트</div>
+      <div className={styles.addDestinationButton}>
+        <Link to={ROUTER.DESTINATION_LIST}>+ 새로운 목적지 추가하기</Link>
+      </div>
       <div className={styles.destinationsContainer}>
-        <div className={styles.addDestinationButton}>
-          <Link to={ROUTER.DESTINATION_LIST}>+ 새로운 목적지 추가하기</Link>
-        </div>
         <label>
           <input
             type='radio'

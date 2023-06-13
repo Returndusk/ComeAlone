@@ -10,7 +10,9 @@ function DestinationsMap({
 }) {
   return (
     <div className={styles.mapContainer}>
-      <MapWithWaypoints markersLocations={markersLocations} />
+      <div className={styles.map}>
+        <MapWithWaypoints markersLocations={markersLocations} />
+      </div>
     </div>
   );
 }

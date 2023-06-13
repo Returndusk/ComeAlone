@@ -6,25 +6,26 @@
   font-size: 26px;
 }
 
+.addDestinationButton {
+  grid-column: 1 / 4;
+  width: 30%;
+  margin: 0 0 24px 0;
+  padding: 12px 0;
+  background-color: #ef6c00;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 10px;
+
+  a {
+    text-decoration: none;
+    color: #ffffff;
+  }
+}
+
 .destinationsContainer {
   grid-column: 1 / 2;
-  height: 500px;
-
-  .addDestinationButton {
-    width: 70%;
-    margin: 0 0 24px 0;
-    padding: 12px 0;
-    background-color: #ef6c00;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 500;
-    border-radius: 10px;
-
-    a {
-      text-decoration: none;
-      color: #ffffff;
-    }
-  }
+  height: 600px;
 
   .destinationsList {
     height: 85%;
