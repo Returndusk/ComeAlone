@@ -216,7 +216,7 @@ function Category({
             <div className={styles.categoryContainer}>
               <button
                 onClick={handleAllClick}
-                className={
+                id={
                   isSelectedAll
                     ? styles.activeSelectedAllButton
                     : styles.selectedAllButton

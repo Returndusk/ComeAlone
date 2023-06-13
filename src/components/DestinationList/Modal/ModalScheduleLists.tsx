@@ -7,6 +7,11 @@ import {
   MyScheduleListType
 } from '../../../types/ModalScheduleTypes';
 import tokenInstance from '../../../apis/tokenInstance';
+import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -28,6 +33,11 @@ export default function ModalScheduleLists() {
   >([]);
   const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
   const [selectedCardIdx, setSelectedCardIdx] = useState<number | null>(null);
+  const navigate = useNavigate();
+
+  function MoveToMySchedule() {
+    navigate('/myschedule/list');
+  }
 
   // console.log('scheduleLists', scheduleLists);
   // console.log('showScheduleList', showScheduleList);
@@ -43,6 +53,7 @@ export default function ModalScheduleLists() {
             index,
             isSelected: selectedCardIdx === index,
             onShowDestinations: handleShowDestinations,
+            // onShowDestinations: onShowDestinations,
             scheduleId: schedule.schedule_id
           }))
         );
@@ -69,9 +80,10 @@ export default function ModalScheduleLists() {
     return scheduleData
       .filter((schedule: ModalMyScheduleType) => {
         const today = new Date();
-        const yesterday = new Date(today.setDate(today.getDate() - 1));
         const end_date = new Date(schedule.end_date);
-        return yesterday < end_date;
+        end_date.setDate(end_date.getDate() + 1);
+        end_date.setHours(0);
+        return today < end_date;
       })
       .sort(
         (a, b) =>
@@ -83,9 +95,10 @@ export default function ModalScheduleLists() {
     return scheduleData
       .filter((schedule: ModalMyScheduleType) => {
         const today = new Date();
-        const yesterday = new Date(today.setDate(today.getDate() - 1));
         const end_date = new Date(schedule.end_date);
-        return yesterday > end_date;
+        end_date.setDate(end_date.getDate() + 1);
+        end_date.setHours(0);
+        return today > end_date;
       })
       .sort(
         (a, b) =>
@@ -112,39 +125,92 @@ export default function ModalScheduleLists() {
   }
   // console.log(selectedCardIdx);
 
-  // function handleCloseDestinations() {
-  //   setSelectedCardIdx(null);
-  // }
-
   return (
     <div className={styles.scheduleContainer}>
-      {/* <div className={styles.scheduleListTitle}>여행 일정</div> */}
       <div className={styles.scheduleFilter}>
-        <button
-          className={`${styles.sortButton} ${
-            scheduleSort === 'upcoming' ? styles.selected : ''
-          }`}
-          onClick={(e) => {
-            handleSort(e);
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            '& > *': {
+              m: 1
+            }
           }}
-          value='upcoming'
         >
-          다가오는 일정
-        </button>
-        <button
-          className={`${styles.sortButton} ${
-            scheduleSort === 'past' ? styles.selected : ''
-          }`}
-          onClick={(e) => {
-            handleSort(e);
-          }}
-          value='past'
-        >
-          지난 일정
-        </button>
+          <ButtonGroup variant='outlined' aria-label='outlined button group'>
+            <Button
+              className={`${styles.sortButton} ${
+                scheduleSort === 'upcoming' ? styles.selected : ''
+              }`}
+              onClick={(e) => {
+                handleSort(e);
+              }}
+              value='upcoming'
+              sx={{
+                color: '#ef6d00',
+                fontWeight: '600',
+                border: 1,
+                borderColor: '#ef6d00',
+                '&:hover': {
+                  color: '#ffffff',
+                  backgroundColor: '#ef6d00',
+                  border: 1,
+                  borderColor: '#ef6d00'
+                }
+              }}
+            >
+              다가오는 일정
+            </Button>
+            <Button
+              className={`${styles.sortButton} ${
+                scheduleSort === 'past' ? styles.selected : ''
+              }`}
+              onClick={(e) => {
+                handleSort(e);
+              }}
+              value='past'
+              sx={{
+                color: '#ef6d00',
+                fontWeight: '600',
+                border: 1,
+                borderColor: '#ef6d00',
+                '&:hover': {
+                  color: '#ffffff',
+                  backgroundColor: '#ef6d00',
+                  border: 1,
+                  borderColor: '#ef6d00'
+                }
+              }}
+            >
+              지난 일정
+            </Button>
+          </ButtonGroup>
+          <Stack spacing={2} direction='row'>
+            <Button
+              variant='contained'
+              className={styles.addScheduleBtn}
+              onClick={MoveToMySchedule}
+              sx={{
+                color: '#ffffff',
+                fontWeight: '600',
+                backgroundColor: '#ef6d00',
+                border: 1,
+                borderColor: '#ef6d00',
+                '&:hover': {
+                  color: '#ffffff',
+                  backgroundColor: '#ef6d00'
+                }
+              }}
+            >
+              새로운 일정 만들기
+            </Button>
+          </Stack>
+        </Box>
+        {/* 필터 div */}
       </div>
       <div className={styles.scheduleCardContainer}>
-        {/* {scheduleLists.map((scheduleList, index) => ( */}
         {showScheduleList.map((scheduleList, index) => (
           <ModalScheduleCard
             key={scheduleList.schedule_id}
