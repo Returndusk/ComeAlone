@@ -109,6 +109,7 @@ function DestinationDetails() {
       const [stringLink, stringTitle] = filteredArray;
       return (
         <a
+          className={styles.destinationHomePage}
           href={stringLink}
           target='_blank'
           title={stringTitle}
@@ -189,7 +190,7 @@ function DestinationDetails() {
 
               <p className={styles.destinationInfo}>
                 <FaHome id={styles.destinationHomeIcon} />
-                <p className={styles.destinationHomePage}>
+                <p>
                   {destinationDetails?.homepage
                     ? changeStringIntoHTML(destinationDetails?.homepage)
                     : '제공된 정보 없음'}{' '}
