@@ -12,10 +12,23 @@ import {
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_OPTIONS
 } from '../../constants/Token';
+import AlertModal from '../common/Alert/AlertModal';
+
+type AlertOption = {
+  isOpen: boolean;
+  message: string;
+  onConfirm: null | (() => void);
+};
 
 function LoginForm() {
   const cookies = new Cookies();
   const { updateAuthState } = useAuthState();
+  const initAlert = {
+    isOpen: false,
+    message: '',
+    onConfirm: null
+  };
+  const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
 
   const navigate = useNavigate();
   const initValues: LoginFormValues = {
@@ -66,9 +79,11 @@ function LoginForm() {
     cookies.set('accessToken', accessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
     cookies.set('refreshToken', refreshToken, REFRESH_TOKEN_COOKIE_OPTIONS);
 
-    //전역으로 상태 관리
-    alert('로그인에 성공하였습니다!');
-    updateAuthState(true, userData);
+    setAlertModal({
+      isOpen: true,
+      message: `환영합니다, ${userData.nickname}님!`,
+      onConfirm: () => updateAuthState(true, userData)
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -98,76 +113,88 @@ function LoginForm() {
         }
 
         console.log(err);
-        alert('로그인에 실패하였습니다.');
+        setAlertModal({
+          isOpen: true,
+          message: '로그인에 실패하였습니다. 잠시 후에 다시 시도해주세요.',
+          onConfirm: () => setAlertModal(initAlert)
+        });
       }
     }
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <ul className={styles.inputs}>
-        <li>
-          <TextField
-            id='outlined-basic'
-            label='이메일'
-            variant='outlined'
-            name='email'
-            value={values.email}
-            onChange={handleChange}
-            size='small'
-            style={{ width: '100%' }}
-            sx={{
-              '& label.Mui-focused': { color: '#ef6d00' },
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#fe9036',
-                  borderWidth: '1px'
+    <>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <ul className={styles.inputs}>
+          <li>
+            <TextField
+              id='outlined-basic'
+              label='이메일'
+              variant='outlined'
+              name='email'
+              value={values.email}
+              onChange={handleChange}
+              size='small'
+              style={{ width: '100%' }}
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
                 }
-              }
-            }}
-          />
-          {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
-        </li>
-        <li>
-          <TextField
-            id='outlined-basic'
-            label='비밀번호'
-            type='password'
-            variant='outlined'
-            name='password'
-            value={values.password}
-            onChange={handleChange}
-            size='small'
-            style={{ width: '100%' }}
-            sx={{
-              '& label.Mui-focused': { color: '#ef6d00' },
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#fe9036',
-                  borderWidth: '1px'
+              }}
+            />
+            {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
+          </li>
+          <li>
+            <TextField
+              id='outlined-basic'
+              label='비밀번호'
+              type='password'
+              variant='outlined'
+              name='password'
+              value={values.password}
+              onChange={handleChange}
+              size='small'
+              style={{ width: '100%' }}
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
                 }
-              }
-            }}
-          />
-          {errors.password && (
-            <p className={styles.errMsg}>{errors.password}</p>
-          )}
-        </li>
-      </ul>
-      <ul className={styles.buttons}>
-        <li>
-          <button type='submit'>로그인</button>
-        </li>
-        <li>
-          <button
-            className={styles.registerBtn}
-            onClick={() => navigate('/register')}
-          >
-            회원가입
-          </button>
-        </li>
-      </ul>
-    </form>
+              }}
+            />
+            {errors.password && (
+              <p className={styles.errMsg}>{errors.password}</p>
+            )}
+          </li>
+        </ul>
+        <ul className={styles.buttons}>
+          <li>
+            <button type='submit'>로그인</button>
+          </li>
+          <li>
+            <button
+              className={styles.registerBtn}
+              onClick={() => navigate('/register')}
+            >
+              회원가입
+            </button>
+          </li>
+        </ul>
+      </form>
+      {alertModal.isOpen && alertModal.onConfirm && (
+        <AlertModal
+          message={alertModal.message}
+          onConfirm={alertModal.onConfirm}
+        />
+      )}
+    </>
   );
 }
 
