@@ -8,6 +8,13 @@ import UserEditButtons from './UserEditButtons';
 import { checkNicknameDuplicate, editUser, getUser } from '../../apis/UserAPI';
 import { AxiosError } from 'axios';
 import { useAuthState } from '../../contexts/AuthContext';
+import AlertModal from '../common/Alert/AlertModal';
+
+type AlertOption = {
+  isOpen: boolean;
+  message: string;
+  onConfirm: null | (() => void);
+};
 
 function UserEditForm() {
   const navigate = useNavigate();
@@ -30,6 +37,12 @@ function UserEditForm() {
     ...initValues,
     birthDate: ''
   };
+  const initAlert = {
+    isOpen: false,
+    message: '',
+    onConfirm: null
+  };
+  const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
   const [values, setValues] = useState<UserInfoValues>(initValues);
   const [errors, setErrors] = useState<UserInfoErrors>(initErrors);
   const [nicknameDuplicate, setNicknameDuplicate] = useState({
@@ -216,7 +229,11 @@ function UserEditForm() {
       if (response.status === 201) {
         setNicknameDuplicate((prev) => ({ ...prev, isPass: true }));
         setErrors((prev) => ({ ...prev, nickname: '' }));
-        alert('사용할 수 있는 닉네임입니다.');
+        setAlertModal({
+          isOpen: true,
+          message: '사용할 수 있는 닉네임입니다.',
+          onConfirm: () => setAlertModal(initAlert)
+        });
       }
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
@@ -233,7 +250,11 @@ function UserEditForm() {
       }
 
       console.log(err);
-      alert('닉네임 중복 확인에 실패하였습니다.');
+      setAlertModal({
+        isOpen: true,
+        message: '닉네임 중복 확인에 실패하였습니다.',
+        onConfirm: () => setAlertModal(initAlert)
+      });
     }
   };
 
@@ -256,9 +277,14 @@ function UserEditForm() {
         const response = await editUser(data);
 
         if (response.status === 200) {
-          alert('회원 정보가 수정되었습니다.');
-          updateAuthState(true, response.data.user);
-          navigate('/mypage');
+          setAlertModal({
+            isOpen: true,
+            message: '회원 정보가 수정되었습니다.',
+            onConfirm: () => {
+              updateAuthState(true, response.data.user);
+              navigate('/mypage');
+            }
+          });
         }
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
@@ -267,14 +293,21 @@ function UserEditForm() {
               err.response.data.reason === 'INVALID' ||
               err.response.data.reason === 'EXPIRED'
             ) {
-              alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
-              return updateAuthState(false);
+              return setAlertModal({
+                isOpen: true,
+                message: '로그인 상태가 아닙니다. 다시 로그인해주세요.',
+                onConfirm: () => updateAuthState(false)
+              });
             }
           }
         }
 
         console.log(err);
-        alert('회원 정보 수정에 실패하였습니다.');
+        setAlertModal({
+          isOpen: true,
+          message: '회원 정보 수정에 실패하였습니다.',
+          onConfirm: () => setAlertModal(initAlert)
+        });
       }
     }
   };
@@ -321,14 +354,21 @@ function UserEditForm() {
                 err.response.data.reason === 'INVALID' ||
                 err.response.data.reason === 'EXPIRED'
               ) {
-                alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
-                return updateAuthState(false);
+                return setAlertModal({
+                  isOpen: true,
+                  message: '로그인 상태가 아닙니다. 다시 로그인해주세요.',
+                  onConfirm: () => updateAuthState(false)
+                });
               }
             }
           }
 
           console.log(err);
-          alert('회원 정보 불러오기에 실패하였습니다.');
+          setAlertModal({
+            isOpen: true,
+            message: '회원 정보 불러오기에 실패하였습니다.',
+            onConfirm: () => setAlertModal(initAlert)
+          });
         }
       };
 
@@ -337,22 +377,30 @@ function UserEditForm() {
   }, [authState.isLoggedIn, updateAuthState]);
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <ProfileImage
-        handleChange={handleImageChange}
-        handleImageRemove={handleImageRemove}
-        image={values.profileImage}
-      />
-      <UserInfo
-        values={values}
-        errors={errors}
-        isNicknameNew={values.nickname !== nicknameDuplicate.prevValue}
-        handleChange={handleChange}
-        handleCheckNickname={handleCheckNickname}
-        handleBirthDateChange={handleBirthDateChange}
-      />
-      <UserEditButtons />
-    </form>
+    <>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <ProfileImage
+          handleChange={handleImageChange}
+          handleImageRemove={handleImageRemove}
+          image={values.profileImage}
+        />
+        <UserInfo
+          values={values}
+          errors={errors}
+          isNicknameNew={values.nickname !== nicknameDuplicate.prevValue}
+          handleChange={handleChange}
+          handleCheckNickname={handleCheckNickname}
+          handleBirthDateChange={handleBirthDateChange}
+        />
+        <UserEditButtons />
+      </form>
+      {alertModal.isOpen && alertModal.onConfirm && (
+        <AlertModal
+          message={alertModal.message}
+          onConfirm={alertModal.onConfirm}
+        />
+      )}
+    </>
   );
 }
 
