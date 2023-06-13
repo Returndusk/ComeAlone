@@ -12,7 +12,7 @@ import {
   getUsersReview,
   modifyReviewByCommentId
 } from '../../apis/destinationList';
-import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import { FaTrashAlt } from 'react-icons/fa';
 import { CiCircleAlert } from 'react-icons/ci';
 
 const ALERT_PROPS = {
@@ -247,12 +247,6 @@ function UsersReview() {
                     </p>
                     {!isEditing.includes(true) && (
                       <div className={styles.reviewHandleButtonContainer}>
-                        {/* <button
-                          className={styles.modifyButton}
-                          onClick={() => handleModifiedButtonOnClick(index)}
-                        >
-                          <FaPen />
-                        </button> */}
                         <button
                           className={styles.deleteButton}
                           onClick={() =>

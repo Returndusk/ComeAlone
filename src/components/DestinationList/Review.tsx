@@ -6,12 +6,13 @@ import {
 } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   getReviewByDestinationId,
   postReviewByDestinationId
 } from '../../apis/destinationList';
 import { Avatar, TextField } from '@mui/material';
+import ReviewManagement from './ReviewManagement';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -41,6 +42,8 @@ function Review() {
   const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
     null
   );
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [targetComment, setTargetComment] = useState<number | null>(null);
   const { contentid } = useParams();
   const navigate = useNavigate();
   //리뷰 등록 -> 요청 -> 리뷰 목록 상태 리렌더링
@@ -55,6 +58,12 @@ function Review() {
   useEffect(() => {
     getReviewList();
   }, [getReviewList]);
+
+  // useEffect(() => {
+  //   if (!isEditing) {
+  //     getReviewList();
+  //   }
+  // }, [isEditing]);
 
   //리뷰 등록일자 가공 매서드
   const changeCreatedAtIntoDate = (date: string) => {
@@ -170,9 +179,14 @@ function Review() {
                         {review.user.nickname}
                       </span>
                       {isUserReviewer(review) && (
-                        <span className={styles.reviewHandlebox}>
-                          <NavLink to='/MyReview'>내 리뷰 관리</NavLink>
-                        </span>
+                        <ReviewManagement
+                          isEditing={isEditing}
+                          setIsEditing={setIsEditing}
+                          getReviewList={getReviewList}
+                          targetComment={targetComment}
+                          setTargetComment={setTargetComment}
+                          commentid={review?.comment_id}
+                        />
                       )}
                     </div>
 
@@ -193,42 +207,44 @@ function Review() {
             );
           })}
         </div>
-        <div className={styles.reviewInputContainer}>
-          <Avatar
-            className={styles.reviewInputAvatar}
-            src={authState?.user?.profile_image}
-          >
-            {authState.user?.nickname[0] ?? 'G'}
-          </Avatar>
-          <form
-            className={styles.reviewInputForm}
-            onSubmit={handleReviewSubmit}
-          >
-            <TextField
-              className={styles.reviewInputBar}
-              type='text'
-              name='review'
-              size='small'
-              label={
-                authState.isLoggedIn
-                  ? '리뷰를 작성해주세요.'
-                  : '로그인이 필요합니다.'
-              }
-              sx={{
-                '& label.Mui-focused': { color: '#ef6d00' },
-                '& .MuiOutlinedInput-root': {
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#fe9036',
-                    borderWidth: '1px'
-                  }
+        {!isEditing && (
+          <div className={styles.reviewInputContainer}>
+            <Avatar
+              className={styles.reviewInputAvatar}
+              src={authState?.user?.profile_image}
+            >
+              {authState.user?.nickname[0] ?? 'G'}
+            </Avatar>
+            <form
+              className={styles.reviewInputForm}
+              onSubmit={handleReviewSubmit}
+            >
+              <TextField
+                className={styles.reviewInputBar}
+                type='text'
+                name='review'
+                size='small'
+                label={
+                  authState.isLoggedIn
+                    ? '리뷰를 작성해주세요.'
+                    : '로그인이 필요합니다.'
                 }
-              }}
-            />
-            <button className={styles.reviewButton} type='submit'>
-              등록
-            </button>
-          </form>
-        </div>
+                sx={{
+                  '& label.Mui-focused': { color: '#ef6d00' },
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#fe9036',
+                      borderWidth: '1px'
+                    }
+                  }
+                }}
+              />
+              <button className={styles.reviewButton} type='submit'>
+                등록
+              </button>
+            </form>
+          </div>
+        )}
       </section>
       {isShowAlert && (
         <AlertModal
