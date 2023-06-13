@@ -53,7 +53,7 @@ function InputReviewSchedule({
               }
             }}
             onChange={handleChange}
-            label='댓글을 입력하세요.'
+            label='리뷰를 입력하세요.'
             value={reviewTyping}
           />
           <button
@@ -66,13 +66,13 @@ function InputReviewSchedule({
       ) : (
         <div className={styles.reviewInputContainer}>
           <div className={styles.notLoggedIn}>
-            댓글을 남기시려면 <Link to={ROUTER.LOGIN}>로그인</Link>해주세요.
+            리뷰를 남기시려면 <Link to={ROUTER.LOGIN}>로그인</Link>해주세요.
           </div>
         </div>
       )}
       {showEmptyAlert && (
         <AlertModal
-          message='댓글 내용을 입력해주세요.'
+          message='리뷰 내용을 입력해주세요.'
           onConfirm={() => setShowEmptyAlert(false)}
         />
       )}

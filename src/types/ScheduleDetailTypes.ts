@@ -12,7 +12,6 @@ export interface IScheduleDetail {
   duration: number;
   createdAt: Date;
   updatedAt: Date;
-  commentsCount: number;
   destinationCount: number;
   destinations: MapWithWaypointsPropsType[][];
   image: string;
@@ -32,7 +31,6 @@ export type ScheduleFetchedType = Pick<
   | 'duration'
   | 'createdAt'
   | 'updatedAt'
-  | 'commentsCount'
   | 'destinationCount'
   | 'destinations'
   | 'image'
@@ -55,7 +53,6 @@ export type ScheduleDetailIconsType = {
   userId: string;
   doesUserLike: boolean;
   likesCount: number;
-  reviewsCount: number;
 };
 
 export interface IScheduleReview {
@@ -73,7 +70,7 @@ export interface IScheduleReview {
 
 export type ScheduleReviewPropsType = {
   scheduleReviews: IScheduleReview[];
-  commentsCount: number;
+  reviewsCount: number;
   onReviewUpdate: (id: number, updateReview: string) => void;
   onReviewDelete: (id: number) => void;
 };

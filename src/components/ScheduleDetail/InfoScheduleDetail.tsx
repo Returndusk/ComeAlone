@@ -15,7 +15,7 @@ function InfoScheduleDetail({
   updatedAt
 }: ScheduleDetailInfoType) {
   return (
-    <div className={styles.scheduleInfoContainer}>
+    <>
       <div className={styles.date}>
         <p>작성일: {createdAt.toLocaleDateString('ko-KR')}</p>
         <p>수정일: {updatedAt.toLocaleDateString('ko-KR')}</p>
@@ -38,8 +38,8 @@ function InfoScheduleDetail({
         )}
         {nickname}
       </div>
-      <p>{summary}</p>
-    </div>
+      <p className={styles.summary}>{summary}</p>
+    </>
   );
 }
 
