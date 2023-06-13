@@ -1,11 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import ModalScheduleLists from './ModalScheduleLists';
-import styles from './CommonModalDesign.module.scss';
+import styles from './OpenModal.module.scss';
+import { TfiClose } from 'react-icons/tfi';
+// import Box from '@mui/material/Box';
+// import Fab from '@mui/material/Fab';
+// import AddIcon from '@mui/icons-material/Add';
 
 function OpenModal(props: { closeModal: () => void }) {
-  const navigate = useNavigate();
-  // const modalRef = useRef<HTMLDivElement>(null);
+  // const navigate = useNavigate();
 
   // useEffect(() => {
   //   function handleClickBackground(e: any) {
@@ -21,20 +23,21 @@ function OpenModal(props: { closeModal: () => void }) {
   //   };
   // }, []);
 
-  function MoveToMySchedule() {
-    navigate('/myschedule/list');
-  }
+  // function MoveToMySchedule() {
+  //   navigate('/myschedule/list');
+  // }
 
   return (
-    <>
-      <div className={styles.modalBackground}>
-        <div className={styles.modalLayout}>
-          <button onClick={MoveToMySchedule}>새로운 일정 만들기</button>
+    <div className={styles.modalBackground}>
+      <div className={styles.modalLayout}>
+        <button className={styles.closeBtn} onClick={props.closeModal}>
+          <TfiClose />
+        </button>
+        <div className={styles.scheduleListContainer} id='scheduleContainer'>
           <ModalScheduleLists />
-          <button onClick={props.closeModal}>창 닫기</button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

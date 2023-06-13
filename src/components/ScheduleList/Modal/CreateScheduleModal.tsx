@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './CommonModalDesign.module.scss';
+import styles from './CreateScheduleModal.module.scss';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { TextField } from '@mui/material';
