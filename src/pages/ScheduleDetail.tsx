@@ -55,6 +55,7 @@ function ScheduleDetail() {
       image: response?.data.image,
       createdAt: new Date(response?.data.created_at.split('T')[0]),
       updatedAt: new Date(response?.data.updated_at.split('T')[0]),
+      commentsCount: response?.data.comments_count,
       destinationCount: response?.data.destination_count,
       destinations: response?.data.destinationMaps
     };
@@ -154,6 +155,7 @@ function ScheduleDetail() {
     image,
     createdAt,
     updatedAt,
+    commentsCount,
     destinationCount,
     destinations
   } = scheduleFetched.current as ScheduleFetchedType;
@@ -195,6 +197,7 @@ function ScheduleDetail() {
       </div>
       <ReviewsSchedule
         scheduleReviews={scheduleReviews}
+        commentsCount={commentsCount}
         onReviewUpdate={updateScheduleReview}
         onReviewDelete={deleteScheduleReview}
       />

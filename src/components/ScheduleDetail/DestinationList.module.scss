@@ -6,8 +6,11 @@
   font-weight: bold;
   font-size: 26px;
 
-  .destinationCount {
+  div {
     display: inline;
+  }
+
+  .destinationCount {
     color: var(--main-color);
     margin: 0 0 0 10px;
   }
