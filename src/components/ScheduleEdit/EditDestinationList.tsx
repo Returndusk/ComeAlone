@@ -8,7 +8,7 @@ import {
   Draggable,
   DropResult
 } from '@hello-pangea/dnd';
-import { FaGripLines, FaTrashAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaGripLines, FaTrashAlt } from 'react-icons/fa';
 import AlertModal from '../common/Alert/AlertModal';
 import ROUTER from '../../constants/Router';
 
@@ -84,7 +84,10 @@ function EditDestinationList({
 
   return (
     <>
-      <div className={styles.destinationsTitle}>목적지 리스트</div>
+      <div className={styles.destinationsTitle}>
+        <FaMapMarkerAlt className={styles.destinationsIcon} />
+        목적지
+      </div>
       <div className={styles.addDestinationButton}>
         <Link to={ROUTER.DESTINATION_LIST}>+ 새로운 목적지 추가하기</Link>
       </div>
