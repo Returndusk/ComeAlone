@@ -15,6 +15,13 @@ import {
 import { checkNicknameDuplicate, registerUser } from '../../apis/UserAPI';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
+import AlertModal from '../common/Alert/AlertModal';
+
+type AlertOption = {
+  isOpen: boolean;
+  message: string;
+  onConfirm: null | (() => void);
+};
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -36,6 +43,12 @@ function RegisterForm() {
     gender: '',
     birthDate: ''
   };
+  const initAlert = {
+    isOpen: false,
+    message: '',
+    onConfirm: null
+  };
+  const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
   const [values, setValues] = useState<RegisterFormValues>(initValues);
   const [errors, setErrors] = useState<RegisterFormErrors>(initErrors);
   const [nicknameDuplicate, setNicknameDuplicate] = useState({
@@ -236,7 +249,11 @@ function RegisterForm() {
       if (response.status === 201) {
         setNicknameDuplicate({ isPass: true, nickname });
         setErrors((prev) => ({ ...prev, nickname: '' }));
-        alert('사용할 수 있는 닉네임입니다.');
+        setAlertModal({
+          isOpen: true,
+          message: '사용할 수 있는 닉네임입니다.',
+          onConfirm: () => setAlertModal(initAlert)
+        });
       }
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
@@ -249,7 +266,11 @@ function RegisterForm() {
       }
 
       console.log(err);
-      alert('닉네임 중복 확인에 실패하였습니다.');
+      setAlertModal({
+        isOpen: true,
+        message: '닉네임 중복 확인에 실패하였습니다.',
+        onConfirm: () => setAlertModal(initAlert)
+      });
     }
   };
 
@@ -283,8 +304,11 @@ function RegisterForm() {
         const response = await registerUser(data);
 
         if (response.status === 201) {
-          alert('회원가입이 완료되었습니다!');
-          navigate('/login');
+          setAlertModal({
+            isOpen: true,
+            message: '회원가입이 완료되었습니다!',
+            onConfirm: () => navigate('/login')
+          });
         }
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
@@ -295,46 +319,29 @@ function RegisterForm() {
         }
 
         console.log(err);
-        alert('회원가입에 실패하였습니다.');
+        setAlertModal({
+          isOpen: true,
+          message: '회원가입에 실패하였습니다. 잠시 후에 다시 시도해주세요.',
+          onConfirm: () => setAlertModal(initAlert)
+        });
       }
     }
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <ul className={styles.inputs}>
-        <li>
-          <TextField
-            id='email'
-            label='이메일'
-            variant='outlined'
-            name='email'
-            value={values.email}
-            onChange={handleChange}
-            size='small'
-            style={{ width: '100%' }}
-            sx={{
-              '& label.Mui-focused': { color: '#ef6d00' },
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#fe9036',
-                  borderWidth: '1px'
-                }
-              }
-            }}
-          />
-          {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
-        </li>
-        <li>
-          <div className={styles.nickname}>
+    <>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <ul className={styles.inputs}>
+          <li>
             <TextField
-              id='nickname'
-              label='닉네임'
+              id='email'
+              label='이메일'
               variant='outlined'
-              name='nickname'
-              value={values.nickname}
+              name='email'
+              value={values.email}
               onChange={handleChange}
               size='small'
+              style={{ width: '100%' }}
               sx={{
                 '& label.Mui-focused': { color: '#ef6d00' },
                 '& .MuiOutlinedInput-root': {
@@ -345,230 +352,261 @@ function RegisterForm() {
                 }
               }}
             />
-            <button type='button' onClick={handleCheckNickname}>
-              중복확인
-            </button>
-          </div>
-          {!errors.nickname && (
-            <p className={styles.msg}>
-              2자 이상, 6자 이하 (특수 문자, 공백 제외)
-            </p>
-          )}
-          {errors.nickname && (
-            <p className={styles.errMsg}>{errors.nickname}</p>
-          )}
-        </li>
-        <li>
-          <TextField
-            id='password'
-            label='비밀번호'
-            type='password'
-            variant='outlined'
-            name='password'
-            value={values.password}
-            onChange={handleChange}
-            size='small'
-            style={{ width: '100%' }}
-            sx={{
-              '& label.Mui-focused': { color: '#ef6d00' },
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#fe9036',
-                  borderWidth: '1px'
-                }
-              }
-            }}
-          />
-          {!errors.password && (
-            <p className={styles.msg}>
-              8자 이상 (대소문자, 특수 문자, 숫자 포함)
-            </p>
-          )}
-          {errors.password && (
-            <p className={styles.errMsg}>{errors.password}</p>
-          )}
-        </li>
-        <li>
-          <TextField
-            id='passwordConfirm'
-            label='비밀번호 확인'
-            type='password'
-            variant='outlined'
-            name='passwordConfirm'
-            value={values.passwordConfirm}
-            onChange={handleChange}
-            size='small'
-            style={{ width: '100%' }}
-            sx={{
-              '& label.Mui-focused': { color: '#ef6d00' },
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#fe9036',
-                  borderWidth: '1px'
-                }
-              }
-            }}
-          />
-          {errors.passwordConfirm && (
-            <p className={styles.errMsg}>{errors.passwordConfirm}</p>
-          )}
-        </li>
-        <li className={styles.radioGroup}>
-          <FormLabel id='gender'>성별</FormLabel>
-          <RadioGroup
-            aria-labelledby='gender'
-            defaultValue='male'
-            name='gender'
-            onChange={handleChange}
-            row
-          >
-            <FormControlLabel
-              value='남성'
-              control={
-                <Radio
-                  size='small'
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'rgba(254, 203, 161, 0.2)'
-                    },
-                    '&.Mui-checked': {
-                      color: '#fe9036'
+            {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
+          </li>
+          <li>
+            <div className={styles.nickname}>
+              <TextField
+                id='nickname'
+                label='닉네임'
+                variant='outlined'
+                name='nickname'
+                value={values.nickname}
+                onChange={handleChange}
+                size='small'
+                sx={{
+                  '& label.Mui-focused': { color: '#ef6d00' },
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#fe9036',
+                      borderWidth: '1px'
                     }
-                  }}
-                />
-              }
-              label='남성'
-              checked={values.gender === '남성'}
+                  }
+                }}
+              />
+              <button type='button' onClick={handleCheckNickname}>
+                중복확인
+              </button>
+            </div>
+            {!errors.nickname && (
+              <p className={styles.msg}>
+                2자 이상, 6자 이하 (특수 문자, 공백 제외)
+              </p>
+            )}
+            {errors.nickname && (
+              <p className={styles.errMsg}>{errors.nickname}</p>
+            )}
+          </li>
+          <li>
+            <TextField
+              id='password'
+              label='비밀번호'
+              type='password'
+              variant='outlined'
+              name='password'
+              value={values.password}
+              onChange={handleChange}
+              size='small'
+              style={{ width: '100%' }}
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
+                }
+              }}
             />
-            <FormControlLabel
-              value='여성'
-              control={
-                <Radio
-                  size='small'
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'rgba(254, 203, 161, 0.2)'
-                    },
-                    '&.Mui-checked': {
-                      color: '#fe9036'
-                    }
-                  }}
-                />
-              }
-              label='여성'
-              checked={values.gender === '여성'}
+            {!errors.password && (
+              <p className={styles.msg}>
+                8자 이상 (대소문자, 특수 문자, 숫자 포함)
+              </p>
+            )}
+            {errors.password && (
+              <p className={styles.errMsg}>{errors.password}</p>
+            )}
+          </li>
+          <li>
+            <TextField
+              id='passwordConfirm'
+              label='비밀번호 확인'
+              type='password'
+              variant='outlined'
+              name='passwordConfirm'
+              value={values.passwordConfirm}
+              onChange={handleChange}
+              size='small'
+              style={{ width: '100%' }}
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
+                }
+              }}
             />
-          </RadioGroup>
-          {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
-        </li>
-        <li className={styles.birthDate}>
-          <InputLabel id='birthDate-select-label'>생년월일</InputLabel>
-          <Select
-            labelId='birthDate-select-label'
-            id='birthDateYear'
-            value={values.birthDate.year}
-            name='year'
-            label='연도'
-            size='small'
-            onChange={handleBirthDateChange}
-            style={{
-              width: 'calc(100% / 3)'
-            }}
-            sx={{
-              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#fe9036',
-                borderWidth: '1px'
-              }
-            }}
-          >
-            {birthDateOptions.years.map((year) => (
-              <MenuItem key={year} value={year}>
-                {year}
-              </MenuItem>
-            ))}
-          </Select>
-          <Select
-            labelId='birthDate-select-label'
-            id='birthDateMonth'
-            value={values.birthDate.month}
-            name='month'
-            label='월'
-            size='small'
-            onChange={handleBirthDateChange}
-            style={{
-              width: 'calc(100% / 3 - 5px)',
-              marginLeft: '5px'
-            }}
-            sx={{
-              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#fe9036',
-                borderWidth: '1px'
-              }
-            }}
-          >
-            {birthDateOptions.months.map((month) => (
-              <MenuItem key={month} value={month}>
-                {month}
-              </MenuItem>
-            ))}
-          </Select>
-          <Select
-            labelId='birthDate-select-label'
-            id='birthDateDay'
-            value={values.birthDate.day}
-            name='day'
-            label='일'
-            size='small'
-            onChange={handleBirthDateChange}
-            style={{
-              width: 'calc(100% / 3 - 5px)',
-              marginLeft: '5px'
-            }}
-            sx={{
-              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#fe9036',
-                borderWidth: '1px'
-              }
-            }}
-          >
-            {birthDateOptions.days.map((day) => (
-              <MenuItem key={day} value={day}>
-                {day}
-              </MenuItem>
-            ))}
-          </Select>
-          {errors.birthDate && (
-            <p className={styles.errMsg}>{errors.birthDate}</p>
-          )}
-        </li>
-        <li>
-          <TextField
-            id='outlined-basic'
-            label='연락처'
-            variant='outlined'
-            name='phoneNumber'
-            value={values.phoneNumber}
-            onChange={handleChange}
-            size='small'
-            style={{ width: '100%' }}
-            sx={{
-              '& label.Mui-focused': { color: '#ef6d00' },
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
+            {errors.passwordConfirm && (
+              <p className={styles.errMsg}>{errors.passwordConfirm}</p>
+            )}
+          </li>
+          <li className={styles.radioGroup}>
+            <FormLabel id='gender'>성별</FormLabel>
+            <RadioGroup
+              aria-labelledby='gender'
+              defaultValue='male'
+              name='gender'
+              onChange={handleChange}
+              row
+            >
+              <FormControlLabel
+                value='남성'
+                control={
+                  <Radio
+                    size='small'
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'rgba(254, 203, 161, 0.2)'
+                      },
+                      '&.Mui-checked': {
+                        color: '#fe9036'
+                      }
+                    }}
+                  />
+                }
+                label='남성'
+                checked={values.gender === '남성'}
+              />
+              <FormControlLabel
+                value='여성'
+                control={
+                  <Radio
+                    size='small'
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'rgba(254, 203, 161, 0.2)'
+                      },
+                      '&.Mui-checked': {
+                        color: '#fe9036'
+                      }
+                    }}
+                  />
+                }
+                label='여성'
+                checked={values.gender === '여성'}
+              />
+            </RadioGroup>
+            {errors.gender && <p className={styles.errMsg}>{errors.gender}</p>}
+          </li>
+          <li className={styles.birthDate}>
+            <InputLabel id='birthDate-select-label'>생년월일</InputLabel>
+            <Select
+              labelId='birthDate-select-label'
+              id='birthDateYear'
+              value={values.birthDate.year}
+              name='year'
+              label='연도'
+              size='small'
+              onChange={handleBirthDateChange}
+              style={{
+                width: 'calc(100% / 3)'
+              }}
+              sx={{
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                   borderColor: '#fe9036',
                   borderWidth: '1px'
                 }
-              }
-            }}
-          />
-          {!errors.phoneNumber && <p className={styles.msg}>하이픈(-) 포함</p>}
-          {errors.phoneNumber && (
-            <p className={styles.errMsg}>{errors.phoneNumber}</p>
-          )}
-        </li>
-      </ul>
-      <button type='submit'>가입하기</button>
-    </form>
+              }}
+            >
+              {birthDateOptions.years.map((year) => (
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
+              ))}
+            </Select>
+            <Select
+              labelId='birthDate-select-label'
+              id='birthDateMonth'
+              value={values.birthDate.month}
+              name='month'
+              label='월'
+              size='small'
+              onChange={handleBirthDateChange}
+              style={{
+                width: 'calc(100% / 3 - 5px)',
+                marginLeft: '5px'
+              }}
+              sx={{
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#fe9036',
+                  borderWidth: '1px'
+                }
+              }}
+            >
+              {birthDateOptions.months.map((month) => (
+                <MenuItem key={month} value={month}>
+                  {month}
+                </MenuItem>
+              ))}
+            </Select>
+            <Select
+              labelId='birthDate-select-label'
+              id='birthDateDay'
+              value={values.birthDate.day}
+              name='day'
+              label='일'
+              size='small'
+              onChange={handleBirthDateChange}
+              style={{
+                width: 'calc(100% / 3 - 5px)',
+                marginLeft: '5px'
+              }}
+              sx={{
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#fe9036',
+                  borderWidth: '1px'
+                }
+              }}
+            >
+              {birthDateOptions.days.map((day) => (
+                <MenuItem key={day} value={day}>
+                  {day}
+                </MenuItem>
+              ))}
+            </Select>
+            {errors.birthDate && (
+              <p className={styles.errMsg}>{errors.birthDate}</p>
+            )}
+          </li>
+          <li>
+            <TextField
+              id='outlined-basic'
+              label='연락처'
+              variant='outlined'
+              name='phoneNumber'
+              value={values.phoneNumber}
+              onChange={handleChange}
+              size='small'
+              style={{ width: '100%' }}
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
+                }
+              }}
+            />
+            {!errors.phoneNumber && (
+              <p className={styles.msg}>하이픈(-) 포함</p>
+            )}
+            {errors.phoneNumber && (
+              <p className={styles.errMsg}>{errors.phoneNumber}</p>
+            )}
+          </li>
+        </ul>
+        <button type='submit'>가입하기</button>
+      </form>
+      {alertModal.isOpen && alertModal.onConfirm && (
+        <AlertModal
+          message={alertModal.message}
+          onConfirm={alertModal.onConfirm}
+        />
+      )}
+    </>
   );
 }
 
