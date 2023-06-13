@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import styles from './ScheduleCard.module.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { MyScheduleCardType } from '../../types/ScheduleTypes';
-import { FaRegDotCircle, FaTrashAlt } from 'react-icons/fa';
-import { useAuthState } from '../../contexts/AuthContext';
+import { FaRegDotCircle } from 'react-icons/fa';
 import ROUTER from '../../constants/Router';
 import tokenInstance from '../../apis/tokenInstance';
 import AlertModal from '../common/Alert/AlertModal';
@@ -13,24 +12,12 @@ type MyScheduleCardProps = { schedule: MyScheduleCardType };
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function ScheduleCard({ schedule }: MyScheduleCardProps) {
-  const { authState } = useAuthState();
-  const isLoggedIn = authState.isLoggedIn;
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] =
     useState<boolean>(false);
   const [showDeleteAlertModal, setShowDeleteAlertModal] =
     useState<boolean>(false);
   const [showDeleteFailAlertModal, setShowDeleteFailAlertModal] =
     useState<boolean>(false);
-  const navigate = useNavigate();
-
-  async function handleDelete(e: React.MouseEvent<SVGElement>) {
-    e.preventDefault();
-    if (isLoggedIn) {
-      setShowDeleteConfirmModal(true);
-    } else {
-      navigate(ROUTER.LOGIN);
-    }
-  }
 
   function getDate(startDateString: string, endDateString: string) {
     const startDate = new Date(startDateString);
@@ -84,14 +71,6 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
                   : '당일치기'}
               </div>
               <div>{getDate(schedule.start_date, schedule.end_date)}</div>
-            </div>
-            <div className={styles.icon}>
-              <FaTrashAlt
-                className={styles.trashIcon}
-                onClick={(e) => {
-                  handleDelete(e);
-                }}
-              />
             </div>
           </div>
           <div className={styles.scheduleDestination}>
