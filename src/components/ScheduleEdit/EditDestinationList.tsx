@@ -83,98 +83,100 @@ function EditDestinationList({
   };
 
   return (
-    <div className={styles.destinationsContainer}>
+    <>
       <div className={styles.destinationsTitle}>목적지 리스트</div>
-      <div className={styles.addDestinationButton}>
-        <Link to={ROUTER.DESTINATION_LIST}>+ 새로운 목적지 추가하기</Link>
-      </div>
-      <label>
-        <input
-          type='radio'
-          checked={checkedDayIndex === -1}
-          onChange={() => {
-            onCheckedDayIndexUpdate(-1);
-          }}
-        />
-        <span>전체 목적지 보기</span>
-      </label>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <div className={styles.destinationsList}>
-          {updatedDestinationList.map((destOfDay, dayIndex) => {
-            return (
-              <Droppable
-                droppableId={`day ${dayIndex}`}
-                key={`day ${dayIndex}`}
-              >
-                {(droppableProvided) => (
-                  <div
-                    className={styles.destinationsDay}
-                    ref={droppableProvided.innerRef}
-                    {...droppableProvided.droppableProps}
-                  >
-                    <label>
-                      <input
-                        type='radio'
-                        checked={checkedDayIndex === dayIndex}
-                        onChange={() => {
-                          if (checkedDayIndex === dayIndex) {
-                            onCheckedDayIndexUpdate(-1);
-                          } else {
-                            onCheckedDayIndexUpdate(dayIndex);
-                          }
-                        }}
-                      />{' '}
-                      <span>Day {dayIndex + 1}</span>
-                      {destOfDay.length > 0 ? null : (
-                        <p>(목적지가 존재하지 않습니다.)</p>
-                      )}
-                    </label>
-                    {destOfDay.map((dest, destIndex) => (
-                      <Draggable
-                        key={`${dayIndex} ${destIndex}`}
-                        draggableId={`${dayIndex} ${destIndex}`}
-                        index={destIndex}
-                      >
-                        {(draggableProvided) => (
-                          <div
-                            className={styles.destination}
-                            ref={draggableProvided.innerRef}
-                            {...draggableProvided.draggableProps}
-                            {...draggableProvided.dragHandleProps}
-                          >
-                            <FaGripLines className={styles.gripIcon} />
-                            {dest.title}
-                            <button
-                              className={styles.deleteButton}
-                              onClick={() => {
-                                targetDeleteDayIndex.current = dayIndex;
-                                targetDeleteDestIndex.current = destIndex;
-                                setShowDeleteAlert(true);
-                              }}
-                            >
-                              <FaTrashAlt />
-                            </button>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {droppableProvided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            );
-          })}
+      <div className={styles.destinationsContainer}>
+        <div className={styles.addDestinationButton}>
+          <Link to={ROUTER.DESTINATION_LIST}>+ 새로운 목적지 추가하기</Link>
         </div>
-      </DragDropContext>
-      {showDeleteAlert && (
-        <AlertModal
-          message='해당 목적지를 삭제하시겠습니까?'
-          showCancelButton={true}
-          onConfirm={handleDestinationDelete}
-          onCancel={() => setShowDeleteAlert(false)}
-        />
-      )}
-    </div>
+        <label>
+          <input
+            type='radio'
+            checked={checkedDayIndex === -1}
+            onChange={() => {
+              onCheckedDayIndexUpdate(-1);
+            }}
+          />
+          <span>전체 목적지 보기</span>
+        </label>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div className={styles.destinationsList}>
+            {updatedDestinationList.map((destOfDay, dayIndex) => {
+              return (
+                <Droppable
+                  droppableId={`day ${dayIndex}`}
+                  key={`day ${dayIndex}`}
+                >
+                  {(droppableProvided) => (
+                    <div
+                      className={styles.destinationsDay}
+                      ref={droppableProvided.innerRef}
+                      {...droppableProvided.droppableProps}
+                    >
+                      <label>
+                        <input
+                          type='radio'
+                          checked={checkedDayIndex === dayIndex}
+                          onChange={() => {
+                            if (checkedDayIndex === dayIndex) {
+                              onCheckedDayIndexUpdate(-1);
+                            } else {
+                              onCheckedDayIndexUpdate(dayIndex);
+                            }
+                          }}
+                        />{' '}
+                        <span>Day {dayIndex + 1}</span>
+                        {destOfDay.length > 0 ? null : (
+                          <p>(목적지가 존재하지 않습니다.)</p>
+                        )}
+                      </label>
+                      {destOfDay.map((dest, destIndex) => (
+                        <Draggable
+                          key={`${dayIndex} ${destIndex}`}
+                          draggableId={`${dayIndex} ${destIndex}`}
+                          index={destIndex}
+                        >
+                          {(draggableProvided) => (
+                            <div
+                              className={styles.destination}
+                              ref={draggableProvided.innerRef}
+                              {...draggableProvided.draggableProps}
+                              {...draggableProvided.dragHandleProps}
+                            >
+                              <FaGripLines className={styles.gripIcon} />
+                              {dest.title}
+                              <button
+                                className={styles.deleteButton}
+                                onClick={() => {
+                                  targetDeleteDayIndex.current = dayIndex;
+                                  targetDeleteDestIndex.current = destIndex;
+                                  setShowDeleteAlert(true);
+                                }}
+                              >
+                                <FaTrashAlt />
+                              </button>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {droppableProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              );
+            })}
+          </div>
+        </DragDropContext>
+        {showDeleteAlert && (
+          <AlertModal
+            message='해당 목적지를 삭제하시겠습니까?'
+            showCancelButton={true}
+            onConfirm={handleDestinationDelete}
+            onCancel={() => setShowDeleteAlert(false)}
+          />
+        )}
+      </div>
+    </>
   );
 }
 
