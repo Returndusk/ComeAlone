@@ -1,59 +1,90 @@
 .reviewWrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding: 0px 15px;
+  box-sizing: border-box;
 }
 .reviewBanner {
-  font-size: 24px;
+  font-size: 22px;
+  padding: 25px 0px 20px;
+  box-sizing: border-box;
+  width: 100%;
+  border-bottom: 1px solid #eee;
   font-weight: 600;
+  color: #333;
 }
 
 .reviewContainer {
-  margin: 20px 0;
-
   .reviewBox {
     display: flex;
     flex-direction: column;
-    margin: 10px;
-    border-bottom: 1px solid #ccc;
-    //코멘트 구역 구분 가능한 class
+    padding: 13px 0px 7px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #eee;
 
     .reviewUserInfo {
+      width: 100%;
       display: flex;
       align-items: center;
 
       .reviewerAvatar {
-        width: 68px;
-        height: 68px;
-        margin: 5px;
+        width: 45px;
+        height: 45px;
+        margin: 5px 10px 5px 5px;
       }
 
       .reviewInfo {
-        .reviewerNickname {
-          font-size: 22px;
-          padding: 3px;
-        }
-        .reviewDate {
+        width: calc(100% - 50px - 10px);
+
+        .reviewerInfo {
           display: flex;
-          padding: 3px;
+          justify-content: space-between;
+          padding: 5px 15px 8px 0px;
+          box-sizing: border-box;
+
+          .reviewerNickname {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+          }
+
+          .reviewHandlebox {
+            font-size: 14px;
+
+            a {
+              color: var(--main-color);
+              text-decoration: none;
+            }
+          }
+        }
+
+        .reviewDate {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 13px;
+          color: #555;
 
           span + span {
-            padding-left: 20px;
+            padding-right: 15px;
+          }
+
+          .reviewModifiedDate {
+            font-size: 13px;
+            color: #888;
           }
         }
       }
     }
     .reviewComment {
       display: flex;
-      font-size: 24px;
-      padding: 20px;
-    }
-
-    .reviewHandlebox {
-      display: flex;
-      padding: 20px;
-
-      #usersReviewButton {
-      }
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333;
+      padding: 7px 10px 10px;
+      box-sizing: border-box;
     }
 
     // div:not(:last-child) {
@@ -64,16 +95,33 @@
 .reviewInputContainer {
   display: flex;
   align-items: center;
+  padding: 15px 0px;
+  box-sizing: border-box;
 
-  #reviewInputAvatar {
-    width: 40px;
-    height: 40px;
-    margin: 10px;
+  .reviewInputAvatar {
+    width: 45px;
+    height: 45px;
+    margin: 5px 10px 5px 5px;
   }
 
-  #reviewButton {
-    width: 50px;
-    height: 30px;
+  .reviewInputForm {
+    width: 100%;
+
+    .reviewInputBar {
+      margin-right: 10px;
+      width: calc(100% - 60px);
+    }
+
+    .reviewButton {
+      width: 50px;
+      height: 40px;
+      background-color: var(--main-color);
+      border: 0;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   }
 }
 

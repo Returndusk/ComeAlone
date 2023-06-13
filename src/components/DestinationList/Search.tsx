@@ -9,6 +9,8 @@ import {
   // getRankedDestinationsByRankingNumber
 } from '../../apis/destinationList';
 import AlertModal from '../common/Alert/AlertModal';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
+import { BiSearch } from 'react-icons/bi';
 
 // 사용자 검색 X -> 랭킹 데이터를 props로 전송
 // 사용자 검색 O -> 검색 쿼리를 props로 전송
@@ -81,16 +83,34 @@ function Search() {
       <div className={styles.filterContainer}>
         <div className={styles.searchContainer}>
           <form className={styles.searchBar} onSubmit={handleSubmitQuery}>
-            <input
-              id={styles.inputBar}
+            <TextField
+              className={styles.inputBar}
               type='text'
               name='searchQuery'
               placeholder='목적지를 입력해주세요.'
+              style={{ width: '350px' }}
+              size='small'
               defaultValue={searchQueryParam}
+              sx={{
+                width: '100%',
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
+                }
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton type='submit'>
+                      <BiSearch />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             />
-            <button id={styles.searchButton} type='submit'>
-              <AiOutlineSearch />
-            </button>
           </form>
         </div>
         <Category

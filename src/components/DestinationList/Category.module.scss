@@ -1,42 +1,39 @@
 .categoryWrapper {
   display: flex;
-  justify-content: center;
-  width: 550px;
-  z-index: 1000;
-  background-color: #fff;
-
-  padding: 15px 0;
+  width: 100%;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .categoryContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   flex-wrap: wrap;
-  margin: 0 50px;
 
   button {
     font-size: 13px;
     cursor: pointer;
-    border-radius: 16px;
-    margin: 2px;
+    border-radius: 5px;
     min-width: 65px;
-  }
-  button + button {
-    margin-left: 15px;
+    background-color: transparent;
+    margin-bottom: 5px;
+    color: #666;
+    font-weight: 600;
   }
 }
 
 .activeSelectedButton {
   border: none;
-  color: #fff;
+  color: var(--main-color);
   padding: 6px;
 }
 
 .activeSelectedAllButton {
   border: none;
-  color: #fff;
   padding: 6px;
   background-color: var(--main-color);
 }
@@ -57,90 +54,89 @@
   background-color: #fff;
 }
 
-.filteredCounterWraper {
-  display: flex;
+// .filteredCounterWraper {
+//   display: flex;
+//   width: 100%;
+//   height: 100%;
+//   padding: 15px;
+//   box-sizing: border-box;
+//   border-bottom: 1px solid #eee;
+//   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
 
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
+//   .filteredCounter {
+//     font-size: 16px;
+//     font-weight: 500;
+//     color: #333;
+//   }
+// }
 
-  background-color: #fff;
+// #activeCategory-12 {
+//   color: #ff4500;
+// }
 
-  #filteredCounter {
-    padding-left: 30px; // destination의 좌우 패딩과 동일
-    font-size: 18px;
-    font-weight: 550;
-  }
-}
+// // #Category-12 {
+// //   background-color: #ff4500;
+// // }
 
-#activeCategory-12 {
-  background-color: #ff4500;
-}
+// #activeCategory-14 {
+//   background-color: #8a2be2;
+// }
 
-#Category-12 {
-  border-color: #ff4500;
-  color: #ff4500;
-}
+// #Category-14 {
+//   border-color: #8a2be2;
+//   background-color: #8a2be2;
+// }
 
-#activeCategory-14 {
-  background-color: #8a2be2;
-}
+// #activeCategory-15 {
+//   background-color: #00ff00;
+// }
 
-#Category-14 {
-  border-color: #8a2be2;
-  color: #8a2be2;
-}
+// #Category-15 {
+//   border-color: #00ff00;
+//   color: #00ff00;
+// }
 
-#activeCategory-15 {
-  background-color: #00ff00;
-}
+// #activeCategory-25 {
+//   background-color: #008080;
+// }
 
-#Category-15 {
-  border-color: #00ff00;
-  color: #00ff00;
-}
+// #Category-25 {
+//   border-color: #008080;
+//   color: #008080;
+// }
 
-#activeCategory-25 {
-  background-color: #008080;
-}
+// #activeCategory-28 {
+//   background-color: #40e0d0;
+// }
 
-#Category-25 {
-  border-color: #008080;
-  color: #008080;
-}
+// #Category-28 {
+//   border-color: #40e0d0;
+//   color: #40e0d0;
+// }
 
-#activeCategory-28 {
-  background-color: #40e0d0;
-}
+// #activeCategory-32 {
+//   background-color: #ffd700;
+// }
 
-#Category-28 {
-  border-color: #40e0d0;
-  color: #40e0d0;
-}
+// #Category-32 {
+//   border-color: #ffd700;
+//   color: #ffd700;
+// }
 
-#activeCategory-32 {
-  background-color: #ffd700;
-}
+// #activeCategory-38 {
+//   background-color: #8b4513;
+// }
 
-#Category-32 {
-  border-color: #ffd700;
-  color: #ffd700;
-}
+// #Category-38 {
+//   border-color: #8b4513;
+//   color: #8b4513;
+// }
 
-#activeCategory-38 {
-  background-color: #8b4513;
-}
+// #activeCategory-39 {
+//   background-color: #1e90ff;
+// }
 
-#Category-38 {
-  border-color: #8b4513;
-  color: #8b4513;
-}
-
-#activeCategory-39 {
-  background-color: #1e90ff;
-}
-
-#Category-39 {
-  border-color: #1e90ff;
-  color: #1e90ff;
-}
+// #Category-39 {
+//   border-color: #1e90ff;
+//   color: #1e90ff;
+// }
