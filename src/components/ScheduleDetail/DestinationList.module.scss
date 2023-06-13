@@ -1,13 +1,14 @@
 .destinationsTitle {
   grid-row: 5;
   grid-column: 1 / 4;
-  display: inline;
+  display: flex;
+  flex-direction: row;
   margin: 0 0 20px 0;
   font-weight: bold;
   font-size: 26px;
 
-  div {
-    display: inline;
+  .destinationsIcon {
+    margin: 0 14px 0 0;
   }
 
   .destinationCount {

@@ -1,11 +1,13 @@
 .reviewsTitle {
   grid-row: 7;
+  display: flex;
+  flex-direction: row;
   margin: 150px 0 24px 0;
   font-size: 26px;
   font-weight: bold;
 
-  div {
-    display: inline;
+  .commentsIcon {
+    margin: 0 14px 0 0;
   }
 
   .commentsCount {

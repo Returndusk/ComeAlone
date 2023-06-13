@@ -3,7 +3,7 @@ import styles from './ReviewsSchedule.module.scss';
 import { useAuthState } from '../../contexts/AuthContext';
 import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import { FaPen, FaTrashAlt, FaCommentAlt } from 'react-icons/fa';
 import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
 import AlertModal from '../common/Alert/AlertModal';
 
@@ -51,6 +51,7 @@ function ReviewsSchedule({
   return (
     <>
       <div className={styles.reviewsTitle}>
+        <FaCommentAlt className={styles.commentsIcon} />
         댓글 <div className={styles.commentsCount}>{commentsCount}</div>
       </div>
       <div className={styles.reviewsContainer}>

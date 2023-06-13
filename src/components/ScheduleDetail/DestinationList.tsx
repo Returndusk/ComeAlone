@@ -1,6 +1,7 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import styles from './DestinationList.module.scss';
 import { MapWithWaypointsPropsType } from '../../types/DestinationListTypes';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 function DestinationList({
   destinations,
@@ -16,6 +17,7 @@ function DestinationList({
   return (
     <>
       <div className={styles.destinationsTitle}>
+        <FaMapMarkerAlt className={styles.destinationsIcon} />
         목적지 <div className={styles.destinationCount}>{destinationCount}</div>
       </div>
       <div className={styles.destinationsContainer}>
