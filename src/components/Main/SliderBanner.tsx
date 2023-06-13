@@ -114,7 +114,7 @@ function SliderBanner({
           : ''
       }`}
     >
-      <Slider {...finalSettings}>
+      <Slider {...finalSettings} draggable={false}>
         {destinations.map((destination, index) => (
           <div
             key={`destination-${String(destination[idProperty]) || index}`}

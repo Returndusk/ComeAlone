@@ -2,14 +2,13 @@ import React from 'react';
 import styles from './IconsScheduleDetail.module.scss';
 import { useAuthState } from '../../contexts/AuthContext';
 import { Tooltip } from '@mui/material';
-import { FaRegHeart, FaHeart, FaCommentAlt } from 'react-icons/fa';
+import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { ScheduleDetailIconsType } from '../../types/ScheduleDetailTypes';
 
 function IconsScheduleDetail({
   userId,
   doesUserLike,
   likesCount,
-  reviewsCount,
   onUserLike
 }: ScheduleDetailIconsType & { onUserLike: () => void }) {
   const isLoggedIn: boolean = useAuthState().authState.isLoggedIn as boolean;
@@ -24,10 +23,6 @@ function IconsScheduleDetail({
             {likesCount}
           </button>
         </Tooltip>
-        <span id={styles.reviewsCount}>
-          <FaCommentAlt id={styles.reviewsCountIcon} />
-          {reviewsCount}
-        </span>
       </div>
     ) : (
       <div className={styles.iconsContainer}>
@@ -44,10 +39,6 @@ function IconsScheduleDetail({
           )}
           {likesCount}
         </button>
-        <span id={styles.reviewsCount}>
-          <FaCommentAlt id={styles.reviewsCountIcon} />
-          {reviewsCount}
-        </span>
       </div>
     )
   ) : (
@@ -58,10 +49,6 @@ function IconsScheduleDetail({
           {likesCount}
         </button>
       </Tooltip>
-      <span id={styles.reviewsCount}>
-        <FaCommentAlt id={styles.reviewsCountIcon} />
-        {reviewsCount}
-      </span>
     </div>
   );
 }

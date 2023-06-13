@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './Footer.module.scss';
 import { useLocation } from 'react-router';
+import styles from './Footer.module.scss';
 import ROUTER from '../../../constants/Router';
 
 function Footer() {
@@ -12,6 +12,12 @@ function Footer() {
     ROUTER.REGISTER
   ];
   const isTargetPage = targetPages.includes(location.pathname);
+  const isFooterVisible = !location.pathname.startsWith(ROUTER.DESTINATION_LIST);
+
+  // 목적지 라우터에서는 푸터 그리지 않도록 예외처리
+  if (!isFooterVisible) {
+    return null;
+  }
 
   return (
     <div className={`${styles.layout} ${isTargetPage ? styles.whiteBg : ''}`}>

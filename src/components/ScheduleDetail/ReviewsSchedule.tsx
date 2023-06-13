@@ -18,7 +18,7 @@ function stringifyDate(date: string) {
 
 function ReviewsSchedule({
   scheduleReviews,
-  commentsCount,
+  reviewsCount,
   onReviewUpdate,
   onReviewDelete
 }: ScheduleReviewPropsType) {
@@ -52,7 +52,7 @@ function ReviewsSchedule({
     <>
       <div className={styles.reviewsTitle}>
         <FaCommentAlt className={styles.commentsIcon} />
-        댓글 <div className={styles.commentsCount}>{commentsCount}</div>
+        리뷰 <div className={styles.commentsCount}>{reviewsCount}</div>
       </div>
       <div className={styles.reviewsContainer}>
         {scheduleReviews.length > 0 ? (
@@ -107,7 +107,7 @@ function ReviewsSchedule({
                         </div>
                       ) : loggedInUserId === commenterId ? (
                         <div className={styles.updateOther}>
-                          다른 댓글을 수정 중입니다...
+                          다른 리뷰를 수정 중입니다...
                         </div>
                       ) : null
                     ) : loggedInUserId === commenterId ? (
@@ -157,31 +157,31 @@ function ReviewsSchedule({
             })}
           </div>
         ) : (
-          <div className={styles.noComments}>등록된 댓글이 없습니다.</div>
-        )}
-        {showDeleteAlert && (
-          <AlertModal
-            message='해당 댓글을 삭제하시겠습니까?'
-            showCancelButton={true}
-            onConfirm={() => handleReviewDelete()}
-            onCancel={() => setShowDeleteAlert(false)}
-          />
-        )}
-        {showUpdateAlert && (
-          <AlertModal
-            message='해당 댓글을 입력하신 내용으로 수정하시겠습니까?'
-            showCancelButton={true}
-            onConfirm={() => handleReviewUpdate()}
-            onCancel={() => setShowUpdateAlert(false)}
-          />
-        )}
-        {showEmptyAlert && (
-          <AlertModal
-            message='수정하실 댓글 내용을 입력해주세요.'
-            onConfirm={() => setShowEmptyAlert(false)}
-          />
+          <div className={styles.noComments}>등록된 리뷰가 없습니다.</div>
         )}
       </div>
+      {showDeleteAlert && (
+        <AlertModal
+          message='해당 리뷰를 삭제하시겠습니까?'
+          showCancelButton={true}
+          onConfirm={() => handleReviewDelete()}
+          onCancel={() => setShowDeleteAlert(false)}
+        />
+      )}
+      {showUpdateAlert && (
+        <AlertModal
+          message='해당 리뷰를 입력하신 내용으로 수정하시겠습니까?'
+          showCancelButton={true}
+          onConfirm={() => handleReviewUpdate()}
+          onCancel={() => setShowUpdateAlert(false)}
+        />
+      )}
+      {showEmptyAlert && (
+        <AlertModal
+          message='수정하실 리뷰 내용을 입력해주세요.'
+          onConfirm={() => setShowEmptyAlert(false)}
+        />
+      )}
     </>
   );
 }
