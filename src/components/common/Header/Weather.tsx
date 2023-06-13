@@ -67,7 +67,7 @@ function Weather() {
           target='_blank'
           rel='noreferrer'
         >
-          <img src={imgSrc} alt='Weather Icon' />
+          <img src={imgSrc} alt='Weather Icon' title='제주시 현재 날씨. 클릭 시 제주지방기상청이 연결됩니다. ' />
           {temp}°
         </a>
       </div>
