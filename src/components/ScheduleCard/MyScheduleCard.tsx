@@ -19,15 +19,12 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
   const [showDeleteFailAlertModal, setShowDeleteFailAlertModal] =
     useState<boolean>(false);
 
-  function getDate(startDateString: string, endDateString: string) {
-    const startDate = new Date(startDateString);
-    const endDate = new Date(endDateString);
-    const startYear = startDate.getFullYear();
-    const startMonth = startDate.getMonth() + 1;
-    const startDay = startDate.getDate();
-    const endMonth = endDate.getMonth() + 1;
-    const endDay = endDate.getDate();
-    return `${startYear}년 ${startMonth}월 ${startDay}일 ~ ${endMonth}월 ${endDay}일`;
+  function getDate(dateString: string) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}년 ${month}월 ${day}일`;
   }
 
   async function handleDeleteConfirm() {
@@ -70,7 +67,10 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
                   ? `${schedule.duration - 1}박 ${schedule.duration}일`
                   : '당일치기'}
               </div>
-              <div>{getDate(schedule.start_date, schedule.end_date)}</div>
+              <div>{getDate(schedule.start_date)}</div>
+              {schedule.start_date != schedule.end_date && (
+                <div>{getDate(schedule.end_date)}</div>
+              )}
             </div>
           </div>
           <div className={styles.scheduleDestination}>
