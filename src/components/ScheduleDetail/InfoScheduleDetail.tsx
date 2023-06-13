@@ -38,7 +38,7 @@ function InfoScheduleDetail({
         )}
         {nickname}
       </div>
-      <p className={styles.summary}>{summary}</p>
+      <div className={styles.summary}>{summary}</div>
     </>
   );
 }
