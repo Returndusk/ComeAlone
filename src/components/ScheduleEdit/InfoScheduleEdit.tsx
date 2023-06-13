@@ -26,6 +26,9 @@ function InfoScheduleEdit({
             }
           }
         }}
+        inputProps={{
+          maxLength: 30
+        }}
         required
         label='제목'
         defaultValue={updatedTitle}
@@ -41,6 +44,9 @@ function InfoScheduleEdit({
               borderWidth: '1px'
             }
           }
+        }}
+        inputProps={{
+          maxLength: 300
         }}
         required
         label='일정 소개'
