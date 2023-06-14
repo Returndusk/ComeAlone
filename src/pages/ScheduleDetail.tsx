@@ -68,7 +68,7 @@ function ScheduleDetail() {
         if (err.response?.status === 404) {
           console.log(err.response.data.message);
 
-          navigate(ROUTER.MAIN);
+          navigate('*');
         }
       } else {
         console.log(err);
