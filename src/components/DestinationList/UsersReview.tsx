@@ -1,18 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './UsersReview.module.scss';
-import {
-  DestinationsReviewType,
-  commentType
-} from '../../types/DestinationListTypes';
+import { DestinationsReviewType } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
 import { useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
-  getUsersReview,
-  modifyReviewByCommentId
+  getUsersReview
 } from '../../apis/destinationList';
-import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import { FaTrashAlt } from 'react-icons/fa';
 import { CiCircleAlert } from 'react-icons/ci';
 
 const ALERT_PROPS = {
@@ -20,16 +16,13 @@ const ALERT_PROPS = {
   showTitle: false
 };
 
-const SUCCESS_ALERT_PROPS = {
-  successModifyingMessage: '리뷰 수정에 성공했습니다.',
-  failedModifyingMessage: '리뷰 수정에 실패했습니다. 다시 시도해주세요',
-  successDeleteMessage: '리뷰 삭제에 성공했습니다.',
+const REVIEW_MANAGEMENT_ALERT_PROPS = {
+  comfirmDeleteMessage: '리뷰를 삭제하시겠습니까?',
   failedDeleteMessage: '리뷰 삭제에 실패했습니다. 다시 시도해주세요',
   showTitle: false
 };
 
 const RESPONSE_STATUS = {
-  MODIFY_SUCCESS: 200,
   DELETE_SUCCESS: 200
 };
 
@@ -37,19 +30,11 @@ function UsersReview() {
   const [usersReview, setUsersReview] = useState<
     DestinationsReviewType[] | null
   >(null);
-  const [modifiedReview, setModifiedReview] = useState<commentType>({
-    comment: null
-  });
-  const [isEditing, setIsEditing] = useState<boolean[] | null>(null);
+  const [isConfirmDelete, setIsConfirmDelete] = useState<boolean>(false);
+  const [tryDelete, setTryDelete] = useState<boolean>(false);
   const [targetComment, setTargetComment] = useState<number | null>(null);
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
-  const [isShowModifySuccess, setIsShowModifySuccess] =
-    useState<boolean>(false);
-  const [isShowDeleteSuccess, setIsShowDeleteSuccess] =
-    useState<boolean>(false);
-  const [isShowModifyFailed, setIsShowModifyFailed] = useState<boolean>(false);
-  const [isShowDeleteFailed, setIsShowDeleteFailed] = useState<boolean>(false);
   const navigate = useNavigate();
 
   //유저의 리뷰 조회
@@ -63,120 +48,35 @@ function UsersReview() {
     getUserReviewList();
   }, [getUserReviewList]);
 
-  //유저 리뷰목록을 상태관리할 배열 생성
-  useEffect(() => {
-    const userReviewCount = usersReview?.length ?? 0;
-    if (userReviewCount > 0) {
-      const editingArray = Array.from({ length: userReviewCount }, () => false);
-      setIsEditing(editingArray);
-    }
-    return;
-  }, [usersReview, setIsEditing]);
-
-  //리뷰 수정 요청 메서드
-  const modifyReview = useCallback(
-    async (commentid: number, content: commentType) => {
-      const res = await modifyReviewByCommentId(commentid, content);
-      const status = res?.status;
-      if (status === RESPONSE_STATUS.MODIFY_SUCCESS) {
-        setModifiedReview(() => ({ comment: null }));
-        return;
-      }
-      setIsShowModifyFailed(true);
-      return;
-    },
-    [
-      modifiedReview,
-      setIsShowModifyFailed,
-      modifyReviewByCommentId,
-      setModifiedReview
-    ]
-  );
-
   //리뷰 삭제 요청 메서드
   const deleteReview = useCallback(
     async (commentid: number) => {
       const res = await deleteReviewByDestinationId(commentid);
       const status = res?.status;
       if (status === RESPONSE_STATUS.DELETE_SUCCESS) {
-        setIsShowDeleteSuccess(true);
-        await getUserReviewList();
+        getUserReviewList();
         return;
       }
-      setIsShowDeleteFailed(true);
       return;
     },
-    [
-      setIsShowDeleteSuccess,
-      getUserReviewList,
-      setIsShowDeleteFailed,
-      deleteReviewByDestinationId
-    ]
+    [getUserReviewList, deleteReviewByDestinationId]
   );
 
-  const isNullishReviewInput = (input: string) => {
-    return input === '';
-  };
-
-  //수정할 내용을 제출했을때 실행할 로직
-  const handleModifiedReviewSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-    commentid: number
-  ) => {
-    e.preventDefault();
+  const handleDeleteOnClick = async (commentid: number) => {
     if (!authState.isLoggedIn) {
       setIsShowAlert(true);
-      return;
-    }
-    const eventTarget = e.target as HTMLFormElement;
-    const submittedModifiedReview = eventTarget.userReview.value;
-    if (isNullishReviewInput(submittedModifiedReview)) {
-      alert(`수정할 내용을 입력해주세요.`);
       return;
     }
     setTargetComment(() => commentid);
-    setModifiedReview(() => {
-      return { comment: submittedModifiedReview };
-    });
-    return;
+    setIsConfirmDelete(() => true);
   };
 
   useEffect(() => {
-    if (targetComment) {
-      modifyReview(targetComment, modifiedReview);
-      setTargetComment(null);
-      setIsShowModifySuccess(true);
-      getUserReviewList();
+    if (tryDelete && targetComment) {
+      deleteReview(targetComment);
     }
-  }, [modifiedReview, targetComment, setTargetComment]);
-
-  // 수정 버튼 클릭 이벤트 (수정 시작)
-  const handleModifiedButtonOnClick = (index: number) => {
-    if (!authState.isLoggedIn) {
-      setIsShowAlert(true);
-      return;
-    }
-    if (isEditing && isEditing.length > 0) {
-      const newIsEditing = [...isEditing];
-      newIsEditing[index] = true;
-      setIsEditing(() => newIsEditing);
-      return;
-    }
-  };
-
-  const handleDeleteOnClick = async (index: number, commentid: number) => {
-    if (!authState.isLoggedIn) {
-      setIsShowAlert(true);
-      return;
-    }
-    await deleteReview(commentid);
-    if (isEditing && isEditing.length > 0) {
-      const newIsEditing = [...isEditing];
-      newIsEditing.splice(index, 1);
-      setIsEditing(newIsEditing);
-      return;
-    }
-  };
+    return;
+  }, [tryDelete, deleteReview, targetComment]);
 
   //리뷰 등록일자 가공 매서드
   const changeCreatedAtIntoDate = (date: string) => {
@@ -194,23 +94,15 @@ function UsersReview() {
     navigate('/login');
   };
 
-  const handleModifySuccessConfirm = () => {
-    setIsShowModifySuccess(false);
+  const handleOnDeleteConfirm = () => {
+    setTryDelete(true);
+    setIsConfirmDelete(false);
     return;
   };
 
-  const handleModifyFailedConfirm = () => {
-    setIsShowModifyFailed(false);
-    return;
-  };
-
-  const handleDeleteSuccessConfirm = () => {
-    setIsShowDeleteSuccess(false);
-    return;
-  };
-
-  const handleDeleteFailedConfirm = () => {
-    setIsShowDeleteFailed(false);
+  const handleOnDeleteCancel = () => {
+    setTryDelete(false);
+    setIsConfirmDelete(false);
     return;
   };
 
@@ -231,7 +123,7 @@ function UsersReview() {
         {Array.isArray(usersReview) && usersReview?.length > 0 && (
           <>
             {usersReview?.map((review, index) => {
-              return isEditing !== null && !isEditing[index] ? (
+              return (
                 <div key={index} className={styles.usersReviewBox}>
                   <div className={styles.destinationInfo}>
                     {review?.destination.image2 && (
@@ -245,24 +137,15 @@ function UsersReview() {
                     <p className={styles.usersReviewTitle}>
                       {review.destination.title}
                     </p>
-                    {!isEditing.includes(true) && (
-                      <div className={styles.reviewHandleButtonContainer}>
-                        {/* <button
-                          className={styles.modifyButton}
-                          onClick={() => handleModifiedButtonOnClick(index)}
-                        >
-                          <FaPen />
-                        </button> */}
-                        <button
-                          className={styles.deleteButton}
-                          onClick={() =>
-                            handleDeleteOnClick(index, review.comment_id)
-                          }
-                        >
-                          <FaTrashAlt />
-                        </button>
-                      </div>
-                    )}
+
+                    <div className={styles.reviewHandleButtonContainer}>
+                      <button
+                        className={styles.deleteButton}
+                        onClick={() => handleDeleteOnClick(review.comment_id)}
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    </div>
                   </div>
 
                   <p className={styles.usersReviewCreatedDate}>
@@ -270,29 +153,6 @@ function UsersReview() {
                   </p>
 
                   <p className={styles.usersReviewComment}>{review.comment}</p>
-                </div>
-              ) : (
-                <div
-                  key={index}
-                  className={styles.usersReviewBox}
-                  id={styles.modifyReviewBox}
-                >
-                  <form
-                    className={styles.reviewBar}
-                    onSubmit={async (e) =>
-                      await handleModifiedReviewSubmit(e, review.comment_id)
-                    }
-                  >
-                    <input
-                      id={styles.usersReviewBar}
-                      type='text'
-                      name='userReview'
-                      defaultValue={review.comment}
-                    />
-                    <button id={styles.reviewSubmmitButton} type='submit'>
-                      완료
-                    </button>
-                  </form>
                 </div>
               );
             })}
@@ -312,32 +172,13 @@ function UsersReview() {
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
-      {isShowModifySuccess && (
+      {isConfirmDelete && (
         <AlertModal
-          message={SUCCESS_ALERT_PROPS.successModifyingMessage}
-          onConfirm={handleModifySuccessConfirm}
-          showTitle={ALERT_PROPS.showTitle}
-        />
-      )}
-      {isShowModifyFailed && (
-        <AlertModal
-          message={SUCCESS_ALERT_PROPS.failedModifyingMessage}
-          onConfirm={handleModifyFailedConfirm}
-          showTitle={ALERT_PROPS.showTitle}
-        />
-      )}
-      {isShowDeleteSuccess && (
-        <AlertModal
-          message={SUCCESS_ALERT_PROPS.successDeleteMessage}
-          onConfirm={handleDeleteSuccessConfirm}
-          showTitle={ALERT_PROPS.showTitle}
-        />
-      )}
-      {isShowDeleteFailed && (
-        <AlertModal
-          message={SUCCESS_ALERT_PROPS.failedDeleteMessage}
-          onConfirm={handleDeleteFailedConfirm}
-          showTitle={ALERT_PROPS.showTitle}
+          message={REVIEW_MANAGEMENT_ALERT_PROPS.comfirmDeleteMessage}
+          onConfirm={handleOnDeleteConfirm}
+          onCancel={handleOnDeleteCancel}
+          showCancelButton={true}
+          showTitle={REVIEW_MANAGEMENT_ALERT_PROPS.showTitle}
         />
       )}
     </div>
