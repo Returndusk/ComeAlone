@@ -52,6 +52,7 @@ function InputReviewSchedule({
                 }
               }
             }}
+            inputProps={{ maxLength: 300 }}
             onChange={handleChange}
             label='리뷰를 입력하세요.'
             value={reviewTyping}

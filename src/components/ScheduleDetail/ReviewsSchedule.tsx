@@ -146,6 +146,7 @@ function ReviewsSchedule({
                           }
                         }
                       }}
+                      inputProps={{ maxLength: 300 }}
                       value={reviewTyping}
                       onChange={handleChange}
                     />
