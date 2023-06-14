@@ -33,6 +33,8 @@ function DateModalScheduleEdit({
 }) {
   const [showDiffDurationAlert, setShowDiffDurationAlert] =
     useState<boolean>(false);
+  const [showMaximumDurationAlert, setShowMaximumDurationAlert] =
+    useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<DateSelectionType[]>([
     {
       startDate: dateInfo.startDate,
@@ -47,6 +49,8 @@ function DateModalScheduleEdit({
 
     if (currentDuration < prevDuration) {
       setShowDiffDurationAlert(true);
+    } else if (currentDuration > 30) {
+      setShowMaximumDurationAlert(true);
     } else {
       handleDateInfoUpdateConfirm();
     }
@@ -102,6 +106,12 @@ function DateModalScheduleEdit({
           showCancelButton={true}
           onConfirm={() => handleDateInfoUpdateConfirm()}
           onCancel={() => setShowDiffDurationAlert(false)}
+        />
+      )}
+      {showMaximumDurationAlert && (
+        <AlertModal
+          message='일정 기간은 최대 30일까지만 가능합니다.'
+          onConfirm={() => setShowMaximumDurationAlert(false)}
         />
       )}
     </>

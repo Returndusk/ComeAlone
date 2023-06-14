@@ -137,13 +137,14 @@ function ScheduleDetail() {
       userLikesCount.current = fetchedDetail.likesCount;
       setScheduleReviews(fetchedReviews);
       setCheckedDestinations(fetchedDetail.destinations.flat());
-      setIsLoading(false);
 
       if (isLoggedIn) {
         const doesUserLike = await getDoesUserLike(scheduleId);
 
         setDoesUserLike(doesUserLike);
       }
+
+      setIsLoading(false);
     };
 
     fetchData();
