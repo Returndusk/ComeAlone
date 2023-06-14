@@ -20,7 +20,7 @@ function IconsScheduleDetail({
         <Tooltip title='자신의 일정에는 좋아요할 수 없습니다.' placement='top'>
           <button id={styles.likesDisabled}>
             <FaRegHeart id={styles.likesIcon} />
-            {likesCount}
+            좋아요 {likesCount}개
           </button>
         </Tooltip>
       </div>
@@ -37,7 +37,7 @@ function IconsScheduleDetail({
           ) : (
             <FaRegHeart id={styles.likesIcon} />
           )}
-          {likesCount}
+          좋아요 {likesCount}개
         </button>
       </div>
     )
@@ -46,7 +46,7 @@ function IconsScheduleDetail({
       <Tooltip title='좋아요 하시려면 로그인해주세요.' placement='top'>
         <button id={styles.likesDisabled}>
           <FaRegHeart id={styles.likesIcon} />
-          {likesCount}
+          좋아요 {likesCount}개
         </button>
       </Tooltip>
     </div>

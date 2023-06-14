@@ -4,6 +4,7 @@ import { useAuthState } from '../../contexts/AuthContext';
 import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { FaPen, FaTrashAlt, FaCommentAlt } from 'react-icons/fa';
+import { CiSquareAlert } from 'react-icons/ci';
 import { ScheduleReviewPropsType } from '../../types/ScheduleDetailTypes';
 import AlertModal from '../common/Alert/AlertModal';
 
@@ -78,7 +79,9 @@ function ReviewsSchedule({
                       </Avatar>
                     )}
                     <div className={styles.commentSubheader}>
-                      <span>{review.user.nickname}</span>
+                      <span className={styles.author}>
+                        {review.user.nickname}
+                      </span>
                       <span className={styles.createdAt}>
                         {stringifyDate(createdAt)}
                       </span>
@@ -102,7 +105,7 @@ function ReviewsSchedule({
                               }
                             }}
                           >
-                            제출
+                            저장
                           </button>
                         </div>
                       ) : loggedInUserId === commenterId ? (
@@ -157,7 +160,10 @@ function ReviewsSchedule({
             })}
           </div>
         ) : (
-          <div className={styles.noComments}>등록된 리뷰가 없습니다.</div>
+          <div className={styles.noComments}>
+            <CiSquareAlert />
+            등록된 리뷰가 없습니다
+          </div>
         )}
       </div>
       {showDeleteAlert && (

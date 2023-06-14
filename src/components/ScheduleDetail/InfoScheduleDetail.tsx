@@ -14,26 +14,33 @@ function InfoScheduleDetail({
   createdAt,
   updatedAt
 }: ScheduleDetailInfoType) {
+  const formatDate = (date: Date) => {
+    return date
+      .toLocaleDateString('ko-KR')
+      .replace('.', '년 ')
+      .replace('.', '월 ')
+      .replace('.', '일 ');
+  };
+
   return (
     <>
       <div className={styles.date}>
-        <p>작성일: {createdAt.toLocaleDateString('ko-KR')}</p>
-        <p>수정일: {updatedAt.toLocaleDateString('ko-KR')}</p>
+        <span>{formatDate(createdAt)} 작성</span>
+        <span>{formatDate(updatedAt)} 수정</span>
       </div>
       <div className={styles.duration}>
-        {`${startDate.toLocaleDateString(
-          'ko-KR'
-        )} ~ ${endDate.toLocaleDateString('ko-KR')} (${duration}일)`}
+        <span>여행 기간</span>
+        {`${formatDate(startDate)} ~ ${formatDate(endDate)} (총 ${duration}일)`}
       </div>
       <div className={styles.title}>{title}</div>
       <div className={styles.nickname}>
         {profileImage ? (
           <span className={styles.avatar}>
-            <Avatar src={profileImage} sx={{ width: 50, height: 50 }} />
+            <Avatar src={profileImage} sx={{ width: 45, height: 45 }} />
           </span>
         ) : (
           <span className={styles.avatar}>
-            <Avatar sx={{ width: 50, height: 50 }}>{nickname[0]}</Avatar>
+            <Avatar sx={{ width: 45, height: 45 }}>{nickname[0]}</Avatar>
           </span>
         )}
         {nickname}
