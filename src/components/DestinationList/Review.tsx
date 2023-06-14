@@ -13,6 +13,7 @@ import {
 } from '../../apis/destinationList';
 import { Avatar, TextField } from '@mui/material';
 import ReviewManagement from './ReviewManagement';
+import { FaPen, FaTrashAlt } from 'react-icons/fa';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -41,7 +42,7 @@ function Review() {
   const [targetComment, setTargetComment] = useState<number | null>(null);
   const { contentid } = useParams();
   const navigate = useNavigate();
-  //리뷰 등록 -> 요청 -> 리뷰 목록 상태 리렌더링
+  const [isConfirmDelete, setIsConfirmDelete] = useState<boolean>(false);
 
   //리뷰 조회 메서드
   const getReviewList = useCallback(async () => {
@@ -132,6 +133,33 @@ function Review() {
     [authState]
   );
 
+  //리뷰를 수정할 때, 유저의 기존 리뷰만 보이지 않게 하는 함수
+  const checkToShowUsersReview = (review: DestinationsReviewType) => {
+    if (!isEditing || !isUserReviewer(review)) {
+      return true;
+    }
+    return false;
+  };
+
+  // 수정 버튼 클릭 이벤트 (수정 시작)
+  const handleModifiedButtonOnClick = (commentid: number) => {
+    if (!authState.isLoggedIn) {
+      setIsShowAlert(true);
+      return;
+    }
+    setIsEditing(() => true);
+    setTargetComment(() => commentid);
+    return;
+  };
+
+  const handleDeleteOnClick = () => {
+    if (!authState.isLoggedIn) {
+      setIsShowAlert(true);
+      return;
+    }
+    setIsConfirmDelete(() => true);
+  };
+
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
     const url = useLocation().pathname;
@@ -179,18 +207,43 @@ function Review() {
                       )}
                     </div>
                   </div>
-                  {isUserReviewer(review) && (
-                    <ReviewManagement
-                      isEditing={isEditing}
-                      setIsEditing={setIsEditing}
-                      getReviewList={getReviewList}
-                      targetComment={targetComment}
-                      setTargetComment={setTargetComment}
-                      commentid={review?.comment_id}
-                    />
+                  {!isEditing && isUserReviewer(review) && (
+                    <span className={styles.reviewHandlebox}>
+                      <div className={styles.reviewHandleButtonContainer}>
+                        <button
+                          className={styles.modifyButton}
+                          onClick={() =>
+                            handleModifiedButtonOnClick(review.comment_id)
+                          }
+                        >
+                          <FaPen />
+                        </button>
+                        <button
+                          className={styles.deleteButton}
+                          onClick={handleDeleteOnClick}
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </div>
+                    </span>
                   )}
                 </div>
-                <p className={styles.reviewComment}>{review.comment}</p>
+                {isUserReviewer(review) && (
+                  <ReviewManagement
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    getReviewList={getReviewList}
+                    targetComment={targetComment}
+                    setTargetComment={setTargetComment}
+                    commentid={review?.comment_id}
+                    isConfirmDelete={isConfirmDelete}
+                    setIsConfirmDelete={setIsConfirmDelete}
+                    prevComment={review.comment}
+                  />
+                )}
+                {checkToShowUsersReview(review) && (
+                  <p className={styles.reviewComment}>{review.comment}</p>
+                )}
               </div>
             );
           })}

@@ -77,6 +77,48 @@
           }
         }
       }
+
+      .reviewHandlebox {
+        margin-left: 3px;
+        text-align: center;
+
+        .reviewHandleButtonContainer {
+          display: flex;
+
+          button {
+            all: unset;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+
+            height: 15px;
+            line-height: 15px;
+            text-align: center;
+            font-size: 15px;
+            letter-spacing: 3px;
+
+            &.modifyButton {
+              color: #4f94d4;
+
+              &:hover {
+                background-color: #4f94d4;
+                opacity: 0.8;
+                color: #fff;
+              }
+            }
+
+            &.deleteButton {
+              color: #d63638;
+
+              &:hover {
+                background-color: #d63638;
+                opacity: 0.8;
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
     }
     .reviewComment {
       display: flex;
