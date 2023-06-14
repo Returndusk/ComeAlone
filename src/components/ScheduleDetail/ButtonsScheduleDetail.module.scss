@@ -4,34 +4,16 @@
   justify-self: self-end;
   align-self: center;
 
-  a {
-    text-decoration: none;
-    color: var(--sub-1-color);
-  }
-
   button {
+    background-color: transparent;
+    font-size: 22px;
     border: 0;
-    background: transparent;
+    margin: 3px 0px 0px 10px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-  }
+    color: #888;
 
-  .icon {
-    margin: 0 10px 0 0;
-  }
-
-  #editButton {
-    margin: 0 20px 0 0;
-    padding: 5px 10px;
-    border-radius: 10px;
-    border: 2px solid var(--sub-1-color);
-  }
-
-  #deleteButton {
-    padding: 5px 10px;
-    color: var(--main-color);
-    border-radius: 10px;
-    border: 2px solid var(--main-color);
+    a {
+      color: #888;
+    }
   }
 }

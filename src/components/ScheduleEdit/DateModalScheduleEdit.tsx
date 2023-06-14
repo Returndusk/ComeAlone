@@ -4,6 +4,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
+import { TfiClose } from 'react-icons/tfi';
 import { DateInfoType, DateSelectionType } from '../../types/ScheduleEditTypes';
 import AlertModal from '../common/Alert/AlertModal';
 
@@ -13,8 +14,9 @@ function getDateInfoFromSelected(
   selectedDate: DateSelectionType
 ): DateInfoType {
   const { startDate, endDate } = selectedDate;
-  const duration =
-    (endDate.getTime() - startDate.getTime()) / SECONDS_OF_DAY + 1;
+  const duration = Math.floor(
+    (endDate.getTime() - startDate.getTime()) / SECONDS_OF_DAY + 1
+  );
 
   return { startDate, endDate, duration };
 }
@@ -32,6 +34,8 @@ function DateModalScheduleEdit({
 }) {
   const [showDiffDurationAlert, setShowDiffDurationAlert] =
     useState<boolean>(false);
+  const [showMaximumDurationAlert, setShowMaximumDurationAlert] =
+    useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<DateSelectionType[]>([
     {
       startDate: dateInfo.startDate,
@@ -46,6 +50,8 @@ function DateModalScheduleEdit({
 
     if (currentDuration < prevDuration) {
       setShowDiffDurationAlert(true);
+    } else if (currentDuration > 30) {
+      setShowMaximumDurationAlert(true);
     } else {
       handleDateInfoUpdateConfirm();
     }
@@ -63,6 +69,7 @@ function DateModalScheduleEdit({
       <Modal open={openModal} onClose={onModalClose}>
         <Box className={styles.durationEditModal}>
           <p>수정하실 날짜를 선택하세요.</p>
+          <TfiClose onClick={onModalClose} className={styles.closeButton} />
           <DateRange
             className={styles.durationEditModalDate}
             locale={ko}
@@ -101,6 +108,12 @@ function DateModalScheduleEdit({
           showCancelButton={true}
           onConfirm={() => handleDateInfoUpdateConfirm()}
           onCancel={() => setShowDiffDurationAlert(false)}
+        />
+      )}
+      {showMaximumDurationAlert && (
+        <AlertModal
+          message='여행 기간은 최대 30일까지만 가능합니다.'
+          onConfirm={() => setShowMaximumDurationAlert(false)}
         />
       )}
     </>

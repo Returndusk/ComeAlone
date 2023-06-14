@@ -9,6 +9,7 @@ import ko from 'date-fns/locale/ko';
 import { addDays, format, differenceInDays } from 'date-fns';
 import tokenInstance from '../../../apis/tokenInstance';
 import { MyScheduleCardType } from '../../../types/ScheduleTypes';
+import AlertModal from '../../common/Alert/AlertModal';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -43,6 +44,9 @@ function CreateScheduleModal(props: {
 
   const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd').split('/');
   const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd').split('/');
+
+  const [showFailAlert, setShowFailAlert] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   function handleDateRange(ranges: RangeKeyDict) {
     const { startDate, endDate } = ranges.selection;
@@ -97,20 +101,18 @@ function CreateScheduleModal(props: {
       formData.end_date.trim() === '' ||
       formData.duration === 0
     ) {
-      alert('일정 정보를 모두 입력해주세요!');
+      setShowFailAlert(true);
       return;
     }
 
     try {
-      console.log('formData', formData);
+      // console.log('formData', formData);
       const response = await tokenInstance.post(
         `${baseUrl}/schedules/basic`,
         formData
       );
       props.onAdd(response.data);
-      // 여기에 득열님 alert 활용
-      alert('일정이 추가되었습니다!');
-      props.closeModal();
+      setShowSuccessAlert(true);
     } catch (err) {
       console.error('Error: ', err);
     }
@@ -124,6 +126,11 @@ function CreateScheduleModal(props: {
           method='post'
           name='schedule_input'
           onSubmit={handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
         >
           <h1>여행 날짜 선택</h1>
           <DateRange
@@ -148,6 +155,18 @@ function CreateScheduleModal(props: {
                 onChange={handleFormData}
                 size='small'
                 style={{ width: '100%' }}
+                inputProps={{
+                  maxLength: 30
+                }}
+                sx={{
+                  '& label.Mui-focused': { color: '#ef6d00' },
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#fe9036',
+                      borderWidth: '1px'
+                    }
+                  }
+                }}
               />
               <TextField
                 id='summary'
@@ -160,6 +179,18 @@ function CreateScheduleModal(props: {
                 onChange={handleFormData}
                 size='small'
                 style={{ width: '100%' }}
+                inputProps={{
+                  maxLength: 300
+                }}
+                sx={{
+                  '& label.Mui-focused': { color: '#ef6d00' },
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#fe9036',
+                      borderWidth: '1px'
+                    }
+                  }
+                }}
               />
             </div>
             <div className={styles.dates}>
@@ -186,6 +217,25 @@ function CreateScheduleModal(props: {
           <TfiClose />
         </button>
       </div>
+      {showFailAlert && (
+        <div className={styles.alertModal}>
+          <AlertModal
+            message='일정 정보를 모두 입력해 주세요.'
+            onConfirm={() => setShowFailAlert(false)}
+            showCancelButton={false}
+          />
+        </div>
+      )}
+      {showSuccessAlert && (
+        <AlertModal
+          message='일정이 추가되었습니다!'
+          onConfirm={() => {
+            setShowSuccessAlert(false);
+            props.closeModal();
+          }}
+          showCancelButton={false}
+        />
+      )}
     </div>
   );
 }
