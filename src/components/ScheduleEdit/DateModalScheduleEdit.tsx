@@ -110,7 +110,7 @@ function DateModalScheduleEdit({
       )}
       {showMaximumDurationAlert && (
         <AlertModal
-          message='일정 기간은 최대 30일까지만 가능합니다.'
+          message='여행 기간은 최대 30일까지만 가능합니다.'
           onConfirm={() => setShowMaximumDurationAlert(false)}
         />
       )}
