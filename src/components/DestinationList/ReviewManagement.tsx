@@ -230,34 +230,36 @@ function ReviewManagement({
       )}
 
       {isEditing && targetComment === commentid && (
-        <form
-          className={styles.reviewInputForm}
-          onSubmit={handleModifiedReviewSubmit}
-        >
-          <TextField
-            className={styles.reviewInputBar}
-            type='text'
-            name='modifiedReview'
-            size='small'
-            label='수정할 내용을 입력해주세요.'
-            inputProps={{ maxLength: REVIEW_HANDLER.MAXIMUM_WORDS }}
-            sx={{
-              '& label.Mui-focused': { color: '#ef6d00' },
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#fe9036',
-                  borderWidth: '1px'
+        <div className={styles.modifyReviewContainer}>
+          <form
+            className={styles.reviewInputForm}
+            onSubmit={handleModifiedReviewSubmit}
+          >
+            <TextField
+              className={styles.reviewInputBar}
+              type='text'
+              name='modifiedReview'
+              size='small'
+              label='수정할 내용을 입력해주세요.'
+              inputProps={{ maxLength: REVIEW_HANDLER.MAXIMUM_WORDS }}
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
                 }
-              }
-            }}
-          />
-          <button className={styles.reviewButton} type='submit'>
-            등록
-          </button>
-          <button className={styles.reviewButton} onClick={cancelModifying}>
-            취소
-          </button>
-        </form>
+              }}
+            />
+            <button className={styles.reviewButton} type='submit'>
+              등록
+            </button>
+            <button className={styles.reviewButton} onClick={cancelModifying}>
+              취소
+            </button>
+          </form>
+        </div>
       )}
       {isShowAlert && (
         <AlertModal

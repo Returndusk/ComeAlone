@@ -166,16 +166,6 @@ function Review() {
                       <span className={styles.reviewerNickname}>
                         {review.user.nickname}
                       </span>
-                      {isUserReviewer(review) && (
-                        <ReviewManagement
-                          isEditing={isEditing}
-                          setIsEditing={setIsEditing}
-                          getReviewList={getReviewList}
-                          targetComment={targetComment}
-                          setTargetComment={setTargetComment}
-                          commentid={review?.comment_id}
-                        />
-                      )}
                     </div>
 
                     <div className={styles.reviewDate}>
@@ -189,6 +179,16 @@ function Review() {
                       )}
                     </div>
                   </div>
+                  {isUserReviewer(review) && (
+                    <ReviewManagement
+                      isEditing={isEditing}
+                      setIsEditing={setIsEditing}
+                      getReviewList={getReviewList}
+                      targetComment={targetComment}
+                      setTargetComment={setTargetComment}
+                      commentid={review?.comment_id}
+                    />
+                  )}
                 </div>
                 <p className={styles.reviewComment}>{review.comment}</p>
               </div>
