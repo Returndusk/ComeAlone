@@ -10,6 +10,13 @@ import AlertModal from '../common/Alert/AlertModal';
 
 const IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
+type ConfirmOption = {
+  isOpen: boolean;
+  message: string;
+  onConfirm: null | (() => void);
+  onCancel: null | (() => void);
+};
+
 type AlertOption = {
   isOpen: boolean;
   message: string;
@@ -33,12 +40,25 @@ function ProfileImage({
     message: '',
     onConfirm: null
   };
+  const initConfirm = {
+    isOpen: false,
+    message: '',
+    onConfirm: null,
+    onCancel: null
+  };
   const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
+  const [confirmModal, setConfirmModal] = useState<ConfirmOption>(initConfirm);
 
-  const handleDeleteImage = async () => {
-    if (window.confirm('정말 삭제하시겠습니까?')) {
-      handleImageRemove();
-    }
+  const confirmDeleteImage = async () => {
+    setConfirmModal({
+      isOpen: true,
+      message: '정말 삭제하시겠습니까?',
+      onConfirm: () => {
+        setConfirmModal(initConfirm);
+        handleImageRemove();
+      },
+      onCancel: () => setConfirmModal(initConfirm)
+    });
   };
 
   const validateFile = (file: File) => {
@@ -138,7 +158,10 @@ function ProfileImage({
                   className={styles.image}
                   alt='프로필 이미지'
                 />
-                <div className={styles.deleteImage} onClick={handleDeleteImage}>
+                <div
+                  className={styles.deleteImage}
+                  onClick={confirmDeleteImage}
+                >
                   <FaTrashAlt />
                 </div>
               </>
@@ -157,6 +180,16 @@ function ProfileImage({
           onConfirm={alertModal.onConfirm}
         />
       )}
+      {confirmModal.isOpen &&
+        confirmModal.onConfirm &&
+        confirmModal.onCancel && (
+          <AlertModal
+            message={confirmModal.message}
+            onConfirm={confirmModal.onConfirm}
+            onCancel={confirmModal.onCancel}
+            showCancelButton={true}
+          />
+        )}
     </>
   );
 }

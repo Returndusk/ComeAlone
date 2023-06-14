@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { Cookies } from 'react-cookie';
 import { LoginFormData, UserData } from '../../types/UserTypes';
-import { LoginFormValues, LoginFormErrors } from './LoginTypes';
 import { TextField } from '@mui/material';
 import styles from './LoginForm.module.scss';
 import { loginUser } from '../../apis/UserAPI';
@@ -19,6 +18,14 @@ type AlertOption = {
   message: string;
   onConfirm: null | (() => void);
 };
+
+interface LoginForm {
+  email: string;
+  password: string;
+}
+
+type LoginFormValues = LoginForm;
+type LoginFormErrors = LoginForm;
 
 function LoginForm() {
   const cookies = new Cookies();
