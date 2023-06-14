@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './MapWithWaypoints.module.scss';
 import { MapWithWaypointsPropsType } from '../../../types/DestinationListTypes';
 
@@ -48,9 +48,9 @@ function MapWithWaypoints({
 }: {
   markersLocations: MapWithWaypointsPropsType[];
 }) {
-  const [renderedMap, setRenderedMap] = useState<any>(null);
+  const renderedMap = useRef<any>();
   const prevMarkers = useRef<any[]>([]);
-  const prevPolyline = useRef<any>(null);
+  const prevPolyline = useRef<any>();
 
   useEffect(() => {
     const container = document.getElementById('mapWithWaypoints');
@@ -63,11 +63,11 @@ function MapWithWaypoints({
     };
     const map = new kakao.maps.Map(container, options);
 
-    setRenderedMap(() => map);
+    renderedMap.current = map;
   }, []);
 
   useEffect(() => {
-    if (renderedMap === null) {
+    if (renderedMap.current === null) {
       return;
     }
 
@@ -95,7 +95,7 @@ function MapWithWaypoints({
     const newMarkers = positions.map(
       (destination, index) =>
         new kakao.maps.Marker({
-          map: renderedMap,
+          map: renderedMap.current,
           position: destination.latlng,
           image: setImageOps(index)
         })
@@ -128,7 +128,7 @@ function MapWithWaypoints({
       });
 
       kakao.maps.event.addListener(newMarkers[i], 'mouseover', function () {
-        customOverlay.setMap(renderedMap);
+        customOverlay.setMap(renderedMap.current);
       });
 
       kakao.maps.event.addListener(newMarkers[i], 'mouseout', function () {
@@ -152,12 +152,12 @@ function MapWithWaypoints({
 
     prevPolyline.current = newPolyline;
 
-    newMarkers.forEach((marker) => marker.setMap(renderedMap));
+    newMarkers.forEach((marker) => marker.setMap(renderedMap.current));
 
-    newPolyline.setMap(renderedMap);
+    newPolyline.setMap(renderedMap.current);
 
-    renderedMap.setBounds(bounds);
-  }, [markersLocations, renderedMap]);
+    renderedMap.current.setBounds(bounds);
+  }, [markersLocations, renderedMap.current]);
 
   return <div className={styles.mapWithWaypoints} id='mapWithWaypoints'></div>;
 }

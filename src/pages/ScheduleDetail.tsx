@@ -20,11 +20,10 @@ import {
   deleteScheduleReviewById
 } from '../apis/ScheduleDetailAPI';
 import {
-  IScheduleReview,
+  ScheduleReview,
   ScheduleFetchedType
 } from '../types/ScheduleDetailTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
-import ROUTER from '../constants/Router';
 import { AxiosError } from 'axios';
 
 function ScheduleDetail() {
@@ -37,7 +36,7 @@ function ScheduleDetail() {
     MapWithWaypointsPropsType[]
   >([]);
   const [doesUserLike, setDoesUserLike] = useState<boolean>(false);
-  const [scheduleReviews, setScheduleReviews] = useState<IScheduleReview[]>([]);
+  const [scheduleReviews, setScheduleReviews] = useState<ScheduleReview[]>([]);
   const scheduleFetched = useRef<ScheduleFetchedType>();
   const userLikesCount = useRef<number>(0);
 
@@ -129,7 +128,7 @@ function ScheduleDetail() {
         return;
       }
 
-      const fetchedReviews: IScheduleReview[] = await getScheduleReviews(
+      const fetchedReviews: ScheduleReview[] = await getScheduleReviews(
         scheduleId
       );
 
