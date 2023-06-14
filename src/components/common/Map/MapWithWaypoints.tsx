@@ -72,25 +72,37 @@ function MapWithWaypoints({
     }
 
     if (markersLocations.length <= 0) {
+      if (prevMarkers.current.length > 0) {
+        prevMarkers.current.forEach((marker: any) => {
+          marker.setMap(null);
+        });
+      }
+
+      if (prevPolyline.current) {
+        prevPolyline.current.setMap(null);
+      }
+
       return;
     }
 
-    const positions = markersLocations?.map(
-      (marker) =>
-        new kakao.maps.LatLng(Number(marker?.mapy), Number(marker?.mapx))
-    );
+    const positions = markersLocations.map((marker) => {
+      return {
+        content: `<span><p>${marker.title}</p></span>`,
+        latlng: new kakao.maps.LatLng(Number(marker.mapy), Number(marker.mapx))
+      };
+    });
 
     const newMarkers = positions.map(
-      (position, index) =>
+      (destination, index) =>
         new kakao.maps.Marker({
-          position,
           map: renderedMap,
+          position: destination.latlng,
           image: setImageOps(index)
         })
     );
 
     const bounds = positions.reduce(
-      (bounds, latlng) => bounds.extend(latlng),
+      (bounds, destination) => bounds.extend(destination.latlng),
       new kakao.maps.LatLngBounds()
     );
 
@@ -109,6 +121,23 @@ function MapWithWaypoints({
       strokeStyle: 'solid'
     });
 
+    for (let i = 0; i < positions.length; i++) {
+      const customOverlay = new kakao.maps.CustomOverlay({
+        position: positions[i].latlng,
+        content: positions[i].content
+      });
+
+      kakao.maps.event.addListener(newMarkers[i], 'mouseover', function () {
+        customOverlay.setMap(renderedMap);
+      });
+
+      kakao.maps.event.addListener(newMarkers[i], 'mouseout', function () {
+        setTimeout(function () {
+          customOverlay.setMap();
+        });
+      });
+    }
+
     if (prevMarkers.current.length > 0) {
       prevMarkers.current.forEach((marker: any) => {
         marker.setMap(null);
@@ -123,11 +152,11 @@ function MapWithWaypoints({
 
     prevPolyline.current = newPolyline;
 
-    newMarkers.forEach((marker: any) => marker.setMap(renderedMap));
+    newMarkers.forEach((marker) => marker.setMap(renderedMap));
 
     newPolyline.setMap(renderedMap);
 
-    renderedMap?.setBounds(bounds);
+    renderedMap.setBounds(bounds);
   }, [markersLocations, renderedMap]);
 
   return <div className={styles.mapWithWaypoints} id='mapWithWaypoints'></div>;
