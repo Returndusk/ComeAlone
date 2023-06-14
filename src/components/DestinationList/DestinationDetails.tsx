@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import styles from './DestinationDetails.module.scss';
 import Review from './Review';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   getAllCategoryList,
   getDestinationDetailsByDestinationId
@@ -23,6 +23,7 @@ import { useAuthState } from '../../contexts/AuthContext';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaCommentAlt, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 import { createPortal } from 'react-dom';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -42,17 +43,31 @@ function DestinationDetails() {
   const [categoryList, setCategoryList] = useState<CategoryListType[] | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLOptionElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   if (detailsRef.current && contentid) {
+  //     detailsRef.current.scrollTop = 0;
+  //   }
+  // }, [detailsRef.current, contentid]);
+
+  const handleReviewIconClick = () => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
     setScheduleModalDomRoot(() => document.getElementById('main'));
   }, []);
 
   const getDestinationDetails = useCallback(async () => {
+    setIsLoading(true);
     const res = await getDestinationDetailsByDestinationId(Number(contentid));
     const details = res?.data;
     setDestinationDetails(() => details);
+    setIsLoading(false);
   }, [contentid]);
 
   useEffect(() => {
@@ -71,7 +86,6 @@ function DestinationDetails() {
   }, [getAllCategoryData]);
 
   //카테고리 id => name 변환 함수
-
   const changeCategoryIdIntoName = useCallback(
     (categoryId: number) => {
       const targetCategory = categoryList?.filter(
@@ -85,19 +99,7 @@ function DestinationDetails() {
     [categoryList]
   );
 
-  /*
-  const handleReviewIconClick = () => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [handleReviewIconClick]);
-  */
-
+  // 목적지 리스트 상세정보의 홈페이지 부분 html 형식의 데이터 파싱
   const changeStringIntoHTML = (stringHTML: string) => {
     const removedBackslashString = stringHTML.replace(/\\/g, '');
     const regex = /"(.*?)"/g;
@@ -138,8 +140,18 @@ function DestinationDetails() {
 
   return (
     <>
-      {destinationDetails !== null && (
+      {isLoading && (
         <div className={styles.destinationDetailsContainer}>
+          <div className={styles.LoadingContainer}>
+            <AiOutlineLoading3Quarters
+              className={styles.destinationDetailsLoadingIcon}
+            />
+            <span>로딩 중 입니다..</span>
+          </div>
+        </div>
+      )}
+      {destinationDetails !== null && !isLoading && (
+        <div className={styles.destinationDetailsContainer} ref={detailsRef}>
           <section className={styles.destinationDetails}>
             <div className={styles.destinationDetailsImgContainer}>
               {destinationDetails.image1 && (
@@ -161,7 +173,7 @@ function DestinationDetails() {
               <div className={styles.destinationReviewContainer}>
                 <button
                   className={styles.reviewButton}
-                  // onClick={handleReviewIconClick}
+                  onClick={handleReviewIconClick}
                 >
                   <FaCommentAlt id={styles.destinationReviewIcon} />
                 </button>
@@ -172,30 +184,30 @@ function DestinationDetails() {
             </div>
 
             <div className={styles.destinationInfoContainer}>
-              <p className={styles.destinationInfo}>
+              <span className={styles.destinationInfo}>
                 <FaMapMarkerAlt id={styles.destinationAddrIcon} />
                 <p className={styles.destinationAddress}>
                   {`${destinationDetails?.addr1} ${destinationDetails?.addr2}`}
                 </p>
-              </p>
+              </span>
 
-              <p className={styles.destinationInfo}>
+              <span className={styles.destinationInfo}>
                 <BsFillTelephoneFill id={styles.destinationTelIcon} />
                 <p className={styles.destinationTelNumber}>
                   {destinationDetails?.tel
                     ? destinationDetails?.tel
                     : '제공된 정보 없음'}{' '}
                 </p>
-              </p>
+              </span>
 
-              <p className={styles.destinationInfo}>
+              <span className={styles.destinationInfo}>
                 <FaHome id={styles.destinationHomeIcon} />
                 <p>
                   {destinationDetails?.homepage
                     ? changeStringIntoHTML(destinationDetails?.homepage)
                     : '제공된 정보 없음'}{' '}
                 </p>
-              </p>
+              </span>
             </div>
 
             <div className={styles.destinationOverview}>

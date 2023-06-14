@@ -6,21 +6,16 @@ import {
 } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   getReviewByDestinationId,
   postReviewByDestinationId
 } from '../../apis/destinationList';
 import { Avatar, TextField } from '@mui/material';
+import ReviewManagement from './ReviewManagement';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
-  showTitle: false
-};
-
-const SUCCESS_ALERT_PROPS = {
-  successMessage: '리뷰 등록에 성공했습니다.',
-  failedMessage: '리뷰 등록에 실패했습니다. 다시 등록해주세요',
   showTitle: false
 };
 
@@ -38,9 +33,8 @@ function Review() {
 
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
-  const [isShowSuccessAlert, setIsShowSuccessAlert] = useState<boolean | null>(
-    null
-  );
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [targetComment, setTargetComment] = useState<number | null>(null);
   const { contentid } = useParams();
   const navigate = useNavigate();
   //리뷰 등록 -> 요청 -> 리뷰 목록 상태 리렌더링
@@ -55,6 +49,12 @@ function Review() {
   useEffect(() => {
     getReviewList();
   }, [getReviewList]);
+
+  // useEffect(() => {
+  //   if (!isEditing) {
+  //     getReviewList();
+  //   }
+  // }, [isEditing]);
 
   //리뷰 등록일자 가공 매서드
   const changeCreatedAtIntoDate = (date: string) => {
@@ -73,14 +73,11 @@ function Review() {
       const res = await postReviewByDestinationId(contentid, submittedReview);
       const status = res?.status;
       if (status === RESPONSE_STATUS.POST_SUCCESS) {
-        setIsShowSuccessAlert(true);
         await getReviewList();
-        return;
       }
-      setIsShowSuccessAlert(false);
       return;
     },
-    [contentid, getReviewList, submittedReview, setIsShowSuccessAlert]
+    [contentid, getReviewList, submittedReview]
   );
 
   //리뷰 수
@@ -137,11 +134,6 @@ function Review() {
     return;
   };
 
-  const handleOnReviewConfirm = () => {
-    setIsShowSuccessAlert(null);
-    return;
-  };
-
   /*
    * 리뷰 객체
   id: number;
@@ -170,9 +162,14 @@ function Review() {
                         {review.user.nickname}
                       </span>
                       {isUserReviewer(review) && (
-                        <span className={styles.reviewHandlebox}>
-                          <NavLink to='/MyReview'>내 리뷰 관리</NavLink>
-                        </span>
+                        <ReviewManagement
+                          isEditing={isEditing}
+                          setIsEditing={setIsEditing}
+                          getReviewList={getReviewList}
+                          targetComment={targetComment}
+                          setTargetComment={setTargetComment}
+                          commentid={review?.comment_id}
+                        />
                       )}
                     </div>
 
@@ -193,61 +190,49 @@ function Review() {
             );
           })}
         </div>
-        <div className={styles.reviewInputContainer}>
-          <Avatar
-            className={styles.reviewInputAvatar}
-            src={authState?.user?.profile_image}
-          >
-            {authState.user?.nickname[0] ?? 'G'}
-          </Avatar>
-          <form
-            className={styles.reviewInputForm}
-            onSubmit={handleReviewSubmit}
-          >
-            <TextField
-              className={styles.reviewInputBar}
-              type='text'
-              name='review'
-              size='small'
-              label={
-                authState.isLoggedIn
-                  ? '리뷰를 작성해주세요.'
-                  : '로그인이 필요합니다.'
-              }
-              sx={{
-                '& label.Mui-focused': { color: '#ef6d00' },
-                '& .MuiOutlinedInput-root': {
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#fe9036',
-                    borderWidth: '1px'
-                  }
+        {!isEditing && (
+          <div className={styles.reviewInputContainer}>
+            <Avatar
+              className={styles.reviewInputAvatar}
+              src={authState?.user?.profile_image}
+            >
+              {authState.user?.nickname[0] ?? 'G'}
+            </Avatar>
+            <form
+              className={styles.reviewInputForm}
+              onSubmit={handleReviewSubmit}
+            >
+              <TextField
+                className={styles.reviewInputBar}
+                type='text'
+                name='review'
+                size='small'
+                label={
+                  authState.isLoggedIn
+                    ? '리뷰를 작성해주세요.'
+                    : '로그인이 필요합니다.'
                 }
-              }}
-            />
-            <button className={styles.reviewButton} type='submit'>
-              등록
-            </button>
-          </form>
-        </div>
+                sx={{
+                  '& label.Mui-focused': { color: '#ef6d00' },
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#fe9036',
+                      borderWidth: '1px'
+                    }
+                  }
+                }}
+              />
+              <button className={styles.reviewButton} type='submit'>
+                등록
+              </button>
+            </form>
+          </div>
+        )}
       </section>
       {isShowAlert && (
         <AlertModal
           message={ALERT_PROPS.message}
           onConfirm={handleOnLoginConfirm}
-          showTitle={ALERT_PROPS.showTitle}
-        />
-      )}
-      {isShowSuccessAlert && (
-        <AlertModal
-          message={SUCCESS_ALERT_PROPS.successMessage}
-          onConfirm={handleOnReviewConfirm}
-          showTitle={ALERT_PROPS.showTitle}
-        />
-      )}
-      {isShowSuccessAlert === false && (
-        <AlertModal
-          message={SUCCESS_ALERT_PROPS.failedMessage}
-          onConfirm={handleOnReviewConfirm}
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
