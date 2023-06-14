@@ -118,9 +118,11 @@ function UsersReview() {
   return (
     <div>
       <div className={styles.usersReviewContainer}>
-        <span
-          className={styles.usersReviewCounter}
-        >{`전체ㆍ${usersReview?.length}`}</span>
+        {usersReview && (
+          <span
+            className={styles.usersReviewCounter}
+          >{`전체ㆍ${usersReview?.length}`}</span>
+        )}
         {Array.isArray(usersReview) && usersReview?.length > 0 && (
           <>
             {usersReview?.map((review, index) => {
