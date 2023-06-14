@@ -56,7 +56,7 @@ function DestinationList({
                           }
                         }}
                       />{' '}
-                      <span>Day {index + 1}</span>
+                      <span>{index + 1}일차</span>
                     </div>
                   </label>
                   {destOfDay.length > 0 ? (
