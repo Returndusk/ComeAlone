@@ -3,7 +3,7 @@ import styles from './ReviewManagement.module.scss';
 import { commentType } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   modifyReviewByCommentId
@@ -111,7 +111,7 @@ function ReviewManagement({
     }
     setIsConfirmModifying(true);
 
-    setTargetComment(() => commentid);
+    // setTargetComment(() => commentid);
     setModifiedReview(() => {
       return { comment: submittedModifiedReview };
     });
@@ -143,6 +143,7 @@ function ReviewManagement({
       return;
     }
     setIsEditing(() => true);
+    setTargetComment(() => commentid);
     return;
   };
 
@@ -167,7 +168,8 @@ function ReviewManagement({
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    navigate('/login');
+    const url = useLocation().pathname;
+    navigate('/login', { state: { prevUrl: url } });
   };
 
   const handleOnModifyConfirm = () => {
@@ -204,7 +206,7 @@ function ReviewManagement({
 
   return (
     <>
-      {!isEditing ? (
+      {!isEditing && (
         <span className={styles.reviewHandlebox}>
           <div className={styles.reviewHandleButtonContainer}>
             <button
@@ -221,7 +223,9 @@ function ReviewManagement({
             </button>
           </div>
         </span>
-      ) : (
+      )}
+
+      {isEditing && targetComment === commentid && (
         <form
           className={styles.reviewInputForm}
           onSubmit={handleModifiedReviewSubmit}
