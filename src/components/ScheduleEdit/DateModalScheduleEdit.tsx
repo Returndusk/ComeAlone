@@ -13,8 +13,9 @@ function getDateInfoFromSelected(
   selectedDate: DateSelectionType
 ): DateInfoType {
   const { startDate, endDate } = selectedDate;
-  const duration =
-    (endDate.getTime() - startDate.getTime()) / SECONDS_OF_DAY + 1;
+  const duration = Math.floor(
+    (endDate.getTime() - startDate.getTime()) / SECONDS_OF_DAY + 1
+  );
 
   return { startDate, endDate, duration };
 }
