@@ -149,15 +149,15 @@ export default function ModalScheduleLists() {
               }}
               value='upcoming'
               sx={{
-                color: '#ef6d00',
+                color: '#7c9070',
                 fontWeight: '600',
                 border: 1,
-                borderColor: '#ef6d00',
+                borderColor: '#7c9070',
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#ef6d00',
+                  backgroundColor: '#7c9070',
                   border: 1,
-                  borderColor: '#ef6d00'
+                  borderColor: '#7c9070'
                 }
               }}
             >
@@ -172,15 +172,15 @@ export default function ModalScheduleLists() {
               }}
               value='past'
               sx={{
-                color: '#ef6d00',
+                color: '#7c9070',
                 fontWeight: '600',
                 border: 1,
-                borderColor: '#ef6d00',
+                borderColor: '#7c9070',
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#ef6d00',
+                  backgroundColor: '#7c9070',
                   border: 1,
-                  borderColor: '#ef6d00'
+                  borderColor: '#7c9070'
                 }
               }}
             >
@@ -195,12 +195,12 @@ export default function ModalScheduleLists() {
               sx={{
                 color: '#ffffff',
                 fontWeight: '600',
-                backgroundColor: '#ef6d00',
+                backgroundColor: '#7c9070',
                 border: 1,
-                borderColor: '#ef6d00',
+                borderColor: '#7c9070',
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#ef6d00'
+                  backgroundColor: '#7c9070'
                 }
               }}
             >

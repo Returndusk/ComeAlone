@@ -1,6 +1,6 @@
 .modalBackground {
   position: fixed;
-  z-index: 9999;
+  z-index: 10;
   top: 0;
   left: 0;
   width: 100%;
@@ -9,6 +9,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.alertModal {
+  z-index: 20;
 }
 
 .modalLayout {
@@ -21,6 +25,7 @@
   border-radius: 10px;
   padding: 0px 20px 25px;
   align-items: center;
+  // height: 660px;
 
   h1 {
     display: flex;
@@ -36,6 +41,12 @@
 .calendar {
   border-bottom: 1px solid #eee;
   box-sizing: border-box;
+  height: 420px;
+
+  .rdrDateDisplayWrapper {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .textContainer {
@@ -121,3 +132,11 @@
     color: #555;
   }
 }
+
+// .rdrMonths .rdrMonthsHorizontal {
+//   height: 300px;
+// }
+
+// .rdrCalendarWrapper .rdrDateRangeWrapper .CreateScheduleModal_calendar__2EFXa {
+//   height: 380px;
+// }
