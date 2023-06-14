@@ -2,7 +2,7 @@
   display: flex;
   justify-content: end;
   grid-column: 1 / 4;
-  margin: 30px 0;
+  margin: 20px 0;
   font-size: 18px;
 
   button {
@@ -14,7 +14,6 @@
     margin: 0 30px 0 0;
     padding: 10px;
     color: var(--sub-1-color);
-    border: 2px var(--sub-1-color) solid;
     border-radius: 10px;
 
     a {
@@ -24,8 +23,8 @@
 
   .confirmButton {
     padding: 10px;
-    color: var(--main-color);
-    border: 2px var(--main-color) solid;
+    color: #fff;
+    background-color: var(--main-color);
     border-radius: 10px;
   }
 }
