@@ -33,6 +33,10 @@ const CATEGORIES_ID = new Map([
   [39, '음식점']
 ]);
 
+const DATA_LOADING_MESSAGE = {
+  CATEGORY_LOADING: '카테고리 정보를 로딩 중입니다.'
+};
+
 const CATEGORIES_ID_LIST = Array.from(CATEGORIES_ID.keys());
 
 function Category({
@@ -103,7 +107,9 @@ function Category({
   const changeCategoryIdIntoName = useCallback(
     (destinationList: DestinationsType[]) => {
       const specifiedCatogory = destinationList?.map((el) => {
-        const categoryName = CATEGORIES_ID.get(el.category_id) ?? '로딩 중..';
+        const categoryName =
+          CATEGORIES_ID.get(el.category_id) ??
+          DATA_LOADING_MESSAGE.CATEGORY_LOADING;
         return { ...el, category_name: categoryName }; //예외처리 다시 수정
       });
       return specifiedCatogory;
@@ -155,7 +161,7 @@ function Category({
 
   useEffect(() => {
     const debouncer = setTimeout(() => {
-      console.log('로딩 중입니다.');
+      console.log(DATA_LOADING_MESSAGE.CATEGORY_LOADING);
     }, 400);
 
     return () => {
@@ -226,7 +232,7 @@ function Category({
             <AiOutlineLoading3Quarters
               className={styles.destinationDetailsLoadingIcon}
             />
-            <span>로딩 중 입니다..</span>
+            <span>{DATA_LOADING_MESSAGE.CATEGORY_LOADING}</span>
           </div>
         </div>
       ) : (
