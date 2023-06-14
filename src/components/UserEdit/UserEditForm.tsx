@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styles from './UserEditForm.module.scss';
-import { UserInfoErrors, UserInfoValues } from './UserEditTypes';
 import ProfileImage from './ProfileImage';
 import UserInfo from './UserInfo';
 import UserEditButtons from './UserEditButtons';
@@ -15,6 +14,31 @@ type AlertOption = {
   message: string;
   onConfirm: null | (() => void);
 };
+
+export interface UserInfoValues {
+  email: string;
+  profileImage: string;
+  nickname: string;
+  newPassword: string;
+  passwordConfirm: string;
+  birthDate: {
+    year: string;
+    month: string;
+    day: string;
+  };
+  gender: string;
+  phoneNumber: string;
+}
+
+export interface UserInfoErrors {
+  email: string;
+  profileImage: string;
+  nickname: string;
+  newPassword: string;
+  passwordConfirm: string;
+  birthDate: string;
+  phoneNumber: string;
+}
 
 function UserEditForm() {
   const navigate = useNavigate();
