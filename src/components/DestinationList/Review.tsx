@@ -135,10 +135,7 @@ function Review() {
 
   //리뷰를 수정할 때, 유저의 기존 리뷰만 보이지 않게 하는 함수
   const checkToShowUsersReview = (review: DestinationsReviewType) => {
-    if (!isEditing || !isUserReviewer(review)) {
-      return true;
-    }
-    return false;
+    return !isEditing || review.comment_id !== targetComment;
   };
 
   // 수정 버튼 클릭 이벤트 (수정 시작)
