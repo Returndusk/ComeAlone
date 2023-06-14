@@ -3,7 +3,7 @@ import styles from './UsersReview.module.scss';
 import { DestinationsReviewType } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   getUsersReview
@@ -135,9 +135,12 @@ function UsersReview() {
                       />
                     )}
 
-                    <p className={styles.usersReviewTitle}>
+                    <NavLink
+                      to={`/destination/list/${review.destination.id}`}
+                      className={styles.usersReviewTitle}
+                    >
                       {review.destination.title}
-                    </p>
+                    </NavLink>
 
                     <div className={styles.reviewHandleButtonContainer}>
                       <button

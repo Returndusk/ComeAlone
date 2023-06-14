@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../components/MyReview/MyReview.module.scss';
-import UsersReview from '../components/DestinationList/UsersReview';
+import UsersReview from '../components/MyReview/UsersReview';
 
 function MyReview() {
   return (
