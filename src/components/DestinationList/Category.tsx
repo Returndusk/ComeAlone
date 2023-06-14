@@ -12,6 +12,7 @@ import {
   getDestinationListByTitleAndCategoryId
 } from '../../apis/destinationList';
 import styles from './Category.module.scss';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 type CategoryPropsTypes = {
   rankedDestinations: DestinationsType[] | [];
@@ -68,25 +69,35 @@ function Category({
 
   //카테고리별 데이터 수 받아오기
   const countEachCategoryItems = useCallback(async () => {
+    setIsLoading(true);
     const res = await countEachCategoryItemsByQuery(
       searchQueryParam,
       selectedCategory
     );
     const categoryCount = res?.data.counts_by_category;
     setCountedCategoryItems(categoryCount);
-  }, [searchQueryParam, selectedCategory, setCountedCategoryItems]);
+    setIsLoading(false);
+  }, [
+    searchQueryParam,
+    selectedCategory,
+    setCountedCategoryItems,
+    setIsLoading
+  ]);
 
   useEffect(() => {
     countEachCategoryItems();
   }, [countEachCategoryItems, searchQueryParam, selectedCategory]);
 
   //카테고리 id로 카테고리 아이템 수를 찾는 함수
-  const findCategoryCountByCategoryId = (categoryid: number) => {
-    const targetCategory = countedCategoryItems.find(
-      (category) => category.category_id === categoryid
-    );
-    return targetCategory;
-  };
+  const findCategoryCountByCategoryId = useCallback(
+    (categoryid: number) => {
+      const targetCategory = countedCategoryItems.find(
+        (category) => category.category_id === categoryid
+      );
+      return targetCategory;
+    },
+    [countedCategoryItems]
+  );
 
   //카테고리 id => name 변환 함수
   const changeCategoryIdIntoName = useCallback(
@@ -182,7 +193,8 @@ function Category({
     setIsLoading(true);
     const res = await getDestinationListByTitleAndCategoryId(
       selectedCategory,
-      isUserSearched ? searchQueryParam : '' //랭킹순 추가 시 수정예정
+      searchQueryParam
+      // isUserSearched ? searchQueryParam : '' //랭킹순 추가 시 수정예정
     );
     const categorizedSearchingDestinationsList = res?.data.destinations;
     setFilteredDestinations(() =>
@@ -204,12 +216,19 @@ function Category({
     setIsLoading(true);
     getCategorizedSearchingData();
     setIsLoading(false);
-  }, [getCategorizedSearchingData, setIsLoading]);
+  }, [getCategorizedSearchingData, setIsLoading, isUserSearched]);
 
   return (
     <>
       {isLoading ? (
-        <div className={styles.IsLoadingContainer}>로딩 중..</div>
+        <div className={styles.categoryWrapper}>
+          <div className={styles.LoadingContainer}>
+            <AiOutlineLoading3Quarters
+              className={styles.destinationDetailsLoadingIcon}
+            />
+            <span>로딩 중 입니다..</span>
+          </div>
+        </div>
       ) : (
         <>
           <section className={styles.categoryWrapper}>
@@ -242,9 +261,6 @@ function Category({
                       : styles[`Category-${categoryId}`]
                   }
                 >
-                  {/* {categoryList?.find(
-                    (categoryPair) => categoryPair.id === categoryId
-                  )?.name ?? ''} */}
                   {`${
                     findCategoryCountByCategoryId(categoryId)?.category_name
                   }ㆍ${findCategoryCountByCategoryId(categoryId)?.count}`}

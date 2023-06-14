@@ -2,7 +2,7 @@
   display: flex;
   justify-content: end;
   grid-column: 1 / 4;
-  margin: 30px 0 50px 0;
+  margin: 30px 0;
   font-size: 18px;
 
   button {
@@ -10,12 +10,16 @@
     cursor: pointer;
   }
 
-  .deleteButton {
+  .cancelButton {
     margin: 0 30px 0 0;
     padding: 10px;
     color: var(--sub-1-color);
     border: 2px var(--sub-1-color) solid;
     border-radius: 10px;
+
+    a {
+      all: unset;
+    }
   }
 
   .confirmButton {

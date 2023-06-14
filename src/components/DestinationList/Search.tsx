@@ -74,6 +74,14 @@ function Search() {
     return;
   };
 
+  useEffect(() => {
+    setIsUserSearched(() => true);
+  }, [setIsUserSearched, searchQueryParam]);
+
+  useEffect(() => {
+    console.log(isUserSearched, '유저 검색?');
+  }, [isUserSearched]);
+
   const handleOnSearchQueryConfirm = () => {
     setIsShowAlert(false);
   };
