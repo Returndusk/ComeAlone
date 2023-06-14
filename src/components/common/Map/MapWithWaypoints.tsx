@@ -43,18 +43,6 @@ const setImageOps = (index: number) => {
   return markerImage;
 };
 
-function makeOverListener(map: any, marker: any, infowindow: any) {
-  return function () {
-    infowindow.open(map, marker);
-  };
-}
-
-function makeOutListener(infowindow: any) {
-  return function () {
-    infowindow.close();
-  };
-}
-
 function MapWithWaypoints({
   markersLocations
 }: {
@@ -113,23 +101,19 @@ function MapWithWaypoints({
         })
     );
 
-    const infowindows = positions.map(
-      (destination) =>
-        new kakao.maps.InfoWindow({ content: destination.content })
-    );
-
     for (let i = 0; i < positions.length; i++) {
-      kakao.maps.event.addListener(
-        newMarkers[i],
-        'mouseover',
-        makeOverListener(renderedMap, newMarkers[i], infowindows[i])
-      );
+      const customOverlay = new kakao.maps.CustomOverlay({
+        position: positions[i].latlng,
+        content: positions[i].content
+      });
 
-      kakao.maps.event.addListener(
-        newMarkers[i],
-        'mouseout',
-        makeOutListener(infowindows[i])
-      );
+      kakao.maps.event.addListener(newMarkers[i], 'mouseover', function () {
+        customOverlay.setMap(renderedMap);
+      });
+
+      kakao.maps.event.addListener(newMarkers[i], 'mouseout', function () {
+        customOverlay.setMap();
+      });
     }
 
     const bounds = positions.reduce(
