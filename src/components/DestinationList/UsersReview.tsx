@@ -3,7 +3,7 @@ import styles from './UsersReview.module.scss';
 import { DestinationsReviewType } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   getUsersReview
@@ -91,7 +91,8 @@ function UsersReview() {
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    navigate('/login');
+    const url = useLocation().pathname;
+    navigate('/login', { state: { prevUrl: url } });
   };
 
   const handleOnDeleteConfirm = () => {

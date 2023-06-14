@@ -6,7 +6,7 @@ import {
 } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   getReviewByDestinationId,
   postReviewByDestinationId
@@ -130,7 +130,8 @@ function Review() {
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    navigate('/login');
+    const url = useLocation().pathname;
+    navigate('/login', { state: { prevUrl: url } });
     return;
   };
 

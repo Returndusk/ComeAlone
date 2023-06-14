@@ -126,7 +126,8 @@ function DestinationDetails() {
 
   const handleOnConfirm = () => {
     setIsShowAlert(false);
-    navigate('/login');
+    const url = useLocation().pathname;
+    navigate('/login', { state: { prevUrl: url } });
   };
 
   const handleShowModalClick = () => {
