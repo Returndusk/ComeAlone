@@ -1,52 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './ScheduleCard.module.scss';
 import { Link } from 'react-router-dom';
 import { MyScheduleCardType } from '../../types/ScheduleTypes';
 import { FaRegDotCircle } from 'react-icons/fa';
 import ROUTER from '../../constants/Router';
-import tokenInstance from '../../apis/tokenInstance';
-import AlertModal from '../common/Alert/AlertModal';
 
 type MyScheduleCardProps = { schedule: MyScheduleCardType };
 
-const baseUrl = process.env.REACT_APP_API_BASE_URL;
-
 function ScheduleCard({ schedule }: MyScheduleCardProps) {
-  const [showDeleteConfirmModal, setShowDeleteConfirmModal] =
-    useState<boolean>(false);
-  const [showDeleteAlertModal, setShowDeleteAlertModal] =
-    useState<boolean>(false);
-  const [showDeleteFailAlertModal, setShowDeleteFailAlertModal] =
-    useState<boolean>(false);
-
   function getDate(dateString: string) {
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
     return `${year}년 ${month}월 ${day}일`;
-  }
-
-  async function handleDeleteConfirm() {
-    try {
-      await tokenInstance.delete(
-        `${baseUrl}/schedules/${schedule.schedule_id}`
-      );
-      setShowDeleteAlertModal(true);
-    } catch (error) {
-      setShowDeleteFailAlertModal(true);
-    }
-    setShowDeleteConfirmModal(false);
-  }
-
-  function handleDeleteCancel() {
-    setShowDeleteConfirmModal(false);
-  }
-
-  function handleOnConfirm() {
-    setShowDeleteAlertModal(false);
-    setShowDeleteFailAlertModal(false);
-    window.location.reload();
   }
 
   return (
@@ -111,26 +78,6 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
           />
         </div>
       </Link>
-      {showDeleteConfirmModal && (
-        <AlertModal
-          message='일정을 삭제하시겠습니까?'
-          onConfirm={handleDeleteConfirm}
-          onCancel={handleDeleteCancel}
-          showCancelButton={true}
-        />
-      )}
-      {showDeleteAlertModal && (
-        <AlertModal
-          message='일정이 삭제되었습니다.'
-          onConfirm={handleOnConfirm}
-        />
-      )}
-      {showDeleteFailAlertModal && (
-        <AlertModal
-          message='일정 삭제를 실패하였습니다.'
-          onConfirm={handleOnConfirm}
-        />
-      )}
     </>
   );
 }
