@@ -17,6 +17,7 @@ import MyReview from './pages/MyReview';
 import Header from './components/common/Header/Header';
 import Footer from './components/common/Footer/Footer';
 import DestinationDetails from './components/DestinationList/DestinationDetails';
+import NotFound from './pages/NotFound';
 
 function App() {
   {
@@ -106,6 +107,7 @@ function App() {
               </Auth>
             }
           />
+          <Route path='*' element={<NotFound />} />
         </Routes>
         <Footer />
       </AuthProvider>
