@@ -29,6 +29,10 @@ const RESPONSE_STATUS = {
   DELETE_SUCCESS: 200
 };
 
+const REVIEW_HANDLER = {
+  MAXIMUM_WORDS: 300
+};
+
 type ReviewManagementPropsType = {
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
@@ -236,6 +240,7 @@ function ReviewManagement({
             name='modifiedReview'
             size='small'
             label='수정할 내용을 입력해주세요.'
+            inputProps={{ maxLength: REVIEW_HANDLER.MAXIMUM_WORDS }}
             sx={{
               '& label.Mui-focused': { color: '#ef6d00' },
               '& .MuiOutlinedInput-root': {

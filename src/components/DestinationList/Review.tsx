@@ -23,6 +23,10 @@ const RESPONSE_STATUS = {
   POST_SUCCESS: 201
 };
 
+const REVIEW_HANDLER = {
+  MAXIMUM_WORDS: 300
+};
+
 function Review() {
   const [submittedReview, setSubmittedReview] = useState<commentType>({
     comment: null
@@ -207,6 +211,7 @@ function Review() {
                 className={styles.reviewInputBar}
                 type='text'
                 name='review'
+                inputProps={{ maxLength: REVIEW_HANDLER.MAXIMUM_WORDS }}
                 size='small'
                 label={
                   authState.isLoggedIn
