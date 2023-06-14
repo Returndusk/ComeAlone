@@ -62,7 +62,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   //페이지 처음 로드시 (새로고침시)
   useEffect(() => {
+    //액세스 토큰이 없고 리프레시 토큰만 있을 경우
     //리프레시 토큰으로 액세스 & 리프레시 토큰 재발급
+    const accessToken = cookies.get('accessToken');
     const refreshToken = cookies.get('refreshToken');
     const getUserState = async (refreshToken: string) => {
       try {
@@ -95,7 +97,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     };
 
-    if (refreshToken) {
+    if (!accessToken && refreshToken) {
       getUserState(refreshToken);
     } else {
       updateAuthState(false);
