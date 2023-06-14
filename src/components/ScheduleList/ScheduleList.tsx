@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
@@ -14,69 +14,124 @@ const baseUrl = process.env.REACT_APP_API_BASE_URL;
 function ScheduleLists() {
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
-  const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
+  const [likesScheduleList, setLikesScheduleList] = useState<ScheduleListType>(
+    []
+  );
+  const [recentScheduleList, setRecentScheduleList] =
+    useState<ScheduleListType>([]);
   const [showScheduleList, setShowScheduleList] = useState<ScheduleListType>(
     []
   );
   const [scheduleSort, setScheduleSort] = useState<string>('likes');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
+  const [likesPage, setLikesPage] = useState<number>(1);
+  const [recentPage, setRecentPage] = useState<number>(1);
+  const [lastDataOfLikes, setLastDataOfLikes] = useState<boolean>(false);
+  const [lastDataOfRecent, setLastDataOfRecent] = useState<boolean>(false);
+  const lastElement = useRef<HTMLDivElement>(null);
+  const SCHEDULES_PER_PAGE = 6;
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
+  const fetchLikesData = useCallback(async () => {
     try {
-      const response = await axios.get(`${baseUrl}/schedules`);
+      const response = await axios.get(
+        `${baseUrl}/schedules/public/order/likes?page=${likesPage}&limit=${SCHEDULES_PER_PAGE}`
+      );
       const scheduleData = response.data;
-      setScheduleList(scheduleData);
-      setShowScheduleList(sortByScheduleLikes(scheduleData));
+      setLikesScheduleList((prev) => [...prev, ...scheduleData]);
+      if (scheduleData.length === 0) {
+        setLastDataOfLikes(true);
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setShowAlertModal(true);
       }
     }
-    setIsLoading(false);
-  }, []);
+  }, [likesPage, scheduleSort]);
+
+  const fetchRecentData = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/schedules/public/order/latest-created-date?page=${recentPage}&limit=${SCHEDULES_PER_PAGE}`
+      );
+      const scheduleData = response.data;
+      setRecentScheduleList((prev) => [...prev, ...scheduleData]);
+      if (scheduleData.length === 0) {
+        setLastDataOfRecent(true);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setShowAlertModal(true);
+      }
+    }
+  }, [recentPage, scheduleSort]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (scheduleSort === 'likes') {
+      if (!lastDataOfLikes) {
+        fetchLikesData();
+      }
+    } else if (scheduleSort === 'recent') {
+      if (!lastDataOfRecent) {
+        fetchRecentData();
+      }
+    }
+  }, [
+    fetchLikesData,
+    fetchRecentData,
+    likesPage,
+    recentPage,
+    lastDataOfLikes,
+    lastDataOfRecent
+  ]);
 
   useEffect(() => {
-    sortSchedule(scheduleSort);
-  }, [scheduleSort]);
+    let observer: IntersectionObserver;
+    if (lastElement.current) {
+      observer = new IntersectionObserver(
+        (entry) => {
+          if (entry[0].isIntersecting) {
+            nextPage(scheduleSort);
+          }
+        },
+        { threshold: 1 }
+      );
+      observer.observe(lastElement.current);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastElement, scheduleSort]);
 
-  function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
+  const nextPage = useCallback(
+    (scheduleSort: string) => {
+      if (scheduleSort === 'likes') {
+        setLikesPage((prev) => prev + 1);
+      } else if (scheduleSort === 'recent') {
+        setRecentPage((prev) => prev + 1);
+      }
+    },
+    [likesPage, recentPage]
+  );
+
+  async function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     setScheduleSort(sortOption);
-  }
-
-  function handleOnConfirm() {
-    setShowAlertModal(false);
-  }
-
-  function sortByScheduleLikes(scheduleData: ScheduleCardType[]) {
-    return scheduleData.sort((a, b) => b.likes_count - a.likes_count);
-  }
-
-  function sortByScheduleRecent(scheduleData: ScheduleCardType[]) {
-    return scheduleData.sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    );
-  }
-
-  async function sortSchedule(sortOption: string) {
-    const scheduleData = [...scheduleList];
-    if (sortOption === 'likes') {
-      setShowScheduleList(sortByScheduleLikes(scheduleData));
-    } else if (sortOption === 'recent') {
-      setShowScheduleList(sortByScheduleRecent(scheduleData));
-    } else if (sortOption === 'liked') {
+    if (sortOption === 'liked') {
       const liked = await tokenInstance.get(
         `${baseUrl}/users/me/liked-schedules`
       );
       setShowScheduleList(liked.data);
     }
+  }
+
+  useEffect(() => {
+    if (scheduleSort === 'likes') {
+      setShowScheduleList(likesScheduleList);
+    } else if (scheduleSort === 'recent') {
+      setShowScheduleList(recentScheduleList);
+    }
+  }, [scheduleSort, likesScheduleList, recentScheduleList]);
+
+  function handleOnConfirm() {
+    setShowAlertModal(false);
   }
 
   return (
@@ -136,9 +191,21 @@ function ScheduleLists() {
             onConfirm={handleOnConfirm}
           />
         )}
-        {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
         <div className={styles.scheduleCardContainer}>
-          {showScheduleList.length ? (
+          {scheduleSort != 'liked' ? (
+            showScheduleList.length ? (
+              showScheduleList.map(
+                (schedule: ScheduleCardType, index: number) => (
+                  <ScheduleCard schedule={schedule} key={index} />
+                )
+              )
+            ) : (
+              <div className={styles.noSchedule}>
+                <FaExclamationCircle />
+                <div>공개된 일정이 없습니다</div>
+              </div>
+            )
+          ) : showScheduleList.length ? (
             showScheduleList.map(
               (schedule: ScheduleCardType, index: number) => (
                 <ScheduleCard schedule={schedule} key={index} />
@@ -152,6 +219,7 @@ function ScheduleLists() {
           )}
         </div>
       </div>
+      <div ref={lastElement} className={styles.lastElement}></div>
     </>
   );
 }
