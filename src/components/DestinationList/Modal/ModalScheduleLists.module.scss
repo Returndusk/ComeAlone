@@ -1,6 +1,5 @@
 .scheduleContainer {
   display: flex;
-  // grid-template-columns: 1fr 1fr;
   flex-direction: column;
   // flex-wrap: nowrap;
   justify-content: flex-start;
@@ -12,6 +11,7 @@
   text-align: center;
   // padding-right: 10px;
   // border-right: 2px solid gray;
+  background-color: #ffffff;
 
   .scheduleListTitle {
     margin: 20px;
@@ -28,24 +28,36 @@
     width: 100%;
     // max-height: 600px;
     // height: 100%;
-    overflow-y: auto;
+    overflow-y: scroll;
 
-    // .scheduleAdd {
-    //   display: flex;
-    //   justify-content: center;
-    //   align-items: center;
-    //   height: 300px;
-    //   padding: 30px;
-    //   border-radius: 10px;
-    //   background-color: lightgray;
-    //   font-size: 40px;
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
 
-    //   &:hover {
-    //     cursor: pointer;
-    //     transform: translateY(-10px);
-    //     transition: 0.5s ease-in-out;
-    //   }
-    // }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(
+        0,
+        0,
+        0,
+        0.1
+      ); // Change this to match scrollbar color
+      border-radius: 20px; // If you want round scrollbars
+      border: 3px solid transparent; // Add this if you want round scrollbars
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: rgba(
+        0,
+        0,
+        0,
+        0.4
+      ); // Change this to match scrollbar color on hover
+      // background-color: #7c9070; // Change this to match scrollbar color on hover
+    }
   }
 
   .scheduleFilter {
@@ -57,16 +69,26 @@
   }
 }
 
-.sortButton {
-  height: 40px;
-  width: auto;
-  border: 0;
-  border-radius: 8px;
-  background-color: white;
-  font-size: 20px;
-  font-weight: bold;
-}
+// .sortButton {
+//   height: 40px;
+//   // width: auto;
+//   border: 0;
+//   border-radius: 8px;
+//   // background-color: white;
+//   font-size: 20px;
+//   font-weight: bold;
+// }
 
-.selected {
-  background-color: lightgray;
-}
+// .selected {
+//   color: #ffffff;
+//   background-color: #7c9070;
+// }
+
+// .sortButton input[type='radio'] {
+//   color: #7c9070;
+// }
+
+// .sortButton input[type='radio']:checked {
+//   background-color: #7c9070;
+//   color: white;
+// }

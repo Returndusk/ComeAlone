@@ -46,7 +46,7 @@ export default function ModalScheduleLists() {
     async function getScheduleLists() {
       try {
         const data = await getMyScheduleLists();
-        console.log(data);
+        // console.log(data);
         setScheduleLists(
           data.map((schedule, index) => ({
             schedule,
@@ -74,6 +74,7 @@ export default function ModalScheduleLists() {
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
     setScheduleSort(sortOption);
+    setSelectedCardIdx(null);
   }
 
   function sortUpcoming(scheduleData: ModalMyScheduleType[]) {
@@ -139,7 +140,16 @@ export default function ModalScheduleLists() {
             }
           }}
         >
-          <ButtonGroup variant='outlined' aria-label='outlined button group'>
+          <ButtonGroup
+            variant='text'
+            aria-label='text button group'
+            sx={{
+              '.MuiButtonGroup-grouped:not(:last-of-type)': {
+                borderColor: '#7c9070'
+                // borderRadius: 0
+              }
+            }}
+          >
             <Button
               className={`${styles.sortButton} ${
                 scheduleSort === 'upcoming' ? styles.selected : ''
@@ -149,15 +159,19 @@ export default function ModalScheduleLists() {
               }}
               value='upcoming'
               sx={{
-                color: '#ef6d00',
+                // color: '#7c9070',
+                color: scheduleSort === 'upcoming' ? '#ffffff' : '#7c9070',
+                backgroundColor:
+                  scheduleSort === 'upcoming' ? '#7c9070' : undefined,
                 fontWeight: '600',
-                border: 1,
-                borderColor: '#ef6d00',
+                fontSize: 'medium',
+                // border: 1,
+                // borderColor: '#7c9070',
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#ef6d00',
-                  border: 1,
-                  borderColor: '#ef6d00'
+                  backgroundColor: '#7c9070'
+                  // border: 1,
+                  // borderColor: '#7c9070'
                 }
               }}
             >
@@ -172,15 +186,19 @@ export default function ModalScheduleLists() {
               }}
               value='past'
               sx={{
-                color: '#ef6d00',
+                // color: '#7c9070',
+                color: scheduleSort === 'past' ? '#ffffff' : '#7c9070',
+                backgroundColor:
+                  scheduleSort === 'past' ? '#7c9070' : undefined,
                 fontWeight: '600',
-                border: 1,
-                borderColor: '#ef6d00',
+                fontSize: 'medium',
+                // border: 1,
+                // borderColor: '#7c9070',
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#ef6d00',
-                  border: 1,
-                  borderColor: '#ef6d00'
+                  backgroundColor: '#7c9070'
+                  // border: 1,
+                  // borderColor: '#7c9070'
                 }
               }}
             >
@@ -195,12 +213,12 @@ export default function ModalScheduleLists() {
               sx={{
                 color: '#ffffff',
                 fontWeight: '600',
-                backgroundColor: '#ef6d00',
+                backgroundColor: '#7c9070',
                 border: 1,
-                borderColor: '#ef6d00',
+                borderColor: '#7c9070',
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#ef6d00'
+                  backgroundColor: '#7c9070'
                 }
               }}
             >

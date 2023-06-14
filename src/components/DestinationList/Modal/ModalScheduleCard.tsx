@@ -96,53 +96,70 @@ ModalScheduleCardType) {
         createPortal(
           <div className={styles.scheduleDestination}>
             <div className={styles.daysContainer}>
-              {startDay > 0 && (
-                <button
-                  className={`${styles.arrowBtn} ${styles.prevBtn}`}
-                  onClick={handlePrevious}
-                >
-                  <SlArrowLeft />
-                </button>
-              )}
+              <div className={styles.arrowSpace}>
+                {startDay > 0 && (
+                  <button
+                    className={`${styles.arrowBtn} ${styles.prevBtn}`}
+                    onClick={handlePrevious}
+                  >
+                    <SlArrowLeft />
+                  </button>
+                )}
+              </div>
               <div className={styles.buttonContainer}>
                 {/* {schedule.destinations.map((_, idx) => ( */}
-                {schedule.destinations
-                  .slice(startDay, startDay + visibleDays)
-                  .map((_, idx) => (
-                    <ButtonGroup
-                      key={idx}
-                      variant='outlined'
-                      aria-label='outlined button group'
-                      className={styles.dayButton}
-                      // onClick={() => handleToggleDestinations(idx)}
-                      onClick={() => handleToggleDestinations(startDay + idx)}
-                    >
-                      {/* <Button>{`${idx + 1}일차`}</Button> */}
+                <ButtonGroup
+                  // key={idx}
+                  variant='outlined'
+                  aria-label='outlined button group'
+                  sx={{
+                    '.MuiButtonGroup-grouped:not(:last-of-type)': {
+                      borderColor: '#ef6d00'
+                      // borderRadius: 0
+                    },
+                    '.MuiButtonGroup-grouped:not(:first-of-type)': {
+                      borderColor: '#ef6d00'
+                      // borderRadius: 0
+                    }
+                  }}
+                  // className={styles.dayButton}
+                >
+                  {schedule.destinations
+                    .slice(startDay, startDay + visibleDays)
+                    .map((_, idx) => (
                       <Button
+                        key={idx}
+                        className={styles.dayButton}
                         sx={{
-                          color: '#ef6d00',
+                          color:
+                            selectedDay === startDay + idx
+                              ? '#ffffff'
+                              : '#ef6d00',
                           fontWeight: '600',
+                          backgroundColor:
+                            selectedDay === startDay + idx
+                              ? '#ef6d00'
+                              : undefined,
                           '&:hover': {
                             color: '#ffffff',
-                            backgroundColor: '#ef6d00',
-                            border: 1,
-                            borderColor: '#ef6d00'
-                          },
-                          border: 1,
-                          borderColor: '#ef6d00'
+                            backgroundColor: '#ef6d00'
+                          }
                         }}
+                        onClick={() => handleToggleDestinations(startDay + idx)}
                       >{`${startDay + idx + 1}일차`}</Button>
-                    </ButtonGroup>
-                  ))}
+                    ))}
+                </ButtonGroup>
               </div>
-              {startDay + visibleDays < schedule.destinations.length && (
-                <button
-                  className={`${styles.arrowBtn} ${styles.nextBtn}`}
-                  onClick={handleNext}
-                >
-                  <SlArrowRight />
-                </button>
-              )}
+              <div className={styles.arrowSpace}>
+                {startDay + visibleDays < schedule.destinations.length && (
+                  <button
+                    className={`${styles.arrowBtn} ${styles.nextBtn}`}
+                    onClick={handleNext}
+                  >
+                    <SlArrowRight />
+                  </button>
+                )}
+              </div>
             </div>
             {isSelected && selectedDay !== null && (
               <AddToScheduleModal

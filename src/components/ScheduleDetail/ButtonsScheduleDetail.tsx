@@ -31,7 +31,6 @@ function ButtonsScheduleDetail({
           <button id={styles.editButton}>
             <Link to={`${ROUTER.SCHEDULE_EDIT}/${scheduleId}`}>
               <FaPen className={styles.icon} />
-              수정
             </Link>
           </button>
           <button
@@ -39,7 +38,6 @@ function ButtonsScheduleDetail({
             onClick={() => setShowDeleteAlert(true)}
           >
             <FaTrashAlt className={styles.icon} />
-            삭제
           </button>
         </>
       ) : null}

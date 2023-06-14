@@ -100,7 +100,7 @@ function EditDestinationList({
               onCheckedDayIndexUpdate(-1);
             }}
           />
-          <span>전체 목적지 보기</span>
+          <span className={styles.allDestinations}>전체 목적지 보기</span>
         </label>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className={styles.destinationsList}>
@@ -128,7 +128,7 @@ function EditDestinationList({
                             }
                           }}
                         />{' '}
-                        <span>Day {dayIndex + 1}</span>
+                        <span>{dayIndex + 1}일차</span>
                         {destOfDay.length > 0 ? null : (
                           <p>(목적지가 존재하지 않습니다.)</p>
                         )}

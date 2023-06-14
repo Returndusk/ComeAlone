@@ -29,7 +29,7 @@ export async function updateScheduleImageById(formData: FormData) {
   }
 }
 
-export async function deleteScheduleById(id: string | undefined) {
+export async function deleteScheduleById(id: string) {
   try {
     await tokenInstance.delete(`${baseUrl}/schedules/${id}`);
   } catch (err) {

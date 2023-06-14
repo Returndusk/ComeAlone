@@ -1,4 +1,18 @@
 .mapWithWaypoints {
   width: 100%;
   height: 100%;
+  border-radius: 5px;
+
+  span {
+    p {
+      margin: 0 0 120px 0;
+      padding: 5px;
+      background-color: #fff;
+      border: 2px var(--main-color) solid;
+      border-radius: 5px;
+      color: var(--main-color);
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
 }

@@ -9,18 +9,49 @@
   // position: relative;
   // height: 600px;
   width: 80%;
-  overflow-y: auto;
+  overflow-y: scroll;
   margin-top: 10px;
   // padding-top: 50px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(
+      0,
+      0,
+      0,
+      0.1
+    ); // Change this to match scrollbar color
+    border-radius: 20px; // If you want round scrollbars
+    border: 3px solid transparent; // Add this if you want round scrollbars
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(
+      0,
+      0,
+      0,
+      0.4
+    ); // Change this to match scrollbar color on hover
+    // background-color: #7c9070; // Change this to match scrollbar color on hover
+  }
 }
 
 .destination {
+  // background-color: #7c9070;
+  // color: #ffffff;
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 86%;
   font-size: 16px;
-  margin: 10px 0 10px 0;
+  margin: 10px;
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;

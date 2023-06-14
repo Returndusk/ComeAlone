@@ -24,6 +24,8 @@ import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import { updateSchedule } from '../apis/ScheduleEditAPI';
 import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
+import { AxiosError } from 'axios';
+import { useAuthState } from '../contexts/AuthContext';
 
 function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
   return destinationList.map((destOfDay: MapWithWaypointsPropsType[]) =>
@@ -41,6 +43,7 @@ function stringifyDate(date: Date) {
 
 function ScheduleEdit() {
   const scheduleId: string = useParams().scheduleId as string;
+  const { authState } = useAuthState();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showDateModal, setShowDateModal] = useState<boolean>(false);
@@ -65,28 +68,53 @@ function ScheduleEdit() {
 
   const getScheduleDetail = useCallback(
     async (scheduleId: string) => {
-      const response = await getScheduleDetailById(scheduleId);
+      try {
+        const response = await getScheduleDetailById(scheduleId);
 
-      const data: ScheduleEditFetchedType = {
-        title: response?.data.title,
-        summary: response?.data.summary,
-        duration: response?.data.duration,
-        startDate: new Date(response?.data.start_date),
-        endDate: new Date(response?.data.end_date),
-        image: response?.data.image,
-        createdAt: new Date(response?.data.created_at.split('T')[0]),
-        status: response?.data.status,
-        destinations: response?.data.destinationMaps
-      };
+        const data: ScheduleEditFetchedType = {
+          userId: response.data.user.id,
+          title: response?.data.title,
+          summary: response?.data.summary,
+          duration: response?.data.duration,
+          startDate: new Date(response?.data.start_date),
+          endDate: new Date(response?.data.end_date),
+          image: response?.data.image,
+          createdAt: new Date(response?.data.created_at.split('T')[0]),
+          status: response?.data.status,
+          destinations: response?.data.destinationMaps
+        };
 
-      return data;
+        return data;
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 404) {
+            console.log(err.response.data.message);
+
+            navigate('*');
+          }
+        } else {
+          console.log(err);
+        }
+      }
     },
     [scheduleId]
   );
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedData = await getScheduleDetail(scheduleId);
+      const fetchedData = (await getScheduleDetail(
+        scheduleId
+      )) as ScheduleEditFetchedType;
+
+      if (!fetchedData) {
+        return;
+      }
+
+      if (authState.user?.id !== fetchedData.userId) {
+        navigate(ROUTER.MAIN);
+
+        return;
+      }
 
       setUpdatedDateInfo({
         startDate: fetchedData.startDate,
@@ -102,8 +130,10 @@ function ScheduleEdit() {
       setIsLoading(false);
     };
 
-    fetchData();
-  }, [getScheduleDetail]);
+    if (authState.isLoggedIn === true) {
+      fetchData();
+    }
+  }, [getScheduleDetail, scheduleId, authState.isLoggedIn]);
 
   useEffect(() => {
     const prevDuration = updatedDestinationList.length;
@@ -132,7 +162,7 @@ function ScheduleEdit() {
         checkedDayIndex
       ];
     }
-  }, [checkedDayIndex, updatedDestinationList]);
+  }, [checkedDayIndex, updatedDestinationList, updatedDateInfo]);
 
   const handleImageUpdate = (imagePath: string) => {
     updatedImagePath.current = imagePath;

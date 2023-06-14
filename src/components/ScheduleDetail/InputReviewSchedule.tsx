@@ -52,15 +52,18 @@ function InputReviewSchedule({
                 }
               }
             }}
+            multiline
+            maxRows={3}
+            inputProps={{ maxLength: 300 }}
             onChange={handleChange}
-            label='리뷰를 입력하세요.'
+            label='리뷰를 입력하세요. (최대 300자)'
             value={reviewTyping}
           />
           <button
             className={styles.reviewsInputButton}
             onClick={() => handleReviewSubmit()}
           >
-            제출
+            저장
           </button>
         </div>
       ) : (

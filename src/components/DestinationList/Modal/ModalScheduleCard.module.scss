@@ -21,9 +21,29 @@
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
     url(https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg);
   background-size: cover;
-  box-shadow: 1px 1px 32px 5px rgba(0, 0, 0, 0.11);
-  margin: 10px 0;
-  // position: absolute;
+  // box-shadow: 1px 1px 32px 5px rgba(0, 0, 0, 0.11);
+  margin: 10px;
+  position: relative;
+
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   border-radius: 10px;
+  //   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
+  //     url(https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg);
+  //   background-size: cover;
+  //   z-index: -1; // Push the image to the back so that it doesn't cover your content
+  //   transition: transform 0.5s ease-in-out; // Add the transition here
+  // }
+
+  // &:hover::before {
+  //   transform: scale(1.05);
+  //   // transition: transform 0.5s;
+  // }
 
   .scheduleContent {
     display: flex;
@@ -45,8 +65,9 @@
 
   &:hover {
     cursor: pointer;
-    // transform: translateY(-10px);
-    // transition: 0.5s ease-in-out;
+    transform: translateY(-10px);
+    // transform: scale(1.05);
+    transition: 0.5s ease-in-out;
   }
 }
 
@@ -56,8 +77,20 @@
   margin: 10px 0;
 }
 
+.arrowSpace {
+  width: 35px;
+}
+
 .buttonContainer {
   display: flex;
+  // width: auto;
+  // flex-grow: 1;
+
+  .dayButton {
+    // display: flex;
+    width: 75px;
+    // margin: 0 2px;
+  }
 }
 
 .scheduleDestination {
