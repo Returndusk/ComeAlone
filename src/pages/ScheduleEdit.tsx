@@ -25,6 +25,7 @@ import { updateSchedule } from '../apis/ScheduleEditAPI';
 import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
 import { AxiosError } from 'axios';
+import { useAuthState } from '../contexts/AuthContext';
 
 function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
   return destinationList.map((destOfDay: MapWithWaypointsPropsType[]) =>
@@ -42,6 +43,7 @@ function stringifyDate(date: Date) {
 
 function ScheduleEdit() {
   const scheduleId: string = useParams().scheduleId as string;
+  const { authState } = useAuthState();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showDateModal, setShowDateModal] = useState<boolean>(false);
@@ -70,6 +72,7 @@ function ScheduleEdit() {
         const response = await getScheduleDetailById(scheduleId);
 
         const data: ScheduleEditFetchedType = {
+          userId: response.data.user.id,
           title: response?.data.title,
           summary: response?.data.summary,
           duration: response?.data.duration,
@@ -107,6 +110,12 @@ function ScheduleEdit() {
         return;
       }
 
+      if (authState.user?.id !== fetchedData.userId) {
+        navigate(ROUTER.MAIN);
+
+        return;
+      }
+
       setUpdatedDateInfo({
         startDate: fetchedData.startDate,
         endDate: fetchedData.endDate,
@@ -121,8 +130,10 @@ function ScheduleEdit() {
       setIsLoading(false);
     };
 
-    fetchData();
-  }, [getScheduleDetail]);
+    if (authState.isLoggedIn === true) {
+      fetchData();
+    }
+  }, [getScheduleDetail, scheduleId, authState.isLoggedIn]);
 
   useEffect(() => {
     const prevDuration = updatedDestinationList.length;
