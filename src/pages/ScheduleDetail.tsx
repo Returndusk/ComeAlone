@@ -101,7 +101,11 @@ function ScheduleDetail() {
   const addScheduleReview = useCallback(
     async (scheduleId: string, newReview: string) => {
       await addScheduleReviewById(scheduleId, newReview);
-      setScheduleReviews(await getScheduleReviews(scheduleId));
+
+      const currentScheduleReviews: IScheduleReview[] =
+        await getScheduleReviews(scheduleId);
+
+      setScheduleReviews(currentScheduleReviews.reverse());
     },
     []
   );
@@ -109,14 +113,23 @@ function ScheduleDetail() {
   const updateScheduleReview = useCallback(
     async (reviewId: number, updateReview: string) => {
       await updateScheduleReviewById(reviewId, updateReview);
-      setScheduleReviews(await getScheduleReviews(scheduleId));
+
+      const currentScheduleReviews: IScheduleReview[] =
+        await getScheduleReviews(scheduleId);
+
+      setScheduleReviews(currentScheduleReviews.reverse());
     },
     []
   );
 
   const deleteScheduleReview = useCallback(async (reviewId: number) => {
     await deleteScheduleReviewById(reviewId);
-    setScheduleReviews(await getScheduleReviews(scheduleId));
+
+    const currentScheduleReviews: IScheduleReview[] = await getScheduleReviews(
+      scheduleId
+    );
+
+    setScheduleReviews(currentScheduleReviews.reverse());
   }, []);
 
   useEffect(() => {
@@ -135,7 +148,7 @@ function ScheduleDetail() {
 
       scheduleFetched.current = fetchedDetail as ScheduleFetchedType;
       userLikesCount.current = fetchedDetail.likesCount;
-      setScheduleReviews(fetchedReviews);
+      setScheduleReviews(fetchedReviews.reverse());
       setCheckedDestinations(fetchedDetail.destinations.flat());
       setIsLoading(false);
 
