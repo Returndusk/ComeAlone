@@ -23,7 +23,7 @@ import { useAuthState } from '../../contexts/AuthContext';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaCommentAlt, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 import { createPortal } from 'react-dom';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+// import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -143,10 +143,10 @@ function DestinationDetails() {
       {isLoading && (
         <div className={styles.destinationDetailsContainer}>
           <div className={styles.LoadingContainer}>
-            <AiOutlineLoading3Quarters
+            {/* <AiOutlineLoading3Quarters
               className={styles.destinationDetailsLoadingIcon}
             />
-            <span>로딩 중 입니다..</span>
+            <span>로딩 중 입니다..</span> */}
           </div>
         </div>
       )}
