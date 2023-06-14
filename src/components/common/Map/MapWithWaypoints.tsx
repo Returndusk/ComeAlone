@@ -87,7 +87,7 @@ function MapWithWaypoints({
 
     const positions = markersLocations.map((marker) => {
       return {
-        content: `<div>${marker.title}</div>`,
+        content: `<span><p>${marker.title}</p></span>`,
         latlng: new kakao.maps.LatLng(Number(marker.mapy), Number(marker.mapx))
       };
     });
@@ -100,21 +100,6 @@ function MapWithWaypoints({
           image: setImageOps(index)
         })
     );
-
-    for (let i = 0; i < positions.length; i++) {
-      const customOverlay = new kakao.maps.CustomOverlay({
-        position: positions[i].latlng,
-        content: positions[i].content
-      });
-
-      kakao.maps.event.addListener(newMarkers[i], 'mouseover', function () {
-        customOverlay.setMap(renderedMap);
-      });
-
-      kakao.maps.event.addListener(newMarkers[i], 'mouseout', function () {
-        customOverlay.setMap();
-      });
-    }
 
     const bounds = positions.reduce(
       (bounds, destination) => bounds.extend(destination.latlng),
@@ -135,6 +120,23 @@ function MapWithWaypoints({
       strokeOpacity: 0.7,
       strokeStyle: 'solid'
     });
+
+    for (let i = 0; i < positions.length; i++) {
+      const customOverlay = new kakao.maps.CustomOverlay({
+        position: positions[i].latlng,
+        content: positions[i].content
+      });
+
+      kakao.maps.event.addListener(newMarkers[i], 'mouseover', function () {
+        customOverlay.setMap(renderedMap);
+      });
+
+      kakao.maps.event.addListener(newMarkers[i], 'mouseout', function () {
+        setTimeout(function () {
+          customOverlay.setMap();
+        });
+      });
+    }
 
     if (prevMarkers.current.length > 0) {
       prevMarkers.current.forEach((marker: any) => {
