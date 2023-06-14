@@ -10,11 +10,17 @@ function InfoScheduleEdit({
   onTitleUpdate,
   onSummaryUpdate
 }: ScheduleEditInfoType) {
+  const formatDate = (date: Date) => {
+    return date
+      .toLocaleDateString('ko-KR')
+      .replace('.', '년 ')
+      .replace('.', '월 ')
+      .replace('.', '일 ');
+  };
+
   return (
     <div className={styles.ScheduleInfoContainer}>
-      <div className={styles.createdAt}>
-        작성일: {createdAt.toLocaleDateString('ko-KR')}
-      </div>
+      <div className={styles.createdAt}>{formatDate(createdAt)} 작성</div>
       <TextField
         className={styles.title}
         sx={{
@@ -26,8 +32,11 @@ function InfoScheduleEdit({
             }
           }
         }}
+        inputProps={{
+          maxLength: 30
+        }}
         required
-        label='제목'
+        label='제목 (최대 30자)'
         defaultValue={updatedTitle}
         onChange={(event) => onTitleUpdate(event.target.value)}
       />
@@ -42,8 +51,11 @@ function InfoScheduleEdit({
             }
           }
         }}
+        inputProps={{
+          maxLength: 300
+        }}
         required
-        label='일정 소개'
+        label='일정 소개 (최대 300자)'
         multiline
         rows={4}
         defaultValue={updatedSummary}

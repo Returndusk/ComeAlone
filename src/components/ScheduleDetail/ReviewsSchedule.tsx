@@ -149,8 +149,12 @@ function ReviewsSchedule({
                           }
                         }
                       }}
+                      multiline
+                      rows={3}
+                      inputProps={{ maxLength: 300 }}
                       value={reviewTyping}
                       onChange={handleChange}
+                      label='수정하실 내용을 입력하세요. (최대 300자)'
                     />
                   ) : (
                     <div className={styles.comment}>{comment}</div>

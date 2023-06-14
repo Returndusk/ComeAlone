@@ -13,8 +13,9 @@ function getDateInfoFromSelected(
   selectedDate: DateSelectionType
 ): DateInfoType {
   const { startDate, endDate } = selectedDate;
-  const duration =
-    (endDate.getTime() - startDate.getTime()) / SECONDS_OF_DAY + 1;
+  const duration = Math.floor(
+    (endDate.getTime() - startDate.getTime()) / SECONDS_OF_DAY + 1
+  );
 
   return { startDate, endDate, duration };
 }
@@ -32,6 +33,8 @@ function DateModalScheduleEdit({
 }) {
   const [showDiffDurationAlert, setShowDiffDurationAlert] =
     useState<boolean>(false);
+  const [showMaximumDurationAlert, setShowMaximumDurationAlert] =
+    useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<DateSelectionType[]>([
     {
       startDate: dateInfo.startDate,
@@ -46,6 +49,8 @@ function DateModalScheduleEdit({
 
     if (currentDuration < prevDuration) {
       setShowDiffDurationAlert(true);
+    } else if (currentDuration > 30) {
+      setShowMaximumDurationAlert(true);
     } else {
       handleDateInfoUpdateConfirm();
     }
@@ -101,6 +106,12 @@ function DateModalScheduleEdit({
           showCancelButton={true}
           onConfirm={() => handleDateInfoUpdateConfirm()}
           onCancel={() => setShowDiffDurationAlert(false)}
+        />
+      )}
+      {showMaximumDurationAlert && (
+        <AlertModal
+          message='여행 기간은 최대 30일까지만 가능합니다.'
+          onConfirm={() => setShowMaximumDurationAlert(false)}
         />
       )}
     </>

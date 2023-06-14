@@ -2,6 +2,7 @@ import { IScheduleDetail } from './ScheduleDetailTypes';
 
 export type ScheduleEditFetchedType = Pick<
   IScheduleDetail,
+  | 'userId'
   | 'title'
   | 'summary'
   | 'startDate'
