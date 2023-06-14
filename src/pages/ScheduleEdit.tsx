@@ -24,6 +24,7 @@ import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import { updateSchedule } from '../apis/ScheduleEditAPI';
 import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
+import { AxiosError } from 'axios';
 
 function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
   return destinationList.map((destOfDay: MapWithWaypointsPropsType[]) =>
@@ -65,28 +66,46 @@ function ScheduleEdit() {
 
   const getScheduleDetail = useCallback(
     async (scheduleId: string) => {
-      const response = await getScheduleDetailById(scheduleId);
+      try {
+        const response = await getScheduleDetailById(scheduleId);
 
-      const data: ScheduleEditFetchedType = {
-        title: response?.data.title,
-        summary: response?.data.summary,
-        duration: response?.data.duration,
-        startDate: new Date(response?.data.start_date),
-        endDate: new Date(response?.data.end_date),
-        image: response?.data.image,
-        createdAt: new Date(response?.data.created_at.split('T')[0]),
-        status: response?.data.status,
-        destinations: response?.data.destinationMaps
-      };
+        const data: ScheduleEditFetchedType = {
+          title: response?.data.title,
+          summary: response?.data.summary,
+          duration: response?.data.duration,
+          startDate: new Date(response?.data.start_date),
+          endDate: new Date(response?.data.end_date),
+          image: response?.data.image,
+          createdAt: new Date(response?.data.created_at.split('T')[0]),
+          status: response?.data.status,
+          destinations: response?.data.destinationMaps
+        };
 
-      return data;
+        return data;
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 404) {
+            console.log(err.response.data.message);
+
+            navigate(ROUTER.MAIN);
+          }
+        } else {
+          console.log(err);
+        }
+      }
     },
     [scheduleId]
   );
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedData = await getScheduleDetail(scheduleId);
+      const fetchedData = (await getScheduleDetail(
+        scheduleId
+      )) as ScheduleEditFetchedType;
+
+      if (!fetchedData) {
+        return;
+      }
 
       setUpdatedDateInfo({
         startDate: fetchedData.startDate,
@@ -132,7 +151,7 @@ function ScheduleEdit() {
         checkedDayIndex
       ];
     }
-  }, [checkedDayIndex, updatedDestinationList]);
+  }, [checkedDayIndex, updatedDestinationList, updatedDateInfo]);
 
   const handleImageUpdate = (imagePath: string) => {
     updatedImagePath.current = imagePath;

@@ -45,7 +45,7 @@ function ScheduleDetail() {
     try {
       const response = await getScheduleDetailById(scheduleId);
 
-      const data = {
+      const data: ScheduleFetchedType = {
         userId: response?.data.user.id,
         nickname: response?.data.user.nickname,
         profileImage: response?.data.user.profile_image,
@@ -58,7 +58,6 @@ function ScheduleDetail() {
         image: response?.data.image,
         createdAt: new Date(response?.data.created_at.split('T')[0]),
         updatedAt: new Date(response?.data.updated_at.split('T')[0]),
-        commentsCount: response?.data.comments_count,
         destinationCount: response?.data.destination_count,
         destinations: response?.data.destinationMaps
       };
