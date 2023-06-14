@@ -12,9 +12,7 @@
 
   .cancelButton {
     margin: 0 30px 0 0;
-    padding: 10px;
     color: var(--sub-1-color);
-    border-radius: 10px;
 
     a {
       all: unset;
@@ -22,9 +20,9 @@
   }
 
   .confirmButton {
-    padding: 10px;
+    padding: 10px 15px;
     color: #fff;
     background-color: var(--main-color);
-    border-radius: 10px;
+    border-radius: 5px;
   }
 }

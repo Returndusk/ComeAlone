@@ -4,6 +4,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { DateRange } from 'react-date-range';
 import ko from 'date-fns/locale/ko';
+import { TfiClose } from 'react-icons/tfi';
 import { DateInfoType, DateSelectionType } from '../../types/ScheduleEditTypes';
 import AlertModal from '../common/Alert/AlertModal';
 
@@ -68,6 +69,7 @@ function DateModalScheduleEdit({
       <Modal open={openModal} onClose={onModalClose}>
         <Box className={styles.durationEditModal}>
           <p>수정하실 날짜를 선택하세요.</p>
+          <TfiClose onClick={onModalClose} className={styles.closeButton} />
           <DateRange
             className={styles.durationEditModalDate}
             locale={ko}
