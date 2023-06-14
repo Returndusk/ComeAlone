@@ -61,7 +61,7 @@ function InputReviewSchedule({
             className={styles.reviewsInputButton}
             onClick={() => handleReviewSubmit()}
           >
-            제출
+            저장
           </button>
         </div>
       ) : (
