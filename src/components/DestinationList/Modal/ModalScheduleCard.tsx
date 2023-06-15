@@ -80,14 +80,12 @@ ModalScheduleCardType) {
               {isSameDay ? '당일치기' : `${diffDate}박 ${diffDate + 1}일`}
             </div>
             <div>
-              {/* {getDate(schedule.start_date, schedule.end_date)} */}
               {isSameDay
                 ? `${startDate.getFullYear()}년 ${
                     startDate.getMonth() + 1
                   }월 ${startDate.getDate()}일`
                 : getDate(schedule.start_date, schedule.end_date)}
             </div>
-            {/* <div className={styles.scheduleCreated}>등록 : {createdAt}</div> */}
           </div>
         </div>
       </div>
