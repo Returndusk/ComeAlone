@@ -5,32 +5,40 @@
   box-sizing: border-box;
 
   .reviewInputForm {
+    display: flex;
+    flex-direction: column;
     width: 100%;
 
     .reviewInputBar {
-      // margin-right: 10px;
-      width: calc(100% - 130px);
+      width: 100%;
     }
 
-    Button {
-      width: 50px;
-      height: 40px;
-      border: 0;
-      color: #fff;
-      font-weight: 600;
-      border-radius: 5px;
-      cursor: pointer;
+    .reviewButtonContainer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
 
-      margin-left: 10px;
-    }
+      Button {
+        width: 50px;
+        height: 40px;
+        border: 0;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
 
-    .reviewCancelButton {
-      background: none;
-      color: #000;
-    }
+        margin-left: 10px;
+        align-items: flex-end;
+      }
 
-    .reviewSubmitButton {
-      background-color: var(--main-color);
+      .reviewCancelButton {
+        background: none;
+        color: #000;
+      }
+
+      .reviewSubmitButton {
+        background-color: var(--main-color);
+      }
     }
   }
 }
