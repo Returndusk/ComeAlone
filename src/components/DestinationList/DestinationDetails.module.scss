@@ -74,13 +74,43 @@
     position: absolute;
     top: 8px;
     left: 7px;
-    background-color: #31e974;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
     border-radius: 15px;
     padding: 7px 10px;
     font-size: 13px;
     color: #fff;
     letter-spacing: 1px;
+  }
+  #Category-12 {
+    background-color: #d23300;
+  }
+
+  #Category-14 {
+    background-color: #6d1c9d;
+  }
+
+  #Category-15 {
+    background-color: #007d00;
+  }
+
+  #Category-25 {
+    background-color: #004e4e;
+  }
+
+  #Category-28 {
+    background-color: #2b8a8a;
+  }
+
+  #Category-32 {
+    background-color: #cca800;
+  }
+
+  #Category-38 {
+    background-color: #773b15;
+  }
+
+  #Category-39 {
+    background-color: #1d6dcc;
   }
 }
 
@@ -159,6 +189,7 @@
   padding: 15px 15px 25px;
   color: #444;
   box-sizing: border-box;
+  white-space: pre-line;
 }
 
 .scheduleModalButtonContainer {
