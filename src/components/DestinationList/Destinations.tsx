@@ -134,8 +134,10 @@ function Destinations({
           {isOpen &&
             detailsDomRoot !== null &&
             createPortal(
-              <section className={styles.detailsContainer}>
-                <Outlet />
+              <>
+                <section className={styles.detailsContainer}>
+                  <Outlet />
+                </section>
                 <div className={styles.detailsButtonContainer}>
                   <button
                     className={styles.detailsCloseButton}
@@ -144,7 +146,7 @@ function Destinations({
                     <TfiClose />
                   </button>
                 </div>
-              </section>,
+              </>,
               detailsDomRoot
             )}
         </>
