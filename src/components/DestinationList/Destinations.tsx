@@ -62,98 +62,98 @@ function Destinations({
 
   return (
     <div className={styles.destinationContentsContainer}>
-      {isLoading ? (
+      {/* {isLoading ? (
         <div className={styles.destinationLoadingContainer}>로딩 중..</div>
-      ) : (
-        <>
-          <section className={styles.destinationsContainer}>
-            {filteredDestinations?.length > 0 ? (
-              <>
-                {slicedDestinations.map(
-                  (destination: specifiedCategoryDestinationsType, index) => (
-                    <div
-                      key={index}
-                      className={styles.destinations}
-                      id={
-                        clickedDestination?.id === destination.id
-                          ? styles.clickedDestination
-                          : styles.restDestination
-                      }
-                      onClick={() => handleDestinationClick(destination)}
-                    >
-                      <div className={styles.destinationTextWrapper}>
-                        <h2 className={styles.destinationTitle}>
-                          {destination?.title}
-                        </h2>
-                        <p className={styles.destinationAddress}>
-                          {destination?.addr1}
-                        </p>
-                        <div className={styles.destinationExtraInfo}>
-                          <span className={styles.destinationCategory}>
-                            {destination?.category_name}
-                          </span>
-                          <div className={styles.iconContainer}>
-                            <div className={styles.likeBox}>
-                              <FaHeart />
-                              <span className={styles.likesCounter}>
-                                {destination?.destination_likes_count}
-                              </span>
-                            </div>
-                            <div className={styles.commentBox}>
-                              <FaCommentAlt />
-                              <span className={styles.commentCounter}>
-                                {destination?.comment_count}
-                              </span>
-                            </div>
+      ) : ( */}
+      <>
+        <section className={styles.destinationsContainer}>
+          {filteredDestinations?.length > 0 ? (
+            <>
+              {slicedDestinations.map(
+                (destination: specifiedCategoryDestinationsType, index) => (
+                  <div
+                    key={index}
+                    className={styles.destinations}
+                    id={
+                      clickedDestination?.id === destination.id
+                        ? styles.clickedDestination
+                        : styles.restDestination
+                    }
+                    onClick={() => handleDestinationClick(destination)}
+                  >
+                    <div className={styles.destinationTextWrapper}>
+                      <h2 className={styles.destinationTitle}>
+                        {destination?.title}
+                      </h2>
+                      <p className={styles.destinationAddress}>
+                        {destination?.addr1}
+                      </p>
+                      <div className={styles.destinationExtraInfo}>
+                        <span className={styles.destinationCategory}>
+                          {destination?.category_name}
+                        </span>
+                        <div className={styles.iconContainer}>
+                          <div className={styles.likeBox}>
+                            <FaHeart />
+                            <span className={styles.likesCounter}>
+                              {destination?.destination_likes_count}
+                            </span>
+                          </div>
+                          <div className={styles.commentBox}>
+                            <FaCommentAlt />
+                            <span className={styles.commentCounter}>
+                              {destination?.comment_count}
+                            </span>
                           </div>
                         </div>
                       </div>
-
-                      {destination?.image1 && (
-                        <img
-                          className={styles.destinationImage}
-                          src={destination?.image2}
-                          alt={destination.title}
-                        />
-                      )}
                     </div>
-                  )
-                )}
-              </>
-            ) : (
-              <div className={styles.alertContainer}>
-                <CiCircleAlert className={styles.alertIcon} />
-                <p>검색 결과가 없습니다.</p>
-              </div>
-            )}
-          </section>
 
-          {filteredDestinations?.length > 0 && (
-            <Pagination
-              filteredDestinations={filteredDestinations}
-              setSlicedDestinations={setSlicedDestinations}
-            />
+                    {destination?.image1 && (
+                      <img
+                        className={styles.destinationImage}
+                        src={destination?.image2}
+                        alt={destination.title}
+                      />
+                    )}
+                  </div>
+                )
+              )}
+            </>
+          ) : (
+            <div className={styles.alertContainer}>
+              <CiCircleAlert className={styles.alertIcon} />
+              <p>검색 결과가 없습니다.</p>
+            </div>
           )}
-          {isOpen &&
-            detailsDomRoot !== null &&
-            createPortal(
-              <>
-                <section className={styles.detailsContainer}>
-                  <Outlet />
-                </section>
-                <div className={styles.detailsButtonContainer}>
-                  <button
-                    className={styles.detailsCloseButton}
-                    onClick={closeDetailPage}
-                  >
-                    <TfiClose />
-                  </button>
-                </div>
-              </>,
-              detailsDomRoot
-            )}
-        </>
-      )}
+        </section>
+
+        {filteredDestinations?.length > 0 && (
+          <Pagination
+            filteredDestinations={filteredDestinations}
+            setSlicedDestinations={setSlicedDestinations}
+          />
+        )}
+        {isOpen &&
+          detailsDomRoot !== null &&
+          createPortal(
+            <>
+              <section className={styles.detailsContainer}>
+                <Outlet />
+              </section>
+              <div className={styles.detailsButtonContainer}>
+                <button
+                  className={styles.detailsCloseButton}
+                  onClick={closeDetailPage}
+                >
+                  <TfiClose />
+                </button>
+              </div>
+            </>,
+            detailsDomRoot
+          )}
+      </>
+      {/* )} */}
       {mapDomRoot !== null &&
         createPortal(
           <Map

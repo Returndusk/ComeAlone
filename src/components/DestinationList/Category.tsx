@@ -106,14 +106,14 @@ function Category({
     if (selectedCategory.length === categoryList?.length) {
       const newSelectedCategory = [targetCategoryId];
       setSelectedCategory(newSelectedCategory);
-      setIsLoading(false);
+
       return;
     }
 
     selectedCategory.includes(targetCategoryId)
       ? removeCategoryFromSelectedCategoryList(targetCategoryId)
       : addCategoryToSelectedCategoryList(targetCategoryId);
-    setIsLoading(false);
+
     return;
   };
 
@@ -121,14 +121,14 @@ function Category({
     setIsLoading(true);
     setIsSelectedAll(true);
     setSelectedCategory([...CATEGORIES_ID_LIST]);
-    setIsLoading(false);
+
     return;
   };
 
   useEffect(() => {
     const debouncer = setTimeout(() => {
-      return DATA_LOADING_MESSAGE.CATEGORY_LOADING;
-    }, 400);
+      setIsLoading(false);
+    }, 200);
 
     return () => {
       clearTimeout(debouncer);
@@ -172,56 +172,48 @@ function Category({
   useEffect(() => {
     setIsLoading(true);
     getCategorizedSearchingData();
-    setIsLoading(false);
   }, [getCategorizedSearchingData, setIsLoading, isUserSearched]);
 
   return (
     <>
-      {isLoading && (
-        <div className={styles.categoryWrapper}>
-          <div className={styles.categoryContainer}></div>
-        </div>
-      )}
-      {!isLoading && (
-        <section className={styles.categoryWrapper}>
-          <div className={styles.categoryContainer}>
+      <section className={styles.categoryWrapper}>
+        <div className={styles.categoryContainer}>
+          <button
+            onClick={handleAllClick}
+            id={
+              isSelectedAll
+                ? styles.activeSelectedAllButton
+                : styles.selectedAllButton
+            }
+            disabled={isLoading}
+          >
+            전체
+          </button>
+
+          {CATEGORIES_ID_LIST?.map((categoryId, index) => (
             <button
-              onClick={handleAllClick}
+              key={index}
+              value={categoryId}
+              onClick={handleCategoryClick}
+              disabled={isLoading}
+              className={
+                selectedCategory?.includes(categoryId)
+                  ? styles.activeSelectedButton
+                  : styles.selectedButton
+              }
               id={
                 isSelectedAll
-                  ? styles.activeSelectedAllButton
-                  : styles.selectedAllButton
+                  ? styles[`Category-${categoryId}`]
+                  : selectedCategory?.includes(categoryId)
+                  ? styles[`activeCategory-${categoryId}`]
+                  : styles[`Category-${categoryId}`]
               }
-              disabled={isLoading}
             >
-              전체
+              {CATEGORIES_ID.get(categoryId)}
             </button>
-
-            {CATEGORIES_ID_LIST?.map((categoryId, index) => (
-              <button
-                key={index}
-                value={categoryId}
-                onClick={handleCategoryClick}
-                disabled={isLoading}
-                className={
-                  selectedCategory?.includes(categoryId)
-                    ? styles.activeSelectedButton
-                    : styles.selectedButton
-                }
-                id={
-                  isSelectedAll
-                    ? styles[`Category-${categoryId}`]
-                    : selectedCategory?.includes(categoryId)
-                    ? styles[`activeCategory-${categoryId}`]
-                    : styles[`Category-${categoryId}`]
-                }
-              >
-                {CATEGORIES_ID.get(categoryId)}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
+          ))}
+        </div>
+      </section>
       <Destinations
         filteredDestinations={filteredDestinations}
         isLoading={isLoading}
