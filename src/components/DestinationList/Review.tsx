@@ -17,6 +17,7 @@ import { FaPen, FaTrashAlt } from 'react-icons/fa';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
+  NulllishCommentMessage: '내용을 입력해주세요.',
   showTitle: false
 };
 
@@ -38,6 +39,7 @@ function Review() {
 
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
+  const [isShowNullishAlert, setIsShowNullishAlert] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [targetComment, setTargetComment] = useState<number | null>(null);
   const { contentid } = useParams();
@@ -104,7 +106,7 @@ function Review() {
     }
     const userReview = e.target.review.value;
     if (isNullishReviewInput(userReview)) {
-      alert(`내용을 입력해주세요.`);
+      setIsShowNullishAlert(true);
       return;
     }
 
@@ -158,18 +160,16 @@ function Review() {
     setIsConfirmDelete(() => true);
   };
 
+  const handleOnNullishCommentConfirm = () => {
+    setIsShowNullishAlert(false);
+    return;
+  };
+
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
     navigate('/login', { state: { prevUrl: url } });
     return;
   };
-
-  /*
-   * 리뷰 객체
-  id: number;
-  commenter_id: string;
-  comment: string;
-  created_at: string; */
 
   return (
     <>
@@ -289,6 +289,13 @@ function Review() {
         <AlertModal
           message={ALERT_PROPS.message}
           onConfirm={handleOnLoginConfirm}
+          showTitle={ALERT_PROPS.showTitle}
+        />
+      )}
+      {isShowNullishAlert && (
+        <AlertModal
+          message={ALERT_PROPS.NulllishCommentMessage}
+          onConfirm={handleOnNullishCommentConfirm}
           showTitle={ALERT_PROPS.showTitle}
         />
       )}
