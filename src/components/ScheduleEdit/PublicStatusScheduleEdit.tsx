@@ -2,9 +2,10 @@ import React, { Dispatch, SetStateAction } from 'react';
 import styles from './PublicStatusScheduleEdit.module.scss';
 import { alpha, styled } from '@mui/material/styles';
 import { FormGroup, FormControlLabel, Switch } from '@mui/material';
-
-const IS_SCHEDULE_PUBLIC = 'PUBLIC';
-const IS_SCHEDULE_PRIVATE = 'PRIVATE';
+import {
+  IS_SCHEDULE_PUBLIC,
+  IS_SCHEDULE_PRIVATE
+} from '../../constants/Schedule';
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   '& .MuiSwitch-switchBase.Mui-checked': {
