@@ -70,6 +70,11 @@ function Destinations({
                     <div
                       key={index}
                       className={styles.destinations}
+                      id={
+                        clickedDestination?.id === destination.id
+                          ? styles.clickedDestination
+                          : styles.restDestination
+                      }
                       onClick={() => handleDestinationClick(destination)}
                     >
                       <div className={styles.destinationTextWrapper}>

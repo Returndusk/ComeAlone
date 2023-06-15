@@ -28,6 +28,10 @@
 
   box-sizing: border-box;
 
+  #clickedDestination {
+    background-color: #f8f8f8;
+  }
+
   .destinations {
     display: flex;
     padding: 20px;
