@@ -17,23 +17,6 @@ function CreateScheduleModal(props: {
   closeModal: () => void;
   onAdd: (schedule: MyScheduleCardType) => void;
 }) {
-  // const modalRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   function handleClickBackground(e: React.MouseEvent<HTMLElement>) {
-  //     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-  //       props.closeModal();
-  //     }
-  //   }
-
-  //   document.addEventListener('mousedown', handleClickBackground);
-
-  //   return () => {
-  //     // cleanup - 컴포넌트 unmount 시 리스너 제거
-  //     document.removeEventListener('mousedown', handleClickBackground);
-  //   };
-  // }, []);
-
   const [date, setDate] = useState([
     {
       startDate: new Date(),
@@ -47,9 +30,15 @@ function CreateScheduleModal(props: {
 
   const [showFailAlert, setShowFailAlert] = useState<boolean>(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const [isValidAlert, setIsValidAlert] = useState<boolean>(false);
 
   function handleDateRange(ranges: RangeKeyDict) {
     const { startDate, endDate } = ranges.selection;
+
+    if (differenceInDays(Number(endDate), Number(startDate)) > 30) {
+      setIsValidAlert(true);
+      return;
+    }
 
     setDate([
       {
@@ -149,7 +138,7 @@ function CreateScheduleModal(props: {
               <TextField
                 id='title'
                 variant='outlined'
-                label='일정 제목'
+                label='일정 제목(최대 30자)'
                 name='title'
                 value={formData.title}
                 onChange={handleFormData}
@@ -171,7 +160,7 @@ function CreateScheduleModal(props: {
               <TextField
                 id='summary'
                 variant='outlined'
-                label='일정 소개'
+                label='일정 소개(최대 300자)'
                 name='summary'
                 value={formData.summary}
                 rows={3}
@@ -231,10 +220,19 @@ function CreateScheduleModal(props: {
       )}
       {showSuccessAlert && (
         <AlertModal
-          message='일정이 추가되었습니다!'
+          message='새로운 일정이 추가되었습니다!'
           onConfirm={() => {
             setShowSuccessAlert(false);
             props.closeModal();
+          }}
+          showCancelButton={false}
+        />
+      )}
+      {isValidAlert && (
+        <AlertModal
+          message='일정은 최대 30일까지 등록할 수 있습니다.'
+          onConfirm={() => {
+            setIsValidAlert(false);
           }}
           showCancelButton={false}
         />
