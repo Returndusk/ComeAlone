@@ -3,7 +3,7 @@ import styles from './UsersReview.module.scss';
 import { DestinationsReviewType } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   getUsersReview
@@ -91,7 +91,8 @@ function UsersReview() {
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    navigate('/login');
+    const url = useLocation().pathname;
+    navigate('/login', { state: { prevUrl: url } });
   };
 
   const handleOnDeleteConfirm = () => {
@@ -106,20 +107,14 @@ function UsersReview() {
     return;
   };
 
-  /*
-   * 리뷰 객체
-  id: number;
-  commenter_id: string;
-  comment: string;
-  created_at: string; 
-  */
-
   return (
     <div>
       <div className={styles.usersReviewContainer}>
-        <span
-          className={styles.usersReviewCounter}
-        >{`전체ㆍ${usersReview?.length}`}</span>
+        {usersReview && (
+          <span
+            className={styles.usersReviewCounter}
+          >{`전체ㆍ${usersReview?.length}`}</span>
+        )}
         {Array.isArray(usersReview) && usersReview?.length > 0 && (
           <>
             {usersReview?.map((review, index) => {
@@ -133,12 +128,14 @@ function UsersReview() {
                         alt={review.destination.title}
                       />
                     )}
+                    <div className={styles.reviewHandleContainer}>
+                      <NavLink
+                        to={`/destination/list/${review.destination.id}`}
+                        className={styles.usersReviewTitle}
+                      >
+                        {review.destination.title}
+                      </NavLink>
 
-                    <p className={styles.usersReviewTitle}>
-                      {review.destination.title}
-                    </p>
-
-                    <div className={styles.reviewHandleButtonContainer}>
                       <button
                         className={styles.deleteButton}
                         onClick={() => handleDeleteOnClick(review.comment_id)}

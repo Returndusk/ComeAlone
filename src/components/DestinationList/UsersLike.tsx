@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './UsersLike.module.scss';
 import { postPreferredDestinationsByDestinationId } from '../../apis/destinationList';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
 import AlertModal from '../common/Alert/AlertModal';
@@ -80,7 +80,8 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    navigate('/login');
+    const url = useLocation().pathname;
+    navigate('/login', { state: { prevUrl: url } });
   };
 
   return (

@@ -20,7 +20,7 @@ function Destinations({
 }: DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
     specifiedCategoryDestinationsType[] | []
-  >(filteredDestinations ?? []);
+  >(filteredDestinations);
   const [clickedDestination, setClickedDestination] =
     useState<specifiedCategoryDestinationsType | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);

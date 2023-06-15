@@ -73,6 +73,11 @@ function Pagination({
     setPage(() => pageNumber);
   }, [pageNumber]);
 
+  // 중간에 페이지가 바뀌면 초기화
+  useEffect(() => {
+    setPage(() => PAGES.START_INDEX_OF_PAGE);
+  }, [totalPages]);
+
   const handlePageQueryChange = (targetPageNumber: number) => {
     setPage(() => targetPageNumber);
     if (searchQueryParam !== null) {
