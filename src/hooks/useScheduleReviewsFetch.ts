@@ -18,7 +18,10 @@ function useScheduleReviewsFetch(id: string) {
     getScheduleReviews(scheduleId.current);
   }, [getScheduleReviews, scheduleId]);
 
-  return [fetchedScheduleReviews];
+  return [fetchedScheduleReviews, getScheduleReviews] as [
+    ScheduleReviewType[],
+    (scheduleId: string) => void
+  ];
 }
 
 export default useScheduleReviewsFetch;

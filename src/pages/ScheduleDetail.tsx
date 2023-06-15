@@ -34,14 +34,11 @@ function ScheduleDetail() {
     MapWithWaypointsPropsType[]
   >([]);
   const [doesUserLike, setDoesUserLike] = useState<boolean>(false);
-  const [scheduleReviews, setScheduleReviews] = useState<ScheduleReviewType[]>(
-    []
-  );
-  const scheduleFetched = useRef<ScheduleFetchedType>();
   const userLikesCount = useRef<number>(0);
 
   const [fetchedScheduleDetail] = useScheduleDetailFetch(scheduleId);
-  const [fetchedScheduleReviews] = useScheduleReviewsFetch(scheduleId);
+  const [fetchedScheduleReviews, getScheduleReviews] =
+    useScheduleReviewsFetch(scheduleId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,9 +50,7 @@ function ScheduleDetail() {
         return;
       }
 
-      scheduleFetched.current = fetchedScheduleDetail as ScheduleFetchedType;
       userLikesCount.current = fetchedScheduleDetail?.likesCount as number;
-      setScheduleReviews(fetchedScheduleReviews);
       setCheckedDestinations(
         fetchedScheduleDetail?.destinations.flat() as MapWithWaypointsPropsType[]
       );
@@ -92,9 +87,7 @@ function ScheduleDetail() {
     async (scheduleId: string, newReview: string) => {
       await addScheduleReviewById(scheduleId, newReview);
 
-      const [fetchedReviews] = useScheduleReviewsFetch(scheduleId);
-
-      setScheduleReviews(fetchedReviews);
+      getScheduleReviews(scheduleId);
     },
     []
   );
@@ -102,18 +95,16 @@ function ScheduleDetail() {
   const updateScheduleReview = useCallback(
     async (reviewId: number, updateReview: string) => {
       await updateScheduleReviewById(reviewId, updateReview);
-      const [fetchedReviews] = useScheduleReviewsFetch(scheduleId);
 
-      setScheduleReviews(fetchedReviews);
+      getScheduleReviews(scheduleId);
     },
     []
   );
 
   const deleteScheduleReview = useCallback(async (reviewId: number) => {
     await deleteScheduleReviewById(reviewId);
-    const [fetchedReviews] = useScheduleReviewsFetch(scheduleId);
 
-    setScheduleReviews(fetchedReviews);
+    getScheduleReviews(scheduleId);
   }, []);
 
   const handleReviewSubmit = (input: string) => {
@@ -176,8 +167,8 @@ function ScheduleDetail() {
       />
       <DestinationsMap checkedDestinations={checkedDestinations} />
       <ReviewsSchedule
-        scheduleReviews={scheduleReviews}
-        reviewsCount={scheduleReviews.length}
+        scheduleReviews={fetchedScheduleReviews as ScheduleReviewType[]}
+        reviewsCount={fetchedScheduleReviews.length}
         onReviewUpdate={updateScheduleReview}
         onReviewDelete={deleteScheduleReview}
       />
