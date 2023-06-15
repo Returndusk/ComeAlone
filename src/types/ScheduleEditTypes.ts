@@ -9,6 +9,7 @@ export type ScheduleEditFetchedType = Pick<
   | 'endDate'
   | 'duration'
   | 'createdAt'
+  | 'updatedAt'
   | 'destinations'
   | 'image'
   | 'status'
@@ -29,6 +30,7 @@ export type ScheduleEditInfoType = Pick<IScheduleDetail, 'createdAt'> & {
   updatedTitle: string;
   updatedSummary: string;
   createdAt: Date;
+  updatedAt: Date;
   onTitleUpdate: (title: string) => void;
   onSummaryUpdate: (title: string) => void;
 };
