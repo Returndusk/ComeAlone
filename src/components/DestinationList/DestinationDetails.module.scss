@@ -1,14 +1,17 @@
 .destinationDetailsContainer {
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: absolute;
   background-color: #fff;
   border-left: 1px solid #ccc;
-  // border-radius: 20px;
   overflow-x: hidden;
   overflow-y: auto;
 
-  width: 400px; // 스크롤 간격(25px 고려)
+  top: 0;
+  left: 400px;
+  z-index: 10;
+
+  width: 400px;
   height: 100%;
   box-sizing: border-box;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
@@ -70,7 +73,6 @@
   }
 
   .categoryNameTag {
-    //추후 id별로 수정
     position: absolute;
     top: 8px;
     left: 7px;
