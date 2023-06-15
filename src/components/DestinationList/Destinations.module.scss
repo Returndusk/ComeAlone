@@ -142,35 +142,62 @@
 .detailsContainer {
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 400px;
+  z-index: 10;
+  width: 400px;
+  height: 100%;
 
-  .detailsButtonContainer {
-    position: absolute;
-    top: 5px;
-    right: -42px;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    border-radius: 0px 3px 3px 0px;
-    border: 1px solid #bbb;
-    border-left: 1px solid transparent;
-    box-sizing: border-box;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+  border-left: 1px solid #ccc;
+  background-color: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
 
-    .detailsCloseButton {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
-      color: #777;
-      opacity: 0.7;
-      background-color: transparent;
-      padding: 0px;
-      font-weight: 600;
-      font-size: 25px;
-      border: none;
-      cursor: pointer;
+  &::-webkit-scrollbar {
+    width: 5px;
+    background: #ffffff;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3.5px;
+    background-color: #ced4da;
+
+    &:hover {
+      background-color: #adb5bd;
     }
+  }
+  &::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+}
+
+.detailsButtonContainer {
+  position: absolute;
+  top: 5px;
+  left: 801px;
+  z-index: 10;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0px 3px 3px 0px;
+  border: 1px solid #bbb;
+  border-left: 1px solid transparent;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+
+  .detailsCloseButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    color: #777;
+    opacity: 0.7;
+    background-color: transparent;
+    padding: 0px;
+    font-weight: 600;
+    font-size: 25px;
+    border: none;
+    cursor: pointer;
   }
 }
