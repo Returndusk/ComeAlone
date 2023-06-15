@@ -3,6 +3,7 @@
 
   .scheduleListImage {
     width: 100%;
+    min-width: 1280px;
     height: 400px;
     object-fit: cover;
   }
@@ -34,45 +35,47 @@
   margin: 20px auto;
   text-align: center;
 
-  .scheduleCardContainer {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 20px;
-    gap: 20px;
-
-    .noSchedule {
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%, 50%);
-      text-align: center;
-      font-size: 40px;
-
-      div {
-        margin-top: 20px;
-        font-size: 30px;
-      }
-    }
-
-    .scheduleAdd {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 334px;
-      border-radius: 10px;
-      background-color: lightgray;
-      font-size: 40px;
-
-      &:hover {
-        cursor: pointer;
-        transform: translateY(-10px);
-        transition: 0.5s ease-in-out;
-      }
-    }
-  }
-
   .scheduleFilter {
     margin: 20px;
     text-align: left;
+  }
+}
+
+.scheduleCardContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+  gap: 20px;
+  width: 1280px;
+  margin: auto;
+
+  .noSchedule {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    text-align: center;
+    font-size: 40px;
+
+    div {
+      margin-top: 20px;
+      font-size: 30px;
+    }
+  }
+
+  .scheduleAdd {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 334px;
+    border-radius: 10px;
+    background-color: lightgray;
+    font-size: 40px;
+
+    &:hover {
+      cursor: pointer;
+      transform: translateY(-10px);
+      transition: 0.5s ease-in-out;
+    }
   }
 }
 

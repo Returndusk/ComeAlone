@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './ScheduleCard.module.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ScheduleCardType } from '../../types/ScheduleTypes';
 import { FaHeart, FaRegDotCircle, FaCommentAlt } from 'react-icons/fa';
 import { useAuthState } from '../../contexts/AuthContext';
@@ -20,6 +20,7 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
   const navigate = useNavigate();
+  const location = useLocation().pathname;
 
   const fetchLike = useCallback(async () => {
     try {
@@ -70,7 +71,7 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
 
   function handleLoginConfirm() {
     setShowLoginAlertModal(false);
-    navigate(ROUTER.LOGIN);
+    navigate(ROUTER.LOGIN, { state: { prevUrl: location } });
   }
 
   function handleLoginCancel() {
