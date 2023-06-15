@@ -30,6 +30,7 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const { contentid } = useParams();
   const navigate = useNavigate();
+  const url = useLocation().pathname;
 
   const getUsersPreferData = useCallback(() => {
     const usersId = authState?.user?.id;
@@ -80,7 +81,6 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    const url = useLocation().pathname;
     navigate('/login', { state: { prevUrl: url } });
   };
 
