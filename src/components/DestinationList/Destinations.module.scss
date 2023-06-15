@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  // height: calc(100% - 194px); //추후 변경 가능
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -25,13 +24,9 @@
 
 .destinationsContainer {
   display: grid;
-  // grid-template-columns: 1fr;
-  // grid-template-rows: repeat(10, 200px);
-  width: 100%; //search bar, category container와 동일
+  width: 100%;
 
   box-sizing: border-box;
-  // max-height: 550px; //추후 삭제
-  // min-height: 550px; 상의 후 결정
 
   .destinations {
     display: flex;

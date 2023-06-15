@@ -28,7 +28,6 @@ function Destinations({
     null
   );
   const [mapDomRoot, setMapDomRoot] = useState<HTMLElement | null>(null);
-  const [imageError, setImageError] = useState<boolean>(false);
   const { search } = useLocation();
   const navigate = useNavigate();
   const { contentid } = useParams();
@@ -55,10 +54,6 @@ function Destinations({
     setIsOpen(() => false);
     setClickedDestination(() => null);
     navigate(`/destination/list${search}`);
-  };
-
-  const handleImageError = () => {
-    setImageError(true);
   };
 
   return (
@@ -110,7 +105,6 @@ function Destinations({
                           className={styles.destinationImage}
                           src={destination?.image2}
                           alt={destination.title}
-                          onError={handleImageError}
                         />
                       )}
                     </div>

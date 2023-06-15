@@ -58,12 +58,6 @@ function Review() {
     getReviewList();
   }, [getReviewList]);
 
-  // useEffect(() => {
-  //   if (!isEditing) {
-  //     getReviewList();
-  //   }
-  // }, [isEditing]);
-
   //리뷰 등록일자 가공 매서드
   const changeCreatedAtIntoDate = (date: string) => {
     const reviewDate = new Date(date);

@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './DestinationDetails.module.scss';
 import Review from './Review';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -23,7 +17,6 @@ import { useAuthState } from '../../contexts/AuthContext';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaCommentAlt, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 import { createPortal } from 'react-dom';
-// import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -48,12 +41,6 @@ function DestinationDetails() {
   const url = useLocation().pathname;
   const scrollRef = useRef<HTMLOptionElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   if (detailsRef.current && contentid) {
-  //     detailsRef.current.scrollTop = 0;
-  //   }
-  // }, [detailsRef.current, contentid]);
 
   const handleReviewIconClick = () => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -148,12 +135,7 @@ function DestinationDetails() {
     <>
       {isLoading && (
         <div className={styles.destinationDetailsContainer}>
-          <div className={styles.LoadingContainer}>
-            {/* <AiOutlineLoading3Quarters
-              className={styles.destinationDetailsLoadingIcon}
-            />
-            <span>로딩 중 입니다..</span> */}
-          </div>
+          <div className={styles.LoadingContainer}></div>
         </div>
       )}
       {destinationDetails !== null && !isLoading && (
