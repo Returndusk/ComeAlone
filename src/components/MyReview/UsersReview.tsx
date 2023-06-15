@@ -107,14 +107,6 @@ function UsersReview() {
     return;
   };
 
-  /*
-   * 리뷰 객체
-  id: number;
-  commenter_id: string;
-  comment: string;
-  created_at: string; 
-  */
-
   return (
     <div>
       <div className={styles.usersReviewContainer}>
@@ -136,15 +128,14 @@ function UsersReview() {
                         alt={review.destination.title}
                       />
                     )}
+                    <div className={styles.reviewHandleContainer}>
+                      <NavLink
+                        to={`/destination/list/${review.destination.id}`}
+                        className={styles.usersReviewTitle}
+                      >
+                        {review.destination.title}
+                      </NavLink>
 
-                    <NavLink
-                      to={`/destination/list/${review.destination.id}`}
-                      className={styles.usersReviewTitle}
-                    >
-                      {review.destination.title}
-                    </NavLink>
-
-                    <div className={styles.reviewHandleButtonContainer}>
                       <button
                         className={styles.deleteButton}
                         onClick={() => handleDeleteOnClick(review.comment_id)}

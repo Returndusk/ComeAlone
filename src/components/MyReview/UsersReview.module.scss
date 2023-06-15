@@ -65,8 +65,9 @@
         text-decoration: none;
       }
 
-      .reviewHandleButtonContainer {
+      .reviewHandleContainer {
         display: flex;
+        justify-content: space-between;
         align-items: center;
 
         button {
@@ -81,25 +82,8 @@
           font-size: 20px;
           letter-spacing: 3px;
 
-          &.modifyButton {
-            color: #4f94d4;
-            border: 1px solid #4f94d4;
-
-            &:hover {
-              background-color: #4f94d4;
-              opacity: 0.8;
-              color: #fff;
-            }
-          }
-
           &.deleteButton {
-            color: #d63638;
-
-            &:hover {
-              background-color: #d63638;
-              opacity: 0.8;
-              color: #fff;
-            }
+            color: #888;
           }
         }
         button + button {
@@ -121,5 +105,9 @@
     .usersReviewCreatedDate {
       font-size: 15px;
     }
+  }
+
+  .reviewHandleContainer {
+    width: calc(100% - 60px);
   }
 }
