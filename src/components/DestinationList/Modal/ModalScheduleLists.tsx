@@ -12,6 +12,9 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import { MdEventNote } from 'react-icons/md';
+import { CiCircleAlert } from 'react-icons/ci';
+import { createPortal } from 'react-dom';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -20,7 +23,6 @@ async function getMyScheduleLists() {
     `${baseUrl}/users/me/schedules`
   );
   const data = response.data;
-  // console.log(data);
   return data;
 }
 
@@ -35,25 +37,29 @@ export default function ModalScheduleLists() {
   const [selectedCardIdx, setSelectedCardIdx] = useState<number | null>(null);
   const navigate = useNavigate();
 
+  const [scheduleDetailsDomRoot, setScheduleDetailsDomRoot] =
+    useState<HTMLElement | null>(null);
+
   function MoveToMySchedule() {
     navigate('/myschedule/list');
   }
 
-  // console.log('scheduleLists', scheduleLists);
-  // console.log('showScheduleList', showScheduleList);
+  useEffect(() => {
+    setScheduleDetailsDomRoot(() =>
+      document.getElementById('scheduleContainer')
+    );
+  }, []);
 
   useEffect(() => {
     async function getScheduleLists() {
       try {
         const data = await getMyScheduleLists();
-        // console.log(data);
         setScheduleLists(
           data.map((schedule, index) => ({
             schedule,
             index,
             isSelected: selectedCardIdx === index,
             onShowDestinations: handleShowDestinations,
-            // onShowDestinations: onShowDestinations,
             scheduleId: schedule.schedule_id
           }))
         );
@@ -68,8 +74,6 @@ export default function ModalScheduleLists() {
   useEffect(() => {
     sortSchedule(scheduleSort);
   }, [scheduleSort, scheduleLists]);
-
-  // console.log(scheduleLists);
 
   function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
     const sortOption = (e.target as HTMLButtonElement).value;
@@ -108,7 +112,6 @@ export default function ModalScheduleLists() {
   }
 
   function sortSchedule(sortOption: string) {
-    // const scheduleData = [...scheduleLists];
     const scheduleData = scheduleLists.map((item) => item.schedule);
     if (sortOption === 'upcoming') {
       setShowScheduleList(sortUpcoming(scheduleData));
@@ -124,7 +127,6 @@ export default function ModalScheduleLists() {
       setSelectedCardIdx(day);
     }
   }
-  // console.log(selectedCardIdx);
 
   return (
     <div className={styles.scheduleContainer}>
@@ -146,7 +148,6 @@ export default function ModalScheduleLists() {
             sx={{
               '.MuiButtonGroup-grouped:not(:last-of-type)': {
                 borderColor: '#7c9070'
-                // borderRadius: 0
               }
             }}
           >
@@ -159,19 +160,14 @@ export default function ModalScheduleLists() {
               }}
               value='upcoming'
               sx={{
-                // color: '#7c9070',
                 color: scheduleSort === 'upcoming' ? '#ffffff' : '#7c9070',
                 backgroundColor:
                   scheduleSort === 'upcoming' ? '#7c9070' : undefined,
                 fontWeight: '600',
                 fontSize: 'medium',
-                // border: 1,
-                // borderColor: '#7c9070',
                 '&:hover': {
                   color: '#ffffff',
                   backgroundColor: '#7c9070'
-                  // border: 1,
-                  // borderColor: '#7c9070'
                 }
               }}
             >
@@ -186,19 +182,14 @@ export default function ModalScheduleLists() {
               }}
               value='past'
               sx={{
-                // color: '#7c9070',
                 color: scheduleSort === 'past' ? '#ffffff' : '#7c9070',
                 backgroundColor:
                   scheduleSort === 'past' ? '#7c9070' : undefined,
                 fontWeight: '600',
                 fontSize: 'medium',
-                // border: 1,
-                // borderColor: '#7c9070',
                 '&:hover': {
                   color: '#ffffff',
                   backgroundColor: '#7c9070'
-                  // border: 1,
-                  // borderColor: '#7c9070'
                 }
               }}
             >
@@ -226,21 +217,35 @@ export default function ModalScheduleLists() {
             </Button>
           </Stack>
         </Box>
-        {/* 필터 div */}
       </div>
       <div className={styles.scheduleCardContainer}>
-        {showScheduleList.map((scheduleList, index) => (
-          <ModalScheduleCard
-            key={scheduleList.schedule_id}
-            schedule={scheduleList}
-            index={index}
-            isSelected={selectedCardIdx === index}
-            onShowDestinations={handleShowDestinations}
-            // onCloseDestinations={handleCloseDestinations}
-            scheduleId={scheduleList.schedule_id}
-          />
-        ))}
+        {showScheduleList.length === 0 ? (
+          <div className={styles.alertContainerLeft}>
+            <CiCircleAlert className={styles.alertIcon} />
+            <p>일정이 없습니다.</p>
+          </div>
+        ) : (
+          showScheduleList.map((scheduleList, index) => (
+            <ModalScheduleCard
+              key={scheduleList.schedule_id}
+              schedule={scheduleList}
+              index={index}
+              isSelected={selectedCardIdx === index}
+              onShowDestinations={handleShowDestinations}
+              scheduleId={scheduleList.schedule_id}
+            />
+          ))
+        )}
       </div>
+      {selectedCardIdx === null &&
+        scheduleDetailsDomRoot !== null &&
+        createPortal(
+          <div className={styles.alertContainerRight}>
+            <MdEventNote className={styles.alertIcon} />
+            <p>일정을 선택해 주세요!</p>
+          </div>,
+          scheduleDetailsDomRoot
+        )}
     </div>
   );
 }

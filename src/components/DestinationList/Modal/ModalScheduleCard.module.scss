@@ -25,26 +25,6 @@
   margin: 10px;
   position: relative;
 
-  // &::before {
-  //   content: '';
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   border-radius: 10px;
-  //   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
-  //     url(https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg);
-  //   background-size: cover;
-  //   z-index: -1; // Push the image to the back so that it doesn't cover your content
-  //   transition: transform 0.5s ease-in-out; // Add the transition here
-  // }
-
-  // &:hover::before {
-  //   transform: scale(1.05);
-  //   // transition: transform 0.5s;
-  // }
-
   .scheduleContent {
     display: flex;
     flex-direction: row;
@@ -59,8 +39,19 @@
 
   .scheduleTitle {
     margin-bottom: 30px;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
+  }
+
+  .scheduleDate {
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .scheduleDuration {
+    font-size: 15px;
+    // color: rgb(205, 203, 203);
   }
 
   &:hover {
@@ -72,6 +63,8 @@
 }
 
 .daysContainer {
+  position: relative;
+  z-index: 10;
   display: flex;
   // flex-direction: column;
   margin: 10px 0;
@@ -85,11 +78,15 @@
   display: flex;
   // width: auto;
   // flex-grow: 1;
+  // overflow: visible;
+  z-index: 5;
 
   .dayButton {
     // display: flex;
+    position: relative;
     width: 75px;
     // margin: 0 2px;
+    // z-index: 1;
   }
 }
 
@@ -110,41 +107,43 @@
 }
 
 .arrowBtn {
-  // position: absolute;
-  z-index: 5;
-  top: 50%;
-  // transform: translateY(-50%);
+  position: relative;
+  z-index: 10;
+  // top: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 35px;
   height: 35px;
-  border-radius: 50%;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  background-color: #fff;
-  border: 0;
+  // border-radius: 50%;
+  // box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  // background-color: #fff;
+  // border: 0;
   // transition: transform 0.2s;
   cursor: pointer;
 
   &:hover {
-    // transform: scale(1.05) translateY(-50%);
-    transform: scale(1.05);
+    transform: scale(1.15);
     transition: transform 0.2s;
+    color: #ef6d00;
+    border-radius: 50%;
+    // border: 0;
+    background-color: #ffffff;
   }
 
   svg {
-    font-size: 18px;
-    color: #aaa;
-    font-weight: 500;
+    font-size: 33px;
+    color: #ef6d00;
+    z-index: 15;
+    border-radius: 50%;
+    background-color: #ffffff;
   }
 
   &.prevBtn {
-    // left: -20px;
-    margin-right: 7px;
+    margin-left: 10px;
   }
 
   &.nextBtn {
-    // right: 0px;
-    margin-left: 7px;
+    margin-left: -10px;
   }
 }

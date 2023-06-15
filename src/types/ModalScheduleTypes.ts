@@ -26,6 +26,7 @@ export type AddToScheduleModalType = {
   scheduleId: number;
   destinations: string[][];
   destinationIds: number[][];
+
   // onDestinationUpdate: (updatedDestination: string[]) => void;
   // updatedDestinations: string[][];
 };

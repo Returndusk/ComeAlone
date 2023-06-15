@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ModalScheduleLists from './ModalScheduleLists';
 import styles from './OpenModal.module.scss';
 import { TfiClose } from 'react-icons/tfi';
 
 function OpenModal(props: { closeModal: () => void }) {
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // function handleLoadingComplete() {
+  //   setIsLoading(false);
+  // }
+
   // useEffect(() => {
   //   function handleClickBackground(e: any) {
   //     if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -26,6 +32,11 @@ function OpenModal(props: { closeModal: () => void }) {
         </button>
         <div className={styles.scheduleListContainer} id='scheduleContainer'>
           <ModalScheduleLists />
+          {/* {isLoading ? (
+            <p>Loading...</p> // Loading display here, replace with your actual loading component or spinner
+          ) : (
+            <ModalScheduleLists onLoadingComplete={handleLoadingComplete} />
+          )} */}
         </div>
       </div>
     </div>
