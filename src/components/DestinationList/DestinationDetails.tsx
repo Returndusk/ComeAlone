@@ -45,6 +45,7 @@ function DestinationDetails() {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const url = useLocation().pathname;
   const scrollRef = useRef<HTMLOptionElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
 
@@ -131,7 +132,6 @@ function DestinationDetails() {
 
   const handleOnConfirm = () => {
     setIsShowAlert(false);
-    const url = useLocation().pathname;
     navigate('/login', { state: { prevUrl: url } });
   };
 
