@@ -157,11 +157,12 @@ function MyScheduleLists() {
             />
           )}
           {isLoading && <Loading />}
-          {showScheduleList.map(
-            (schedule: MyScheduleCardType, index: number) => (
-              <MyScheduleCard schedule={schedule} key={index} />
-            )
-          )}
+          {!isLoading &&
+            showScheduleList.map(
+              (schedule: MyScheduleCardType, index: number) => (
+                <MyScheduleCard schedule={schedule} key={index} />
+              )
+            )}
         </div>
       </div>
     </>
