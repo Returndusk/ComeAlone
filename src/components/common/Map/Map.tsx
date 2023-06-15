@@ -26,7 +26,7 @@ const { kakao } = window;
 function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
   const [renderedMap, setRenderedMap] = useState<any>(null);
   const [markers, setMarkers] = useState<any>(null);
-  const [isClicked, setIsClicked] = useState<boolean>(false);
+  // const [isClicked, setIsClicked] = useState<boolean>(false);
   const navigate = useNavigate();
   const { search } = useLocation();
 
@@ -79,20 +79,20 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
         renderedMap?.setBounds(bounds, 36, 32, 32, 800);
       }
 
+      //이벤트 등록
       for (let i = 0; i < positions.length; i++) {
         const customOverlay = new kakao.maps.CustomOverlay({
           position: positions[i].latlng,
           content: positions[i].content
         });
 
-        // let isClicked = false;
+        //이벤트
+        let isClicked = false;
         kakao.maps.event.addListener(newMarkers[i], 'click', function () {
-          // isClicked = true;
-          // setIsClicked(true);
-          console.log(isClicked, '클릭');
-
+          if (!isClicked) {
+            isClicked = true;
+          }
           const markersTitle = newMarkers[i].getTitle();
-
           const targetMarker = markersLocations.find(
             (pos) => pos.title === markersTitle
           );
@@ -101,12 +101,12 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
             setClickedDestination(() => targetMarker);
             navigate(`/destination/list/${targetMarker.id}${search}`);
           }
+          isClicked = false;
 
           return;
         });
 
         // kakao.maps.event.addListener(newMarkers[i], 'mouseover', function () {
-        //   console.log(isClicked, '마우스오버 1');
         //   if (isClicked) {
         //     return;
         //   }
@@ -114,17 +114,12 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
         // });
 
         // kakao.maps.event.addListener(newMarkers[i], 'mouseout', function () {
-        //   console.log(isClicked, '마우스아웃');
         //   if (isClicked) {
         //     return;
         //   }
         //   setTimeout(function () {
         //     customOverlay.setMap(null);
-        //     // isClicked = false;
-        //     setIsClicked(false);
-        //   }, 100);
-
-        //   // customOverlay.setMap(null);
+        //   });
         // });
       }
     }
