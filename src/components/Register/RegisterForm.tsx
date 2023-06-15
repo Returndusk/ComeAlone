@@ -233,6 +233,9 @@ function RegisterForm() {
         }
       };
     });
+
+    const error = validateBirthDate({ ...values.birthDate, [name]: value });
+    setErrors((prev) => ({ ...prev, birthDate: error }));
   };
 
   const birthDateOptions = useMemo(() => {
