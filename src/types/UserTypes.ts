@@ -1,4 +1,4 @@
-export type UserData = {
+export interface UserData {
   id: string;
   nickname: string;
   birth_date: string;
@@ -6,37 +6,37 @@ export type UserData = {
   phone_number: string;
   profile_image: string;
   created_at: string;
-};
+}
 
-export type UserDetail = {
+export interface UserDetail {
   email: string;
   nickname: string;
   birthDate: string;
   gender: string;
   phoneNumber: string;
   profileImage: string;
-};
+}
 
-export type RegisterFormData = {
+export interface RegisterFormData {
   id: string;
   password: string;
   nickname: string;
   birth_date: string;
-  gender: '남성' | '여성';
+  gender: string;
   phone_number: string;
-  profile_image: '';
-};
+  profile_image: string;
+}
 
-export type UserEditFormData = {
+export interface UserEditFormData {
   password?: string;
   nickname: string;
   birth_date: string;
   phone_number: string;
   gender: string;
   profile_image: string;
-};
+}
 
-export type LoginFormData = {
+export interface LoginFormData {
   id: string;
   password: string;
-};
+}

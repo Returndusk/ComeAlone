@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import styles from './RegisterForm.module.scss';
-import { RegisterFormErrors, RegisterFormValues } from './RegisterTypes';
 import { RegisterFormData } from '../../types/UserTypes';
 import TextField from '@mui/material/TextField';
 import {
@@ -22,6 +21,30 @@ type AlertOption = {
   message: string;
   onConfirm: null | (() => void);
 };
+
+interface RegisterFormValues {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  nickname: string;
+  birthDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  gender: '남성' | '여성';
+  phoneNumber: string;
+}
+
+interface RegisterFormErrors {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  nickname: string;
+  birthDate: string;
+  gender: string;
+  phoneNumber: string;
+}
 
 function RegisterForm() {
   const navigate = useNavigate();

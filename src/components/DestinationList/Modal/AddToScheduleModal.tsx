@@ -72,7 +72,7 @@ function AddToScheduleModal({
         const response = await tokenInstance.post(
           `${baseUrl}/schedules/${scheduleId}`,
           {
-            destinations: copiedContentIds
+            destinations: updatedContentIds
           }
         );
 
