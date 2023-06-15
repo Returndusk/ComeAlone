@@ -5,6 +5,11 @@
   box-sizing: border-box;
   border-bottom: 1px solid #eee;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .categoryContainer {
