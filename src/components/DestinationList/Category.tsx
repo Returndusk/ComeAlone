@@ -128,7 +128,7 @@ function Category({
   useEffect(() => {
     const debouncer = setTimeout(() => {
       setIsLoading(false);
-    }, 200);
+    }, 150);
 
     return () => {
       clearTimeout(debouncer);
