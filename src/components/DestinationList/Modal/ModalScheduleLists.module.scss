@@ -12,6 +12,9 @@
   // padding-right: 10px;
   // border-right: 2px solid gray;
   background-color: #ffffff;
+  padding-right: 40px;
+  margin-left: -10px;
+  border-right: 5px solid #c1c1c1;
 
   .scheduleListTitle {
     margin: 20px;
@@ -39,24 +42,26 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: rgba(
-        0,
-        0,
-        0,
-        0.1
-      ); // Change this to match scrollbar color
-      border-radius: 20px; // If you want round scrollbars
-      border: 3px solid transparent; // Add this if you want round scrollbars
+      // background-color: rgba(
+      //   0,
+      //   0,
+      //   0,
+      //   0.1
+      // );
+      background-color: #cddac6;
+      border-radius: 20px;
+      border: 3px solid transparent;
     }
 
     &:hover::-webkit-scrollbar-thumb {
-      background-color: rgba(
-        0,
-        0,
-        0,
-        0.4
-      ); // Change this to match scrollbar color on hover
-      // background-color: #7c9070; // Change this to match scrollbar color on hover
+      // background-color: rgba(
+      //   0,
+      //   0,
+      //   0,
+      //   0.4
+      // );
+      background-color: #7c9070;
+      // background-color: #c8d5c1;
     }
   }
 
@@ -82,6 +87,7 @@
 .alertContainerRight {
   display: flex;
   margin-bottom: 70px;
+  margin-left: 70px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
