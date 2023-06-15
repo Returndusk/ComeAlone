@@ -33,19 +33,6 @@
     .MuiFormControl-root {
       width: calc(100% - 100px - 10px);
     }
-
-    button {
-      width: 100px;
-      height: 40px;
-      margin-left: 10px;
-      letter-spacing: 0;
-      border: 1px solid var(--main-color);
-      border-radius: 3px;
-      background-color: #fff;
-      font-weight: 500;
-      color: var(--main-color);
-      cursor: pointer;
-    }
   }
 
   .birthDate {
@@ -79,5 +66,24 @@
     line-height: 1.3;
     color: red;
     padding: 5px 0px;
+  }
+
+  .checkBtn {
+    width: 100px;
+    height: 40px;
+    margin-left: 10px;
+    letter-spacing: 0;
+    border: 1px solid var(--main-color);
+    border-radius: 3px;
+    background-color: #fff;
+    font-weight: 500;
+    color: var(--main-color);
+    cursor: pointer;
+
+    &.disabled {
+      background-color: #bbb;
+      color: #fff;
+      border-color: #bbb;
+    }
   }
 }
