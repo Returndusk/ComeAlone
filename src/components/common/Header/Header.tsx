@@ -81,7 +81,9 @@ function Header() {
                 <RouterLink to={Router.DESTINATION_LIST}>목적지</RouterLink>
               </li>
               <li>
-                <RouterLink to={Router.SCHEDULE_LIST}>여행일정</RouterLink>
+                <RouterLink to={`${Router.SCHEDULE_LIST}/likes`}>
+                  여행일정
+                </RouterLink>
               </li>
             </ul>
           </nav>
