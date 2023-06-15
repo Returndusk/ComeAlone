@@ -9,6 +9,7 @@ import CreateScheduleModal from './Modal/CreateScheduleModal';
 import tokenInstance from '../../apis/tokenInstance';
 import AlertModal from '../common/Alert/AlertModal';
 import images from '../../constants/image';
+import Loading from '../../components/common/Loading/ScheduleListLoading';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -155,9 +156,7 @@ function MyScheduleLists() {
               onAdd={handleAddToBrowser}
             />
           )}
-          {isLoading && (
-            <div className={styles.loading}>일정 불러오는중...</div>
-          )}
+          {isLoading && <Loading />}
           {showScheduleList.map(
             (schedule: MyScheduleCardType, index: number) => (
               <MyScheduleCard schedule={schedule} key={index} />

@@ -5,6 +5,7 @@ import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 import AlertModal from '../common/Alert/AlertModal';
 import { FaExclamationCircle } from 'react-icons/fa';
+import Loading from '../../components/common/Loading/ScheduleListLoading';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -15,10 +16,12 @@ function LikedScheduleLists() {
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [likesPage, setLikesPage] = useState<number>(1);
   const [lastDataOfLikes, setLastDataOfLikes] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElement = useRef<HTMLDivElement>(null);
   const SCHEDULES_PER_PAGE = 6;
 
   const fetchLikesData = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${baseUrl}/schedules/public/order/likes?page=${likesPage}&limit=${SCHEDULES_PER_PAGE}`
@@ -33,6 +36,7 @@ function LikedScheduleLists() {
         setShowAlertModal(true);
       }
     }
+    setIsLoading(false);
   }, [likesPage]);
 
   useEffect(() => {
@@ -84,6 +88,7 @@ function LikedScheduleLists() {
             <div>공개된 일정이 없습니다</div>
           </div>
         )}
+        {isLoading && <Loading />}
       </div>
       <div ref={lastElement} className={styles.lastElement}></div>
     </>
