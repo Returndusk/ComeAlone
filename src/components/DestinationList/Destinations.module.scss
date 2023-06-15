@@ -5,6 +5,11 @@
   overflow-x: hidden;
   overflow-y: auto;
 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   &::-webkit-scrollbar {
     width: 5px;
     background: #ffffff;
