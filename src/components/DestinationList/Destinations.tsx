@@ -34,8 +34,12 @@ function Destinations({
 
   //contentid가 url에 있으면, 상세페이지가 열리도록 하기
   useEffect(() => {
-    contentid && setIsOpen(true);
-  }, [contentid]);
+    if (contentid) {
+      setIsOpen(true);
+      return;
+    }
+    setIsOpen(false);
+  }, [contentid, setIsOpen]);
 
   useEffect(() => {
     setDetailsDomRoot(() => document.getElementById('main'));
