@@ -7,8 +7,7 @@ import ko from 'date-fns/locale/ko';
 import { TfiClose } from 'react-icons/tfi';
 import { DateInfoType, DateSelectionType } from '../../types/ScheduleEditTypes';
 import AlertModal from '../common/Alert/AlertModal';
-
-const SECONDS_OF_DAY = 1000 * 60 * 60 * 24;
+import { SECONDS_OF_DAY } from '../../constants/Schedule';
 
 function getDateInfoFromSelected(
   selectedDate: DateSelectionType
@@ -48,13 +47,19 @@ function DateModalScheduleEdit({
     const prevDuration = dateInfo.duration;
     const currentDuration = getDateInfoFromSelected(selectedDate[0]).duration;
 
+    if (currentDuration > 30) {
+      setShowMaximumDurationAlert(true);
+
+      return;
+    }
+
     if (currentDuration < prevDuration) {
       setShowDiffDurationAlert(true);
-    } else if (currentDuration > 30) {
-      setShowMaximumDurationAlert(true);
-    } else {
-      handleDateInfoUpdateConfirm();
+
+      return;
     }
+
+    handleDateInfoUpdateConfirm();
   };
 
   const handleDateInfoUpdateConfirm = () => {

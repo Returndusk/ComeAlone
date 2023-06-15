@@ -1,0 +1,46 @@
+.container {
+  margin: 30px auto;
+  width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  .image {
+    grid-column: 1 / 4;
+    justify-self: center;
+  }
+
+  .date {
+    grid-column: 1 / 4;
+    margin: 20px 0 0 0;
+    width: 40%;
+  }
+
+  .title {
+    grid-column: 1 / 4;
+    width: 60%;
+  }
+
+  .duration {
+    grid-column: 1 / 4;
+    width: 40%;
+  }
+
+  .writer {
+    grid-column: 1 / 4;
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0 0 0;
+
+    .avatar {
+      margin: 5px 10px 0 0;
+    }
+
+    .nickname {
+      width: 10%;
+    }
+  }
+
+  .summary {
+    grid-column: 1 / 4;
+  }
+}

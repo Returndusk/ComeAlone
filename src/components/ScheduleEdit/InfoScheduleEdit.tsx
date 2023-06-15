@@ -7,6 +7,7 @@ function InfoScheduleEdit({
   updatedTitle,
   updatedSummary,
   createdAt,
+  updatedAt,
   onTitleUpdate,
   onSummaryUpdate
 }: ScheduleEditInfoType) {
@@ -20,7 +21,10 @@ function InfoScheduleEdit({
 
   return (
     <div className={styles.ScheduleInfoContainer}>
-      <div className={styles.createdAt}>{formatDate(createdAt)} 작성</div>
+      <div className={styles.date}>
+        <span>{formatDate(createdAt)} 작성</span>
+        <span>{formatDate(updatedAt)} 수정</span>
+      </div>
       <TextField
         className={styles.title}
         sx={{

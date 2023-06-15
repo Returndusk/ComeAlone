@@ -26,6 +26,7 @@ import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
 import { AxiosError } from 'axios';
 import { useAuthState } from '../contexts/AuthContext';
+import ScheduleDetailLoading from '../components/common/Loading/ScheduleDetailLoading';
 
 function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
   return destinationList.map((destOfDay: MapWithWaypointsPropsType[]) =>
@@ -65,6 +66,7 @@ function ScheduleEdit() {
   const updatedTitle = useRef<string>('');
   const updatedSummary = useRef<string>('');
   const createdAt = useRef<Date>(new Date());
+  const updatedAt = useRef<Date>(new Date());
 
   const getScheduleDetail = useCallback(
     async (scheduleId: string) => {
@@ -80,6 +82,7 @@ function ScheduleEdit() {
           endDate: new Date(response?.data.end_date),
           image: response?.data.image,
           createdAt: new Date(response?.data.created_at.split('T')[0]),
+          updatedAt: new Date(response?.data.updated_at.split('T')[0]),
           status: response?.data.status,
           destinations: response?.data.destinationMaps
         };
@@ -125,6 +128,7 @@ function ScheduleEdit() {
       updatedTitle.current = fetchedData.title;
       updatedSummary.current = fetchedData.summary;
       createdAt.current = fetchedData.createdAt;
+      updatedAt.current = fetchedData.updatedAt;
       setUpdatedStatus(fetchedData.status);
       setUpdatedDestinationList(fetchedData.destinations);
       setIsLoading(false);
@@ -203,7 +207,7 @@ function ScheduleEdit() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <ScheduleDetailLoading />;
   }
 
   return (
@@ -224,6 +228,7 @@ function ScheduleEdit() {
         updatedTitle={updatedTitle.current}
         updatedSummary={updatedSummary.current}
         createdAt={createdAt.current}
+        updatedAt={updatedAt.current}
         onTitleUpdate={handleTitleUpdate}
         onSummaryUpdate={handleSummaryUpdate}
       />
