@@ -162,7 +162,10 @@ function DestinationDetails() {
                   alt={destinationDetails.title}
                 />
               )}
-              <span className={styles.categoryNameTag}>
+              <span
+                className={styles.categoryNameTag}
+                id={styles[`Category-${destinationDetails?.category_id}`]}
+              >
                 {changeCategoryIdIntoName(destinationDetails?.category_id)}
               </span>
             </div>
