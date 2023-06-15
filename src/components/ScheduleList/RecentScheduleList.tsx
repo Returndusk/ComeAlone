@@ -77,18 +77,18 @@ function RecentScheduleLists() {
         />
       )}
       <div className={styles.scheduleCardContainer}>
-        {recentScheduleList.length ? (
-          recentScheduleList.map(
-            (schedule: ScheduleCardType, index: number) => (
-              <ScheduleCard schedule={schedule} key={index} />
+        {recentScheduleList.length
+          ? recentScheduleList.map(
+              (schedule: ScheduleCardType, index: number) => (
+                <ScheduleCard schedule={schedule} key={index} />
+              )
             )
-          )
-        ) : (
-          <div className={styles.noSchedule}>
-            <FaExclamationCircle />
-            <div>공개된 일정이 없습니다</div>
-          </div>
-        )}
+          : !isLoading && (
+              <div className={styles.noSchedule}>
+                <FaExclamationCircle />
+                <div>공개된 일정이 없습니다</div>
+              </div>
+            )}
         {isLoading && <Loading />}
       </div>
       <div ref={lastElement} className={styles.lastElement}></div>

@@ -50,16 +50,18 @@ function LikedScheduleLists() {
         />
       )}
       <div className={styles.scheduleCardContainer}>
-        {showScheduleList.length ? (
-          showScheduleList.map((schedule: ScheduleCardType, index: number) => (
-            <ScheduleCard schedule={schedule} key={index} />
-          ))
-        ) : (
-          <div className={styles.noSchedule}>
-            <FaExclamationCircle />
-            <div>좋아요 한 일정이 없습니다</div>
-          </div>
-        )}
+        {showScheduleList.length
+          ? showScheduleList.map(
+              (schedule: ScheduleCardType, index: number) => (
+                <ScheduleCard schedule={schedule} key={index} />
+              )
+            )
+          : !isLoading && (
+              <div className={styles.noSchedule}>
+                <FaExclamationCircle />
+                <div>좋아요 한 일정이 없습니다</div>
+              </div>
+            )}
         {isLoading && <Loading />}
       </div>
       <div className={styles.lastElement}></div>
