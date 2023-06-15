@@ -72,11 +72,6 @@ export interface DestinationsPreferenceType {
   user: User;
 }
 
-export type MapPropsType = Pick<
-  specifiedCategoryDestinationsType,
-  'title' | 'mapx' | 'mapy'
->;
-
 export type MapWithWaypointsPropsType = Pick<
   DestinationsType,
   'id' | 'title' | 'mapx' | 'mapy'
