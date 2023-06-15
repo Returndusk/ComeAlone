@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   modifyReviewByCommentId
-} from '../../apis/destinationList';
+} from '../../apis/destinationListAPI';
 import { TextField } from '@mui/material';
 
 const ALERT_PROPS = {

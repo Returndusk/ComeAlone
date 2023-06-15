@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   getAllCategoryList,
   getDestinationDetailsByDestinationId
-} from '../../apis/destinationList';
+} from '../../apis/destinationListAPI';
 import AlertModal from '../common/Alert/AlertModal';
 import {
   CategoryListType,

@@ -10,7 +10,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   getReviewByDestinationId,
   postReviewByDestinationId
-} from '../../apis/destinationList';
+} from '../../apis/destinationListAPI';
 import { Avatar, TextField } from '@mui/material';
 import ReviewManagement from './ReviewManagement';
 import { FaPen, FaTrashAlt } from 'react-icons/fa';

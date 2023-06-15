@@ -8,7 +8,7 @@ import Destinations from './Destinations';
 import {
   getAllCategoryList,
   getDestinationListByTitleAndCategoryId
-} from '../../apis/destinationList';
+} from '../../apis/destinationListAPI';
 import styles from './Category.module.scss';
 
 type CategoryPropsTypes = {

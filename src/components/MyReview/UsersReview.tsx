@@ -7,7 +7,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   getUsersReview
-} from '../../apis/destinationList';
+} from '../../apis/destinationListAPI';
 import { FaTrashAlt } from 'react-icons/fa';
 import { CiCircleAlert } from 'react-icons/ci';
 
