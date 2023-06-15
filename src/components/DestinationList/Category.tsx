@@ -126,13 +126,15 @@ function Category({
   };
 
   useEffect(() => {
-    const debouncer = setTimeout(() => {
-      setIsLoading(false);
-    }, 150);
+    if (isLoading) {
+      const debouncer = setTimeout(() => {
+        setIsLoading(false);
+      }, 150);
 
-    return () => {
-      clearTimeout(debouncer);
-    };
+      return () => {
+        clearTimeout(debouncer);
+      };
+    }
   }, [isLoading]);
 
   //필터링 로직(유저 검색 O/X 분기)
