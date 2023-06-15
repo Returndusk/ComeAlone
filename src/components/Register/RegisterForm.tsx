@@ -11,7 +11,7 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
-import { checkNicknameDuplicate, registerUser } from '../../apis/UserAPI';
+import { checkEmailDuplicate, registerUser } from '../../apis/UserAPI';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
 import AlertModal from '../common/Alert/AlertModal';
@@ -83,9 +83,9 @@ function RegisterForm() {
   const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
   const [values, setValues] = useState<RegisterFormValues>(initValues);
   const [errors, setErrors] = useState<RegisterFormErrors>(initErrors);
-  const [nicknameDuplicate, setNicknameDuplicate] = useState({
+  const [emailDuplicate, setEmailDuplicate] = useState({
     isPass: false,
-    nickname: ''
+    email: ''
   });
 
   const checkEmptyInputFields = (
@@ -210,12 +210,12 @@ function RegisterForm() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target as {
-      value: string;
-      name: keyof typeof validators;
-    };
+    const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
-    const error = validators[name](value);
+
+    //유효성 검사
+    if (name === 'gender') return;
+    const error = validators[name as keyof typeof validators](value);
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
@@ -264,27 +264,31 @@ function RegisterForm() {
     };
   }, []);
 
-  const handleCheckNickname = async () => {
-    const nickname = values.nickname;
-    if (errors.nickname) return;
-    if (!nickname) {
+  const handleCheckEmail = async () => {
+    const email = values.email;
+    //이미 에러메시지가 출력되어있다면 중지
+    if (errors.email) return;
+    //빈값 체크
+    if (!email) {
       return setErrors((prev) => ({
         ...prev,
-        nickname: '빈칸을 입력해주세요.'
+        email: '빈칸을 입력해주세요.'
       }));
     }
-    const error = validateNickname(values.nickname);
-    setErrors((prev) => ({ ...prev, nickname: error }));
+    //이메일 유효성 검사
+    const error = validateEmail(email);
+    if (error) return setErrors((prev) => ({ ...prev, email: error }));
 
+    //중복 확인
     try {
-      const response = await checkNicknameDuplicate({ nickname });
+      const response = await checkEmailDuplicate({ id: email });
 
       if (response.status === 201) {
-        setNicknameDuplicate({ isPass: true, nickname });
-        setErrors((prev) => ({ ...prev, nickname: '' }));
+        setEmailDuplicate({ isPass: true, email });
+        setErrors((prev) => ({ ...prev, email: '' }));
         setAlertModal({
           isOpen: true,
-          message: '사용할 수 있는 닉네임입니다.',
+          message: '사용할 수 있는 이메일입니다.',
           onConfirm: () => setAlertModal(initAlert)
         });
       }
@@ -293,15 +297,15 @@ function RegisterForm() {
         if (err.response?.status === 409) {
           const { message: errMsg } = err.response.data;
 
-          setNicknameDuplicate({ isPass: false, nickname: '' });
-          return setErrors((prev) => ({ ...prev, nickname: errMsg }));
+          setEmailDuplicate({ isPass: false, email: '' });
+          return setErrors((prev) => ({ ...prev, email: errMsg }));
         }
       }
 
       console.log(err);
       setAlertModal({
         isOpen: true,
-        message: '닉네임 중복 확인에 실패하였습니다.',
+        message: '이메일 중복 확인에 실패하였습니다.',
         onConfirm: () => setAlertModal(initAlert)
       });
     }
@@ -313,21 +317,18 @@ function RegisterForm() {
     checkEmptyInputFields(values, errMsgs);
     if (!errMsgs.email) {
       errMsgs.email = validateEmail(values.email);
+
+      if (!emailDuplicate.isPass || emailDuplicate.email !== values.email) {
+        setAlertModal({
+          isOpen: true,
+          message: '이메일 중복 확인을 해주세요.',
+          onConfirm: () => setAlertModal(initAlert)
+        });
+      }
     }
 
     if (!errMsgs.nickname) {
       errMsgs.nickname = validateNickname(values.nickname);
-
-      if (
-        !nicknameDuplicate.isPass ||
-        nicknameDuplicate.nickname !== values.nickname
-      ) {
-        setAlertModal({
-          isOpen: true,
-          message: '닉네임 중복 확인을 해주세요.',
-          onConfirm: () => setAlertModal(initAlert)
-        });
-      }
     }
 
     if (!errMsgs.password) {
@@ -338,9 +339,7 @@ function RegisterForm() {
       errMsgs.passwordConfirm = validatePasswordConfirm(values.passwordConfirm);
     }
 
-    if (!errMsgs.birthDate) {
-      errMsgs.birthDate = validateBirthDate(values.birthDate);
-    }
+    errMsgs.birthDate = validateBirthDate(values.birthDate);
 
     if (!errMsgs.phoneNumber) {
       errMsgs.phoneNumber = validatePhoneNumber(values.phoneNumber);
@@ -408,35 +407,13 @@ function RegisterForm() {
       <form className={styles.form} onSubmit={handleSubmit}>
         <ul className={styles.inputs}>
           <li>
-            <TextField
-              id='email'
-              label='이메일'
-              variant='outlined'
-              name='email'
-              value={values.email}
-              onChange={handleChange}
-              size='small'
-              style={{ width: '100%' }}
-              sx={{
-                '& label.Mui-focused': { color: '#ef6d00' },
-                '& .MuiOutlinedInput-root': {
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#fe9036',
-                    borderWidth: '1px'
-                  }
-                }
-              }}
-            />
-            {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
-          </li>
-          <li>
-            <div className={styles.nickname}>
+            <div className={styles.email}>
               <TextField
-                id='nickname'
-                label='닉네임'
+                id='email'
+                label='이메일'
                 variant='outlined'
-                name='nickname'
-                value={values.nickname}
+                name='email'
+                value={values.email}
                 onChange={handleChange}
                 size='small'
                 sx={{
@@ -452,21 +429,43 @@ function RegisterForm() {
               <button
                 type='button'
                 className={
-                  errors.nickname || !values.nickname
+                  errors.email || !values.email
                     ? `${styles.disabled} ${styles.checkBtn}`
                     : styles.checkBtn
                 }
-                onClick={handleCheckNickname}
-                disabled={errors.nickname !== '' || !values.nickname}
+                onClick={handleCheckEmail}
+                disabled={errors.email !== '' || !values.email}
               >
                 중복확인
               </button>
             </div>
-            {/* {!errors.nickname && (
+            {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
+          </li>
+          <li>
+            <TextField
+              id='nickname'
+              label='닉네임'
+              variant='outlined'
+              name='nickname'
+              value={values.nickname}
+              onChange={handleChange}
+              size='small'
+              style={{ width: '100%' }}
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
+                }
+              }}
+            />
+            {!errors.nickname && (
               <p className={styles.msg}>
                 2자 이상, 6자 이하 (특수 문자, 공백 제외)
               </p>
-            )} */}
+            )}
             {errors.nickname && (
               <p className={styles.errMsg}>{errors.nickname}</p>
             )}
