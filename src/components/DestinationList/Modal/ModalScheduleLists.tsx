@@ -222,7 +222,7 @@ export default function ModalScheduleLists() {
         {showScheduleList.length === 0 ? (
           <div className={styles.alertContainerLeft}>
             <CiCircleAlert className={styles.alertIcon} />
-            <p>일정이 없습니다.</p>
+            <p className={styles.pTag}>일정이 없습니다.</p>
           </div>
         ) : (
           showScheduleList.map((scheduleList, index) => (
@@ -242,7 +242,7 @@ export default function ModalScheduleLists() {
         createPortal(
           <div className={styles.alertContainerRight}>
             <MdEventNote className={styles.alertIcon} />
-            <p>일정을 선택해 주세요!</p>
+            <p className={styles.pTag}>일정을 선택해 주세요!</p>
           </div>,
           scheduleDetailsDomRoot
         )}
