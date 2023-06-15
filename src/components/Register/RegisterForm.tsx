@@ -83,10 +83,6 @@ function RegisterForm() {
   const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
   const [values, setValues] = useState<RegisterFormValues>(initValues);
   const [errors, setErrors] = useState<RegisterFormErrors>(initErrors);
-  const [emailDuplicate, setEmailDuplicate] = useState({
-    isPass: false,
-    email: ''
-  });
 
   const checkEmptyInputFields = (
     values: RegisterFormValues,
@@ -264,67 +260,13 @@ function RegisterForm() {
     };
   }, []);
 
-  const handleCheckEmail = async () => {
-    const email = values.email;
-    //이미 에러메시지가 출력되어있다면 중지
-    if (errors.email) return;
-    //빈값 체크
-    if (!email) {
-      return setErrors((prev) => ({
-        ...prev,
-        email: '빈칸을 입력해주세요.'
-      }));
-    }
-    //이메일 유효성 검사
-    const error = validateEmail(email);
-    if (error) return setErrors((prev) => ({ ...prev, email: error }));
-
-    //중복 확인
-    try {
-      const response = await checkEmailDuplicate({ id: email });
-
-      if (response.status === 201) {
-        setEmailDuplicate({ isPass: true, email });
-        setErrors((prev) => ({ ...prev, email: '' }));
-        setAlertModal({
-          isOpen: true,
-          message: '사용할 수 있는 이메일입니다.',
-          onConfirm: () => setAlertModal(initAlert)
-        });
-      }
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 409) {
-          const { message: errMsg } = err.response.data;
-
-          setEmailDuplicate({ isPass: false, email: '' });
-          return setErrors((prev) => ({ ...prev, email: errMsg }));
-        }
-      }
-
-      console.log(err);
-      setAlertModal({
-        isOpen: true,
-        message: '이메일 중복 확인에 실패하였습니다.',
-        onConfirm: () => setAlertModal(initAlert)
-      });
-    }
-  };
-
   const validateForm = (values: RegisterFormValues) => {
     const errMsgs: RegisterFormErrors = { ...errors };
 
     checkEmptyInputFields(values, errMsgs);
+
     if (!errMsgs.email) {
       errMsgs.email = validateEmail(values.email);
-
-      if (!emailDuplicate.isPass || emailDuplicate.email !== values.email) {
-        setAlertModal({
-          isOpen: true,
-          message: '이메일 중복 확인을 해주세요.',
-          onConfirm: () => setAlertModal(initAlert)
-        });
-      }
     }
 
     if (!errMsgs.nickname) {
@@ -351,10 +293,13 @@ function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    //에러 존재시 에러메시지 출력 (가입X)
     const validationErrors = validateForm(values);
-    setErrors(validationErrors);
+    const hasErrors = Object.values(validationErrors).some((error) => error);
+    if (hasErrors) return setErrors(validationErrors);
 
-    if (Object.values(validationErrors).every((error) => !error)) {
+    //회원가입 api 호출
+    try {
       const {
         email,
         nickname,
@@ -364,41 +309,39 @@ function RegisterForm() {
         gender
       } = values;
 
-      try {
-        const data: RegisterFormData = {
-          id: email,
-          password,
-          nickname,
-          birth_date: `${year}-${month}-${day}`,
-          phone_number: phoneNumber,
-          gender,
-          profile_image: ''
-        };
+      const data: RegisterFormData = {
+        id: email,
+        password,
+        nickname,
+        birth_date: `${year}-${month}-${day}`,
+        phone_number: phoneNumber,
+        gender,
+        profile_image: ''
+      };
 
-        const response = await registerUser(data);
+      const response = await registerUser(data);
 
-        if (response.status === 201) {
-          setAlertModal({
-            isOpen: true,
-            message: '회원가입이 완료되었습니다!',
-            onConfirm: () => navigate('/login')
-          });
-        }
-      } catch (err: unknown) {
-        if (err instanceof AxiosError) {
-          if (err.response?.status === 409) {
-            const { message: errMsg, field } = err.response.data;
-            return setErrors((prev) => ({ ...prev, [field]: errMsg }));
-          }
-        }
-
-        console.log(err);
+      if (response.status === 201) {
         setAlertModal({
           isOpen: true,
-          message: '회원가입에 실패하였습니다. 잠시 후에 다시 시도해주세요.',
-          onConfirm: () => setAlertModal(initAlert)
+          message: '회원가입이 완료되었습니다!',
+          onConfirm: () => navigate('/login')
         });
       }
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) {
+          const { message: errMsg, field } = err.response.data;
+          return setErrors((prev) => ({ ...prev, [field]: errMsg }));
+        }
+      }
+
+      console.log(err);
+      setAlertModal({
+        isOpen: true,
+        message: '회원가입에 실패하였습니다. 잠시 후에 다시 시도해주세요.',
+        onConfirm: () => setAlertModal(initAlert)
+      });
     }
   };
 
@@ -416,6 +359,7 @@ function RegisterForm() {
                 value={values.email}
                 onChange={handleChange}
                 size='small'
+                style={{ width: '100%' }}
                 sx={{
                   '& label.Mui-focused': { color: '#ef6d00' },
                   '& .MuiOutlinedInput-root': {
@@ -426,18 +370,6 @@ function RegisterForm() {
                   }
                 }}
               />
-              <button
-                type='button'
-                className={
-                  errors.email || !values.email
-                    ? `${styles.disabled} ${styles.checkBtn}`
-                    : styles.checkBtn
-                }
-                onClick={handleCheckEmail}
-                disabled={errors.email !== '' || !values.email}
-              >
-                중복확인
-              </button>
             </div>
             {errors.email && <p className={styles.errMsg}>{errors.email}</p>}
           </li>
