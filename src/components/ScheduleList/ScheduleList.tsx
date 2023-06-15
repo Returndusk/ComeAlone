@@ -15,8 +15,6 @@ function ScheduleLists({ children }: ScheduleProps) {
   const path = useLocation().pathname.split('/');
   const scheduleFilter = path[path.length - 1];
 
-  console.log(scheduleFilter);
-
   return (
     <>
       <div className={styles.imageContainer}>
