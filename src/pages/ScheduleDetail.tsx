@@ -22,6 +22,7 @@ import {
   ScheduleFetchedType
 } from '../types/ScheduleDetailTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
+import ScheduleDetailLoading from '../components/common/Loading/ScheduleDetailLoading';
 import useScheduleDetailFetch from '../hooks/useScheduleDetailFetch';
 import useScheduleReviewsFetch from '../hooks/useScheduleReviewsFetch';
 
@@ -116,7 +117,7 @@ function ScheduleDetail() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <ScheduleDetailLoading />;
   }
 
   const {

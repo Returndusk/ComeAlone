@@ -26,6 +26,7 @@ import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
 import { AxiosError } from 'axios';
 import { useAuthState } from '../contexts/AuthContext';
+import ScheduleDetailLoading from '../components/common/Loading/ScheduleDetailLoading';
 
 function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
   return destinationList.map((destOfDay: MapWithWaypointsPropsType[]) =>
@@ -206,7 +207,7 @@ function ScheduleEdit() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <ScheduleDetailLoading />;
   }
 
   return (
