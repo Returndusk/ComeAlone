@@ -23,7 +23,7 @@ import { useAuthState } from '../../contexts/AuthContext';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaCommentAlt, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 import { createPortal } from 'react-dom';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+// import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -45,6 +45,7 @@ function DestinationDetails() {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const url = useLocation().pathname;
   const scrollRef = useRef<HTMLOptionElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
 
@@ -124,9 +125,14 @@ function DestinationDetails() {
     return '';
   };
 
+  const removeTagFromOverview = useCallback((overview: string) => {
+    const removedStr = overview.replace(/<br>|<br\/>|<br \/>/g, '\n');
+    return removedStr;
+  }, []);
+
   const handleOnConfirm = () => {
     setIsShowAlert(false);
-    navigate('/login');
+    navigate('/login', { state: { prevUrl: url } });
   };
 
   const handleShowModalClick = () => {
@@ -143,10 +149,10 @@ function DestinationDetails() {
       {isLoading && (
         <div className={styles.destinationDetailsContainer}>
           <div className={styles.LoadingContainer}>
-            <AiOutlineLoading3Quarters
+            {/* <AiOutlineLoading3Quarters
               className={styles.destinationDetailsLoadingIcon}
             />
-            <span>로딩 중 입니다..</span>
+            <span>로딩 중 입니다..</span> */}
           </div>
         </div>
       )}
@@ -161,7 +167,10 @@ function DestinationDetails() {
                   alt={destinationDetails.title}
                 />
               )}
-              <span className={styles.categoryNameTag}>
+              <span
+                className={styles.categoryNameTag}
+                id={styles[`Category-${destinationDetails?.category_id}`]}
+              >
                 {changeCategoryIdIntoName(destinationDetails?.category_id)}
               </span>
             </div>
@@ -211,7 +220,7 @@ function DestinationDetails() {
             </div>
 
             <div className={styles.destinationOverview}>
-              {destinationDetails?.overview}
+              {removeTagFromOverview(destinationDetails?.overview)}
             </div>
 
             <div className={styles.scheduleModalButtonContainer}>

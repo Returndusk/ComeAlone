@@ -5,7 +5,8 @@ import AddToScheduleModal from './AddToScheduleModal';
 import { createPortal } from 'react-dom';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import { SlArrowRight, SlArrowLeft } from 'react-icons/sl';
+import { TfiArrowCircleRight, TfiArrowCircleLeft } from 'react-icons/tfi';
+import { CiCircleAlert } from 'react-icons/ci';
 
 function getDate(startDateString: string, endDateString: string) {
   const startDate = new Date(startDateString);
@@ -79,18 +80,17 @@ ModalScheduleCardType) {
             <div className={styles.scheduleDate}>
               {isSameDay ? '당일치기' : `${diffDate}박 ${diffDate + 1}일`}
             </div>
-            <div>
-              {/* {getDate(schedule.start_date, schedule.end_date)} */}
+            <div className={styles.scheduleDuration}>
               {isSameDay
                 ? `${startDate.getFullYear()}년 ${
                     startDate.getMonth() + 1
                   }월 ${startDate.getDate()}일`
                 : getDate(schedule.start_date, schedule.end_date)}
             </div>
-            {/* <div className={styles.scheduleCreated}>등록 : {createdAt}</div> */}
           </div>
         </div>
       </div>
+
       {isSelected &&
         scheduleDetailsDomRoot !== null &&
         createPortal(
@@ -98,12 +98,12 @@ ModalScheduleCardType) {
             <div className={styles.daysContainer}>
               <div className={styles.arrowSpace}>
                 {startDay > 0 && (
-                  <button
+                  <div
                     className={`${styles.arrowBtn} ${styles.prevBtn}`}
                     onClick={handlePrevious}
                   >
-                    <SlArrowLeft />
-                  </button>
+                    <TfiArrowCircleLeft />
+                  </div>
                 )}
               </div>
               <div className={styles.buttonContainer}>
@@ -152,12 +152,12 @@ ModalScheduleCardType) {
               </div>
               <div className={styles.arrowSpace}>
                 {startDay + visibleDays < schedule.destinations.length && (
-                  <button
+                  <div
                     className={`${styles.arrowBtn} ${styles.nextBtn}`}
                     onClick={handleNext}
                   >
-                    <SlArrowRight />
-                  </button>
+                    <TfiArrowCircleRight />
+                  </div>
                 )}
               </div>
             </div>
@@ -173,7 +173,6 @@ ModalScheduleCardType) {
               />
             )}
           </div>,
-
           scheduleDetailsDomRoot
         )}
     </div>

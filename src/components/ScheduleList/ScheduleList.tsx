@@ -1,83 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import styles from './ScheduleList.module.scss';
-import ScheduleCard from '../ScheduleCard/ScheduleCard';
-import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 import { useAuthState } from '../../contexts/AuthContext';
-import AlertModal from '../common/Alert/AlertModal';
 import images from '../../constants/image';
-import tokenInstance from '../../apis/tokenInstance';
-import { FaExclamationCircle } from 'react-icons/fa';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Router from '../../constants/Router';
 
-const baseUrl = process.env.REACT_APP_API_BASE_URL;
+type ScheduleProps = {
+  children: React.ReactElement;
+};
 
-function ScheduleLists() {
+function ScheduleLists({ children }: ScheduleProps) {
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
-  const [scheduleList, setScheduleList] = useState<ScheduleListType>([]);
-  const [showScheduleList, setShowScheduleList] = useState<ScheduleListType>(
-    []
-  );
-  const [scheduleSort, setScheduleSort] = useState<string>('likes');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
-
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(`${baseUrl}/schedules`);
-      const scheduleData = response.data;
-      setScheduleList(scheduleData);
-      setShowScheduleList(sortByScheduleLikes(scheduleData));
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        setShowAlertModal(true);
-      }
-    }
-    setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
-    sortSchedule(scheduleSort);
-  }, [scheduleSort]);
-
-  function handleSort(e: React.MouseEvent<HTMLButtonElement>) {
-    const sortOption = (e.target as HTMLButtonElement).value;
-    setScheduleSort(sortOption);
-  }
-
-  function handleOnConfirm() {
-    setShowAlertModal(false);
-  }
-
-  function sortByScheduleLikes(scheduleData: ScheduleCardType[]) {
-    return scheduleData.sort((a, b) => b.likes_count - a.likes_count);
-  }
-
-  function sortByScheduleRecent(scheduleData: ScheduleCardType[]) {
-    return scheduleData.sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    );
-  }
-
-  async function sortSchedule(sortOption: string) {
-    const scheduleData = [...scheduleList];
-    if (sortOption === 'likes') {
-      setShowScheduleList(sortByScheduleLikes(scheduleData));
-    } else if (sortOption === 'recent') {
-      setShowScheduleList(sortByScheduleRecent(scheduleData));
-    } else if (sortOption === 'liked') {
-      const liked = await tokenInstance.get(
-        `${baseUrl}/users/me/liked-schedules`
-      );
-      setShowScheduleList(liked.data);
-    }
-  }
+  const path = useLocation().pathname.split('/');
+  const scheduleFilter = path[path.length - 1];
+  const navigate = useNavigate();
 
   return (
     <>
@@ -96,61 +33,38 @@ function ScheduleLists() {
         <div className={styles.scheduleFilter}>
           <button
             className={`${styles.sortButton} ${
-              scheduleSort === 'likes' ? styles.selected : ''
+              scheduleFilter === 'likes' && styles.selected
             }`}
-            onClick={(e) => {
-              handleSort(e);
+            onClick={() => {
+              navigate(`${Router.SCHEDULE_LIST}/likes`);
             }}
-            value='likes'
           >
             인기순
           </button>
           <button
             className={`${styles.sortButton} ${
-              scheduleSort === 'recent' ? styles.selected : ''
+              scheduleFilter === 'recent' && styles.selected
             }`}
-            onClick={(e) => {
-              handleSort(e);
+            onClick={() => {
+              navigate(`${Router.SCHEDULE_LIST}/recent`);
             }}
-            value='recent'
           >
             최신순
           </button>
           {isLoggedIn && (
             <button
               className={`${styles.sortButton} ${
-                scheduleSort === 'liked' ? styles.selected : ''
+                scheduleFilter === 'liked' && styles.selected
               }`}
-              onClick={(e) => {
-                handleSort(e);
+              onClick={() => {
+                navigate(`${Router.SCHEDULE_LIST}/liked`);
               }}
-              value='liked'
             >
               좋아요 한 일정
             </button>
           )}
         </div>
-        {showAlertModal && (
-          <AlertModal
-            message='여행 일정을 불러올 수 없습니다.'
-            onConfirm={handleOnConfirm}
-          />
-        )}
-        {isLoading && <div className={styles.loading}>일정 불러오는중...</div>}
-        <div className={styles.scheduleCardContainer}>
-          {showScheduleList.length ? (
-            showScheduleList.map(
-              (schedule: ScheduleCardType, index: number) => (
-                <ScheduleCard schedule={schedule} key={index} />
-              )
-            )
-          ) : (
-            <div className={styles.noSchedule}>
-              <FaExclamationCircle />
-              <div>좋아요 한 일정이 없습니다</div>
-            </div>
-          )}
-        </div>
+        {children}
       </div>
     </>
   );

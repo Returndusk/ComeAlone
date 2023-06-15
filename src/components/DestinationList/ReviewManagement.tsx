@@ -3,13 +3,12 @@ import styles from './ReviewManagement.module.scss';
 import { commentType } from '../../types/DestinationListTypes';
 import { useAuthState } from '../../contexts/AuthContext';
 import AlertModal from '../common/Alert/AlertModal';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   modifyReviewByCommentId
 } from '../../apis/destinationList';
 import { TextField } from '@mui/material';
-import { FaPen, FaTrashAlt } from 'react-icons/fa';
 
 const ALERT_PROPS = {
   message: '로그인이 필요한 기능입니다.',
@@ -29,6 +28,10 @@ const RESPONSE_STATUS = {
   DELETE_SUCCESS: 200
 };
 
+const REVIEW_HANDLER = {
+  MAXIMUM_WORDS: 300
+};
+
 type ReviewManagementPropsType = {
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,6 +39,9 @@ type ReviewManagementPropsType = {
   targetComment: number | null;
   setTargetComment: React.Dispatch<React.SetStateAction<number | null>>;
   commentid: number;
+  isConfirmDelete: boolean;
+  setIsConfirmDelete: React.Dispatch<React.SetStateAction<boolean>>;
+  prevComment: string;
 };
 
 function ReviewManagement({
@@ -44,7 +50,10 @@ function ReviewManagement({
   getReviewList,
   targetComment,
   setTargetComment,
-  commentid
+  commentid,
+  isConfirmDelete,
+  setIsConfirmDelete,
+  prevComment
 }: ReviewManagementPropsType) {
   const [modifiedReview, setModifiedReview] = useState<commentType>({
     comment: null
@@ -53,9 +62,10 @@ function ReviewManagement({
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isConfirmModifying, setIsConfirmModifying] = useState<boolean>(false);
   const [tryModify, setTryModify] = useState<boolean>(false);
-  const [isConfirmDelete, setIsConfirmDelete] = useState<boolean>(false);
+  // const [isConfirmDelete, setIsConfirmDelete] = useState<boolean>(false);
   const [tryDelete, setTryDelete] = useState<boolean>(false);
   const navigate = useNavigate();
+  const url = useLocation().pathname;
 
   //리뷰 수정 요청 메서드
   const modifyReview = useCallback(
@@ -111,7 +121,7 @@ function ReviewManagement({
     }
     setIsConfirmModifying(true);
 
-    setTargetComment(() => commentid);
+    // setTargetComment(() => commentid);
     setModifiedReview(() => {
       return { comment: submittedModifiedReview };
     });
@@ -136,27 +146,9 @@ function ReviewManagement({
     modifyReview
   ]);
 
-  // 수정 버튼 클릭 이벤트 (수정 시작)
-  const handleModifiedButtonOnClick = () => {
-    if (!authState.isLoggedIn) {
-      setIsShowAlert(true);
-      return;
-    }
-    setIsEditing(() => true);
-    return;
-  };
-
   // 취소 버튼 => 수정 취소
   const cancelModifying = () => {
     setIsEditing(() => false);
-  };
-
-  const handleDeleteOnClick = () => {
-    if (!authState.isLoggedIn) {
-      setIsShowAlert(true);
-      return;
-    }
-    setIsConfirmDelete(() => true);
   };
 
   useEffect(() => {
@@ -167,7 +159,7 @@ function ReviewManagement({
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    navigate('/login');
+    navigate('/login', { state: { prevUrl: url } });
   };
 
   const handleOnModifyConfirm = () => {
@@ -204,51 +196,41 @@ function ReviewManagement({
 
   return (
     <>
-      {!isEditing ? (
-        <span className={styles.reviewHandlebox}>
-          <div className={styles.reviewHandleButtonContainer}>
-            <button
-              className={styles.modifyButton}
-              onClick={handleModifiedButtonOnClick}
-            >
-              <FaPen />
-            </button>
-            <button
-              className={styles.deleteButton}
-              onClick={handleDeleteOnClick}
-            >
-              <FaTrashAlt />
-            </button>
-          </div>
-        </span>
-      ) : (
-        <form
-          className={styles.reviewInputForm}
-          onSubmit={handleModifiedReviewSubmit}
-        >
-          <TextField
-            className={styles.reviewInputBar}
-            type='text'
-            name='modifiedReview'
-            size='small'
-            label='수정할 내용을 입력해주세요.'
-            sx={{
-              '& label.Mui-focused': { color: '#ef6d00' },
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#fe9036',
-                  borderWidth: '1px'
+      {isEditing && targetComment === commentid && (
+        <div className={styles.modifyReviewContainer}>
+          <form
+            className={styles.reviewInputForm}
+            onSubmit={handleModifiedReviewSubmit}
+          >
+            <TextField
+              className={styles.reviewInputBar}
+              type='text'
+              name='modifiedReview'
+              size='small'
+              label='수정할 내용을 입력해주세요.'
+              defaultValue={prevComment}
+              inputProps={{ maxLength: REVIEW_HANDLER.MAXIMUM_WORDS }}
+              sx={{
+                '& label.Mui-focused': { color: '#ef6d00' },
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#fe9036',
+                    borderWidth: '1px'
+                  }
                 }
-              }
-            }}
-          />
-          <button className={styles.reviewButton} type='submit'>
-            등록
-          </button>
-          <button className={styles.reviewButton} onClick={cancelModifying}>
-            취소
-          </button>
-        </form>
+              }}
+            />
+            <button
+              className={styles.reviewCancelButton}
+              onClick={cancelModifying}
+            >
+              취소
+            </button>
+            <button className={styles.reviewSubmitButton} type='submit'>
+              등록
+            </button>
+          </form>
+        </div>
       )}
       {isShowAlert && (
         <AlertModal

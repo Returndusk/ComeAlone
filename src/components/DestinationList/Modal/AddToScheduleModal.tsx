@@ -6,15 +6,10 @@ import axios from 'axios';
 import tokenInstance from '../../../apis/tokenInstance';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-// import AlertModal from '../../common/Alert/AlertModal';
+import AlertModal from '../../common/Alert/AlertModal';
+import { FaTrashAlt } from 'react-icons/fa';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
-
-// const ALERT_PROPS = {
-//   message: '이미 추가된 일정입니다.',
-//   showCanCelButton: false,
-//   showTitle: false
-// };
 
 function AddToScheduleModal({
   destinations,
@@ -29,7 +24,10 @@ function AddToScheduleModal({
   const [updatedContentIds, setUpdatedContentIds] = useState([
     ...destinationIds
   ]);
-  // const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alreadyAddedAlert, setAlreadyAddedAlert] = useState<boolean>(false);
+  const [errorAlert, setErrorAlert] = useState<boolean>(false);
+  const [limitAlert, setLimitAlert] = useState<boolean>(false);
+  const [deleteAlert, setDeleteAlert] = useState<boolean>(false);
 
   useEffect(() => {
     setUpdatedDestinations([...destinations]);
@@ -48,31 +46,36 @@ function AddToScheduleModal({
         return title;
       }
     } catch (err) {
-      console.error('Error: ', err);
-      alert('목적지를 선택해 주세요.');
+      // console.error('Error: ', err);
+      setErrorAlert(true);
     }
   }
 
   async function addToSelectedDay() {
     const title = await getDestinationTitle(Number(contentid));
 
+    if (updatedDestinations[selectedDay].length > 100) {
+      setLimitAlert(true);
+      return;
+    }
+
     if (
       Number(contentid) &&
       !updatedDestinations[selectedDay].includes(title)
     ) {
-      // console.log('updatedDestinations', updatedDestinations);
+      console.log('updatedDestinations', updatedDestinations);
 
       const copiedContentIds = [...updatedContentIds];
       copiedContentIds[selectedDay] = copiedContentIds[selectedDay] || [];
       copiedContentIds[selectedDay].push(Number(contentid));
 
-      // console.log('updatedContentIds', updatedContentIds);
+      console.log('updatedContentIds', updatedContentIds);
 
       try {
         const response = await tokenInstance.post(
           `${baseUrl}/schedules/${scheduleId}`,
           {
-            destinations: updatedContentIds
+            destinations: copiedContentIds
           }
         );
 
@@ -85,10 +88,37 @@ function AddToScheduleModal({
         console.error('Error: ', err);
       }
     } else {
-      alert('이미 추가된 일정입니다.');
+      setAlreadyAddedAlert(true);
       return;
     }
   }
+
+  async function handleRemoveDestination(
+    dayIndex: number,
+    destinationIndex: number
+  ) {
+    try {
+      const copiedContentIds = [...updatedContentIds];
+      copiedContentIds[dayIndex].splice(destinationIndex, 1);
+
+      const response = await tokenInstance.post(
+        `${baseUrl}/schedules/${scheduleId}`,
+        {
+          destinations: copiedContentIds
+        }
+      );
+
+      setUpdatedDestinations(response.data.destinationTitles);
+      setUpdatedContentIds(response.data.destinationIds);
+      setDeleteAlert(false);
+    } catch (err) {
+      console.error('Error: ', err);
+    }
+  }
+
+  // async function handleCancelRemoveDestination() {
+  //   setDeleteAlert(false);
+  // }
 
   return (
     <>
@@ -115,9 +145,43 @@ function AddToScheduleModal({
         {updatedDestinations[selectedDay].map((destination, idx) => (
           <div key={idx} className={styles.destination}>
             {destination}
+            <button
+              className={styles.deleteButton}
+              onClick={() => handleRemoveDestination(selectedDay, idx)}
+              // onClick={handleRemoveDestination}
+            >
+              <FaTrashAlt />
+            </button>
           </div>
         ))}
       </div>
+      {alreadyAddedAlert && (
+        <div className={styles.alertModal}>
+          <AlertModal
+            message='이미 추가된 일정입니다.'
+            onConfirm={() => setAlreadyAddedAlert(false)}
+            showCancelButton={false}
+          />
+        </div>
+      )}
+      {errorAlert && (
+        <div className={styles.alertModal}>
+          <AlertModal
+            message='목적지를 선택해 주세요.'
+            onConfirm={() => setErrorAlert(false)}
+            showCancelButton={false}
+          />
+        </div>
+      )}
+      {limitAlert && (
+        <div className={styles.alertModal}>
+          <AlertModal
+            message='목적지는 100개까지만 추가할 수 있습니다.'
+            onConfirm={() => setLimitAlert(false)}
+            showCancelButton={false}
+          />
+        </div>
+      )}
     </>
   );
 }

@@ -77,6 +77,36 @@
           }
         }
       }
+
+      .reviewHandlebox {
+        margin-left: 3px;
+        text-align: center;
+
+        .reviewHandleButtonContainer {
+          display: flex;
+
+          button {
+            all: unset;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+
+            height: 15px;
+            line-height: 15px;
+            text-align: center;
+            font-size: 15px;
+            letter-spacing: 3px;
+
+            &.modifyButton {
+              color: #888;
+            }
+
+            &.deleteButton {
+              color: #888;
+            }
+          }
+        }
+      }
     }
     .reviewComment {
       display: flex;
