@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styles from './UserEditForm.module.scss';
-import { UserInfoValues, UserInfoErrors } from './UserEditTypes';
+import { UserInfoValues, UserInfoErrors } from './UserEditForm';
 import TextField from '@mui/material/TextField';
 import {
   FormControlLabel,

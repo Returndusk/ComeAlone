@@ -12,6 +12,13 @@ type AlertOption = {
   onConfirm: null | (() => void);
 };
 
+type ConfirmOption = {
+  isOpen: boolean;
+  message: string;
+  onConfirm: null | (() => void);
+  onCancel: null | (() => void);
+};
+
 type DeleteFormProps = {
   cancelDeleteAccount: () => void;
 };
@@ -26,6 +33,14 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
     onConfirm: null
   };
   const [alertModal, setAlertModal] = useState<AlertOption>(initAlert);
+  const initConfirm = {
+    isOpen: false,
+    message: '',
+    onConfirm: null,
+    onCancel: null
+  };
+  const [confirmModal, setConfirmModal] = useState<ConfirmOption>(initConfirm);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
@@ -37,28 +52,38 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
   };
 
   const handleDeleteAccount = async () => {
-    if (window.confirm('정말 탈퇴하시겠습니까?')) {
-      try {
-        const response = await deleteUser();
-        if (response.status === 200) {
-          setAlertModal({
-            isOpen: true,
-            message: '탈퇴 완료되었습니다.',
-            onConfirm: () => {
-              updateAuthState(false);
-              // navigate('/');
-            }
-          });
-        }
-      } catch (err) {
-        console.log(err);
+    try {
+      const response = await deleteUser();
+      if (response.status === 200) {
         setAlertModal({
           isOpen: true,
-          message: '회원 탈퇴에 실패하였습니다.',
-          onConfirm: () => setAlertModal(initAlert)
+          message: '탈퇴 완료되었습니다.',
+          onConfirm: () => {
+            updateAuthState(false);
+            // navigate('/');
+          }
         });
       }
+    } catch (err) {
+      console.log(err);
+      setAlertModal({
+        isOpen: true,
+        message: '회원 탈퇴에 실패하였습니다.',
+        onConfirm: () => setAlertModal(initAlert)
+      });
     }
+  };
+
+  const confirmDeleteAccount = async () => {
+    setConfirmModal({
+      isOpen: true,
+      message: '정말 탈퇴하시겠습니까?',
+      onConfirm: () => {
+        setConfirmModal(initConfirm);
+        handleDeleteAccount();
+      },
+      onCancel: () => setConfirmModal(initConfirm)
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,7 +97,7 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
         const response = await checkPassword(data);
 
         if (response.status === 201) {
-          handleDeleteAccount();
+          confirmDeleteAccount();
         }
       } catch (err: unknown) {
         if (err instanceof AxiosError) {
@@ -149,6 +174,16 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
           onConfirm={alertModal.onConfirm}
         />
       )}
+      {confirmModal.isOpen &&
+        confirmModal.onConfirm &&
+        confirmModal.onCancel && (
+          <AlertModal
+            message={confirmModal.message}
+            onConfirm={confirmModal.onConfirm}
+            onCancel={confirmModal.onCancel}
+            showCancelButton={true}
+          />
+        )}
     </>
   );
 }
