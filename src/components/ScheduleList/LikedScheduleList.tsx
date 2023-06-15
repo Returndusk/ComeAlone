@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './ScheduleList.module.scss';
 import ScheduleCard from '../ScheduleCard/ScheduleCard';
@@ -14,7 +14,6 @@ function LikedScheduleLists() {
     []
   );
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
-  const lastElement = useRef<HTMLDivElement>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -58,7 +57,7 @@ function LikedScheduleLists() {
           </div>
         )}
       </div>
-      <div ref={lastElement} className={styles.lastElement}></div>
+      <div className={styles.lastElement}></div>
     </>
   );
 }
