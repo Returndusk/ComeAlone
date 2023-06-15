@@ -23,24 +23,13 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(
-      0,
-      0,
-      0,
-      0.1
-    ); // Change this to match scrollbar color
-    border-radius: 20px; // If you want round scrollbars
-    border: 3px solid transparent; // Add this if you want round scrollbars
+    background-color: #efd3bc;
+    border-radius: 20px;
+    border: 3px solid transparent;
   }
 
   &:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(
-      0,
-      0,
-      0,
-      0.4
-    ); // Change this to match scrollbar color on hover
-    // background-color: #7c9070; // Change this to match scrollbar color on hover
+    background-color: #ef6d00;
   }
 }
 
