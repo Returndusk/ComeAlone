@@ -48,13 +48,19 @@ function DateModalScheduleEdit({
     const prevDuration = dateInfo.duration;
     const currentDuration = getDateInfoFromSelected(selectedDate[0]).duration;
 
+    if (currentDuration > 30) {
+      setShowMaximumDurationAlert(true);
+
+      return;
+    }
+
     if (currentDuration < prevDuration) {
       setShowDiffDurationAlert(true);
-    } else if (currentDuration > 30) {
-      setShowMaximumDurationAlert(true);
-    } else {
-      handleDateInfoUpdateConfirm();
+
+      return;
     }
+
+    handleDateInfoUpdateConfirm();
   };
 
   const handleDateInfoUpdateConfirm = () => {
