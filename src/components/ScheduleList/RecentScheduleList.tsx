@@ -5,6 +5,7 @@ import ScheduleCard from '../ScheduleCard/ScheduleCard';
 import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 import AlertModal from '../common/Alert/AlertModal';
 import { FaExclamationCircle } from 'react-icons/fa';
+import Loading from '../../components/common/Loading/ScheduleListLoading';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -14,10 +15,12 @@ function RecentScheduleLists() {
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [recentPage, setRecentPage] = useState<number>(1);
   const [lastDataOfRecent, setLastDataOfRecent] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElement = useRef<HTMLDivElement>(null);
   const SCHEDULES_PER_PAGE = 6;
 
   const fetchRecentData = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${baseUrl}/schedules/public/order/latest-created-date?page=${recentPage}&limit=${SCHEDULES_PER_PAGE}`
@@ -32,6 +35,7 @@ function RecentScheduleLists() {
         setShowAlertModal(true);
       }
     }
+    setIsLoading(false);
   }, [recentPage]);
 
   useEffect(() => {
@@ -73,18 +77,19 @@ function RecentScheduleLists() {
         />
       )}
       <div className={styles.scheduleCardContainer}>
-        {recentScheduleList.length ? (
-          recentScheduleList.map(
-            (schedule: ScheduleCardType, index: number) => (
-              <ScheduleCard schedule={schedule} key={index} />
+        {recentScheduleList.length
+          ? recentScheduleList.map(
+              (schedule: ScheduleCardType, index: number) => (
+                <ScheduleCard schedule={schedule} key={index} />
+              )
             )
-          )
-        ) : (
-          <div className={styles.noSchedule}>
-            <FaExclamationCircle />
-            <div>공개된 일정이 없습니다</div>
-          </div>
-        )}
+          : !isLoading && (
+              <div className={styles.noSchedule}>
+                <FaExclamationCircle />
+                <div>공개된 일정이 없습니다</div>
+              </div>
+            )}
+        {isLoading && <Loading />}
       </div>
       <div ref={lastElement} className={styles.lastElement}></div>
     </>
