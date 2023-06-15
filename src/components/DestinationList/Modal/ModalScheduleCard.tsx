@@ -6,7 +6,6 @@ import { createPortal } from 'react-dom';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { SlArrowRight, SlArrowLeft } from 'react-icons/sl';
-import { makeStyles } from '@mui/material';
 
 function getDate(startDateString: string, endDateString: string) {
   const startDate = new Date(startDateString);
@@ -81,14 +80,12 @@ ModalScheduleCardType) {
               {isSameDay ? '당일치기' : `${diffDate}박 ${diffDate + 1}일`}
             </div>
             <div>
-              {/* {getDate(schedule.start_date, schedule.end_date)} */}
               {isSameDay
                 ? `${startDate.getFullYear()}년 ${
                     startDate.getMonth() + 1
                   }월 ${startDate.getDate()}일`
                 : getDate(schedule.start_date, schedule.end_date)}
             </div>
-            {/* <div className={styles.scheduleCreated}>등록 : {createdAt}</div> */}
           </div>
         </div>
       </div>
@@ -132,16 +129,18 @@ ModalScheduleCardType) {
                         key={idx}
                         className={styles.dayButton}
                         sx={{
-                          color: '#ef6d00',
+                          color:
+                            selectedDay === startDay + idx
+                              ? '#ffffff'
+                              : '#ef6d00',
                           fontWeight: '600',
-                          // fontSize: '0.8rem',
-                          // border: 1,
-                          // borderColor: '#ef6d00',
+                          backgroundColor:
+                            selectedDay === startDay + idx
+                              ? '#ef6d00'
+                              : undefined,
                           '&:hover': {
                             color: '#ffffff',
                             backgroundColor: '#ef6d00'
-                            // border: 1,
-                            // borderColor: '#ef6d00'
                           }
                         }}
                         onClick={() => handleToggleDestinations(startDay + idx)}

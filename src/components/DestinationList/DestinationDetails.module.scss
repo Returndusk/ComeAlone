@@ -2,32 +2,15 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  background-color: #fff;
-  border-left: 1px solid #ccc;
+  // background-color: #fff;
   // border-radius: 20px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  // overflow-x: hidden;
+  // overflow-y: auto;
 
   width: 400px; // 스크롤 간격(25px 고려)
   height: 100%;
   box-sizing: border-box;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
-
-  &::-webkit-scrollbar {
-    width: 5px;
-    background: #ffffff;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 3.5px;
-    background-color: #ced4da;
-
-    &:hover {
-      background-color: #adb5bd;
-    }
-  }
-  &::-webkit-scrollbar-track {
-    background: #ffffff;
-  }
+  // box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .destinationDetails {
@@ -74,13 +57,43 @@
     position: absolute;
     top: 8px;
     left: 7px;
-    background-color: #31e974;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
     border-radius: 15px;
     padding: 7px 10px;
     font-size: 13px;
     color: #fff;
     letter-spacing: 1px;
+  }
+  #Category-12 {
+    background-color: #d23300;
+  }
+
+  #Category-14 {
+    background-color: #6d1c9d;
+  }
+
+  #Category-15 {
+    background-color: #007d00;
+  }
+
+  #Category-25 {
+    background-color: #004e4e;
+  }
+
+  #Category-28 {
+    background-color: #2b8a8a;
+  }
+
+  #Category-32 {
+    background-color: #cca800;
+  }
+
+  #Category-38 {
+    background-color: #773b15;
+  }
+
+  #Category-39 {
+    background-color: #1d6dcc;
   }
 }
 
@@ -159,6 +172,7 @@
   padding: 15px 15px 25px;
   color: #444;
   box-sizing: border-box;
+  white-space: pre-line;
 }
 
 .scheduleModalButtonContainer {

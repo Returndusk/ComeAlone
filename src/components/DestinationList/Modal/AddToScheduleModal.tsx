@@ -6,15 +6,9 @@ import axios from 'axios';
 import tokenInstance from '../../../apis/tokenInstance';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-// import AlertModal from '../../common/Alert/AlertModal';
+import AlertModal from '../../common/Alert/AlertModal';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
-
-// const ALERT_PROPS = {
-//   message: '이미 추가된 일정입니다.',
-//   showCanCelButton: false,
-//   showTitle: false
-// };
 
 function AddToScheduleModal({
   destinations,
@@ -29,7 +23,8 @@ function AddToScheduleModal({
   const [updatedContentIds, setUpdatedContentIds] = useState([
     ...destinationIds
   ]);
-  // const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alreadyAddedAlert, setAlreadyAddedAlert] = useState<boolean>(false);
+  const [errorAlert, setErrorAlert] = useState<boolean>(false);
 
   useEffect(() => {
     setUpdatedDestinations([...destinations]);
@@ -48,8 +43,8 @@ function AddToScheduleModal({
         return title;
       }
     } catch (err) {
-      console.error('Error: ', err);
-      alert('목적지를 선택해 주세요.');
+      // console.error('Error: ', err);
+      setErrorAlert(true);
     }
   }
 
@@ -85,7 +80,7 @@ function AddToScheduleModal({
         console.error('Error: ', err);
       }
     } else {
-      alert('이미 추가된 일정입니다.');
+      setAlreadyAddedAlert(true);
       return;
     }
   }
@@ -118,6 +113,24 @@ function AddToScheduleModal({
           </div>
         ))}
       </div>
+      {alreadyAddedAlert && (
+        <div className={styles.alertModal}>
+          <AlertModal
+            message='이미 추가된 일정입니다.'
+            onConfirm={() => setAlreadyAddedAlert(false)}
+            showCancelButton={false}
+          />
+        </div>
+      )}
+      {errorAlert && (
+        <div className={styles.alertModal}>
+          <AlertModal
+            message='목적지를 선택해 주세요.'
+            onConfirm={() => setErrorAlert(false)}
+            showCancelButton={false}
+          />
+        </div>
+      )}
     </>
   );
 }

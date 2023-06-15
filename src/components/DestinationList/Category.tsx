@@ -33,6 +33,10 @@ const CATEGORIES_ID = new Map([
   [39, '음식점']
 ]);
 
+const DATA_LOADING_MESSAGE = {
+  CATEGORY_LOADING: '카테고리 정보를 로딩 중입니다.'
+};
+
 const CATEGORIES_ID_LIST = Array.from(CATEGORIES_ID.keys());
 
 function Category({
@@ -69,20 +73,13 @@ function Category({
 
   //카테고리별 데이터 수 받아오기
   const countEachCategoryItems = useCallback(async () => {
-    setIsLoading(true);
     const res = await countEachCategoryItemsByQuery(
       searchQueryParam,
       selectedCategory
     );
     const categoryCount = res?.data.counts_by_category;
     setCountedCategoryItems(categoryCount);
-    setIsLoading(false);
-  }, [
-    searchQueryParam,
-    selectedCategory,
-    setCountedCategoryItems,
-    setIsLoading
-  ]);
+  }, [searchQueryParam, selectedCategory, setCountedCategoryItems]);
 
   useEffect(() => {
     countEachCategoryItems();
@@ -103,7 +100,9 @@ function Category({
   const changeCategoryIdIntoName = useCallback(
     (destinationList: DestinationsType[]) => {
       const specifiedCatogory = destinationList?.map((el) => {
-        const categoryName = CATEGORIES_ID.get(el.category_id) ?? '로딩 중..';
+        const categoryName =
+          CATEGORIES_ID.get(el.category_id) ??
+          DATA_LOADING_MESSAGE.CATEGORY_LOADING;
         return { ...el, category_name: categoryName }; //예외처리 다시 수정
       });
       return specifiedCatogory;
@@ -155,7 +154,7 @@ function Category({
 
   useEffect(() => {
     const debouncer = setTimeout(() => {
-      console.log('로딩 중입니다.');
+      console.log(DATA_LOADING_MESSAGE.CATEGORY_LOADING);
     }, 400);
 
     return () => {
@@ -169,7 +168,6 @@ function Category({
       return;
     }
     if (!isUserSearched) {
-      setIsLoading(true);
       const categorizedRankingDestinations =
         rankedDestinations?.filter((destination) => {
           return selectedCategory.includes(destination?.category_id);
@@ -178,38 +176,33 @@ function Category({
         changeCategoryIdIntoName(categorizedRankingDestinations)
       );
       setFilteredCount(() => categorizedRankingDestinations.length);
-      setIsLoading(false);
     }
     return;
   }, [
     selectedCategory,
     rankedDestinations,
     setFilteredCount,
-    setIsLoading,
+    // setIsLoading,
     isUserSearched
   ]);
 
   const getCategorizedSearchingData = useCallback(async () => {
-    setIsLoading(true);
     const res = await getDestinationListByTitleAndCategoryId(
       selectedCategory,
       searchQueryParam
-      // isUserSearched ? searchQueryParam : '' //랭킹순 추가 시 수정예정
     );
     const categorizedSearchingDestinationsList = res?.data.destinations;
     setFilteredDestinations(() =>
       changeCategoryIdIntoName(categorizedSearchingDestinationsList)
     );
     setFilteredCount(() => categorizedSearchingDestinationsList.length);
-    setIsLoading(false);
     return;
   }, [
     selectedCategory,
     searchQueryParam,
     setFilteredDestinations,
     setFilteredCount,
-    isUserSearched,
-    setIsLoading
+    isUserSearched
   ]);
 
   useEffect(() => {
@@ -220,65 +213,62 @@ function Category({
 
   return (
     <>
-      {isLoading ? (
+      {isLoading && (
         <div className={styles.categoryWrapper}>
-          <div className={styles.LoadingContainer}>
-            <AiOutlineLoading3Quarters
+          <div className={styles.categoryContainer}>
+            {/* <AiOutlineLoading3Quarters
               className={styles.destinationDetailsLoadingIcon}
             />
-            <span>로딩 중 입니다..</span>
+            <span>{DATA_LOADING_MESSAGE.CATEGORY_LOADING}</span> */}
           </div>
         </div>
-      ) : (
-        <>
-          <section className={styles.categoryWrapper}>
-            <div className={styles.categoryContainer}>
-              <button
-                onClick={handleAllClick}
-                id={
-                  isSelectedAll
-                    ? styles.activeSelectedAllButton
-                    : styles.selectedAllButton
-                }
-                disabled={isLoading}
-              >
-                전체
-              </button>
-              {CATEGORIES_ID_LIST?.map((categoryId, index) => (
-                <button
-                  key={index}
-                  value={categoryId}
-                  onClick={handleCategoryClick}
-                  disabled={isLoading}
-                  className={
-                    selectedCategory?.includes(categoryId)
-                      ? styles.activeSelectedButton
-                      : styles.selectedButton
-                  }
-                  id={
-                    selectedCategory?.includes(categoryId)
-                      ? styles[`activeCategory-${categoryId}`]
-                      : styles[`Category-${categoryId}`]
-                  }
-                >
-                  {`${
-                    findCategoryCountByCategoryId(categoryId)?.category_name
-                  }ㆍ${findCategoryCountByCategoryId(categoryId)?.count}`}
-                </button>
-              ))}
-            </div>
-          </section>
-          {/* <div className={styles.filteredCounterWraper}>
-            <p className={styles.filteredCounter}>{`전체ㆍ${
-              filteredCount ?? '로딩 중...'
-            }`}</p>
-          </div> */}
-          <Destinations
-            filteredDestinations={filteredDestinations}
-            isLoading={isLoading}
-          />
-        </>
       )}
+      {!isLoading && (
+        <section className={styles.categoryWrapper}>
+          <div className={styles.categoryContainer}>
+            <button
+              onClick={handleAllClick}
+              id={
+                isSelectedAll
+                  ? styles.activeSelectedAllButton
+                  : styles.selectedAllButton
+              }
+              disabled={isLoading}
+            >
+              전체
+            </button>
+            {CATEGORIES_ID_LIST?.map((categoryId, index) => (
+              <button
+                key={index}
+                value={categoryId}
+                onClick={handleCategoryClick}
+                disabled={isLoading}
+                className={
+                  selectedCategory?.includes(categoryId)
+                    ? styles.activeSelectedButton
+                    : styles.selectedButton
+                }
+                id={
+                  selectedCategory?.includes(categoryId)
+                    ? styles[`activeCategory-${categoryId}`]
+                    : styles[`Category-${categoryId}`]
+                }
+              >
+                {CATEGORIES_ID.get(categoryId)}
+                {/* {findCategoryCountByCategoryId(categoryId) &&
+                  `${
+                    findCategoryCountByCategoryId(categoryId)?.category_name ??
+                    ''
+                  }ㆍ${findCategoryCountByCategoryId(categoryId)?.count ?? ''}`} */}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+      <Destinations
+        filteredDestinations={filteredDestinations}
+        isLoading={isLoading}
+      />
     </>
   );
 }

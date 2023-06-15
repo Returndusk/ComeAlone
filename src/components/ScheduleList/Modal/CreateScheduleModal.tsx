@@ -45,8 +45,8 @@ function CreateScheduleModal(props: {
   const startDateFormatted = format(date[0].startDate, 'yyyy/MM/dd').split('/');
   const endDateFormatted = format(date[0].endDate, 'yyyy/MM/dd').split('/');
 
-  const [showFailAlert, setShowFailAlert] = useState(false);
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showFailAlert, setShowFailAlert] = useState<boolean>(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
 
   function handleDateRange(ranges: RangeKeyDict) {
     const { startDate, endDate } = ranges.selection;
@@ -190,6 +190,9 @@ function CreateScheduleModal(props: {
                       borderWidth: '1px'
                     }
                   }
+                  // '&:hover': {
+                  //   borderColor: '#ef6d00'
+                  // }
                 }}
               />
             </div>
