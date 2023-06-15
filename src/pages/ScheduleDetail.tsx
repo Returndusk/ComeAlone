@@ -11,7 +11,6 @@ import DestinationsMap from '../components/ScheduleDetail/DestinationsMap';
 import ReviewsSchedule from '../components/ScheduleDetail/ReviewsSchedule';
 import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedule';
 import {
-  getScheduleDetailById,
   getDoesUserLikeById,
   toggleUserLikeById,
   getScheduleReviewsById,
@@ -24,10 +23,9 @@ import {
   ScheduleFetchedType
 } from '../types/ScheduleDetailTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
-import { AxiosError } from 'axios';
+import useScheduleDetailFetch from '../hooks/useScheduleDetailFetch';
 
 function ScheduleDetail() {
-  const navigate = useNavigate();
   const scheduleId: string = useParams().scheduleId as string;
   const isLoggedIn: boolean = useAuthState().authState.isLoggedIn as boolean;
   const loggedInUserId: string = useAuthState().authState.user?.id as string;
@@ -40,40 +38,19 @@ function ScheduleDetail() {
   const scheduleFetched = useRef<ScheduleFetchedType>();
   const userLikesCount = useRef<number>(0);
 
-  const getScheduleDetail = useCallback(async (scheduleId: string) => {
-    try {
-      const response = await getScheduleDetailById(scheduleId);
+  const [fetched] = useScheduleDetailFetch(scheduleId);
 
-      const data: ScheduleFetchedType = {
-        userId: response?.data.user.id,
-        nickname: response?.data.user.nickname,
-        profileImage: response?.data.user.profile_image,
-        title: response?.data.title,
-        summary: response?.data.summary,
-        likesCount: response?.data.likes_count,
-        duration: response?.data.duration,
-        startDate: new Date(response?.data.start_date),
-        endDate: new Date(response?.data.end_date),
-        image: response?.data.image,
-        createdAt: new Date(response?.data.created_at.split('T')[0]),
-        updatedAt: new Date(response?.data.updated_at.split('T')[0]),
-        destinationCount: response?.data.destination_count,
-        destinations: response?.data.destinationMaps
-      };
-
-      return data;
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 404) {
-          console.log(err.response.data.message);
-
-          navigate('*');
-        }
-      } else {
-        console.log(err);
-      }
+  useEffect(() => {
+    if (!fetched) {
+      return;
     }
-  }, []);
+
+    scheduleFetched.current = fetched as ScheduleFetchedType;
+    userLikesCount.current = fetched?.likesCount as number;
+    setCheckedDestinations(
+      fetched?.destinations.flat() as MapWithWaypointsPropsType[]
+    );
+  }, [fetched]);
 
   const getDoesUserLike = useCallback(async (scheduleId: string) => {
     const response = await getDoesUserLikeById(scheduleId);
@@ -120,22 +97,11 @@ function ScheduleDetail() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedDetail = (await getScheduleDetail(
-        scheduleId
-      )) as ScheduleFetchedType;
-
-      if (!fetchedDetail) {
-        return;
-      }
-
       const fetchedReviews: ScheduleReview[] = await getScheduleReviews(
         scheduleId
       );
 
-      scheduleFetched.current = fetchedDetail as ScheduleFetchedType;
-      userLikesCount.current = fetchedDetail.likesCount;
       setScheduleReviews(fetchedReviews);
-      setCheckedDestinations(fetchedDetail.destinations.flat());
 
       if (isLoggedIn) {
         const doesUserLike = await getDoesUserLike(scheduleId);
@@ -147,7 +113,7 @@ function ScheduleDetail() {
     };
 
     fetchData();
-  }, [getScheduleDetail, getScheduleReviews, getDoesUserLike, isLoggedIn]);
+  }, [getScheduleReviews, getDoesUserLike, isLoggedIn]);
 
   const handleReviewSubmit = (input: string) => {
     addScheduleReview(scheduleId, input);
@@ -175,7 +141,7 @@ function ScheduleDetail() {
     updatedAt,
     destinationCount,
     destinations
-  } = scheduleFetched.current as ScheduleFetchedType;
+  } = fetched as ScheduleFetchedType;
 
   return (
     <div className={styles.container}>
