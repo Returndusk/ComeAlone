@@ -12,6 +12,11 @@ interface NextArrowProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
+interface Coordinates {
+  x: number;
+  y: number;
+}
+
 function NextArrow({ onClick }: NextArrowProps) {
   return (
     <button
@@ -64,6 +69,11 @@ function SliderBanner({
   };
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [mouseDownPoint, setMouseDownPoint] = useState<Coordinates | null>(
+    null
+  );
+  const [mouseUpPoint, setMouseUpPoint] = useState<Coordinates | null>(null);
+
   const navigate = useNavigate();
   const categoryMapping: { [key: number]: string } = {
     12: '관광지',
@@ -94,8 +104,38 @@ function SliderBanner({
 
   const finalSettings = { ...defaultSettings, ...settings };
 
-  const handleBannerClick = (data: Destination): void => {
-    if (urlTemplate) {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    setMouseDownPoint({
+      x: event.clientX,
+      y: event.clientY
+    });
+  };
+
+  const handleMouseUp = (event: React.MouseEvent<HTMLDivElement>) => {
+    setMouseUpPoint({
+      x: event.clientX,
+      y: event.clientY
+    });
+  };
+
+  const isCoordinatesEqual = (point1: Coordinates, point2: Coordinates) => {
+    const threshold = 5;
+    return (
+      Math.abs(point1.x - point2.x) < threshold &&
+      Math.abs(point1.y - point2.y) < threshold
+    );
+  };
+
+  const handleBannerClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    data: Destination
+  ) => {
+    if (
+      urlTemplate &&
+      mouseDownPoint &&
+      mouseUpPoint &&
+      isCoordinatesEqual(mouseDownPoint, mouseUpPoint)
+    ) {
       const url = urlTemplate.replace(/{(\w+)}/g, (match, key) => {
         return String(data[key] || '');
       });
@@ -114,14 +154,16 @@ function SliderBanner({
           : ''
       }`}
     >
-      <Slider {...finalSettings} draggable={false}>
+      <Slider {...finalSettings}>
         {destinations.map((destination, index) => (
           <div
             key={`destination-${String(destination[idProperty]) || index}`}
             className={`${styles.box} ${
               boxClassName && styles[boxClassName] ? styles[boxClassName] : ''
             }`}
-            onClick={() => handleBannerClick(destination)}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onClick={(event) => handleBannerClick(event, destination)}
           >
             <div
               className={`${
@@ -148,7 +190,6 @@ function SliderBanner({
                   {categoryMapping[Number(destination.destination_category_id)]}
                 </span>
               )}
-
               {showTitleAndOverview && (
                 <div
                   className={`${styles.text} ${
