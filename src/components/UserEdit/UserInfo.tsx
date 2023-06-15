@@ -96,8 +96,10 @@ function UserInfo({
           <button
             type='button'
             onClick={handleCheckNickname}
-            className={!isNicknameNew ? styles.disabled : ''}
-            disabled={!isNicknameNew}
+            className={
+              !isNicknameNew || errors.nickname !== '' ? styles.disabled : ''
+            }
+            disabled={!isNicknameNew || errors.nickname !== ''}
           >
             중복확인
           </button>
