@@ -65,6 +65,7 @@ function ReviewManagement({
   // const [isConfirmDelete, setIsConfirmDelete] = useState<boolean>(false);
   const [tryDelete, setTryDelete] = useState<boolean>(false);
   const navigate = useNavigate();
+  const url = useLocation().pathname;
 
   //리뷰 수정 요청 메서드
   const modifyReview = useCallback(
@@ -158,7 +159,6 @@ function ReviewManagement({
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    const url = useLocation().pathname;
     navigate('/login', { state: { prevUrl: url } });
   };
 
