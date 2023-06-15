@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './ScheduleList.module.scss';
 import { useAuthState } from '../../contexts/AuthContext';
 import images from '../../constants/image';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Router from '../../constants/Router';
 
 type ScheduleProps = {
@@ -14,6 +14,7 @@ function ScheduleLists({ children }: ScheduleProps) {
   const isLoggedIn = authState.isLoggedIn;
   const path = useLocation().pathname.split('/');
   const scheduleFilter = path[path.length - 1];
+  const navigate = useNavigate();
 
   return (
     <>
@@ -30,35 +31,41 @@ function ScheduleLists({ children }: ScheduleProps) {
       </div>
       <div className={styles.scheduleContainer}>
         <div className={styles.scheduleFilter}>
-          <Link
-            to={`${Router.SCHEDULE_LIST}/likes`}
+          <button
             className={`${styles.sortButton} ${
               scheduleFilter === 'likes' && styles.selected
             }`}
+            onClick={() => {
+              navigate(`${Router.SCHEDULE_LIST}/likes`);
+            }}
           >
             인기순
-          </Link>
-          <Link
-            to={`${Router.SCHEDULE_LIST}/recent`}
+          </button>
+          <button
             className={`${styles.sortButton} ${
               scheduleFilter === 'recent' && styles.selected
             }`}
+            onClick={() => {
+              navigate(`${Router.SCHEDULE_LIST}/recent`);
+            }}
           >
             최신순
-          </Link>
+          </button>
           {isLoggedIn && (
-            <Link
-              to={`${Router.SCHEDULE_LIST}/liked`}
+            <button
               className={`${styles.sortButton} ${
                 scheduleFilter === 'liked' && styles.selected
               }`}
+              onClick={() => {
+                navigate(`${Router.SCHEDULE_LIST}/liked`);
+              }}
             >
               좋아요 한 일정
-            </Link>
+            </button>
           )}
         </div>
+        {children}
       </div>
-      {children}
     </>
   );
 }
