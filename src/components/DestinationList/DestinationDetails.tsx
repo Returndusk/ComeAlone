@@ -124,6 +124,11 @@ function DestinationDetails() {
     return '';
   };
 
+  const removeTagFromOverview = useCallback((overview: string) => {
+    const removedStr = overview.replace(/<br>|<br\/>|<br \/>/g, '\n');
+    return removedStr;
+  }, []);
+
   const handleOnConfirm = () => {
     setIsShowAlert(false);
     const url = useLocation().pathname;
@@ -215,7 +220,7 @@ function DestinationDetails() {
             </div>
 
             <div className={styles.destinationOverview}>
-              {destinationDetails?.overview}
+              {removeTagFromOverview(destinationDetails?.overview)}
             </div>
 
             <div className={styles.scheduleModalButtonContainer}>
