@@ -1,124 +1,36 @@
-.usersReviewContainer {
-  display: grid;
+.modifyReviewContainer {
+  display: flex;
+  align-items: center;
+  padding: 15px 0px;
+  box-sizing: border-box;
 
-  .usersReviewCounter {
-    font-size: 16px;
-  }
+  .reviewInputForm {
+    width: 100%;
 
-  .alertContainer {
-    display: flex;
-    margin-top: 80px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: #c1c1c1;
-
-    .alertIcon {
-      width: 100px;
-      height: 100px;
-      padding: 20px;
-    }
-  }
-
-  .usersReviewBox:not(:first-child) {
-    margin-top: 20px;
-  }
-
-  .usersReviewBox {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 24px;
-
-    p + p {
-      margin: 10px 0;
+    .reviewInputBar {
+      // margin-right: 10px;
+      width: calc(100% - 130px);
     }
 
-    .destinationInfo {
-      display: flex;
-      position: relative;
-      align-items: center;
-      padding-bottom: 10px;
+    Button {
+      width: 50px;
+      height: 40px;
+      border: 0;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
 
-      &::before {
-        content: 'NO IMAGE';
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 60px;
-        height: 60px;
-        color: #fff;
-        background-color: #ddd;
-        border-radius: 10px;
-        font-size: 10px;
-        letter-spacing: 1px;
-      }
-      #reviewImage {
-        position: absolute;
-        width: 60px;
-        height: 60px;
-        border-radius: 10px;
-      }
-
-      .usersReviewTitle {
-        font-size: 20px;
-        color: var(--main-color);
-        margin-left: 10px;
-      }
-
-      .reviewHandleButtonContainer {
-        display: flex;
-        align-items: center;
-
-        button {
-          all: unset;
-          cursor: pointer;
-          padding: 10px;
-          border-radius: 5px;
-
-          height: 20px;
-          line-height: 20px;
-          text-align: center;
-          font-size: 20px;
-          letter-spacing: 3px;
-
-          &.modifyButton {
-            color: #4f94d4;
-            border: 1px solid #4f94d4;
-
-            &:hover {
-              background-color: #4f94d4;
-              opacity: 0.8;
-              color: #fff;
-            }
-          }
-
-          &.deleteButton {
-            color: #d63638;
-
-            &:hover {
-              background-color: #d63638;
-              opacity: 0.8;
-              color: #fff;
-            }
-          }
-        }
-        button + button {
-          margin-left: 8px;
-        }
-
-        span {
-          margin-left: 3px;
-          text-align: center;
-        }
-      }
+      margin-left: 10px;
     }
 
-    .usersReviewComment {
-      font-size: 19px;
-      line-height: 1.2;
+    .reviewCancelButton {
+      background: none;
+      color: #000;
     }
 
-    .usersReviewCreatedDate {
-      font-size: 15px;
+    .reviewSubmitButton {
+      background-color: var(--main-color);
     }
   }
 }
