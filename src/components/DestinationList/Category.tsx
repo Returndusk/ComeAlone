@@ -102,11 +102,11 @@ function Category({
     setIsLoading(true);
     const { value } = e.target as HTMLButtonElement;
     const targetCategoryId = Number(value);
-    setIsSelectedAll(false);
-    if (selectedCategory.length === categoryList?.length) {
+
+    if (isSelectedAll) {
+      setIsSelectedAll(false);
       const newSelectedCategory = [targetCategoryId];
       setSelectedCategory(newSelectedCategory);
-
       return;
     }
 
