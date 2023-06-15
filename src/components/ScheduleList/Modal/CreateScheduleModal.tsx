@@ -190,6 +190,9 @@ function CreateScheduleModal(props: {
                       borderWidth: '1px'
                     }
                   }
+                  // '&:hover': {
+                  //   borderColor: '#ef6d00'
+                  // }
                 }}
               />
             </div>
