@@ -36,6 +36,7 @@ function UsersReview() {
   const { authState } = useAuthState();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const navigate = useNavigate();
+  const url = useLocation().pathname;
 
   //유저의 리뷰 조회
   const getUserReviewList = useCallback(async () => {
@@ -91,7 +92,6 @@ function UsersReview() {
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    const url = useLocation().pathname;
     navigate('/login', { state: { prevUrl: url } });
   };
 

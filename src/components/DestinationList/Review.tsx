@@ -43,6 +43,7 @@ function Review() {
   const { contentid } = useParams();
   const navigate = useNavigate();
   const [isConfirmDelete, setIsConfirmDelete] = useState<boolean>(false);
+  const url = useLocation().pathname;
 
   //리뷰 조회 메서드
   const getReviewList = useCallback(async () => {
@@ -159,7 +160,6 @@ function Review() {
 
   const handleOnLoginConfirm = () => {
     setIsShowAlert(false);
-    const url = useLocation().pathname;
     navigate('/login', { state: { prevUrl: url } });
     return;
   };
