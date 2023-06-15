@@ -40,6 +40,13 @@ export interface UserInfoErrors {
   phoneNumber: string;
 }
 
+interface Validator {
+  nickname: (nickname: string) => string;
+  newPassword: (password: string) => string;
+  passwordConfirm: (passwordConfirm: string) => string;
+  phoneNumber: (phoneNumber: string) => string;
+}
+
 function UserEditForm() {
   const navigate = useNavigate();
   const { authState, updateAuthState } = useAuthState();
@@ -74,9 +81,136 @@ function UserEditForm() {
     prevValue: ''
   });
 
+  const checkEmptyInputFields = (
+    values: UserInfoValues,
+    errMsgs: UserInfoErrors
+  ) => {
+    for (const [key, value] of Object.entries(values)) {
+      if (
+        key === 'newPassword' ||
+        key === 'passwordConfirm' ||
+        key === 'profileImage'
+      )
+        return;
+      const errorKey = key as keyof UserInfoErrors;
+      if (!value) errMsgs[errorKey] = '빈칸을 입력해 주세요.';
+    }
+  };
+
+  const validateNickname = (nickname: string) => {
+    let errMsg = '';
+    const minLength = 2;
+    const maxLength = 6;
+    const hasAllowedChars = /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/;
+
+    if (nickname.length < minLength || nickname.length > maxLength) {
+      return (errMsg = `닉네임은 ${minLength}자 이상, ${maxLength}자 이하여야 합니다.`);
+    }
+
+    if (nickname.includes(' ')) {
+      return (errMsg = '닉네임에는 공백을 사용할 수 없습니다.');
+    }
+
+    if (!hasAllowedChars.test(nickname)) {
+      return (errMsg =
+        '닉네임은 알파벳 대소문자, 숫자, 한글만 사용할 수 있습니다.');
+    }
+
+    return errMsg;
+  };
+
+  const validatePassword = (password: string) => {
+    let errMsg = '';
+    const hasSpecialChar = /[-_!@#$%&*,.]/;
+    const hasNumber = /[0-9]/;
+    const minLength = 8;
+    const maxLength = 20;
+    const hasAllowedChars = /^[a-zA-Z0-9-_!@#$%&*,.]+$/g;
+
+    if (!hasSpecialChar.test(password) || !hasNumber.test(password)) {
+      return (errMsg = '특수 문자와 숫자가 1개 이상 포함되어야 합니다.');
+    }
+
+    if (!hasAllowedChars.test(password)) {
+      return (errMsg = '허용되지 않는 문자입니다.');
+    }
+
+    if (password.length < minLength) {
+      return (errMsg = `비밀번호는 ${minLength}자 이상이어야 합니다.`);
+    }
+
+    if (password.length > maxLength) {
+      return (errMsg = `비밀번호는 ${maxLength}자 이하여야 합니다.`);
+    }
+
+    return errMsg;
+  };
+
+  const validatePasswordConfirm = (passwordConfirm: string) => {
+    let errMsg = '';
+    if (passwordConfirm !== values.newPassword) {
+      return (errMsg = '비밀번호가 일치하지 않습니다.');
+    }
+
+    return errMsg;
+  };
+
+  const validatePhoneNumber = (phoneNumber: string) => {
+    let errMsg = '';
+    const pattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
+    const hasAllowedChars = /^[0-9-]*$/;
+
+    if (!phoneNumber.includes('-')) {
+      return (errMsg = '하이픈(-)을 포함하여 입력해주세요.');
+    }
+
+    if (!pattern.test(phoneNumber) || !hasAllowedChars.test(phoneNumber)) {
+      return (errMsg = '유효한 전화번호 형식이 아닙니다.');
+    }
+
+    return errMsg;
+  };
+
+  const validateBirthDate = ({
+    year,
+    month,
+    day
+  }: UserInfoValues['birthDate']) => {
+    let errMsg = '';
+    const birthDate = new Date(Number(year), Number(month) - 1, Number(day));
+    const isYearValid = birthDate.getFullYear() === Number(year);
+    const isMonthValid = birthDate.getMonth() + 1 === Number(month);
+    const isDayValid = birthDate.getDate() === Number(day);
+
+    if (!isYearValid || !isMonthValid || !isDayValid) {
+      return (errMsg = '유효한 날짜를 입력해주세요.');
+    }
+
+    return errMsg;
+  };
+
+  const validators: Validator = {
+    newPassword: validatePassword,
+    passwordConfirm: validatePasswordConfirm,
+    nickname: validateNickname,
+    phoneNumber: validatePhoneNumber
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
+
+    //유효성 검사
+    if (name === 'gender') return;
+    if (name === 'newPassword' && !value) {
+      if (!values.passwordConfirm) {
+        setErrors((prev) => ({ ...prev, passwordConfirm: '' }));
+      }
+      return setErrors((prev) => ({ ...prev, newPassword: '' }));
+    }
+
+    const error = validators[name as keyof typeof validators](value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   const handleImageChange = (imagePath: string) => {
@@ -102,137 +236,10 @@ function UserEditForm() {
         }
       };
     });
-  };
 
-  const checkEmptyInputFields = (
-    values: UserInfoValues,
-    errMsgs: UserInfoErrors
-  ) => {
-    for (const [key, value] of Object.entries(values)) {
-      if (
-        key === 'newPassword' ||
-        key === 'passwordConfirm' ||
-        key === 'profileImage'
-      )
-        return;
-      const errorKey = key as keyof UserInfoErrors;
-      if (!value) errMsgs[errorKey] = '빈칸을 입력해 주세요.';
-    }
-  };
-
-  const validateNickname = (nickname: string, errMsgs: UserInfoErrors) => {
-    const minLength = 2;
-    const maxLength = 6;
-    const hasAllowedChars = /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/;
-
-    if (nickname.length < minLength || nickname.length > maxLength) {
-      return (errMsgs.nickname = '닉네임은 2자 이상, 6자 이하여야 합니다.');
-    }
-
-    if (nickname.includes(' ')) {
-      return (errMsgs.nickname = '닉네임에는 공백을 사용할 수 없습니다.');
-    }
-
-    if (!hasAllowedChars.test(nickname)) {
-      return (errMsgs.nickname =
-        '닉네임은 알파벳 대소문자, 숫자, 한글만 사용할 수 있습니다.');
-    }
-  };
-
-  const validatePassword = (password: string, errMsgs: UserInfoErrors) => {
-    const hasSpecialChar = /[-_!@#$%&*,.]/;
-    const hasUpperCase = /[A-Z]/;
-    const hasLowerCase = /[a-z]/;
-    const hasNumber = /[0-9]/;
-    const minLength = 8;
-    const hasAllowedChars = /^[a-zA-Z0-9-_!@#$%&*,.]+$/g;
-
-    if (password.length < minLength) {
-      return (errMsgs.newPassword = '비밀번호는 8자 이상이어야 합니다.');
-    }
-
-    if (
-      !hasSpecialChar.test(password) ||
-      !hasUpperCase.test(password) ||
-      !hasLowerCase.test(password) ||
-      !hasNumber.test(password)
-    ) {
-      return (errMsgs.newPassword =
-        '대문자, 소문자, 특수 문자, 숫자가 1개 이상 포함되어야 합니다.');
-    }
-
-    if (!hasAllowedChars.test(password)) {
-      return (errMsgs.newPassword = '허용되지 않는 문자입니다.');
-    }
-  };
-
-  const validatePasswordConfirm = (
-    password: string,
-    passwordConfirm: string,
-    errMsgs: UserInfoErrors
-  ) => {
-    if (password !== passwordConfirm) {
-      errMsgs.passwordConfirm = '비밀번호가 일치하지 않습니다.';
-    }
-  };
-
-  const validatePhoneNumber = (
-    phoneNumber: string,
-    errMsgs: UserInfoErrors
-  ) => {
-    const pattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
-    const hasAllowedChars = /^[0-9-]*$/;
-
-    if (!phoneNumber.includes('-')) {
-      return (errMsgs.phoneNumber = '하이픈(-)을 포함하여 입력해주세요.');
-    }
-
-    if (!pattern.test(phoneNumber) || !hasAllowedChars.test(phoneNumber)) {
-      return (errMsgs.phoneNumber = '유효한 전화번호 형식이 아닙니다.');
-    }
-  };
-
-  const validateBirthDate = (
-    { year, month, day }: UserInfoValues['birthDate'],
-    errMsgs: UserInfoErrors
-  ) => {
-    const birthDate = new Date(Number(year), Number(month) - 1, Number(day));
-    const isYearValid = birthDate.getFullYear() === Number(year);
-    const isMonthValid = birthDate.getMonth() + 1 === Number(month);
-    const isDayValid = birthDate.getDate() === Number(day);
-
-    if (!isYearValid || !isMonthValid || !isDayValid) {
-      return (errMsgs.birthDate = '유효한 날짜를 입력해주세요.');
-    }
-  };
-
-  const validateForm = (values: UserInfoValues) => {
-    const errMsgs: UserInfoErrors = initErrors;
-
-    checkEmptyInputFields(values, errMsgs);
-    if (!errMsgs.nickname) {
-      validateNickname(values.nickname, errMsgs);
-
-      if (
-        !nicknameDuplicate.isPass &&
-        nicknameDuplicate.prevValue !== values.nickname
-      ) {
-        errMsgs.nickname = '닉네임 중복 확인을 해주세요.';
-      }
-    }
-
-    if (!errMsgs.newPassword && values.newPassword)
-      validatePassword(values.newPassword, errMsgs);
-    if (!errMsgs.passwordConfirm && values.newPassword)
-      validatePasswordConfirm(
-        values.newPassword,
-        values.passwordConfirm,
-        errMsgs
-      );
-    if (!errMsgs.phoneNumber) validatePhoneNumber(values.phoneNumber, errMsgs);
-    if (!errMsgs.birthDate) validateBirthDate(values.birthDate, errMsgs);
-
-    return errMsgs;
+    //유효성 검사
+    const error = validateBirthDate({ ...values.birthDate, [name]: value });
+    setErrors((prev) => ({ ...prev, birthDate: error }));
   };
 
   const handleCheckNickname = async () => {
@@ -243,9 +250,6 @@ function UserEditForm() {
         nickname: '빈칸을 입력해주세요.'
       }));
     }
-    const errMsgs = { ...errors };
-    const nicknameError = validateNickname(values.nickname, errMsgs);
-    if (nicknameError) return setErrors(errMsgs);
 
     try {
       const response = await checkNicknameDuplicate({ nickname });
@@ -282,57 +286,96 @@ function UserEditForm() {
     }
   };
 
+  const validateForm = (values: UserInfoValues) => {
+    const errMsgs: UserInfoErrors = { ...errors };
+
+    checkEmptyInputFields(values, errMsgs);
+
+    if (!errMsgs.nickname) {
+      errMsgs.nickname = validateNickname(values.nickname);
+    }
+
+    if (!errMsgs.newPassword && values.newPassword) {
+      errMsgs.newPassword = validatePassword(values.newPassword);
+    }
+
+    if (!errMsgs.passwordConfirm && values.newPassword) {
+      errMsgs.passwordConfirm = validatePasswordConfirm(values.passwordConfirm);
+    }
+
+    if (!errMsgs.phoneNumber) {
+      errMsgs.phoneNumber = validatePhoneNumber(values.phoneNumber);
+    }
+
+    errMsgs.birthDate = validateBirthDate(values.birthDate);
+
+    return errMsgs;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    //에러 존재시 에러메시지 출력 (가입X)
     const validationErrors = validateForm(values);
-    setErrors(validationErrors);
-    if (Object.values(validationErrors).every((error) => !error)) {
-      try {
-        const { year, month, day } = values.birthDate;
-        const data = {
-          password: values.newPassword,
-          nickname: values.nickname,
-          birth_date: `${year}-${month}-${day}`,
-          phone_number: values.phoneNumber,
-          gender: values.gender,
-          profile_image: values.profileImage
-        };
-        const response = await editUser(data);
+    const hasErrors = Object.values(validationErrors).some((error) => error);
+    if (hasErrors) return setErrors(validationErrors);
 
-        if (response.status === 200) {
-          setAlertModal({
-            isOpen: true,
-            message: '회원 정보가 수정되었습니다.',
-            onConfirm: () => {
-              updateAuthState(true, response.data.user);
-              navigate('/mypage');
-            }
-          });
-        }
-      } catch (err: unknown) {
-        if (err instanceof AxiosError) {
-          if (err.response?.status === 401) {
-            if (
-              err.response.data.reason === 'INVALID' ||
-              err.response.data.reason === 'EXPIRED'
-            ) {
-              return setAlertModal({
-                isOpen: true,
-                message: '로그인 상태가 아닙니다. 다시 로그인해주세요.',
-                onConfirm: () => updateAuthState(false)
-              });
-            }
-          }
-        }
+    //닉네임 중복 확인 여부 확인
+    if (
+      !nicknameDuplicate.isPass &&
+      nicknameDuplicate.prevValue !== values.nickname
+    ) {
+      return setAlertModal({
+        isOpen: true,
+        message: '닉네임 중복확인을 해주세요.',
+        onConfirm: () => setAlertModal(initAlert)
+      });
+    }
 
-        console.log(err);
+    try {
+      const { year, month, day } = values.birthDate;
+      const data = {
+        password: values.newPassword,
+        nickname: values.nickname,
+        birth_date: `${year}-${month}-${day}`,
+        phone_number: values.phoneNumber,
+        gender: values.gender,
+        profile_image: values.profileImage
+      };
+      const response = await editUser(data);
+
+      if (response.status === 200) {
         setAlertModal({
           isOpen: true,
-          message: '회원 정보 수정에 실패하였습니다.',
-          onConfirm: () => setAlertModal(initAlert)
+          message: '회원 정보가 수정되었습니다.',
+          onConfirm: () => {
+            updateAuthState(true, response.data.user);
+            navigate('/mypage');
+          }
         });
       }
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          if (
+            err.response.data.reason === 'INVALID' ||
+            err.response.data.reason === 'EXPIRED'
+          ) {
+            return setAlertModal({
+              isOpen: true,
+              message: '로그인 상태가 아닙니다. 다시 로그인해주세요.',
+              onConfirm: () => updateAuthState(false)
+            });
+          }
+        }
+      }
+
+      console.log(err);
+      setAlertModal({
+        isOpen: true,
+        message: '회원 정보 수정에 실패하였습니다.',
+        onConfirm: () => setAlertModal(initAlert)
+      });
     }
   };
 
