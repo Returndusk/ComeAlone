@@ -14,9 +14,7 @@ const ALERT_PROPS = {
 
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [rankedDestinations, setRankedDestinations] = useState<
-    DestinationsType[] | []
-  >([]);
+  const [rankedDestinations] = useState<DestinationsType[] | []>([]);
   const [isUserSearched, setIsUserSearched] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
