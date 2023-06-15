@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuthState } from '../contexts/AuthContext';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from '../components/ScheduleDetail/ScheduleDetail.module.scss';
 import ImageScheduleDetail from '../components/ScheduleDetail/ImageScheduleDetail';
 import InfoScheduleDetail from '../components/ScheduleDetail/InfoScheduleDetail';
@@ -13,17 +13,17 @@ import InputReviewSchedule from '../components/ScheduleDetail/InputReviewSchedul
 import {
   getDoesUserLikeById,
   toggleUserLikeById,
-  getScheduleReviewsById,
   addScheduleReviewById,
   updateScheduleReviewById,
   deleteScheduleReviewById
 } from '../apis/ScheduleDetailAPI';
 import {
-  ScheduleReview,
+  ScheduleReviewType,
   ScheduleFetchedType
 } from '../types/ScheduleDetailTypes';
 import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
 import useScheduleDetailFetch from '../hooks/useScheduleDetailFetch';
+import useScheduleReviewsFetch from '../hooks/useScheduleReviewsFetch';
 
 function ScheduleDetail() {
   const scheduleId: string = useParams().scheduleId as string;
@@ -34,23 +34,43 @@ function ScheduleDetail() {
     MapWithWaypointsPropsType[]
   >([]);
   const [doesUserLike, setDoesUserLike] = useState<boolean>(false);
-  const [scheduleReviews, setScheduleReviews] = useState<ScheduleReview[]>([]);
+  const [scheduleReviews, setScheduleReviews] = useState<ScheduleReviewType[]>(
+    []
+  );
   const scheduleFetched = useRef<ScheduleFetchedType>();
   const userLikesCount = useRef<number>(0);
 
-  const [fetched] = useScheduleDetailFetch(scheduleId);
+  const [fetchedScheduleDetail] = useScheduleDetailFetch(scheduleId);
+  const [fetchedScheduleReviews] = useScheduleReviewsFetch(scheduleId);
 
   useEffect(() => {
-    if (!fetched) {
-      return;
-    }
+    const fetchData = async () => {
+      if (!fetchedScheduleDetail) {
+        return;
+      }
 
-    scheduleFetched.current = fetched as ScheduleFetchedType;
-    userLikesCount.current = fetched?.likesCount as number;
-    setCheckedDestinations(
-      fetched?.destinations.flat() as MapWithWaypointsPropsType[]
-    );
-  }, [fetched]);
+      if (!fetchedScheduleReviews) {
+        return;
+      }
+
+      scheduleFetched.current = fetchedScheduleDetail as ScheduleFetchedType;
+      userLikesCount.current = fetchedScheduleDetail?.likesCount as number;
+      setScheduleReviews(fetchedScheduleReviews);
+      setCheckedDestinations(
+        fetchedScheduleDetail?.destinations.flat() as MapWithWaypointsPropsType[]
+      );
+
+      if (isLoggedIn) {
+        const doesUserLike = await getDoesUserLike(scheduleId);
+
+        setDoesUserLike(doesUserLike);
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [fetchedScheduleDetail, fetchedScheduleReviews]);
 
   const getDoesUserLike = useCallback(async (scheduleId: string) => {
     const response = await getDoesUserLikeById(scheduleId);
@@ -68,16 +88,13 @@ function ScheduleDetail() {
     setDoesUserLike(isLiked);
   }, []);
 
-  const getScheduleReviews = useCallback(async (scheduleId: string) => {
-    const response = await getScheduleReviewsById(scheduleId);
-
-    return response?.data;
-  }, []);
-
   const addScheduleReview = useCallback(
     async (scheduleId: string, newReview: string) => {
       await addScheduleReviewById(scheduleId, newReview);
-      setScheduleReviews(await getScheduleReviews(scheduleId));
+
+      const [fetchedReviews] = useScheduleReviewsFetch(scheduleId);
+
+      setScheduleReviews(fetchedReviews);
     },
     []
   );
@@ -85,35 +102,19 @@ function ScheduleDetail() {
   const updateScheduleReview = useCallback(
     async (reviewId: number, updateReview: string) => {
       await updateScheduleReviewById(reviewId, updateReview);
-      setScheduleReviews(await getScheduleReviews(scheduleId));
+      const [fetchedReviews] = useScheduleReviewsFetch(scheduleId);
+
+      setScheduleReviews(fetchedReviews);
     },
     []
   );
 
   const deleteScheduleReview = useCallback(async (reviewId: number) => {
     await deleteScheduleReviewById(reviewId);
-    setScheduleReviews(await getScheduleReviews(scheduleId));
+    const [fetchedReviews] = useScheduleReviewsFetch(scheduleId);
+
+    setScheduleReviews(fetchedReviews);
   }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const fetchedReviews: ScheduleReview[] = await getScheduleReviews(
-        scheduleId
-      );
-
-      setScheduleReviews(fetchedReviews);
-
-      if (isLoggedIn) {
-        const doesUserLike = await getDoesUserLike(scheduleId);
-
-        setDoesUserLike(doesUserLike);
-      }
-
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [getScheduleReviews, getDoesUserLike, isLoggedIn]);
 
   const handleReviewSubmit = (input: string) => {
     addScheduleReview(scheduleId, input);
@@ -141,7 +142,7 @@ function ScheduleDetail() {
     updatedAt,
     destinationCount,
     destinations
-  } = fetched as ScheduleFetchedType;
+  } = fetchedScheduleDetail as ScheduleFetchedType;
 
   return (
     <div className={styles.container}>

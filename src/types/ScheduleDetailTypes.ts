@@ -55,7 +55,7 @@ export type ScheduleDetailIconsType = {
   likesCount: number;
 };
 
-export type ScheduleReview = {
+export type ScheduleReviewType = {
   comment_id: number;
   scheduleId: number;
   comment: string;
@@ -69,7 +69,7 @@ export type ScheduleReview = {
 };
 
 export type ScheduleReviewPropsType = {
-  scheduleReviews: ScheduleReview[];
+  scheduleReviews: ScheduleReviewType[];
   reviewsCount: number;
   onReviewUpdate: (id: number, updateReview: string) => void;
   onReviewDelete: (id: number) => void;
