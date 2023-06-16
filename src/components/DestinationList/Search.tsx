@@ -64,6 +64,7 @@ function Search() {
               style={{ width: '350px' }}
               size='small'
               defaultValue={searchQueryParam}
+              key={searchQueryParam}
               sx={{
                 width: '100%',
                 '& label.Mui-focused': { color: '#ef6d00' },
