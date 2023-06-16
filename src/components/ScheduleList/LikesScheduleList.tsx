@@ -6,19 +6,21 @@ import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 import AlertModal from '../common/Alert/AlertModal';
 import { FaExclamationCircle } from 'react-icons/fa';
 import Loading from '../../components/common/Loading/ScheduleListLoading';
+import { SCHEDULES_PER_PAGE } from '../../constants/ScheduleList';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
+const INITIAL_PAGE = 1;
 
 function LikedScheduleLists() {
   const [likesScheduleList, setLikesScheduleList] = useState<ScheduleListType>(
     []
   );
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
-  const [likesPage, setLikesPage] = useState<number>(1);
+  const [likesPage, setLikesPage] = useState<number>(INITIAL_PAGE);
   const [lastDataOfLikes, setLastDataOfLikes] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElement = useRef<HTMLDivElement>(null);
-  const SCHEDULES_PER_PAGE = 6;
+  const fetchDataTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchLikesData = useCallback(async () => {
     setIsLoading(true);
@@ -40,6 +42,12 @@ function LikedScheduleLists() {
   }, [likesPage]);
 
   useEffect(() => {
+    return () => {
+      clearTimeout(fetchDataTimeoutRef.current as NodeJS.Timeout);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!lastDataOfLikes) {
       fetchLikesData();
     }
@@ -50,9 +58,12 @@ function LikedScheduleLists() {
     if (lastElement.current) {
       observer = new IntersectionObserver(
         (entry) => {
-          if (entry[0].isIntersecting) {
-            nextPage();
-          }
+          clearTimeout(fetchDataTimeoutRef.current as NodeJS.Timeout);
+          fetchDataTimeoutRef.current = setTimeout(() => {
+            if (entry[0].isIntersecting) {
+              nextPage();
+            }
+          }, 200);
         },
         { threshold: 1 }
       );
@@ -63,7 +74,7 @@ function LikedScheduleLists() {
 
   const nextPage = useCallback(() => {
     setLikesPage((prev) => prev + 1);
-  }, [likesPage]);
+  }, []);
 
   function handleOnConfirm() {
     setShowAlertModal(false);
