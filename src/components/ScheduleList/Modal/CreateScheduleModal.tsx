@@ -31,6 +31,7 @@ function CreateScheduleModal(props: {
   const [showFailAlert, setShowFailAlert] = useState<boolean>(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
   const [isValidAlert, setIsValidAlert] = useState<boolean>(false);
+  const [consoleAlert, setConsoleAlert] = useState<boolean>(false);
 
   function handleDateRange(ranges: RangeKeyDict) {
     const { startDate, endDate } = ranges.selection;
@@ -103,7 +104,9 @@ function CreateScheduleModal(props: {
       props.onAdd(response.data);
       setShowSuccessAlert(true);
     } catch (err) {
-      console.error('Error: ', err);
+      // console.error('Error: ', err);
+      setConsoleAlert(true);
+      return;
     }
   }
 
@@ -233,6 +236,15 @@ function CreateScheduleModal(props: {
           message='일정은 최대 30일까지 등록할 수 있습니다.'
           onConfirm={() => {
             setIsValidAlert(false);
+          }}
+          showCancelButton={false}
+        />
+      )}
+      {consoleAlert && (
+        <AlertModal
+          message='오류가 발생했습니다.'
+          onConfirm={() => {
+            setConsoleAlert(false);
           }}
           showCancelButton={false}
         />

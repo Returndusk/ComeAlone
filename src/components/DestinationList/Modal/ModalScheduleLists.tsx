@@ -15,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import { MdEventNote } from 'react-icons/md';
 import { CiCircleAlert } from 'react-icons/ci';
 import { createPortal } from 'react-dom';
+import AlertModal from '../../common/Alert/AlertModal';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -35,6 +36,7 @@ export default function ModalScheduleLists() {
   >([]);
   const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
   const [selectedCardIdx, setSelectedCardIdx] = useState<number | null>(null);
+  const [consoleAlert, setConsoleAlert] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const [scheduleDetailsDomRoot, setScheduleDetailsDomRoot] =
@@ -64,7 +66,9 @@ export default function ModalScheduleLists() {
           }))
         );
       } catch (err) {
-        console.error('Error: ', err);
+        // console.error('Error: ', err);
+        setConsoleAlert(true);
+        return;
       }
     }
 
@@ -246,6 +250,15 @@ export default function ModalScheduleLists() {
           </div>,
           scheduleDetailsDomRoot
         )}
+      {consoleAlert && (
+        <div className={styles.alertModal}>
+          <AlertModal
+            message='오류가 발생했습니다.'
+            onConfirm={() => setConsoleAlert(false)}
+            showCancelButton={false}
+          />
+        </div>
+      )}
     </div>
   );
 }
