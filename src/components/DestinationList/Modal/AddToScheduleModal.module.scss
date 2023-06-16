@@ -63,3 +63,19 @@
   font-size: 20px;
   color: var(--main-color);
 }
+
+.alertContainer {
+  display: flex;
+  margin-top: 70px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #c1c1c1;
+  overflow-y: hidden;
+}
+
+.alertIcon {
+  width: 130px;
+  height: 130px;
+  padding: 20px;
+}

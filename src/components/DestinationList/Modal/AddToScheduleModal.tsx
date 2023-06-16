@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import AlertModal from '../../common/Alert/AlertModal';
 import { FaTrashAlt } from 'react-icons/fa';
+import { BsFillFlagFill } from 'react-icons/bs';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -141,17 +142,24 @@ function AddToScheduleModal({
         </Button>
       </Stack>
       <div className={styles.destinationList}>
-        {updatedDestinations[selectedDay].map((destination, idx) => (
-          <div key={idx} className={styles.destination}>
-            {destination}
-            <button
-              className={styles.deleteButton}
-              onClick={() => handleRemoveDestination(selectedDay, idx)}
-            >
-              <FaTrashAlt />
-            </button>
+        {updatedDestinations[selectedDay].length === 0 ? (
+          <div className={styles.alertContainer}>
+            <BsFillFlagFill className={styles.alertIcon} />
+            목적지를 추가해 주세요!
           </div>
-        ))}
+        ) : (
+          updatedDestinations[selectedDay].map((destination, idx) => (
+            <div key={idx} className={styles.destination}>
+              {destination}
+              <button
+                className={styles.deleteButton}
+                onClick={() => handleRemoveDestination(selectedDay, idx)}
+              >
+                <FaTrashAlt />
+              </button>
+            </div>
+          ))
+        )}
       </div>
       {alreadyAddedAlert && (
         <div className={styles.alertModal}>
