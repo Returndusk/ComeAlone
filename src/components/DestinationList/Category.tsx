@@ -1,14 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  CategoryListType,
   DestinationsType,
   specifiedCategoryDestinationsType
 } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
-import {
-  getAllCategoryList,
-  getDestinationListByTitleAndCategoryId
-} from '../../apis/destinationListAPI';
+import { getDestinationListByTitleAndCategoryId } from '../../apis/destinationListAPI';
 import styles from './Category.module.scss';
 
 type CategoryPropsTypes = {
@@ -49,21 +45,8 @@ function Category({
   const [filteredDestinations, setFilteredDestinations] = useState<
     specifiedCategoryDestinationsType[] | []
   >([]);
-  const [categoryList, setCategoryList] = useState<CategoryListType[] | null>(
-    null
-  );
   const [isSelectedAll, setIsSelectedAll] = useState<boolean>(true);
-
-  const getAllCategoryData = useCallback(async () => {
-    const res = await getAllCategoryList();
-    const categoryListData = res?.data;
-    setCategoryList(() => categoryListData);
-    return;
-  }, [setCategoryList]);
-
-  useEffect(() => {
-    getAllCategoryData();
-  }, [getAllCategoryData]);
+  const [isTotalDataNone, setIsTotalDataNone] = useState<boolean>(false);
 
   //카테고리 id => name 변환 함수
   const changeCategoryIdIntoName = useCallback(
@@ -159,6 +142,10 @@ function Category({
       selectedCategory,
       searchQueryParam
     );
+    const totalData = res?.data.total_count;
+    if (totalData === 0) {
+      setIsTotalDataNone(true);
+    }
     const categorizedSearchingDestinationsList = res?.data.destinations;
     setFilteredDestinations(() =>
       changeCategoryIdIntoName(categorizedSearchingDestinationsList)
@@ -174,6 +161,7 @@ function Category({
   useEffect(() => {
     setIsLoading(true);
     getCategorizedSearchingData();
+    return () => setIsTotalDataNone(false); //체크하기
   }, [getCategorizedSearchingData, setIsLoading, isUserSearched]);
 
   return (
@@ -218,7 +206,7 @@ function Category({
       </section>
       <Destinations
         filteredDestinations={filteredDestinations}
-        isLoading={isLoading}
+        isTotalDataNone={isTotalDataNone}
       />
     </>
   );

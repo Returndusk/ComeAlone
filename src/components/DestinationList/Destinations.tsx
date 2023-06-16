@@ -11,12 +11,16 @@ import { TfiClose } from 'react-icons/tfi';
 
 type DestinationsPropsType = {
   filteredDestinations: specifiedCategoryDestinationsType[] | [];
-  isLoading: boolean;
+  isTotalDataNone: boolean;
+};
+
+const DESTINATION_TITLE_STATUS = {
+  MAXIMUN_LENGTH: 14
 };
 
 function Destinations({
   filteredDestinations,
-  isLoading
+  isTotalDataNone
 }: DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
     specifiedCategoryDestinationsType[] | []
@@ -78,7 +82,15 @@ function Destinations({
                   onClick={() => handleDestinationClick(destination)}
                 >
                   <div className={styles.destinationTextWrapper}>
-                    <h2 className={styles.destinationTitle}>
+                    <h2
+                      className={styles.destinationTitle}
+                      id={
+                        destination?.title.length >=
+                        DESTINATION_TITLE_STATUS.MAXIMUN_LENGTH
+                          ? styles.destinationTitleExtended
+                          : styles.destinationTitle
+                      }
+                    >
                       {destination?.title}
                     </h2>
                     <p className={styles.destinationAddress}>
@@ -117,19 +129,22 @@ function Destinations({
             )}
           </>
         ) : (
-          <div className={styles.alertContainer}>
-            <CiCircleAlert className={styles.alertIcon} />
-            <p>검색 결과가 없습니다.</p>
-          </div>
+          isTotalDataNone && (
+            <div className={styles.alertContainer}>
+              <CiCircleAlert className={styles.alertIcon} />
+              <p>검색 결과가 없습니다.</p>
+            </div>
+          )
         )}
       </section>
 
-      {filteredDestinations?.length > 0 && (
-        <Pagination
-          filteredDestinations={filteredDestinations}
-          setSlicedDestinations={setSlicedDestinations}
-        />
-      )}
+      {Array.isArray(filteredDestinations) &&
+        filteredDestinations?.length > 0 && (
+          <Pagination
+            filteredDestinations={filteredDestinations}
+            setSlicedDestinations={setSlicedDestinations}
+          />
+        )}
       {isOpen &&
         detailsDomRoot !== null &&
         createPortal(

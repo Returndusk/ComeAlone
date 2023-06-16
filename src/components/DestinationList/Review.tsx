@@ -168,7 +168,9 @@ function Review() {
   return (
     <>
       <section className={styles.reviewWrapper}>
-        <h3 className={styles.reviewBanner}>{`리뷰(${reviewCount})`}</h3>
+        <h3 className={styles.reviewBanner}>
+          {reviewCount !== undefined && `리뷰(${reviewCount})`}
+        </h3>
         <div className={styles.reviewContainer}>
           {allReviewList?.map((review, index) => {
             return (

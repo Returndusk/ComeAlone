@@ -136,6 +136,7 @@
   padding: 20px 15px;
   box-sizing: border-box;
   border-bottom: 1px solid #eee;
+  text-align: left;
 
   .destinationInfo {
     display: flex;
@@ -154,9 +155,26 @@
       color: #555;
     }
 
-    .destinationHomePage {
-      text-decoration: none;
-      color: var(--main-color);
+    .hompageLinkContainer {
+      display: flex;
+      justify-content: flex-start;
+      width: calc(100% - 17px);
+
+      .destinationHomePage {
+        text-decoration: none;
+        color: var(--main-color);
+        white-space: normal;
+        text-overflow: ellipsis;
+        text-align: left;
+
+        line-height: 1.2;
+        width: 100%;
+        word-break: break-all;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
     }
   }
 }
