@@ -120,7 +120,6 @@ function ProfileImage({
         }
       }
 
-      console.log(err);
       setAlertModal({
         isOpen: true,
         message: '프로필 이미지 업로드에 실패하였습니다.',

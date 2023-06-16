@@ -65,7 +65,6 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
         });
       }
     } catch (err) {
-      console.log(err);
       setAlertModal({
         isOpen: true,
         message: '회원 탈퇴에 실패하였습니다.',
@@ -116,7 +115,6 @@ function DeleteAccountForm({ cancelDeleteAccount }: DeleteFormProps) {
           }
         }
 
-        console.log(err);
         setAlertModal({
           isOpen: true,
           message: '비밀번호 확인에 실패하였습니다.',
