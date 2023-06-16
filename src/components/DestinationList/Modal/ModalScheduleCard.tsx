@@ -6,7 +6,6 @@ import { createPortal } from 'react-dom';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { TfiArrowCircleRight, TfiArrowCircleLeft } from 'react-icons/tfi';
-import { CiCircleAlert } from 'react-icons/ci';
 
 function getDate(startDateString: string, endDateString: string) {
   const startDate = new Date(startDateString);
