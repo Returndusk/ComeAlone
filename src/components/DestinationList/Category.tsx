@@ -1,14 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  CategoryListType,
   DestinationsType,
   specifiedCategoryDestinationsType
 } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
-import {
-  getAllCategoryList,
-  getDestinationListByTitleAndCategoryId
-} from '../../apis/destinationListAPI';
+import { getDestinationListByTitleAndCategoryId } from '../../apis/destinationListAPI';
 import styles from './Category.module.scss';
 
 type CategoryPropsTypes = {
@@ -49,22 +45,8 @@ function Category({
   const [filteredDestinations, setFilteredDestinations] = useState<
     specifiedCategoryDestinationsType[] | []
   >([]);
-  const [categoryList, setCategoryList] = useState<CategoryListType[] | null>(
-    null
-  );
   const [isSelectedAll, setIsSelectedAll] = useState<boolean>(true);
   const [isTotalDataNone, setIsTotalDataNone] = useState<boolean>(false);
-
-  const getAllCategoryData = useCallback(async () => {
-    const res = await getAllCategoryList();
-    const categoryListData = res?.data;
-    setCategoryList(() => categoryListData);
-    return;
-  }, [setCategoryList]);
-
-  useEffect(() => {
-    getAllCategoryData();
-  }, [getAllCategoryData]);
 
   //카테고리 id => name 변환 함수
   const changeCategoryIdIntoName = useCallback(
