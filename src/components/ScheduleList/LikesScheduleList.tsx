@@ -20,6 +20,7 @@ function LikedScheduleLists() {
   const [lastDataOfLikes, setLastDataOfLikes] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElement = useRef<HTMLDivElement>(null);
+  const fetchDataTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchLikesData = useCallback(async () => {
     setIsLoading(true);
@@ -41,6 +42,12 @@ function LikedScheduleLists() {
   }, [likesPage]);
 
   useEffect(() => {
+    return () => {
+      clearTimeout(fetchDataTimeoutRef.current as NodeJS.Timeout);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!lastDataOfLikes) {
       fetchLikesData();
     }
@@ -51,9 +58,12 @@ function LikedScheduleLists() {
     if (lastElement.current) {
       observer = new IntersectionObserver(
         (entry) => {
-          if (entry[0].isIntersecting) {
-            nextPage();
-          }
+          clearTimeout(fetchDataTimeoutRef.current as NodeJS.Timeout);
+          fetchDataTimeoutRef.current = setTimeout(() => {
+            if (entry[0].isIntersecting) {
+              nextPage();
+            }
+          }, 200);
         },
         { threshold: 1 }
       );

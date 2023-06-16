@@ -19,6 +19,7 @@ function RecentScheduleLists() {
   const [lastDataOfRecent, setLastDataOfRecent] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElement = useRef<HTMLDivElement>(null);
+  const fetchDataTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchRecentData = useCallback(async () => {
     setIsLoading(true);
@@ -40,6 +41,12 @@ function RecentScheduleLists() {
   }, [recentPage]);
 
   useEffect(() => {
+    return () => {
+      clearTimeout(fetchDataTimeoutRef.current as NodeJS.Timeout);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!lastDataOfRecent) {
       fetchRecentData();
     }
@@ -50,9 +57,12 @@ function RecentScheduleLists() {
     if (lastElement.current) {
       observer = new IntersectionObserver(
         (entry) => {
-          if (entry[0].isIntersecting) {
-            nextPage();
-          }
+          clearTimeout(fetchDataTimeoutRef.current as NodeJS.Timeout);
+          fetchDataTimeoutRef.current = setTimeout(() => {
+            if (entry[0].isIntersecting) {
+              nextPage();
+            }
+          }, 200);
         },
         { threshold: 1 }
       );
