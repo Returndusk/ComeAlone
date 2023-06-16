@@ -113,11 +113,11 @@ ModalScheduleCardType) {
                   aria-label='outlined button group'
                   sx={{
                     '.MuiButtonGroup-grouped:not(:last-of-type)': {
-                      borderColor: '#ef6d00'
+                      borderColor: `var(--main-color)`
                       // borderRadius: 0
                     },
                     '.MuiButtonGroup-grouped:not(:first-of-type)': {
-                      borderColor: '#ef6d00'
+                      borderColor: `var(--main-color)`
                       // borderRadius: 0
                     }
                   }}
@@ -133,15 +133,15 @@ ModalScheduleCardType) {
                           color:
                             selectedDay === startDay + idx
                               ? '#ffffff'
-                              : '#ef6d00',
+                              : `var(--main-color)`,
                           fontWeight: '600',
                           backgroundColor:
                             selectedDay === startDay + idx
-                              ? '#ef6d00'
+                              ? `var(--main-color)`
                               : undefined,
                           '&:hover': {
                             color: '#ffffff',
-                            backgroundColor: '#ef6d00'
+                            backgroundColor: `var(--main-color)`
                           }
                         }}
                         onClick={() => handleToggleDestinations(startDay + idx)}

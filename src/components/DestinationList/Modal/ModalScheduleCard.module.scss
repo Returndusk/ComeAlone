@@ -122,7 +122,7 @@
   &:hover {
     transform: scale(1.15);
     transition: transform 0.2s;
-    color: #ef6d00;
+    color: var(--main-color);
     border-radius: 50%;
     // border: 0;
     background-color: #ffffff;
@@ -130,7 +130,7 @@
 
   svg {
     font-size: 33px;
-    color: #ef6d00;
+    color: var(--main-color);
     z-index: 15;
     border-radius: 50%;
     background-color: #ffffff;

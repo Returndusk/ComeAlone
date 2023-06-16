@@ -134,7 +134,7 @@ function CreateScheduleModal(props: {
             months={2}
             ranges={date}
             direction='horizontal'
-            rangeColors={['#ef6d00']}
+            rangeColors={[`var(--main-color)`]}
           />
           <div className={styles.textContainer}>
             <div className={styles.texts}>
@@ -151,7 +151,7 @@ function CreateScheduleModal(props: {
                   maxLength: 30
                 }}
                 sx={{
-                  '& label.Mui-focused': { color: '#ef6d00' },
+                  '& label.Mui-focused': { color: `var(--main-color)` },
                   '& .MuiOutlinedInput-root': {
                     '&.Mui-focused fieldset': {
                       borderColor: '#fe9036',
@@ -175,7 +175,7 @@ function CreateScheduleModal(props: {
                   maxLength: 300
                 }}
                 sx={{
-                  '& label.Mui-focused': { color: '#ef6d00' },
+                  '& label.Mui-focused': { color: `var(--main-color)` },
                   '& .MuiOutlinedInput-root': {
                     '&.Mui-focused fieldset': {
                       borderColor: '#fe9036',
