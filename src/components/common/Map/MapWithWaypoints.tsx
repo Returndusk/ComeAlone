@@ -48,9 +48,9 @@ function MapWithWaypoints({
 }: {
   markersLocations: MapWithWaypointsPropsType[];
 }) {
-  const renderedMap = useRef<any>();
-  const prevMarkers = useRef<any[]>([]);
-  const prevPolyline = useRef<any>();
+  const renderedMap = useRef<kakao.maps.Map>();
+  const prevMarkers = useRef<kakao.maps.Marker[]>([]);
+  const prevPolyline = useRef<kakao.maps.Polyline>();
 
   useEffect(() => {
     const container = document.getElementById('mapWithWaypoints');
@@ -73,7 +73,7 @@ function MapWithWaypoints({
 
     if (markersLocations.length <= 0) {
       if (prevMarkers.current.length > 0) {
-        prevMarkers.current.forEach((marker: any) => {
+        prevMarkers.current.forEach((marker: kakao.maps.Marker) => {
           marker.setMap(null);
         });
       }
@@ -139,7 +139,7 @@ function MapWithWaypoints({
     }
 
     if (prevMarkers.current.length > 0) {
-      prevMarkers.current.forEach((marker: any) => {
+      prevMarkers.current.forEach((marker: kakao.maps.Marker) => {
         marker.setMap(null);
       });
     }
@@ -156,7 +156,7 @@ function MapWithWaypoints({
 
     newPolyline.setMap(renderedMap.current);
 
-    renderedMap.current.setBounds(bounds);
+    renderedMap.current?.setBounds(bounds);
   }, [markersLocations, renderedMap.current]);
 
   return <div className={styles.mapWithWaypoints} id='mapWithWaypoints'></div>;

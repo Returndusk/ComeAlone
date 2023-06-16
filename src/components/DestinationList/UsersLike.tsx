@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './UsersLike.module.scss';
-import { postPreferredDestinationsByDestinationId } from '../../apis/destinationList';
+import { postPreferredDestinationsByDestinationId } from '../../apis/destinationListAPI';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';

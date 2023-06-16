@@ -27,7 +27,7 @@ function AddToScheduleModal({
   const [alreadyAddedAlert, setAlreadyAddedAlert] = useState<boolean>(false);
   const [errorAlert, setErrorAlert] = useState<boolean>(false);
   const [limitAlert, setLimitAlert] = useState<boolean>(false);
-  const [deleteAlert, setDeleteAlert] = useState<boolean>(false);
+  const [consoleAlert, setConsoleAlert] = useState<boolean>(false);
 
   useEffect(() => {
     setUpdatedDestinations([...destinations]);
@@ -63,13 +63,13 @@ function AddToScheduleModal({
       Number(contentid) &&
       !updatedDestinations[selectedDay].includes(title)
     ) {
-      console.log('updatedDestinations', updatedDestinations);
+      // console.log('updatedDestinations', updatedDestinations);
 
       const copiedContentIds = [...updatedContentIds];
       copiedContentIds[selectedDay] = copiedContentIds[selectedDay] || [];
       copiedContentIds[selectedDay].push(Number(contentid));
 
-      console.log('updatedContentIds', updatedContentIds);
+      // console.log('updatedContentIds', updatedContentIds);
 
       try {
         const response = await tokenInstance.post(
@@ -85,7 +85,9 @@ function AddToScheduleModal({
         setUpdatedDestinations(response.data.destinationTitles);
         setUpdatedContentIds(response.data.destinationIds);
       } catch (err) {
-        console.error('Error: ', err);
+        // console.error('Error: ', err);
+        setConsoleAlert(true);
+        return;
       }
     } else {
       setAlreadyAddedAlert(true);
@@ -110,15 +112,12 @@ function AddToScheduleModal({
 
       setUpdatedDestinations(response.data.destinationTitles);
       setUpdatedContentIds(response.data.destinationIds);
-      setDeleteAlert(false);
     } catch (err) {
-      console.error('Error: ', err);
+      // console.error('Error: ', err);
+      setConsoleAlert(true);
+      return;
     }
   }
-
-  // async function handleCancelRemoveDestination() {
-  //   setDeleteAlert(false);
-  // }
 
   return (
     <>
@@ -129,12 +128,12 @@ function AddToScheduleModal({
           sx={{
             color: '#ffffff',
             fontWeight: '600',
-            backgroundColor: '#ef6d00',
+            backgroundColor: `var(--main-color)`,
             border: 1,
-            borderColor: '#ef6d00',
+            borderColor: `var(--main-color)`,
             '&:hover': {
               color: '#ffffff',
-              backgroundColor: '#ef6d00'
+              backgroundColor: `var(--main-color)`
             }
           }}
         >
@@ -148,7 +147,6 @@ function AddToScheduleModal({
             <button
               className={styles.deleteButton}
               onClick={() => handleRemoveDestination(selectedDay, idx)}
-              // onClick={handleRemoveDestination}
             >
               <FaTrashAlt />
             </button>
@@ -178,6 +176,15 @@ function AddToScheduleModal({
           <AlertModal
             message='목적지는 100개까지만 추가할 수 있습니다.'
             onConfirm={() => setLimitAlert(false)}
+            showCancelButton={false}
+          />
+        </div>
+      )}
+      {consoleAlert && (
+        <div className={styles.alertModal}>
+          <AlertModal
+            message='오류가 발생했습니다.'
+            onConfirm={() => setConsoleAlert(false)}
             showCancelButton={false}
           />
         </div>
