@@ -20,6 +20,7 @@ export interface IScheduleDetail {
 
 export type ScheduleFetchedType = Pick<
   IScheduleDetail,
+  | 'scheduleId'
   | 'userId'
   | 'nickname'
   | 'profileImage'
@@ -34,6 +35,7 @@ export type ScheduleFetchedType = Pick<
   | 'destinationCount'
   | 'destinations'
   | 'image'
+  | 'status'
 >;
 
 export type ScheduleDetailInfoType = Pick<
