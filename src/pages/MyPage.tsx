@@ -76,7 +76,6 @@ function MyPage() {
             }
           }
 
-          console.log(err);
           setAlertModal({
             isOpen: true,
             message: '회원 정보 불러오기에 실패하였습니다.',

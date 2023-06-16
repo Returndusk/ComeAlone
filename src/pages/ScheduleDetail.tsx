@@ -30,15 +30,15 @@ function ScheduleDetail() {
   const scheduleId: string = useParams().scheduleId as string;
   const isLoggedIn: boolean = useAuthState().authState.isLoggedIn as boolean;
   const loggedInUserId: string = useAuthState().authState.user?.id as string;
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [checkedDestinations, setCheckedDestinations] = useState<
     MapWithWaypointsPropsType[]
   >([]);
   const [doesUserLike, setDoesUserLike] = useState<boolean>(false);
   const userLikesCount = useRef<number>(0);
 
-  const [fetchedScheduleDetail] = useScheduleDetailFetch(scheduleId);
-  const [fetchedScheduleReviews, getScheduleReviews] =
+  const [isDetailLoading, fetchedScheduleDetail] =
+    useScheduleDetailFetch(scheduleId);
+  const [isReviewsLoading, fetchedScheduleReviews, getScheduleReviews] =
     useScheduleReviewsFetch(scheduleId);
 
   useEffect(() => {
@@ -61,12 +61,10 @@ function ScheduleDetail() {
 
         setDoesUserLike(doesUserLike);
       }
-
-      setIsLoading(false);
     };
 
     fetchData();
-  }, [fetchedScheduleDetail, fetchedScheduleReviews]);
+  }, [fetchedScheduleDetail, fetchedScheduleReviews, isLoggedIn]);
 
   const getDoesUserLike = useCallback(async (scheduleId: string) => {
     const response = await getDoesUserLikeById(scheduleId);
@@ -116,7 +114,7 @@ function ScheduleDetail() {
     toggleUserLike(scheduleId);
   };
 
-  if (isLoading) {
+  if (isDetailLoading || isReviewsLoading) {
     return <ScheduleDetailLoading />;
   }
 
