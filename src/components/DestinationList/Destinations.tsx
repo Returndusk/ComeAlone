@@ -14,6 +14,10 @@ type DestinationsPropsType = {
   isTotalDataNone: boolean;
 };
 
+const DESTINATION_TITLE_STATUS = {
+  MAXIMUN_LENGTH: 14
+};
+
 function Destinations({
   filteredDestinations,
   isTotalDataNone
@@ -78,7 +82,15 @@ function Destinations({
                   onClick={() => handleDestinationClick(destination)}
                 >
                   <div className={styles.destinationTextWrapper}>
-                    <h2 className={styles.destinationTitle}>
+                    <h2
+                      className={styles.destinationTitle}
+                      id={
+                        destination?.title.length >=
+                        DESTINATION_TITLE_STATUS.MAXIMUN_LENGTH
+                          ? styles.destinationTitleExtended
+                          : styles.destinationTitle
+                      }
+                    >
                       {destination?.title}
                     </h2>
                     <p className={styles.destinationAddress}>
