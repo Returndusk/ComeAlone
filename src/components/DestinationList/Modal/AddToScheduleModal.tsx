@@ -128,12 +128,12 @@ function AddToScheduleModal({
           sx={{
             color: '#ffffff',
             fontWeight: '600',
-            backgroundColor: '#ef6d00',
+            backgroundColor: `var(--main-color)`,
             border: 1,
-            borderColor: '#ef6d00',
+            borderColor: `var(--main-color)`,
             '&:hover': {
               color: '#ffffff',
-              backgroundColor: '#ef6d00'
+              backgroundColor: `var(--main-color)`
             }
           }}
         >

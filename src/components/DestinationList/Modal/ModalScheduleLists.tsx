@@ -151,7 +151,7 @@ export default function ModalScheduleLists() {
             aria-label='text button group'
             sx={{
               '.MuiButtonGroup-grouped:not(:last-of-type)': {
-                borderColor: '#7c9070'
+                borderColor: `var(--main-color)`
               }
             }}
           >
@@ -164,14 +164,15 @@ export default function ModalScheduleLists() {
               }}
               value='upcoming'
               sx={{
-                color: scheduleSort === 'upcoming' ? '#ffffff' : '#7c9070',
+                color:
+                  scheduleSort === 'upcoming' ? '#ffffff' : `var(--main-color)`,
                 backgroundColor:
-                  scheduleSort === 'upcoming' ? '#7c9070' : undefined,
+                  scheduleSort === 'upcoming' ? `var(--main-color)` : undefined,
                 fontWeight: '600',
                 fontSize: 'medium',
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#7c9070'
+                  backgroundColor: `var(--main-color)`
                 }
               }}
             >
@@ -186,14 +187,15 @@ export default function ModalScheduleLists() {
               }}
               value='past'
               sx={{
-                color: scheduleSort === 'past' ? '#ffffff' : '#7c9070',
+                color:
+                  scheduleSort === 'past' ? '#ffffff' : `var(--main-color)`,
                 backgroundColor:
-                  scheduleSort === 'past' ? '#7c9070' : undefined,
+                  scheduleSort === 'past' ? `var(--main-color)` : undefined,
                 fontWeight: '600',
                 fontSize: 'medium',
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#7c9070'
+                  backgroundColor: `var(--main-color)`
                 }
               }}
             >
@@ -208,12 +210,12 @@ export default function ModalScheduleLists() {
               sx={{
                 color: '#ffffff',
                 fontWeight: '600',
-                backgroundColor: '#7c9070',
+                backgroundColor: `var(--main-color)`,
                 border: 1,
-                borderColor: '#7c9070',
+                borderColor: `var(--main-color)`,
                 '&:hover': {
                   color: '#ffffff',
-                  backgroundColor: '#7c9070'
+                  backgroundColor: `var(--main-color)`
                 }
               }}
             >
