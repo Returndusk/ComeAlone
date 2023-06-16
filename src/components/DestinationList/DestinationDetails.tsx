@@ -90,26 +90,25 @@ function DestinationDetails() {
   // 목적지 리스트 상세정보의 홈페이지 부분 html 형식의 데이터 파싱
   const changeStringIntoHTML = (stringHTML: string, title: string) => {
     const removedBackslashString = stringHTML.replace(/\\/g, '');
-    const regex = /"(.*?)"/g;
-    const filteredString = removedBackslashString.match(regex);
-    const filteredArray = filteredString?.map((str: string) =>
-      str.replace(/"/g, '')
+    const hrefPattern = /href="([^"]*)"/;
+    const hrefMatch = removedBackslashString.match(hrefPattern) ?? '';
+    const hrefLink = hrefMatch[1];
+
+    const targetPattern = /target="([^"]*)"/;
+    const targetMatch = removedBackslashString.match(targetPattern) ?? '';
+    const target = targetMatch[1];
+
+    return (
+      <a
+        className={styles.destinationHomePage}
+        href={hrefLink}
+        target={target}
+        title={title}
+        rel='_ noreferrer'
+      >
+        {hrefLink}
+      </a>
     );
-    if (filteredArray) {
-      const [stringLink, stringTitle] = filteredArray;
-      return (
-        <a
-          className={styles.destinationHomePage}
-          href={stringLink}
-          target={stringTitle}
-          title={title}
-          rel='_ noreferrer'
-        >
-          {stringLink}
-        </a>
-      );
-    }
-    return '';
   };
 
   const removeTagFromOverview = useCallback((overview: string) => {
