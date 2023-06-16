@@ -96,7 +96,6 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
 
       //이벤트 등록
       for (let i = 0; i < positions.length; i++) {
-        //이벤트
         kakao.maps.event.addListener(newMarkers[i], 'click', function () {
           const markersTitle = newMarkers[i].getTitle();
           const targetMarker = markersLocations.find(
