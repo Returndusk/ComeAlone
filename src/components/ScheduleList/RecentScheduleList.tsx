@@ -6,18 +6,19 @@ import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 import AlertModal from '../common/Alert/AlertModal';
 import { FaExclamationCircle } from 'react-icons/fa';
 import Loading from '../../components/common/Loading/ScheduleListLoading';
+import { SCHEDULES_PER_PAGE } from '../../constants/ScheduleList';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
+const INITIAL_PAGE = 1;
 
 function RecentScheduleLists() {
   const [recentScheduleList, setRecentScheduleList] =
     useState<ScheduleListType>([]);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
-  const [recentPage, setRecentPage] = useState<number>(1);
+  const [recentPage, setRecentPage] = useState<number>(INITIAL_PAGE);
   const [lastDataOfRecent, setLastDataOfRecent] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElement = useRef<HTMLDivElement>(null);
-  const SCHEDULES_PER_PAGE = 6;
 
   const fetchRecentData = useCallback(async () => {
     setIsLoading(true);
@@ -62,7 +63,7 @@ function RecentScheduleLists() {
 
   const nextPage = useCallback(() => {
     setRecentPage((prev) => prev + 1);
-  }, [recentPage]);
+  }, []);
 
   function handleOnConfirm() {
     setShowAlertModal(false);

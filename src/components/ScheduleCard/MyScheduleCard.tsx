@@ -25,10 +25,8 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
         <div className={styles.scheduleCardContent}>
           <div className={styles.scheduleContent}>
             <div className={styles.scheduleText}>
-              <div className={styles.scheduleTitle}>
-                {schedule.title ? schedule.title : '여행 이름'}
-              </div>
-              <div>{schedule.summary ? schedule.summary : '여행 소개'}</div>
+              <div className={styles.scheduleTitle}>{schedule.title}</div>
+              <div>{schedule.summary}</div>
               <div>
                 {schedule.duration > 1
                   ? `${schedule.duration - 1}박 ${schedule.duration}일`
@@ -68,11 +66,7 @@ function ScheduleCard({ schedule }: MyScheduleCardProps) {
             </div>
           </div>
           <img
-            src={
-              schedule.image
-                ? schedule.image
-                : 'https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg'
-            }
+            src={schedule.image}
             className={styles.image}
             alt='일정 배경 사진'
           />
