@@ -8,13 +8,15 @@
   text-align: left;
   text-decoration: none;
   background-size: cover;
-  box-shadow: 1px 1px 32px 5px rgba(0, 0, 0, 0.11);
+  box-shadow: 1px 1px 32px 5px rgba(0, 0, 0, 0.15);
+  transition: 0.3s ease-in-out;
 
   .scheduleCardContent {
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-radius: 10px;
 
     .scheduleContent {
       display: flex;
@@ -26,7 +28,7 @@
 
       .scheduleText {
         width: 100%;
-        font-size: 20px;
+        font-size: 18px;
 
         div {
           width: 300px;
@@ -50,11 +52,15 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 20px;
+          margin-bottom: 13px;
 
           .likeIcon {
-            margin-right: 10px;
+            margin-right: 5px;
             font-size: 30px;
+
+            &:hover {
+              transform: scale(1.3);
+            }
 
             .isLiked {
               color: #ff0000;
@@ -62,7 +68,8 @@
           }
 
           .likesCount {
-            font-size: 20px;
+            font-size: 15px;
+            font-weight: 600;
           }
         }
 
@@ -72,12 +79,13 @@
           align-items: center;
 
           .commentIcon {
-            margin-right: 10px;
-            font-size: 30px;
+            margin-right: 7px;
+            font-size: 26px;
           }
 
           .commentsCount {
-            font-size: 20px;
+            font-size: 15px;
+            font-weight: 600;
           }
         }
       }
@@ -86,7 +94,7 @@
     .scheduleTitle {
       height: 40px;
       margin-bottom: 20px;
-      font-size: 30px;
+      font-size: 26px;
       font-weight: bold;
     }
 
@@ -133,7 +141,7 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        font-size: 18px;
+        font-size: 16px;
       }
     }
 
@@ -150,7 +158,7 @@
 
   &:hover {
     cursor: pointer;
-    transform: translateY(-10px);
-    transition: 0.5s ease-in-out;
+    transform: translateY(-5px);
+    transition: 0.3s ease-in-out;
   }
 }
