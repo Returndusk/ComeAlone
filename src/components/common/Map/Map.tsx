@@ -3,12 +3,6 @@ import styles from './Map.module.scss';
 import { specifiedCategoryDestinationsType } from '../../../types/DestinationListTypes';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 type MapPropsTypes = {
   markersLocations: specifiedCategoryDestinationsType[];
   setClickedDestination: React.Dispatch<
@@ -30,9 +24,8 @@ const NULL_DATA = {
 const { kakao } = window;
 
 function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
-  const [renderedMap, setRenderedMap] = useState<any>(null);
-  const [markers, setMarkers] = useState<any>(null);
-  // const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [renderedMap, setRenderedMap] = useState<kakao.maps.Map | null>(null);
+  const [markers, setMarkers] = useState<kakao.maps.Marker[] | null>(null);
   const navigate = useNavigate();
   const { search } = useLocation();
 
@@ -79,9 +72,8 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
           )
         };
       });
-      if (markers !== null) {
-        const removeMarkers = markers.map((marker: any) => marker.setMap(null));
-        setMarkers(removeMarkers);
+      if (markers) {
+        markers.forEach((marker: kakao.maps.Marker) => marker.setMap(null));
       }
       const newMarkers = positions.map(
         (position) =>
