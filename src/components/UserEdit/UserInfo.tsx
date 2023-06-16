@@ -302,6 +302,9 @@ function UserInfo({
           value={values.phoneNumber}
           onChange={handleChange}
           size='small'
+          inputProps={{
+            maxLength: 13
+          }}
           style={{ width: '100%' }}
           sx={{
             '& label.Mui-focused': { color: '#ef6d00' },
