@@ -31,20 +31,22 @@
 
 .scheduleContainer {
   width: 1280px;
-  min-height: calc(100vh - 630px);
+  min-height: calc(100vh - 611px);
   margin: 20px auto;
+  padding: 20px 0px 80px;
+  box-sizing: border-box;
   text-align: center;
 
   .scheduleFilter {
-    margin: 20px;
+    margin: 20px 0px 30px;
     text-align: left;
   }
 
   .scheduleCardContainer {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 20px;
-    gap: 20px;
+    grid-gap: 30px;
+    gap: 30px;
     width: 1280px;
     margin: auto;
 
@@ -67,35 +69,43 @@
       align-items: center;
       min-height: 334px;
       border-radius: 10px;
-      background-color: lightgray;
-      font-size: 40px;
+      background-color: #ddd;
+      border: 0;
+      font-size: 30px;
+      color: #555;
+      font-weight: 600;
 
-      &:hover {
-        cursor: pointer;
-        transform: translateY(-10px);
-        transition: 0.5s ease-in-out;
-      }
+      // &:hover {
+      //   cursor: pointer;
+      //   transform: translateY(-10px);
+      //   transition: 0.5s ease-in-out;
+      // }
     }
   }
 }
 
 .sortButton {
-  height: 40px;
   width: auto;
   margin-right: 10px;
-  padding: 7px;
-  border: 0;
-  border-radius: 8px;
-  background-color: white;
-  font-size: 20px;
-  font-weight: bold;
-  color: black;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: #666;
+  background-color: #fff;
   text-decoration: none;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s;
 }
 
 .selected {
-  color: white;
-  background-color: #ef6d00;
+  color: #fff;
+  border-color: var(--main-color);
+  background-color: var(--main-color);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .loading {
@@ -106,5 +116,7 @@
 }
 
 .lastElement {
-  height: 200px;
+  margin: auto;
+  width: 50px;
+  height: 50px;
 }
