@@ -16,6 +16,7 @@ function useScheduleDetailFetch(id: string) {
       const response = await getScheduleDetailById(scheduleId);
 
       const data: ScheduleFetchedType = {
+        scheduleId: response?.data.schedule_id,
         userId: response?.data.user.id,
         nickname: response?.data.user.nickname,
         profileImage: response?.data.user.profile_image,
@@ -29,7 +30,8 @@ function useScheduleDetailFetch(id: string) {
         createdAt: new Date(response?.data.created_at.split('T')[0]),
         updatedAt: new Date(response?.data.updated_at.split('T')[0]),
         destinationCount: response?.data.destination_count,
-        destinations: response?.data.destinationMaps
+        destinations: response?.data.destinationMaps,
+        status: response?.data.status
       };
 
       setFetchedScheduleDetail(data);
