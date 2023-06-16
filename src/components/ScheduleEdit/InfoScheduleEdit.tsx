@@ -41,7 +41,7 @@ function InfoScheduleEdit({
         }}
         required
         label='제목 (최대 30자)'
-        defaultValue={updatedTitle}
+        value={updatedTitle}
         onChange={(event) => onTitleUpdate(event.target.value)}
       />
       <TextField
@@ -62,7 +62,7 @@ function InfoScheduleEdit({
         label='일정 소개 (최대 300자)'
         multiline
         rows={4}
-        defaultValue={updatedSummary}
+        value={updatedSummary}
         onChange={(event) => onSummaryUpdate(event.target.value)}
       />
     </div>

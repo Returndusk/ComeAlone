@@ -1,10 +1,4 @@
-import React, {
-  useMemo,
-  useState,
-  useEffect,
-  useCallback,
-  useRef
-} from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
@@ -15,131 +9,73 @@ import EditDestinationList from '../components/ScheduleEdit/EditDestinationList'
 import DestinationsMap from '../components/ScheduleEdit/DestinationsMap';
 import ButtonsScheduleEdit from '../components/ScheduleEdit/ButtonsScheduleEdit';
 import DateModalScheduleEdit from '../components/ScheduleEdit/DateModalScheduleEdit';
-import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
-import {
-  ScheduleEditFetchedType,
-  DateInfoType
-} from '../types/ScheduleEditTypes';
-import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import { updateSchedule } from '../apis/ScheduleEditAPI';
 import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
-import { AxiosError } from 'axios';
 import { useAuthState } from '../contexts/AuthContext';
+import useScheduleDetailFetch from '../hooks/useScheduleDetailFetch';
+import useScheduleEditForm from '../hooks/useScheduleEditForm';
 import ScheduleDetailLoading from '../components/common/Loading/ScheduleDetailLoading';
-
-function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
-  return destinationList.map((destOfDay: MapWithWaypointsPropsType[]) =>
-    destOfDay.map((dest: MapWithWaypointsPropsType) => dest.id)
-  );
-}
-
-function stringifyDate(date: Date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
 
 function ScheduleEdit() {
   const scheduleId: string = useParams().scheduleId as string;
   const { authState } = useAuthState();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showDateModal, setShowDateModal] = useState<boolean>(false);
   const [showTitleEmptyAlert, setShowTitleEmptyAlert] =
     useState<boolean>(false);
   const [showSummaryEmptyAlert, setShowSummaryEmptyAlert] =
     useState<boolean>(false);
-  const [updatedDateInfo, setUpdatedDateInfo] = useState<DateInfoType>({
-    startDate: new Date(),
-    endDate: new Date(),
-    duration: 0
-  });
-  const [updatedStatus, setUpdatedStatus] = useState<string>('');
-  const [updatedDestinationList, setUpdatedDestinationList] = useState<
-    MapWithWaypointsPropsType[][]
-  >([]);
   const [checkedDayIndex, setCheckedDayIndex] = useState<number>(-1);
-  const updatedImagePath = useRef<string>('');
-  const updatedTitle = useRef<string>('');
-  const updatedSummary = useRef<string>('');
-  const createdAt = useRef<Date>(new Date());
-  const updatedAt = useRef<Date>(new Date());
+  const createdAt = useRef<Date>();
+  const updatedAt = useRef<Date>();
 
-  const getScheduleDetail = useCallback(
-    async (scheduleId: string) => {
-      try {
-        const response = await getScheduleDetailById(scheduleId);
-
-        const data: ScheduleEditFetchedType = {
-          userId: response.data.user.id,
-          title: response?.data.title,
-          summary: response?.data.summary,
-          duration: response?.data.duration,
-          startDate: new Date(response?.data.start_date),
-          endDate: new Date(response?.data.end_date),
-          image: response?.data.image,
-          createdAt: new Date(response?.data.created_at.split('T')[0]),
-          updatedAt: new Date(response?.data.updated_at.split('T')[0]),
-          status: response?.data.status,
-          destinations: response?.data.destinationMaps
-        };
-
-        return data;
-      } catch (err: unknown) {
-        if (err instanceof AxiosError) {
-          if (err.response?.status === 404) {
-            console.log(err.response.data.message);
-
-            navigate('*');
-          }
-        } else {
-          console.log(err);
-        }
-      }
-    },
-    [scheduleId]
-  );
+  const [isDetailLoading, fetchedScheduleDetail] =
+    useScheduleDetailFetch(scheduleId);
+  const [
+    isInitDataLoading,
+    updatedTitle,
+    updatedSummary,
+    updatedImagePath,
+    updatedDateInfo,
+    updatedDestinationList,
+    updatedStatus,
+    setInitScheduleEditForm,
+    setUpdatedTitle,
+    setUpdatedSummary,
+    setUpdatedImagePath,
+    setUpdatedDateInfo,
+    setUpdatedDestinationList,
+    setUpdatedStatus,
+    getUpdatedScheduleSubmitForm
+  ] = useScheduleEditForm();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const fetchedData = (await getScheduleDetail(
-        scheduleId
-      )) as ScheduleEditFetchedType;
-
-      if (!fetchedData) {
+    const fetchInitScheduleForm = () => {
+      if (isDetailLoading) {
         return;
+      } else {
+        if (authState.user?.id !== fetchedScheduleDetail.userId) {
+          navigate(ROUTER.MAIN);
+
+          return;
+        }
+        setInitScheduleEditForm(fetchedScheduleDetail);
+        (createdAt.current = fetchedScheduleDetail.createdAt),
+          (updatedAt.current = fetchedScheduleDetail.updatedAt);
       }
-
-      if (authState.user?.id !== fetchedData.userId) {
-        navigate(ROUTER.MAIN);
-
-        return;
-      }
-
-      setUpdatedDateInfo({
-        startDate: fetchedData.startDate,
-        endDate: fetchedData.endDate,
-        duration: fetchedData.duration
-      });
-      updatedImagePath.current = fetchedData.image;
-      updatedTitle.current = fetchedData.title;
-      updatedSummary.current = fetchedData.summary;
-      createdAt.current = fetchedData.createdAt;
-      updatedAt.current = fetchedData.updatedAt;
-      setUpdatedStatus(fetchedData.status);
-      setUpdatedDestinationList(fetchedData.destinations);
-      setIsLoading(false);
     };
 
     if (authState.isLoggedIn === true) {
-      fetchData();
+      fetchInitScheduleForm();
     }
-  }, [getScheduleDetail, scheduleId, authState.isLoggedIn]);
+  }, [isDetailLoading, fetchedScheduleDetail, authState.isLoggedIn]);
 
   useEffect(() => {
+    if (isInitDataLoading) {
+      return;
+    }
+
     const prevDuration = updatedDestinationList.length;
     const updatedDuration = updatedDateInfo.duration;
 
@@ -159,6 +95,10 @@ function ScheduleEdit() {
   }, [updatedDestinationList, updatedDateInfo.duration]);
 
   const markersLocations = useMemo(() => {
+    if (isInitDataLoading) {
+      return;
+    }
+
     if (checkedDayIndex === -1) {
       return updatedDestinationList.flat();
     } else {
@@ -168,22 +108,10 @@ function ScheduleEdit() {
     }
   }, [checkedDayIndex, updatedDestinationList, updatedDateInfo]);
 
-  const handleImageUpdate = (imagePath: string) => {
-    updatedImagePath.current = imagePath;
-  };
-
-  const handleTitleUpdate = (title: string) => {
-    updatedTitle.current = title;
-  };
-
-  const handleSummaryUpdate = (summary: string) => {
-    updatedSummary.current = summary;
-  };
-
   const handleSubmit = () => {
-    if (!updatedTitle.current) {
+    if (!updatedTitle) {
       setShowTitleEmptyAlert(true);
-    } else if (!updatedSummary.current) {
+    } else if (!updatedSummary) {
       setShowSummaryEmptyAlert(true);
     } else {
       handleSubmitConfirm();
@@ -191,30 +119,20 @@ function ScheduleEdit() {
   };
 
   const handleSubmitConfirm = async () => {
-    await updateSchedule({
-      schedule_id: Number(scheduleId),
-      title: updatedTitle.current,
-      summary: updatedSummary.current,
-      duration: updatedDateInfo.duration,
-      start_date: stringifyDate(updatedDateInfo.startDate),
-      end_date: stringifyDate(updatedDateInfo.endDate),
-      status: updatedStatus,
-      image: updatedImagePath.current,
-      destinations: mapDestinationId(updatedDestinationList)
-    });
+    await updateSchedule(getUpdatedScheduleSubmitForm());
 
     navigate(`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`);
   };
 
-  if (isLoading) {
+  if (isInitDataLoading) {
     return <ScheduleDetailLoading />;
   }
 
   return (
     <div className={styles.container}>
       <ImageScheduleEdit
-        imagePath={updatedImagePath.current}
-        onImageUpdate={handleImageUpdate}
+        imagePath={updatedImagePath}
+        onImageUpdate={setUpdatedImagePath}
       />
       <DateScheduleEdit
         dateInfo={updatedDateInfo}
@@ -225,12 +143,12 @@ function ScheduleEdit() {
         onStatusUpdate={setUpdatedStatus}
       />
       <InfoScheduleEdit
-        updatedTitle={updatedTitle.current}
-        updatedSummary={updatedSummary.current}
-        createdAt={createdAt.current}
-        updatedAt={updatedAt.current}
-        onTitleUpdate={handleTitleUpdate}
-        onSummaryUpdate={handleSummaryUpdate}
+        updatedTitle={updatedTitle}
+        updatedSummary={updatedSummary}
+        createdAt={createdAt.current as Date}
+        updatedAt={updatedAt.current as Date}
+        onTitleUpdate={setUpdatedTitle}
+        onSummaryUpdate={setUpdatedSummary}
       />
       <EditDestinationList
         updatedDestinationList={updatedDestinationList}
