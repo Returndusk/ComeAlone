@@ -5,12 +5,17 @@
   box-sizing: border-box;
   border-bottom: 1px solid #eee;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .categoryContainer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
   width: 100%;
   flex-wrap: wrap;
 
@@ -19,92 +24,67 @@
     font-size: 13px;
     cursor: pointer;
     border-radius: 5px;
-    min-width: 65px;
+    min-width: 45px;
     background-color: transparent;
     margin-bottom: 5px;
     color: #666;
-    font-weight: 600;
-  }
-
-  button + button {
-    padding: 3px;
+    font-weight: 500;
+    text-align: center;
+    margin-right: 15px;
+    padding: 5px;
   }
 }
-
-// .activeSelectedButton {
-//   border: none;
-//   color: var(--main-color);
-//   padding: 6px;
-// }
 
 #activeSelectedAllButton {
-  // border: none;
-  // padding: 6px;
+  border: none;
   display: flex;
   justify-content: center;
-  color: var(--main-color);
+  background-color: var(--main-color);
+  color: #fff;
 }
-
-// .selectedButton {
-//   border: 2px solid;
-//   padding: 4px;
-//   color: var(--sub-1-color);
-//   background-color: #fff;
-// }
 
 #selectedAllButton {
-  // border: 2px solid;
-  // padding: 4px;
-  // color: var(--main-color);
-  // background-color: #fff;
+  background-color: #fff;
   display: flex;
   justify-content: center;
 }
 
-// .filteredCounterWraper {
-//   display: flex;
-//   width: 100%;
-//   height: 100%;
-//   padding: 15px;
-//   box-sizing: border-box;
-//   border-bottom: 1px solid #eee;
-//   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
-
-//   .filteredCounter {
-//     font-size: 16px;
-//     font-weight: 500;
-//     color: #333;
-//   }
-// }
-
 #activeCategory-12 {
-  color: #d23300;
+  background-color: #d23300;
+  color: #fff;
 }
 
 #activeCategory-14 {
-  color: #6d1c9d;
+  background-color: #6d1c9d;
+  color: #fff;
 }
 
 #activeCategory-15 {
-  color: #007d00;
+  background-color: #007d00;
+  color: #fff;
 }
 
 #activeCategory-25 {
-  color: #004e4e;
+  background-color: #004e4e;
+  color: #fff;
 }
 
 #activeCategory-28 {
-  color: #2b8a8a;
+  background-color: #2b8a8a;
+  color: #fff;
 }
 
 #activeCategory-32 {
-  color: #cca800;
+  background-color: #cca800;
+  color: #fff;
 }
 
 #activeCategory-38 {
-  color: #773b15;
+  background-color: #773b15;
+  color: #fff;
 }
 
 #activeCategory-39 {
-  color: #1d6dcc;
+  background-color: #1d6dcc;
+  color: #fff;
 }

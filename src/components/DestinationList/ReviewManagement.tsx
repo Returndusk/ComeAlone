@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {
   deleteReviewByDestinationId,
   modifyReviewByCommentId
-} from '../../apis/destinationList';
+} from '../../apis/destinationListAPI';
 import { TextField } from '@mui/material';
 
 const ALERT_PROPS = {
@@ -62,7 +62,6 @@ function ReviewManagement({
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   const [isConfirmModifying, setIsConfirmModifying] = useState<boolean>(false);
   const [tryModify, setTryModify] = useState<boolean>(false);
-  // const [isConfirmDelete, setIsConfirmDelete] = useState<boolean>(false);
   const [tryDelete, setTryDelete] = useState<boolean>(false);
   const navigate = useNavigate();
   const url = useLocation().pathname;
@@ -121,7 +120,6 @@ function ReviewManagement({
     }
     setIsConfirmModifying(true);
 
-    // setTargetComment(() => commentid);
     setModifiedReview(() => {
       return { comment: submittedModifiedReview };
     });
@@ -186,14 +184,6 @@ function ReviewManagement({
     return;
   };
 
-  /*
-   * 리뷰 객체
-  id: number;
-  commenter_id: string;
-  comment: string;
-  created_at: string; 
-  */
-
   return (
     <>
       {isEditing && targetComment === commentid && (
@@ -210,6 +200,8 @@ function ReviewManagement({
               label='수정할 내용을 입력해주세요.'
               defaultValue={prevComment}
               inputProps={{ maxLength: REVIEW_HANDLER.MAXIMUM_WORDS }}
+              multiline
+              rows={5}
               sx={{
                 '& label.Mui-focused': { color: '#ef6d00' },
                 '& .MuiOutlinedInput-root': {
@@ -220,15 +212,17 @@ function ReviewManagement({
                 }
               }}
             />
-            <button
-              className={styles.reviewCancelButton}
-              onClick={cancelModifying}
-            >
-              취소
-            </button>
-            <button className={styles.reviewSubmitButton} type='submit'>
-              등록
-            </button>
+            <div className={styles.reviewButtonContainer}>
+              <button
+                className={styles.reviewCancelButton}
+                onClick={cancelModifying}
+              >
+                취소
+              </button>
+              <button className={styles.reviewSubmitButton} type='submit'>
+                등록
+              </button>
+            </div>
           </form>
         </div>
       )}
