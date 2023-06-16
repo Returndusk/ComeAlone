@@ -10,6 +10,7 @@ import tokenInstance from '../../apis/tokenInstance';
 import AlertModal from '../common/Alert/AlertModal';
 import images from '../../constants/image';
 import Loading from '../../components/common/Loading/ScheduleListLoading';
+import { UPCOMING_FILTER, PAST_FILTER } from '../../constants/ScheduleList';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -18,7 +19,7 @@ function MyScheduleLists() {
   const [showScheduleList, setShowScheduleList] = useState<MyScheduleListType>(
     []
   );
-  const [scheduleSort, setScheduleSort] = useState<string>('upcoming');
+  const [scheduleSort, setScheduleSort] = useState<string>(UPCOMING_FILTER);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
@@ -81,7 +82,7 @@ function MyScheduleLists() {
 
   function sortSchedule(sortOption: string) {
     const scheduleData = [...scheduleList];
-    if (sortOption === 'upcoming') {
+    if (sortOption === UPCOMING_FILTER) {
       setShowScheduleList(sortUpcoming(scheduleData));
     } else {
       setShowScheduleList(sortPast(scheduleData));
@@ -117,23 +118,23 @@ function MyScheduleLists() {
         <div className={styles.scheduleFilter}>
           <button
             className={`${styles.sortButton} ${
-              scheduleSort === 'upcoming' ? styles.selected : ''
+              scheduleSort === UPCOMING_FILTER && styles.selected
             }`}
             onClick={(e) => {
               handleSort(e);
             }}
-            value='upcoming'
+            value={UPCOMING_FILTER}
           >
             다가오는 일정
           </button>
           <button
             className={`${styles.sortButton} ${
-              scheduleSort === 'past' ? styles.selected : ''
+              scheduleSort === PAST_FILTER && styles.selected
             }`}
             onClick={(e) => {
               handleSort(e);
             }}
-            value='past'
+            value={PAST_FILTER}
           >
             지난 일정
           </button>
