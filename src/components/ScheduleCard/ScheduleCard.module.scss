@@ -8,7 +8,8 @@
   text-align: left;
   text-decoration: none;
   background-size: cover;
-  box-shadow: 1px 1px 32px 5px rgba(0, 0, 0, 0.11);
+  box-shadow: 1px 1px 32px 5px rgba(0, 0, 0, 0.15);
+  transition: 0.3s ease-in-out;
 
   .scheduleCardContent {
     position: relative;
@@ -16,7 +17,6 @@
     flex-direction: column;
     justify-content: space-between;
     border-radius: 10px;
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
 
     .scheduleContent {
       display: flex;
@@ -154,7 +154,7 @@
 
   &:hover {
     cursor: pointer;
-    transform: translateY(-10px);
-    transition: 0.5s ease-in-out;
+    transform: translateY(-5px);
+    transition: 0.3s ease-in-out;
   }
 }

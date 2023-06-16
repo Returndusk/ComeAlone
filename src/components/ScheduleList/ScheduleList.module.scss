@@ -31,7 +31,7 @@
 
 .scheduleContainer {
   width: 1280px;
-  min-height: calc(100vh - 611px);
+  min-height: calc(100vh - 630px);
   margin: 20px auto;
   padding: 20px 0px 80px;
   box-sizing: border-box;
@@ -56,6 +56,7 @@
       transform: translate(-50%, 50%);
       text-align: center;
       font-size: 40px;
+      color: #888;
 
       div {
         margin-top: 20px;
@@ -69,43 +70,55 @@
       align-items: center;
       min-height: 334px;
       border-radius: 10px;
+      border: 1px solid #ccc;
       background-color: #ddd;
-      border: 0;
-      font-size: 30px;
+
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 28px;
+      box-sizing: border-box;
+      letter-spacing: 1px;
+      font-family: 'Noto Sans KR';
       color: #555;
       font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease-in-out;
 
-      // &:hover {
-      //   cursor: pointer;
-      //   transform: translateY(-10px);
-      //   transition: 0.5s ease-in-out;
-      // }
+      &:hover {
+        transform: translateY(-5px);
+        transition: 0.3s ease-in-out;
+      }
     }
   }
 }
 
 .sortButton {
   width: auto;
-  margin-right: 10px;
-  padding: 10px;
-  border: 1px solid #eee;
+  border: 0;
   border-radius: 5px;
-  font-size: 16px;
+  padding: 7px 12px;
+  margin: 0px 5px;
+  font-size: 17px;
   font-weight: 600;
   box-sizing: border-box;
   cursor: pointer;
-  color: #666;
+  color: #888;
   background-color: #fff;
+  border: 1px solid #ddd;
   text-decoration: none;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.5s;
-}
+  transition: all 0.3s;
 
-.selected {
-  color: #fff;
-  border-color: var(--main-color);
-  background-color: var(--main-color);
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+  &:hover {
+    color: var(--main-color);
+    border-color: var(--main-color);
+  }
+
+  &.selected {
+    color: #fff;
+    border-color: var(--main-color);
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 4px rgba(243, 118, 23, 0.35);
+  }
 }
 
 .loading {
