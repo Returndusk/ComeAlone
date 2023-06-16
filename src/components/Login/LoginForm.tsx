@@ -119,7 +119,6 @@ function LoginForm() {
           }
         }
 
-        console.log(err);
         setAlertModal({
           isOpen: true,
           message: '로그인에 실패하였습니다. 잠시 후에 다시 시도해주세요.',

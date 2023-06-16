@@ -11,7 +11,7 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
-import { checkEmailDuplicate, registerUser } from '../../apis/UserAPI';
+import { registerUser } from '../../apis/UserAPI';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
 import AlertModal from '../common/Alert/AlertModal';
@@ -339,7 +339,6 @@ function RegisterForm() {
         }
       }
 
-      console.log(err);
       setAlertModal({
         isOpen: true,
         message: '회원가입에 실패하였습니다. 잠시 후에 다시 시도해주세요.',
@@ -595,6 +594,9 @@ function RegisterForm() {
               value={values.phoneNumber}
               onChange={handleChange}
               size='small'
+              inputProps={{
+                maxLength: 13
+              }}
               style={{ width: '100%' }}
               sx={{
                 '& label.Mui-focused': { color: '#ef6d00' },
