@@ -6,18 +6,20 @@ import { ScheduleCardType, ScheduleListType } from '../../types/ScheduleTypes';
 import AlertModal from '../common/Alert/AlertModal';
 import { FaExclamationCircle } from 'react-icons/fa';
 import Loading from '../../components/common/Loading/ScheduleListLoading';
+import { SCHEDULES_PER_PAGE } from '../../constants/ScheduleList';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
+const INITIAL_PAGE = 1;
 
 function RecentScheduleLists() {
   const [recentScheduleList, setRecentScheduleList] =
     useState<ScheduleListType>([]);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
-  const [recentPage, setRecentPage] = useState<number>(1);
+  const [recentPage, setRecentPage] = useState<number>(INITIAL_PAGE);
   const [lastDataOfRecent, setLastDataOfRecent] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElement = useRef<HTMLDivElement>(null);
-  const SCHEDULES_PER_PAGE = 6;
+  const fetchDataTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchRecentData = useCallback(async () => {
     setIsLoading(true);
@@ -39,6 +41,12 @@ function RecentScheduleLists() {
   }, [recentPage]);
 
   useEffect(() => {
+    return () => {
+      clearTimeout(fetchDataTimeoutRef.current as NodeJS.Timeout);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!lastDataOfRecent) {
       fetchRecentData();
     }
@@ -49,9 +57,12 @@ function RecentScheduleLists() {
     if (lastElement.current) {
       observer = new IntersectionObserver(
         (entry) => {
-          if (entry[0].isIntersecting) {
-            nextPage();
-          }
+          clearTimeout(fetchDataTimeoutRef.current as NodeJS.Timeout);
+          fetchDataTimeoutRef.current = setTimeout(() => {
+            if (entry[0].isIntersecting) {
+              nextPage();
+            }
+          }, 200);
         },
         { threshold: 1 }
       );
@@ -62,7 +73,7 @@ function RecentScheduleLists() {
 
   const nextPage = useCallback(() => {
     setRecentPage((prev) => prev + 1);
-  }, [recentPage]);
+  }, []);
 
   function handleOnConfirm() {
     setShowAlertModal(false);

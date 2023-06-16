@@ -4,6 +4,11 @@ import { useAuthState } from '../../contexts/AuthContext';
 import images from '../../constants/image';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Router from '../../constants/Router';
+import {
+  LIKES_FILTER,
+  RECENT_FILTER,
+  LIKED_FILTER
+} from '../../constants/ScheduleList';
 
 type ScheduleProps = {
   children: React.ReactElement;
@@ -33,20 +38,20 @@ function ScheduleLists({ children }: ScheduleProps) {
         <div className={styles.scheduleFilter}>
           <button
             className={`${styles.sortButton} ${
-              scheduleFilter === 'likes' && styles.selected
+              scheduleFilter === LIKES_FILTER && styles.selected
             }`}
             onClick={() => {
-              navigate(`${Router.SCHEDULE_LIST}/likes`);
+              navigate(`${Router.SCHEDULE_LIST}/${LIKES_FILTER}`);
             }}
           >
             인기순
           </button>
           <button
             className={`${styles.sortButton} ${
-              scheduleFilter === 'recent' && styles.selected
+              scheduleFilter === RECENT_FILTER && styles.selected
             }`}
             onClick={() => {
-              navigate(`${Router.SCHEDULE_LIST}/recent`);
+              navigate(`${Router.SCHEDULE_LIST}/${RECENT_FILTER}`);
             }}
           >
             최신순
@@ -54,10 +59,10 @@ function ScheduleLists({ children }: ScheduleProps) {
           {isLoggedIn && (
             <button
               className={`${styles.sortButton} ${
-                scheduleFilter === 'liked' && styles.selected
+                scheduleFilter === LIKED_FILTER && styles.selected
               }`}
               onClick={() => {
-                navigate(`${Router.SCHEDULE_LIST}/liked`);
+                navigate(`${Router.SCHEDULE_LIST}/${LIKED_FILTER}`);
               }}
             >
               좋아요 한 일정
