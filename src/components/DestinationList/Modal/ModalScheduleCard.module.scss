@@ -112,17 +112,12 @@
   align-items: center;
   width: 35px;
   height: 35px;
-  // border-radius: 50%;
-  // box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  // background-color: #fff;
-  // border: 0;
-  // transition: transform 0.2s;
   cursor: pointer;
 
   &:hover {
     transform: scale(1.15);
     transition: transform 0.2s;
-    color: #ef6d00;
+    color: var(--main-color);
     border-radius: 50%;
     // border: 0;
     background-color: #ffffff;
@@ -130,7 +125,7 @@
 
   svg {
     font-size: 33px;
-    color: #ef6d00;
+    color: var(--main-color);
     z-index: 15;
     border-radius: 50%;
     background-color: #ffffff;
