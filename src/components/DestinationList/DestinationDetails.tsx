@@ -88,7 +88,7 @@ function DestinationDetails() {
   );
 
   // 목적지 리스트 상세정보의 홈페이지 부분 html 형식의 데이터 파싱
-  const changeStringIntoHTML = (stringHTML: string) => {
+  const changeStringIntoHTML = (stringHTML: string, title: string) => {
     const removedBackslashString = stringHTML.replace(/\\/g, '');
     const regex = /"(.*?)"/g;
     const filteredString = removedBackslashString.match(regex);
@@ -101,8 +101,8 @@ function DestinationDetails() {
         <a
           className={styles.destinationHomePage}
           href={stringLink}
-          target='_blank'
-          title={stringTitle}
+          target={stringTitle}
+          title={title}
           rel='_ noreferrer'
         >
           {stringLink}
@@ -193,9 +193,12 @@ function DestinationDetails() {
 
               <span className={styles.destinationInfo}>
                 <FaHome id={styles.destinationHomeIcon} />
-                <p>
+                <p className={styles.hompageLinkContainer}>
                   {destinationDetails?.homepage
-                    ? changeStringIntoHTML(destinationDetails?.homepage)
+                    ? changeStringIntoHTML(
+                        destinationDetails?.homepage,
+                        destinationDetails?.title
+                      )
                     : '제공된 정보 없음'}{' '}
                 </p>
               </span>
