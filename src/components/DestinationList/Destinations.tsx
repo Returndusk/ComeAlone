@@ -11,12 +11,12 @@ import { TfiClose } from 'react-icons/tfi';
 
 type DestinationsPropsType = {
   filteredDestinations: specifiedCategoryDestinationsType[] | [];
-  isLoading: boolean;
+  isTotalDataNone: boolean;
 };
 
 function Destinations({
   filteredDestinations,
-  isLoading
+  isTotalDataNone
 }: DestinationsPropsType) {
   const [slicedDestinations, setSlicedDestinations] = useState<
     specifiedCategoryDestinationsType[] | []
@@ -117,19 +117,22 @@ function Destinations({
             )}
           </>
         ) : (
-          <div className={styles.alertContainer}>
-            <CiCircleAlert className={styles.alertIcon} />
-            <p>검색 결과가 없습니다.</p>
-          </div>
+          isTotalDataNone && (
+            <div className={styles.alertContainer}>
+              <CiCircleAlert className={styles.alertIcon} />
+              <p>검색 결과가 없습니다.</p>
+            </div>
+          )
         )}
       </section>
 
-      {filteredDestinations?.length > 0 && (
-        <Pagination
-          filteredDestinations={filteredDestinations}
-          setSlicedDestinations={setSlicedDestinations}
-        />
-      )}
+      {Array.isArray(filteredDestinations) &&
+        filteredDestinations?.length > 0 && (
+          <Pagination
+            filteredDestinations={filteredDestinations}
+            setSlicedDestinations={setSlicedDestinations}
+          />
+        )}
       {isOpen &&
         detailsDomRoot !== null &&
         createPortal(

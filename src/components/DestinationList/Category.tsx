@@ -53,6 +53,7 @@ function Category({
     null
   );
   const [isSelectedAll, setIsSelectedAll] = useState<boolean>(true);
+  const [isTotalDataNone, setIsTotalDataNone] = useState<boolean>(false);
 
   const getAllCategoryData = useCallback(async () => {
     const res = await getAllCategoryList();
@@ -159,6 +160,10 @@ function Category({
       selectedCategory,
       searchQueryParam
     );
+    const totalData = res?.data.total_count;
+    if (totalData === 0) {
+      setIsTotalDataNone(true);
+    }
     const categorizedSearchingDestinationsList = res?.data.destinations;
     setFilteredDestinations(() =>
       changeCategoryIdIntoName(categorizedSearchingDestinationsList)
@@ -174,6 +179,7 @@ function Category({
   useEffect(() => {
     setIsLoading(true);
     getCategorizedSearchingData();
+    return () => setIsTotalDataNone(false); //체크하기
   }, [getCategorizedSearchingData, setIsLoading, isUserSearched]);
 
   return (
@@ -218,7 +224,7 @@ function Category({
       </section>
       <Destinations
         filteredDestinations={filteredDestinations}
-        isLoading={isLoading}
+        isTotalDataNone={isTotalDataNone}
       />
     </>
   );
