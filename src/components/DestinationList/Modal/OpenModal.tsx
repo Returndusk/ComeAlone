@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ModalScheduleLists from './ModalScheduleLists';
 import styles from './OpenModal.module.scss';
 import { TfiClose } from 'react-icons/tfi';
