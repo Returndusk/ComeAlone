@@ -1,11 +1,13 @@
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
 import { ScheduleFetchedType } from '../types/ScheduleDetailTypes';
 import { AxiosError } from 'axios';
 
 function useScheduleDetailFetch(id: string) {
-  const fetchedScheduleDetail = useRef<ScheduleFetchedType>();
+  const [fetchedScheduleDetail, setFetchedScheduleDetail] =
+    useState<ScheduleFetchedType>();
+  const [isDetailLoading, setIsDetailLoading] = useState<boolean>(true);
   const scheduleId = useRef<string>(id);
   const navigate = useNavigate();
 
@@ -30,7 +32,8 @@ function useScheduleDetailFetch(id: string) {
         destinations: response?.data.destinationMaps
       };
 
-      fetchedScheduleDetail.current = data;
+      setFetchedScheduleDetail(data);
+      setIsDetailLoading(false);
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         if (err.response?.status === 404) {
@@ -48,7 +51,10 @@ function useScheduleDetailFetch(id: string) {
     getScheduleDetail(scheduleId.current);
   }, [getScheduleDetail, scheduleId.current]);
 
-  return [fetchedScheduleDetail.current];
+  return [isDetailLoading, fetchedScheduleDetail] as [
+    boolean,
+    ScheduleFetchedType
+  ];
 }
 
 export default useScheduleDetailFetch;
