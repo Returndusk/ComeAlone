@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { DestinationsType } from '../../types/DestinationListTypes';
 import styles from './Search.module.scss';
 import Category from './Category';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import AlertModal from '../common/Alert/AlertModal';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { BiSearch } from 'react-icons/bi';
@@ -18,6 +18,7 @@ function Search() {
   const [isUserSearched, setIsUserSearched] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const searchQueryParam = useMemo(() => {
     return searchParams.get('search') ?? '';
@@ -34,6 +35,7 @@ function Search() {
     const submittedQuery = e.target.searchQuery.value;
     if (isNullishSearchInput(submittedQuery)) {
       setIsShowAlert(true);
+      navigate('/destination/list');
       return;
     }
     const searchQueryString = encodeURIComponent(submittedQuery);
@@ -64,6 +66,7 @@ function Search() {
               style={{ width: '350px' }}
               size='small'
               defaultValue={searchQueryParam}
+              key={searchQueryParam}
               sx={{
                 width: '100%',
                 '& label.Mui-focused': { color: '#ef6d00' },
