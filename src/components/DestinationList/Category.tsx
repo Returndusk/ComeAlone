@@ -164,6 +164,10 @@ function Category({
     return () => setIsTotalDataNone(false); //체크하기
   }, [getCategorizedSearchingData, setIsLoading, isUserSearched]);
 
+  useEffect(() => {
+    setIsSelectedAll(true);
+  }, [searchQueryParam, setIsSelectedAll]);
+
   return (
     <>
       <section className={styles.categoryWrapper}>
