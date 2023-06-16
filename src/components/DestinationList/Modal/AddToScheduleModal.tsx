@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './AddToScheduleModal.module.scss';
 import { AddToScheduleModalType } from '../../../types/ModalScheduleTypes';
-import axios from 'axios';
+// import axios from 'axios';
 import tokenInstance from '../../../apis/tokenInstance';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -34,65 +34,65 @@ function AddToScheduleModal({
     setUpdatedContentIds([...destinationIds]);
   }, [destinations, destinationIds]);
 
-  async function getDestinationTitle(id: number) {
-    try {
-      const response = await axios.get(`${baseUrl}/destinations/${contentid}`);
-      const data = response.data;
-      // console.log(data);
+  // async function getDestinationTitle(id: number) {
+  //   try {
+  //     const response = await axios.get(`${baseUrl}/destinations/${contentid}`);
+  //     const data = response.data;
+  //     // console.log(data);
 
-      if (data && data.id === id) {
-        const title = data.title;
-        // console.log('title', title);
-        return title;
-      }
-    } catch (err) {
-      // console.error('Error: ', err);
-      setErrorAlert(true);
-    }
-  }
+  //     if (data && data.id === id) {
+  //       const title = data.title;
+  //       // console.log('title', title);
+  //       return title;
+  //     }
+  //   } catch (err) {
+  //     // console.error('Error: ', err);
+  //     setErrorAlert(true);
+  //   }
+  // }
 
   async function addToSelectedDay() {
-    const title = await getDestinationTitle(Number(contentid));
+    // const title = await getDestinationTitle(Number(contentid));
 
     if (updatedDestinations[selectedDay].length > 100) {
       setLimitAlert(true);
       return;
     }
 
-    if (
-      Number(contentid) &&
-      !updatedDestinations[selectedDay].includes(title)
-    ) {
-      // console.log('updatedDestinations', updatedDestinations);
+    // if (
+    //   Number(contentid) &&
+    //   !updatedDestinations[selectedDay].includes(title)
+    // ) {
+    // console.log('updatedDestinations', updatedDestinations);
 
-      const copiedContentIds = [...updatedContentIds];
-      copiedContentIds[selectedDay] = copiedContentIds[selectedDay] || [];
-      copiedContentIds[selectedDay].push(Number(contentid));
+    const copiedContentIds = [...updatedContentIds];
+    copiedContentIds[selectedDay] = copiedContentIds[selectedDay] || [];
+    copiedContentIds[selectedDay].push(Number(contentid));
 
-      // console.log('updatedContentIds', updatedContentIds);
+    // console.log('updatedContentIds', updatedContentIds);
 
-      try {
-        const response = await tokenInstance.post(
-          `${baseUrl}/schedules/${scheduleId}`,
-          {
-            destinations: copiedContentIds
-          }
-        );
+    try {
+      const response = await tokenInstance.post(
+        `${baseUrl}/schedules/${scheduleId}`,
+        {
+          destinations: copiedContentIds
+        }
+      );
 
-        // console.log(response);
-        // alert('일정이 추가되었습니다!');
+      // console.log(response);
+      // alert('일정이 추가되었습니다!');
 
-        setUpdatedDestinations(response.data.destinationTitles);
-        setUpdatedContentIds(response.data.destinationIds);
-      } catch (err) {
-        // console.error('Error: ', err);
-        setConsoleAlert(true);
-        return;
-      }
-    } else {
-      setAlreadyAddedAlert(true);
+      setUpdatedDestinations(response.data.destinationTitles);
+      setUpdatedContentIds(response.data.destinationIds);
+    } catch (err) {
+      // console.error('Error: ', err);
+      setConsoleAlert(true);
       return;
     }
+    // } else {
+    //   setAlreadyAddedAlert(true);
+    //   return;
+    // }
   }
 
   async function handleRemoveDestination(
