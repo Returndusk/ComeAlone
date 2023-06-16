@@ -21,6 +21,12 @@ const DEFAULT_LOCATION = {
   LONGITUDE: 126.94951514124065
 };
 
+const NULL_DATA = {
+  TITLE: '금능포구',
+  MAPX: 126.22823779107965,
+  MAPY: 33.390051648123254
+};
+
 const { kakao } = window;
 
 function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
@@ -29,6 +35,20 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
   // const [isClicked, setIsClicked] = useState<boolean>(false);
   const navigate = useNavigate();
   const { search } = useLocation();
+
+  const setLocationToNullData = (
+    location: specifiedCategoryDestinationsType
+  ) => {
+    if (location?.title === NULL_DATA.TITLE) {
+      const newLocationData: specifiedCategoryDestinationsType = {
+        ...location
+      };
+      newLocationData['mapx'] = String(NULL_DATA.MAPX);
+      newLocationData['mapy'] = String(NULL_DATA.MAPY);
+      return newLocationData;
+    }
+    return location;
+  };
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -48,14 +68,17 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
     if (renderedMap === null) {
       return;
     } else {
-      const positions = markersLocations?.map((marker) => ({
-        title: marker.title,
-        content: `<p>${marker.title}</p>`,
-        latlng: new kakao.maps.LatLng(
-          Number(marker?.mapy),
-          Number(marker?.mapx)
-        )
-      }));
+      const positions = markersLocations?.map((marker) => {
+        const InspectedMarker = setLocationToNullData(marker);
+        return {
+          title: InspectedMarker.title,
+          content: `<p>${InspectedMarker.title}</p>`,
+          latlng: new kakao.maps.LatLng(
+            Number(InspectedMarker?.mapy),
+            Number(InspectedMarker?.mapx)
+          )
+        };
+      });
       if (markers !== null) {
         const removeMarkers = markers.map((marker: any) => marker.setMap(null));
         setMarkers(removeMarkers);
@@ -81,17 +104,8 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
 
       //이벤트 등록
       for (let i = 0; i < positions.length; i++) {
-        const customOverlay = new kakao.maps.CustomOverlay({
-          position: positions[i].latlng,
-          content: positions[i].content
-        });
-
         //이벤트
-        let isClicked = false;
         kakao.maps.event.addListener(newMarkers[i], 'click', function () {
-          if (!isClicked) {
-            isClicked = true;
-          }
           const markersTitle = newMarkers[i].getTitle();
           const targetMarker = markersLocations.find(
             (pos) => pos.title === markersTitle
@@ -101,26 +115,9 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
             setClickedDestination(() => targetMarker);
             navigate(`/destination/list/${targetMarker.id}${search}`);
           }
-          isClicked = false;
 
           return;
         });
-
-        // kakao.maps.event.addListener(newMarkers[i], 'mouseover', function () {
-        //   if (isClicked) {
-        //     return;
-        //   }
-        //   customOverlay.setMap(renderedMap);
-        // });
-
-        // kakao.maps.event.addListener(newMarkers[i], 'mouseout', function () {
-        //   if (isClicked) {
-        //     return;
-        //   }
-        //   setTimeout(function () {
-        //     customOverlay.setMap(null);
-        //   });
-        // });
       }
     }
   }, [markersLocations, renderedMap, setClickedDestination, search]);
