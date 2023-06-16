@@ -7,6 +7,7 @@ export type ModalMyScheduleType = {
   created_at: string;
   destinations: string[][];
   destinationIds: number[][];
+  image: string;
 };
 
 export type MyScheduleListType = ModalMyScheduleType[];

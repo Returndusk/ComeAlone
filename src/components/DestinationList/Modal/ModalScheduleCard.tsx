@@ -71,6 +71,9 @@ ModalScheduleCardType) {
         key={index}
         className={styles.scheduleCard}
         // onClick={handleShowDestinations}
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${schedule.image})`
+        }}
         onClick={() => onShowDestinations(index)}
       >
         <div className={styles.scheduleContent}>
