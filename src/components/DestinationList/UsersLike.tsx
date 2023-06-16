@@ -34,12 +34,20 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
 
   const getUsersPreferData = useCallback(() => {
     const usersId = authState?.user?.id;
-    const preferUserList = destinationDetails?.destination_likes ?? [];
-    const accessUserPreferInfo = preferUserList.find(
+    const preferUserList = destinationDetails?.destination_likes;
+    const accessUserPreferInfo = preferUserList?.find(
       (user) => user.user_id === usersId
     );
-    setIsUserClickLike(() => accessUserPreferInfo?.is_liked ?? false);
-  }, [setIsUserClickLike, destinationDetails]);
+    if (accessUserPreferInfo) {
+      setIsUserClickLike(true);
+    }
+    setPreferCounter(() => {
+      return (
+        destinationDetails?.destination_likes_count ??
+        COUNTS_PER_USER_CLICK.DEFAULT_COUNT
+      );
+    });
+  }, [setIsUserClickLike, destinationDetails, authState]);
 
   useEffect(() => {
     getUsersPreferData();
@@ -86,16 +94,18 @@ function UsersLike({ destinationDetails }: UsersLikePropsType) {
 
   return (
     <>
-      <div className={styles.usersLikesbox}>
-        <button className={styles.likesButton} onClick={handleLikeClick}>
-          {isUserClickLike ? (
-            <FaHeart id={styles.likesIcon} />
-          ) : (
-            <FaRegHeart id={styles.canceledLikesIcon} />
-          )}
-        </button>
-        <span id={styles.likesLabel}>좋아요{`ㆍ${preferCounter}개`}</span>
-      </div>
+      {destinationDetails && (
+        <div className={styles.usersLikesbox}>
+          <button className={styles.likesButton} onClick={handleLikeClick}>
+            {isUserClickLike ? (
+              <FaHeart id={styles.likesIcon} />
+            ) : (
+              <FaRegHeart id={styles.canceledLikesIcon} />
+            )}
+          </button>
+          <span id={styles.likesLabel}>좋아요{`ㆍ${preferCounter}개`}</span>
+        </div>
+      )}
       {isShowAlert && (
         <AlertModal
           message={ALERT_PROPS.message}
