@@ -39,7 +39,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     user: null
   };
   const [authState, setAuthState] = useState<AuthStateType>(initAuthState);
-  // console.log(authState);
 
   const updateAuthState = (
     isLoggedIn: boolean,

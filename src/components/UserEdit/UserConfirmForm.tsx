@@ -68,7 +68,6 @@ function UserConfirmForm({ confirmUser }: UserConfirmFormProps) {
           }
         }
 
-        console.log(err);
         setAlertModal({
           isOpen: true,
           message: '비밀번호 확인에 실패하였습니다.',
