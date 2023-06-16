@@ -42,8 +42,6 @@ function ImageScheduleEdit({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const uploadedImage = (event.target.files as FileList)[0];
 
-    console.log(updatedImageFile);
-
     if (!uploadedImage) {
       return;
     }
