@@ -42,26 +42,13 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      // background-color: rgba(
-      //   0,
-      //   0,
-      //   0,
-      //   0.1
-      // );
       background-color: #cddac6;
       border-radius: 20px;
       border: 3px solid transparent;
     }
 
     &:hover::-webkit-scrollbar-thumb {
-      // background-color: rgba(
-      //   0,
-      //   0,
-      //   0,
-      //   0.4
-      // );
       background-color: #7c9070;
-      // background-color: #c8d5c1;
     }
   }
 
