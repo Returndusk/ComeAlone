@@ -1,5 +1,5 @@
 .container {
-  margin: 40px auto;
+  margin: 30px auto;
   width: 1000px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -7,15 +7,4 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-.backButton {
-  font-size: 20px;
-  margin: 0 0 20px 10px;
-}
-
-.mapContainer {
-  grid-column: 2 / 4;
-  height: 530px;
-  padding: 100px 0 0 0;
 }

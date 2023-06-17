@@ -1,15 +1,18 @@
 import { MapWithWaypointsPropsType } from './DestinationListTypes';
 export interface IScheduleDetail {
+  userId: string;
+  nickname: string;
+  profileImage: string;
   scheduleId: number;
   title: string;
   summary: string;
-  userId: string;
-  nickname: string;
   likesCount: number;
   startDate: Date;
   endDate: Date;
   duration: number;
   createdAt: Date;
+  updatedAt: Date;
+  destinationCount: number;
   destinations: MapWithWaypointsPropsType[][];
   image: string;
   status: string;
@@ -17,39 +20,44 @@ export interface IScheduleDetail {
 
 export type ScheduleFetchedType = Pick<
   IScheduleDetail,
+  | 'scheduleId'
   | 'userId'
+  | 'nickname'
+  | 'profileImage'
   | 'title'
   | 'summary'
-  | 'nickname'
   | 'likesCount'
   | 'startDate'
   | 'endDate'
   | 'duration'
   | 'createdAt'
+  | 'updatedAt'
+  | 'destinationCount'
   | 'destinations'
   | 'image'
+  | 'status'
 >;
 
 export type ScheduleDetailInfoType = Pick<
   IScheduleDetail,
+  | 'nickname'
+  | 'profileImage'
   | 'title'
   | 'summary'
-  | 'nickname'
   | 'startDate'
   | 'endDate'
   | 'duration'
   | 'createdAt'
+  | 'updatedAt'
 >;
 
-export type IconsScheduleDetailType = {
+export type ScheduleDetailIconsType = {
   userId: string;
   doesUserLike: boolean;
   likesCount: number;
-  reviewsCount: number;
-  onUserLike: () => void;
 };
 
-interface IScheduleReviewType {
+export type ScheduleReviewType = {
   comment_id: number;
   scheduleId: number;
   comment: string;
@@ -58,11 +66,13 @@ interface IScheduleReviewType {
   user: {
     id: string;
     nickname: string;
-    profileImage: string;
+    profile_image: string;
   };
-}
+};
 
 export type ScheduleReviewPropsType = {
-  scheduleReviews: IScheduleReviewType[];
+  scheduleReviews: ScheduleReviewType[];
+  reviewsCount: number;
+  onReviewUpdate: (id: number, updateReview: string) => void;
   onReviewDelete: (id: number) => void;
 };

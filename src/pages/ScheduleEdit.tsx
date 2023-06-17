@@ -1,99 +1,81 @@
-import React, {
-  useMemo,
-  useState,
-  useEffect,
-  useCallback,
-  useRef
-} from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../components/ScheduleEdit/ScheduleEdit.module.scss';
 import ImageScheduleEdit from '../components/ScheduleEdit/ImageScheduleEdit';
 import DateScheduleEdit from '../components/ScheduleEdit/DateScheduleEdit';
 import PublicStatusScheduleEdit from '../components/ScheduleEdit/PublicStatusScheduleEdit';
 import InfoScheduleEdit from '../components/ScheduleEdit/InfoScheduleEdit';
 import EditDestinationList from '../components/ScheduleEdit/EditDestinationList';
-import MapWithWaypoints from '../components/common/Map/MapWithWaypoints';
-import ButttonsScheduleEdit from '../components/ScheduleEdit/ButtonsScheduleEdit';
+import DestinationsMap from '../components/ScheduleEdit/DestinationsMap';
+import ButtonsScheduleEdit from '../components/ScheduleEdit/ButtonsScheduleEdit';
 import DateModalScheduleEdit from '../components/ScheduleEdit/DateModalScheduleEdit';
-import { defaultSchedule } from '../components/ScheduleEdit/Dummy';
-import { FaArrowLeft } from 'react-icons/fa';
-import { MapWithWaypointsPropsType } from '../types/DestinationListTypes';
-import { getScheduleDetailById } from '../apis/ScheduleDetailAPI';
-import { updateSchedule, deleteScheduleById } from '../apis/ScheduleEditAPI';
+import { updateSchedule } from '../apis/ScheduleEditAPI';
+import AlertModal from '../components/common/Alert/AlertModal';
 import ROUTER from '../constants/Router';
-
-function mapDestinationId(destinationList: MapWithWaypointsPropsType[][]) {
-  return destinationList.map((destOfDay: MapWithWaypointsPropsType[]) =>
-    destOfDay.map((dest: MapWithWaypointsPropsType) => dest.id)
-  );
-}
-
-function stringifyDate(date: Date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
+import { useAuthState } from '../contexts/AuthContext';
+import useScheduleDetailFetch from '../hooks/useScheduleDetailFetch';
+import useScheduleEditForm from '../hooks/useScheduleEditForm';
+import ScheduleDetailLoading from '../components/common/Loading/ScheduleDetailLoading';
 
 function ScheduleEdit() {
-  const { scheduleId } = useParams();
+  const scheduleId: string = useParams().scheduleId as string;
+  const { authState } = useAuthState();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
-  const [updatedDateInfo, setUpdatedDateInfo] = useState({
-    startDate: defaultSchedule.startDate,
-    endDate: defaultSchedule.endDate,
-    duration: defaultSchedule.duration
-  });
-  const [updatedStatus, setUpdatedStatus] = useState(defaultSchedule.status);
-  const [updatedDestinationList, setUpdatedDestinationList] = useState(
-    defaultSchedule.destinations
-  );
-  const [checkedDayIndex, setCheckedDayIndex] = useState(-1);
-  const updatedTitle = useRef(defaultSchedule.title);
-  const updatedSummary = useRef(defaultSchedule.summary);
-  const createdAt = useRef(defaultSchedule.createdAt);
+  const [showDateModal, setShowDateModal] = useState<boolean>(false);
+  const [showTitleEmptyAlert, setShowTitleEmptyAlert] =
+    useState<boolean>(false);
+  const [showSummaryEmptyAlert, setShowSummaryEmptyAlert] =
+    useState<boolean>(false);
+  const [checkedDayIndex, setCheckedDayIndex] = useState<number>(-1);
+  const createdAt = useRef<Date>();
+  const updatedAt = useRef<Date>();
 
-  const getScheduleEdit = useCallback(async (id: string | undefined) => {
-    const response = await getScheduleDetailById(id);
-
-    const data = {
-      title: response?.data.title,
-      summary: response?.data.summary,
-      duration: response?.data.duration,
-      startDate: new Date(response?.data.start_date),
-      endDate: new Date(response?.data.end_date),
-      image: response?.data.image,
-      createdAt: new Date(response?.data.created_at.split('T')[0]),
-      status: response?.data.status,
-      destinations: response?.data.destinationMaps
-    };
-
-    return data;
-  }, []);
+  const [isDetailLoading, fetchedScheduleDetail] =
+    useScheduleDetailFetch(scheduleId);
+  const [
+    isInitDataLoading,
+    updatedTitle,
+    updatedSummary,
+    updatedImagePath,
+    updatedDateInfo,
+    updatedDestinationList,
+    updatedStatus,
+    setInitScheduleEditForm,
+    setUpdatedTitle,
+    setUpdatedSummary,
+    setUpdatedImagePath,
+    setUpdatedDateInfo,
+    setUpdatedDestinationList,
+    setUpdatedStatus,
+    getUpdatedScheduleSubmitForm
+  ] = useScheduleEditForm();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getScheduleEdit(scheduleId);
+    const fetchInitScheduleForm = () => {
+      if (isDetailLoading) {
+        return;
+      } else {
+        if (authState.user?.id !== fetchedScheduleDetail.userId) {
+          navigate(ROUTER.MAIN);
 
-      setUpdatedDateInfo({
-        startDate: data.startDate,
-        endDate: data.endDate,
-        duration: data.duration
-      });
-      updatedTitle.current = data.title;
-      updatedSummary.current = data.summary;
-      createdAt.current = data.createdAt;
-      setUpdatedStatus(data.status);
-      setUpdatedDestinationList(data.destinations);
-      setIsLoading(false);
+          return;
+        }
+        setInitScheduleEditForm(fetchedScheduleDetail);
+        (createdAt.current = fetchedScheduleDetail.createdAt),
+          (updatedAt.current = fetchedScheduleDetail.updatedAt);
+      }
     };
 
-    fetchData();
-  }, []);
+    if (authState.isLoggedIn === true) {
+      fetchInitScheduleForm();
+    }
+  }, [isDetailLoading, fetchedScheduleDetail, authState.isLoggedIn]);
 
   useEffect(() => {
+    if (isInitDataLoading) {
+      return;
+    }
+
     const prevDuration = updatedDestinationList.length;
     const updatedDuration = updatedDateInfo.duration;
 
@@ -110,9 +92,13 @@ function ScheduleEdit() {
         updatedDestinationList.slice(0, updatedDuration)
       );
     }
-  }, [updatedDateInfo.duration]);
+  }, [updatedDestinationList, updatedDateInfo.duration]);
 
   const markersLocations = useMemo(() => {
+    if (isInitDataLoading) {
+      return;
+    }
+
     if (checkedDayIndex === -1) {
       return updatedDestinationList.flat();
     } else {
@@ -120,80 +106,49 @@ function ScheduleEdit() {
         checkedDayIndex
       ];
     }
-  }, [checkedDayIndex, updatedDestinationList]);
+  }, [checkedDayIndex, updatedDestinationList, updatedDateInfo]);
 
-  const handleModelOpen = () => setOpenModal(true);
-
-  const handleModalClose = () => setOpenModal(false);
-
-  const handleTitleUpdate = (title: string) => {
-    updatedTitle.current = title;
+  const handleSubmit = () => {
+    if (!updatedTitle) {
+      setShowTitleEmptyAlert(true);
+    } else if (!updatedSummary) {
+      setShowSummaryEmptyAlert(true);
+    } else {
+      handleSubmitConfirm();
+    }
   };
 
-  const handleSummaryUpdate = (summary: string) => {
-    updatedSummary.current = summary;
-  };
-
-  const handleSubmit = async () => {
-    const schedule_id = Number(scheduleId);
-    const title = updatedTitle.current;
-    const summary = updatedSummary.current;
-    const duration = updatedDateInfo.duration;
-    const start_date = stringifyDate(updatedDateInfo.startDate);
-    const end_date = stringifyDate(updatedDateInfo.endDate);
-    const status = updatedStatus;
-    const image = '';
-    const destinations = mapDestinationId(updatedDestinationList);
-
-    await updateSchedule({
-      schedule_id,
-      title,
-      summary,
-      duration,
-      start_date,
-      end_date,
-      status,
-      image,
-      destinations
-    });
+  const handleSubmitConfirm = async () => {
+    await updateSchedule(getUpdatedScheduleSubmitForm());
 
     navigate(`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`);
   };
 
-  const handleDelete = async () => {
-    await deleteScheduleById(scheduleId);
-
-    navigate(ROUTER.MYSCHEDULE_LIST);
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isInitDataLoading) {
+    return <ScheduleDetailLoading />;
   }
 
   return (
     <div className={styles.container}>
-      <Link
-        to={`${ROUTER.SCHEDULE_DETAIL}/${scheduleId}`}
-        className={styles.backButton}
-      >
-        <FaArrowLeft />
-        돌아가기
-      </Link>
-      <ImageScheduleEdit image={defaultSchedule.image} />
+      <ImageScheduleEdit
+        imagePath={updatedImagePath}
+        onImageUpdate={setUpdatedImagePath}
+      />
       <DateScheduleEdit
         dateInfo={updatedDateInfo}
-        onOpenModal={handleModelOpen}
+        onOpenModal={() => setShowDateModal(true)}
       />
       <PublicStatusScheduleEdit
         updatedStatus={updatedStatus}
         onStatusUpdate={setUpdatedStatus}
       />
       <InfoScheduleEdit
-        updatedTitle={updatedTitle.current}
-        updatedSummary={updatedSummary.current}
-        createdAt={createdAt.current}
-        onTitleUpdate={handleTitleUpdate}
-        onSummaryUpdate={handleSummaryUpdate}
+        updatedTitle={updatedTitle}
+        updatedSummary={updatedSummary}
+        createdAt={createdAt.current as Date}
+        updatedAt={updatedAt.current as Date}
+        onTitleUpdate={setUpdatedTitle}
+        onSummaryUpdate={setUpdatedSummary}
       />
       <EditDestinationList
         updatedDestinationList={updatedDestinationList}
@@ -201,16 +156,26 @@ function ScheduleEdit() {
         onDestinationListUpdate={setUpdatedDestinationList}
         onCheckedDayIndexUpdate={setCheckedDayIndex}
       />
-      <div className={styles.mapContainer}>
-        <MapWithWaypoints markersLocations={markersLocations} />
-      </div>
-      <ButttonsScheduleEdit onSubmit={handleSubmit} onDelete={handleDelete} />
+      <DestinationsMap markersLocations={markersLocations} />
+      <ButtonsScheduleEdit scheduleId={scheduleId} onSubmit={handleSubmit} />
       <DateModalScheduleEdit
-        openModal={openModal}
+        openModal={showDateModal}
         dateInfo={updatedDateInfo}
         onDateInfoUpdate={setUpdatedDateInfo}
-        onModalClose={handleModalClose}
+        onModalClose={() => setShowDateModal(false)}
       />
+      {showTitleEmptyAlert && (
+        <AlertModal
+          message='수정하실 제목을 입력해주세요.'
+          onConfirm={() => setShowTitleEmptyAlert(false)}
+        />
+      )}
+      {showSummaryEmptyAlert && (
+        <AlertModal
+          message='수정하실 일정 소개를 입력해주세요.'
+          onConfirm={() => setShowSummaryEmptyAlert(false)}
+        />
+      )}
     </div>
   );
 }

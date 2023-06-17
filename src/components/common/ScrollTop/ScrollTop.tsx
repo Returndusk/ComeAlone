@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './ScrollTop.module.scss';
+import { FaArrowCircleUp } from 'react-icons/fa';
 
 function ScrollTop() {
   function scrollToTop() {
@@ -8,9 +9,9 @@ function ScrollTop() {
 
   return (
     <div className={styles.scrollButtonBox}>
-      <button className={styles.scrollTopButton} onClick={scrollToTop}>
-        ▲
-      </button>
+      <div className={styles.scrollTopButton} onClick={scrollToTop}>
+        <FaArrowCircleUp />
+      </div>
     </div>
   );
 }

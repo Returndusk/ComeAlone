@@ -1,31 +1,49 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styles from './PublicStatusScheduleEdit.module.scss';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { ScheduleEditPublicStatusPropsType } from '../../types/ScheduleEditTypes';
+import { alpha, styled } from '@mui/material/styles';
+import { FormGroup, FormControlLabel, Switch } from '@mui/material';
+import {
+  IS_SCHEDULE_PUBLIC,
+  IS_SCHEDULE_PRIVATE
+} from '../../constants/Schedule';
+
+const CustomSwitch = styled(Switch)(({ theme }) => ({
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: '#ef6d00',
+    '&:hover': {
+      backgroundColor: alpha('#ef6d00', theme.palette.action.hoverOpacity)
+    }
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: '#ef6d00'
+  }
+}));
 
 function PublicStatusScheduleEdit({
   updatedStatus,
   onStatusUpdate
-}: ScheduleEditPublicStatusPropsType) {
+}: {
+  updatedStatus: string;
+  onStatusUpdate: Dispatch<SetStateAction<string>>;
+}) {
   return (
     <div className={styles.publicStatus}>
       <FormGroup>
         <FormControlLabel
           control={
-            <Switch
-              checked={updatedStatus === 'PUBLIC' ? true : false}
+            <CustomSwitch
+              className={styles.statusSwitch}
+              checked={updatedStatus === IS_SCHEDULE_PUBLIC ? true : false}
               onClick={() => {
-                if (updatedStatus === 'PUBLIC') {
-                  onStatusUpdate('PRIVATE');
+                if (updatedStatus === IS_SCHEDULE_PUBLIC) {
+                  onStatusUpdate(IS_SCHEDULE_PRIVATE);
                 } else {
-                  onStatusUpdate('PUBLIC');
+                  onStatusUpdate(IS_SCHEDULE_PUBLIC);
                 }
               }}
             />
           }
-          label={updatedStatus === 'PUBLIC' ? '공개' : '비공개'}
+          label={updatedStatus === IS_SCHEDULE_PUBLIC ? '공개' : '비공개'}
         />
       </FormGroup>
     </div>

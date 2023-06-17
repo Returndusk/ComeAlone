@@ -14,17 +14,24 @@ function DateScheduleEdit({
   dateInfo: DateInfoType;
   onOpenModal: () => void;
 }) {
+  const formatDate = (date: Date) => {
+    return date
+      .toLocaleDateString('ko-KR')
+      .replace('.', '년 ')
+      .replace('.', '월 ')
+      .replace('.', '일 ');
+  };
+
   return (
     <div className={styles.dateContainer}>
       <span className={styles.duration}>
-        {`${dateInfo.startDate.toLocaleDateString(
-          'ko-KR'
-        )} ~ ${dateInfo.endDate.toLocaleDateString('ko-KR')} (${
-          dateInfo.duration
-        }일)`}
+        <span>여행 기간</span>
+        {`${formatDate(dateInfo.startDate)} ~ ${formatDate(
+          dateInfo.endDate
+        )} (총 ${dateInfo.duration}일)`}
       </span>
       <Tooltip title='날짜 수정하기' placement='right'>
-        <IconButton onClick={onOpenModal}>
+        <IconButton onClick={onOpenModal} className={styles.dateIcon}>
           <FaCalendarAlt className={styles.durationEdit} />
         </IconButton>
       </Tooltip>

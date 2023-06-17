@@ -1,0 +1,19 @@
+.buttonContainer {
+  grid-row: 2;
+  grid-column: 3;
+  justify-self: self-end;
+  align-self: center;
+
+  button {
+    background-color: transparent;
+    font-size: 22px;
+    border: 0;
+    margin: 3px 0px 0px 10px;
+    cursor: pointer;
+    color: #888;
+
+    a {
+      color: #888;
+    }
+  }
+}

@@ -59,13 +59,21 @@ export const checkNicknameDuplicate = async (formData: {
   return response;
 };
 
+export const checkEmailDuplicate = async (formData: { id: string }) => {
+  const response = await axios.post(`${baseUrl}/auth/users/email`, formData);
+  return response;
+};
+
 export const deleteUser = async () => {
   const response = await tokenInstance.delete(`${baseUrl}/auth/users/me`);
 
   return response;
 };
 
-export const testUserToken = async (accessToken: string) => {
-  const response = await axios.post(`${baseUrl}/auth/tokenTest`, accessToken);
+export const uploadProfileImage = async (formData: FormData) => {
+  const response = await tokenInstance.post(
+    `${baseUrl}/upload/profile/image`,
+    formData
+  );
   return response;
 };

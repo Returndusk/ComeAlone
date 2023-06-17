@@ -1,25 +1,25 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import ModalScheduleLists from './ModalScheduleLists';
-import styles from './CommonModalDesign.module.scss';
+import styles from './OpenModal.module.scss';
+import { TfiClose } from 'react-icons/tfi';
 
 function OpenModal(props: { closeModal: () => void }) {
-  const navigate = useNavigate();
-
-  function MoveToMySchedule() {
-    navigate('/myschedule/list');
-  }
-
   return (
-    <>
-      <div className={styles.modalBackground}>
-        <div className={styles.modalLayout}>
-          <button onClick={MoveToMySchedule}>새로운 일정 만들기</button>
+    <div className={styles.modalBackground}>
+      <div className={styles.modalLayout}>
+        <button className={styles.closeBtn} onClick={props.closeModal}>
+          <TfiClose />
+        </button>
+        <div className={styles.scheduleListContainer} id='scheduleContainer'>
           <ModalScheduleLists />
-          <button onClick={props.closeModal}>창 닫기</button>
+          {/* {isLoading ? (
+            <p>Loading...</p> // Loading display here, replace with your actual loading component or spinner
+          ) : (
+            <ModalScheduleLists onLoadingComplete={handleLoadingComplete} />
+          )} */}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

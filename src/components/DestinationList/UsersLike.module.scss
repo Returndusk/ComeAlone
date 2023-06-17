@@ -1,0 +1,24 @@
+.usersLikesbox {
+  display: flex;
+  flex-direction: column;
+
+  .likesButton {
+    border: none;
+    background: none;
+
+    &:hover {
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    #likesIcon {
+      font-size: 28px;
+      color: rgb(231, 49, 49);
+    }
+
+    #canceledLikesIcon {
+      font-size: 28px;
+      color: rgb(231, 49, 49);
+    }
+  }
+}

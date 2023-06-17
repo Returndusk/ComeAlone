@@ -1,0 +1,81 @@
+.destinationList {
+  // margin-bottom: 10px;
+  display: flex;
+  // flex-direction: column;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  // position: relative;
+  // height: 600px;
+  width: 80%;
+  overflow-y: scroll;
+  margin-top: 10px;
+  margin-left: 8px;
+  // padding-top: 50px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #efd3bc;
+    border-radius: 20px;
+    border: 3px solid transparent;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: var(--main-color);
+  }
+}
+
+.destination {
+  // background-color: #7c9070;
+  // color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 86%;
+  font-size: 16px;
+  margin: 10px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.addDestinationBtn {
+  margin: 10px 0;
+}
+
+.alertModal {
+  z-index: 20;
+}
+
+.deleteButton {
+  all: unset;
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 20px;
+  color: var(--main-color);
+}
+
+.alertContainer {
+  display: flex;
+  margin-top: 70px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #c1c1c1;
+  overflow-y: hidden;
+}
+
+.alertIcon {
+  width: 130px;
+  height: 130px;
+  padding: 20px;
+}

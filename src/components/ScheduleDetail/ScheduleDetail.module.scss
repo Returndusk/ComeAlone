@@ -1,33 +1,6 @@
 .container {
-  margin: 40px auto;
+  margin: 30px auto;
   width: 1000px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  column-gap: 10px;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.backButton {
-  font-size: 20px;
-  margin: 0 0 20px 10px;
-}
-
-.editButtonContainer {
-  justify-self: self-end;
-  align-self: self-start;
-  margin-top: 20px;
-  padding: 20px 0 0 0;
-
-  .editButton {
-    width: 50%;
-    height: 40px;
-  }
-}
-
-.mapContainer {
-  grid-column: 2 / 4;
-  height: 530px;
-  padding: 90px 0 0 0;
+  grid-template-columns: repeat(3, 1fr);
 }

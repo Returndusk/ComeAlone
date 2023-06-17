@@ -1,75 +1,90 @@
 .categoryWrapper {
   display: flex;
-  justify-content: center;
-  width: 550px;
-  z-index: 1000;
-  background-color: #fff;
+  width: 100%;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
 
-  padding: 15px 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .categoryContainer {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 100%;
   flex-wrap: wrap;
-  margin: 0 50px;
 
   button {
+    all: unset;
     font-size: 13px;
     cursor: pointer;
-    border-radius: 16px;
-    margin: 2px;
-    min-width: 65px;
-  }
-  button + button {
-    margin-left: 15px;
+    border-radius: 5px;
+    min-width: 45px;
+    background-color: transparent;
+    margin-bottom: 5px;
+    color: #666;
+    font-weight: 500;
+    text-align: center;
+    margin-right: 15px;
+    padding: 5px;
   }
 }
 
-.activeSelectedButton {
+#activeSelectedAllButton {
   border: none;
-  background-color: var(--sub-1-color);
-  color: #fff;
-  padding: 6px;
-}
-
-.activeSelectedAllButton {
-  border: none;
+  display: flex;
+  justify-content: center;
   background-color: var(--main-color);
   color: #fff;
-  padding: 6px;
 }
 
-.selectedButton {
-  border: 2px solid;
-  padding: 4px;
-  border-color: var(--sub-1-color);
-  color: var(--sub-1-color);
+#selectedAllButton {
   background-color: #fff;
-}
-
-.selectedAllButton {
-  border: 2px solid;
-  padding: 4px;
-  border-color: var(--main-color);
-  color: var(--main-color);
-  background-color: #fff;
-}
-
-.filteredCounterWraper {
   display: flex;
+  justify-content: center;
+}
 
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
+#activeCategory-12 {
+  background-color: #d23300;
+  color: #fff;
+}
 
-  background-color: #fff;
+#activeCategory-14 {
+  background-color: #6d1c9d;
+  color: #fff;
+}
 
-  #filteredCounter {
-    padding-left: 30px; // destination의 좌우 패딩과 동일
-    font-size: 18px;
-    font-weight: 550;
-  }
+#activeCategory-15 {
+  background-color: #007d00;
+  color: #fff;
+}
+
+#activeCategory-25 {
+  background-color: #004e4e;
+  color: #fff;
+}
+
+#activeCategory-28 {
+  background-color: #2b8a8a;
+  color: #fff;
+}
+
+#activeCategory-32 {
+  background-color: #cca800;
+  color: #fff;
+}
+
+#activeCategory-38 {
+  background-color: #773b15;
+  color: #fff;
+}
+
+#activeCategory-39 {
+  background-color: #1d6dcc;
+  color: #fff;
 }

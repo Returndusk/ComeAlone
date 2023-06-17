@@ -27,9 +27,8 @@ export const AuthContext = createContext<AuthContextProps | null>(null);
 export function useAuthState() {
   const state = useContext(AuthContext);
   if (!state) throw new Error('AuthProvider를 찾을 수 없습니다.');
-  const { authState, updateAuthState } = state;
 
-  return { authState, updateAuthState };
+  return state;
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -40,7 +39,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     user: null
   };
   const [authState, setAuthState] = useState<AuthStateType>(initAuthState);
-  console.log(authState);
 
   const updateAuthState = (
     isLoggedIn: boolean,
@@ -63,27 +61,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   //페이지 처음 로드시 (새로고침시)
   useEffect(() => {
-    //리프레시 토큰으로 액세스 & 리프레시 토큰 재발급
-    const refreshToken = cookies.get('refreshToken');
-    const getUserState = async (refreshToken: string) => {
+    const getUserState = async (
+      accessToken: string | null,
+      refreshToken: string | null
+    ) => {
       try {
-        const response = await refreshUserTokens(refreshToken);
-        const data = response.data;
-
-        if (response.status === 201) {
-          cookies.set(
-            'accessToken',
-            data.accessToken,
-            ACCESS_TOKEN_COOKIE_OPTIONS
-          );
-          cookies.set(
-            'refreshToken',
-            data.refreshToken,
-            REFRESH_TOKEN_COOKIE_OPTIONS
-          );
-
+        if (accessToken) {
           const userInfo = await getUser();
           updateAuthState(true, userInfo.data);
+        }
+
+        if (refreshToken) {
+          const response = await refreshUserTokens(refreshToken);
+          const data = response.data;
+
+          if (response.status === 201) {
+            cookies.set(
+              'accessToken',
+              data.accessToken,
+              ACCESS_TOKEN_COOKIE_OPTIONS
+            );
+            cookies.set(
+              'refreshToken',
+              data.refreshToken,
+              REFRESH_TOKEN_COOKIE_OPTIONS
+            );
+
+            const userInfo = await getUser();
+            updateAuthState(true, userInfo.data);
+          } else {
+            alert(
+              '로그인 처리 중 알 수 없는 문제가 발생하였습니다. 계속 문제가 발생한다면 서비스 제공자에게 문의해주세요.'
+            );
+          }
         }
       } catch (error) {
         cookies.remove('accessToken', { path: '/' });
@@ -92,9 +102,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     };
 
-    if (refreshToken) {
-      getUserState(refreshToken);
-    } else {
+    const accessToken = cookies.get('accessToken');
+    const refreshToken = cookies.get('refreshToken');
+
+    //리프레시 토큰만 있을 경우 (액세스 & 리프레시) 토큰 재발급
+    if (!accessToken && refreshToken) {
+      getUserState(null, refreshToken);
+    }
+    //둘 다 있을 경우 액세스 토큰으로 유저 정보 받아오기
+    if (accessToken && refreshToken) {
+      getUserState(accessToken, null);
+    }
+    //둘 다 없을 경우 비로그인 상태로 업데이트
+    if (!accessToken && !refreshToken) {
       updateAuthState(false);
     }
   }, []);

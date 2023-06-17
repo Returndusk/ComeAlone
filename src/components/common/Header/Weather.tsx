@@ -58,7 +58,7 @@ function Weather() {
   const imgSrc = icon;
 
   if (loading) {
-    return <p>Loading</p>;
+    return null;
   } else {
     return (
       <div className={styles.weather}>
@@ -67,8 +67,8 @@ function Weather() {
           target='_blank'
           rel='noreferrer'
         >
-          <img src={imgSrc} alt='Weather Icon' />
-          {temp}°C
+          <img src={imgSrc} alt='Weather Icon' title='제주시 현재 날씨. 클릭 시 제주지방기상청이 연결됩니다. ' />
+          {temp}°
         </a>
       </div>
     );

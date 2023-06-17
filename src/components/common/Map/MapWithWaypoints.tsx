@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './MapWithWaypoints.module.scss';
 import { MapWithWaypointsPropsType } from '../../../types/DestinationListTypes';
 
@@ -48,9 +48,9 @@ function MapWithWaypoints({
 }: {
   markersLocations: MapWithWaypointsPropsType[];
 }) {
-  const [renderedMap, setRenderedMap] = useState<any>(null);
-  const prevMarkers = useRef<any[]>([]);
-  const prevPolyline = useRef<any>(null);
+  const renderedMap = useRef<kakao.maps.Map>();
+  const prevMarkers = useRef<kakao.maps.Marker[]>([]);
+  const prevPolyline = useRef<kakao.maps.Polyline>();
 
   useEffect(() => {
     const container = document.getElementById('mapWithWaypoints');
@@ -63,34 +63,46 @@ function MapWithWaypoints({
     };
     const map = new kakao.maps.Map(container, options);
 
-    setRenderedMap(() => map);
+    renderedMap.current = map;
   }, []);
 
   useEffect(() => {
-    if (renderedMap === null) {
+    if (renderedMap.current === null) {
       return;
     }
 
     if (markersLocations.length <= 0) {
+      if (prevMarkers.current.length > 0) {
+        prevMarkers.current.forEach((marker: kakao.maps.Marker) => {
+          marker.setMap(null);
+        });
+      }
+
+      if (prevPolyline.current) {
+        prevPolyline.current.setMap(null);
+      }
+
       return;
     }
 
-    const positions = markersLocations?.map(
-      (marker) =>
-        new kakao.maps.LatLng(Number(marker?.mapy), Number(marker?.mapx))
-    );
+    const positions = markersLocations.map((marker) => {
+      return {
+        content: `<span><p>${marker.title}</p></span>`,
+        latlng: new kakao.maps.LatLng(Number(marker.mapy), Number(marker.mapx))
+      };
+    });
 
     const newMarkers = positions.map(
-      (position, index) =>
+      (destination, index) =>
         new kakao.maps.Marker({
-          position,
-          map: renderedMap,
+          map: renderedMap.current,
+          position: destination.latlng,
           image: setImageOps(index)
         })
     );
 
     const bounds = positions.reduce(
-      (bounds, latlng) => bounds.extend(latlng),
+      (bounds, destination) => bounds.extend(destination.latlng),
       new kakao.maps.LatLngBounds()
     );
 
@@ -109,8 +121,25 @@ function MapWithWaypoints({
       strokeStyle: 'solid'
     });
 
+    for (let i = 0; i < positions.length; i++) {
+      const customOverlay = new kakao.maps.CustomOverlay({
+        position: positions[i].latlng,
+        content: positions[i].content
+      });
+
+      kakao.maps.event.addListener(newMarkers[i], 'mouseover', function () {
+        customOverlay.setMap(renderedMap.current);
+      });
+
+      kakao.maps.event.addListener(newMarkers[i], 'mouseout', function () {
+        setTimeout(function () {
+          customOverlay.setMap();
+        });
+      });
+    }
+
     if (prevMarkers.current.length > 0) {
-      prevMarkers.current.forEach((marker: any) => {
+      prevMarkers.current.forEach((marker: kakao.maps.Marker) => {
         marker.setMap(null);
       });
     }
@@ -123,12 +152,12 @@ function MapWithWaypoints({
 
     prevPolyline.current = newPolyline;
 
-    newMarkers.forEach((marker: any) => marker.setMap(renderedMap));
+    newMarkers.forEach((marker) => marker.setMap(renderedMap.current));
 
-    newPolyline.setMap(renderedMap);
+    newPolyline.setMap(renderedMap.current);
 
-    renderedMap?.setBounds(bounds);
-  }, [markersLocations]);
+    renderedMap.current?.setBounds(bounds);
+  }, [markersLocations, renderedMap.current]);
 
   return <div className={styles.mapWithWaypoints} id='mapWithWaypoints'></div>;
 }

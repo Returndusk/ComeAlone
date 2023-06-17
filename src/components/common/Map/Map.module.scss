@@ -1,6 +1,16 @@
 .map {
   width: 100%;
+  min-width: 1280px;
   height: 100%;
-  position: absolute;
-  top: 0%;
+
+  p {
+    margin: 0 0 130px 0;
+    padding: 5px;
+    background-color: #fff;
+    border: 2px var(--main-color) solid;
+    border-radius: 5px;
+    color: var(--main-color);
+    font-size: 20px;
+    font-weight: 600;
+  }
 }

@@ -1,0 +1,44 @@
+.modifyReviewContainer {
+  display: flex;
+  align-items: center;
+  padding: 15px 0px;
+  box-sizing: border-box;
+
+  .reviewInputForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .reviewInputBar {
+      width: 100%;
+    }
+
+    .reviewButtonContainer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+
+      Button {
+        width: 50px;
+        height: 40px;
+        border: 0;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+
+        margin-left: 10px;
+        align-items: flex-end;
+      }
+
+      .reviewCancelButton {
+        background: none;
+        color: #000;
+      }
+
+      .reviewSubmitButton {
+        background-color: var(--main-color);
+      }
+    }
+  }
+}
