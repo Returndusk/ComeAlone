@@ -1,7 +1,20 @@
 .scheduleContainer {
-  width: 1000px;
-  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  // flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow: auto;
+  scrollbar-width: thin;
+  width: 100%;
+  height: 100%;
+  // margin: 20px auto;
   text-align: center;
+  // padding-right: 10px;
+  // border-right: 2px solid gray;
+  background-color: #ffffff;
+  padding-right: 40px;
+  margin-left: -10px;
+  border-right: 5px solid #c1c1c1;
 
   .scheduleListTitle {
     margin: 20px;
@@ -12,44 +25,69 @@
 
   .scheduleCardContainer {
     display: flex;
+    // grid-template-columns: 1fr 1fr;
     flex-direction: column;
-    width: 50%;
-    height: auto;
+    // 일정 카드 너비
+    width: 100%;
+    // max-height: 600px;
+    // height: 100%;
+    overflow-y: scroll;
 
-    .scheduleAdd {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 300px;
-      padding: 30px;
-      border-radius: 10px;
-      background-color: lightgray;
-      font-size: 40px;
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
 
-      &:hover {
-        cursor: pointer;
-        transform: translateY(-10px);
-        transition: 0.5s ease-in-out;
-      }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #efd3bc;
+      border-radius: 20px;
+      border: 3px solid transparent;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: var(--main-color);
     }
   }
 
   .scheduleFilter {
-    margin: 20px;
+    margin-bottom: 20px;
     text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 }
 
-.sortButton {
-  height: 40px;
-  width: 90px;
-  border: 0;
-  border-radius: 8px;
-  background-color: white;
-  font-size: 20px;
-  font-weight: bold;
+.alertContainerLeft {
+  display: flex;
+  margin-top: 80px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #c1c1c1;
+  overflow-y: hidden;
 }
 
-.selected {
-  background-color: lightgray;
+.alertContainerRight {
+  display: flex;
+  margin-bottom: 70px;
+  margin-left: 70px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #c1c1c1;
+  overflow-y: hidden;
+}
+
+.alertIcon {
+  width: 150px;
+  height: 150px;
+  padding: 20px;
+}
+
+.pTag {
+  font-size: x-large;
 }

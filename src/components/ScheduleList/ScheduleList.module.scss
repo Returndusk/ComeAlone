@@ -1,58 +1,124 @@
-.scheduleContainer {
-  width: 1280px;
-  min-height: calc(100vh - 230px);
-  margin: 20px auto;
-  text-align: center;
+.imageContainer {
+  position: relative;
+
+  .scheduleListImage {
+    width: 100%;
+    min-width: 1280px;
+    height: 400px;
+    object-fit: cover;
+  }
 
   .scheduleListTitle {
-    margin: 20px;
-    text-align: left;
-    font-size: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 55px;
     font-weight: bold;
+    color: white;
+
+    h1 {
+      margin-bottom: 20px;
+      font-family: 'WandoHopeR';
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+  }
+}
+
+.scheduleContainer {
+  width: 1280px;
+  min-height: calc(100vh - 630px);
+  margin: 20px auto;
+  padding: 20px 0px 80px;
+  box-sizing: border-box;
+  text-align: center;
+
+  .scheduleFilter {
+    margin: 20px 0px 30px;
+    text-align: left;
   }
 
   .scheduleCardContainer {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 20px;
-    gap: 20px;
+    grid-gap: 30px;
+    gap: 30px;
+    width: 1280px;
+    margin: auto;
+
+    .noSchedule {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      text-align: center;
+      font-size: 40px;
+      color: #888;
+
+      div {
+        margin-top: 20px;
+        font-size: 30px;
+      }
+    }
 
     .scheduleAdd {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 200px;
+      min-height: 332px;
       border-radius: 10px;
-      background-color: lightgray;
-      font-size: 40px;
+      border: 1px solid #ccc;
+      background-color: #ddd;
+
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 28px;
+      box-sizing: border-box;
+      letter-spacing: 1px;
+      font-family: 'Noto Sans KR';
+      color: #555;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease-in-out;
 
       &:hover {
-        cursor: pointer;
-        transform: translateY(-10px);
-        transition: 0.5s ease-in-out;
+        transform: translateY(-5px);
+        transition: 0.3s ease-in-out;
       }
     }
-  }
-
-  .scheduleFilter {
-    margin: 20px;
-    text-align: left;
   }
 }
 
 .sortButton {
-  height: 40px;
   width: auto;
-  margin-right: 10px;
   border: 0;
-  border-radius: 8px;
-  background-color: white;
-  font-size: 20px;
-  font-weight: bold;
-}
+  border-radius: 5px;
+  padding: 7px 12px;
+  margin: 0px 5px;
+  font-size: 17px;
+  font-weight: 600;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: #888;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
 
-.selected {
-  background-color: lightgray;
+  &:hover {
+    color: var(--main-color);
+    border-color: var(--main-color);
+  }
+
+  &.selected {
+    color: #fff;
+    border-color: var(--main-color);
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 4px rgba(243, 118, 23, 0.35);
+  }
 }
 
 .loading {
@@ -60,4 +126,10 @@
   height: 100px;
   text-align: center;
   font-size: 40px;
+}
+
+.lastElement {
+  margin: auto;
+  width: 50px;
+  height: 50px;
 }

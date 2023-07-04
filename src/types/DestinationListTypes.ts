@@ -22,6 +22,23 @@ export interface specifiedCategoryDestinationsType extends DestinationsType {
   category_name: string;
 }
 
+export type DestinationInCommentType = Pick<
+  DestinationsType,
+  Exclude<
+    keyof DestinationsType,
+    | 'destination_comments'
+    | 'comment_count'
+    | 'destination_likes'
+    | 'destination_likes_count'
+  >
+>;
+
+export interface CountedCategoryItemsType {
+  category_id: number;
+  category_name: string;
+  count: number;
+}
+
 export interface User {
   id: string;
   nickname: string;
@@ -39,6 +56,7 @@ export interface DestinationsReviewType {
   created_at: string;
   updated_at: string;
   user: User;
+  destination: DestinationInCommentType;
 }
 
 export interface commentType {
@@ -53,11 +71,6 @@ export interface DestinationsPreferenceType {
   updated_at: string;
   user: User;
 }
-
-export type MapPropsType = Pick<
-  specifiedCategoryDestinationsType,
-  'title' | 'mapx' | 'mapy'
->;
 
 export type MapWithWaypointsPropsType = Pick<
   DestinationsType,

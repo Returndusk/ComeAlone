@@ -3,17 +3,13 @@ import tokenInstance from './tokenInstance';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-export async function getScheduleDetailById(id: string | undefined) {
-  try {
-    const response = await axios.get(`${baseUrl}/schedules/${id}`);
+export async function getScheduleDetailById(id: string) {
+  const response = await axios.get(`${baseUrl}/schedules/${id}`);
 
-    return response;
-  } catch (err) {
-    console.log(err);
-  }
+  return response;
 }
 
-export async function getDoesUserLikeById(id: string | undefined) {
+export async function getDoesUserLikeById(id: string) {
   try {
     const response = await tokenInstance.get(
       `${baseUrl}/schedules/${id}/likes`
@@ -25,7 +21,7 @@ export async function getDoesUserLikeById(id: string | undefined) {
   }
 }
 
-export async function toggleUserLikeById(id: string | undefined) {
+export async function toggleUserLikeById(id: string) {
   try {
     const response = await tokenInstance.post(
       `${baseUrl}/schedules/${id}/likes`
@@ -37,7 +33,7 @@ export async function toggleUserLikeById(id: string | undefined) {
   }
 }
 
-export async function getScheduleReviewsById(id: string | undefined) {
+export async function getScheduleReviewsById(id: string) {
   try {
     const response = await axios.get(`${baseUrl}/schedules/${id}/comments`);
 
@@ -47,10 +43,7 @@ export async function getScheduleReviewsById(id: string | undefined) {
   }
 }
 
-export async function addScheduleReviewById(
-  id: string | undefined,
-  review: string
-) {
+export async function addScheduleReviewById(id: string, review: string) {
   try {
     const response = await tokenInstance.post(
       `${baseUrl}/schedules/${id}/comments`,
@@ -63,7 +56,20 @@ export async function addScheduleReviewById(
   }
 }
 
-export async function deleteScheduleReviewById(id: number | undefined) {
+export async function updateScheduleReviewById(id: number, review: string) {
+  try {
+    const response = await tokenInstance.put(
+      `${baseUrl}/schedules/comments/${id}`,
+      { comment: review }
+    );
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function deleteScheduleReviewById(id: number) {
   try {
     const response = await tokenInstance.delete(
       `${baseUrl}/schedules/comments/${id}`

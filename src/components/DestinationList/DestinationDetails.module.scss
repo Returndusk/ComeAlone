@@ -2,89 +2,245 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  background-color: #fff;
-  padding: 70px 50px;
-  border-left: 1px solid #ccc;
-  // border-radius: 20px;
 
-  z-index: 1000;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  width: 575px; // 스크롤 간격(25px 고려)
-  height: calc(100vh + 32px);
+  width: 400px;
+  height: 100%;
   box-sizing: border-box;
-  box-shadow: 2px 0 0 0 rgba(96, 101, 105, 0.3);
+}
+
+.destinationDetails {
+  width: 100%;
 }
 
 .destinationDetailsTitle {
   display: flex;
   justify-content: center;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 600;
-  padding: 30px;
+  padding: 20px 20px 25px;
 }
 
-#destinationDetailsImage {
-  width: 450px;
-  height: 300px;
+.destinationDetailsImgContainer {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background-color: #ddd;
+
+  &::before {
+    content: 'NO IMAGE';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    font-size: 26px;
+    letter-spacing: 1px;
+  }
+
+  .destinationDetailsImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .categoryNameTag {
+    //추후 id별로 수정
+    position: absolute;
+    top: 8px;
+    left: 7px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    padding: 7px 10px;
+    font-size: 13px;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  #Category-12 {
+    background-color: #d23300;
+  }
+
+  #Category-14 {
+    background-color: #6d1c9d;
+  }
+
+  #Category-15 {
+    background-color: #007d00;
+  }
+
+  #Category-25 {
+    background-color: #004e4e;
+  }
+
+  #Category-28 {
+    background-color: #2b8a8a;
+  }
+
+  #Category-32 {
+    background-color: #cca800;
+  }
+
+  #Category-38 {
+    background-color: #773b15;
+  }
+
+  #Category-39 {
+    background-color: #1d6dcc;
+  }
 }
 
-.destinationTelNumber {
-  font-size: 18px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ccc;
+.destinationDetailsIcons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+
+  > div {
+    font-size: 13px;
+    color: #444;
+    padding: 0px 10px;
+  }
+
+  .destinationReviewContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .reviewButton {
+      border: none;
+      background: none;
+
+      &:hover {
+        transform: scale(1.2);
+        cursor: pointer;
+      }
+    }
+
+    #destinationReviewIcon {
+      font-size: 28px;
+    }
+
+    #reviewLabel {
+      padding: 1px 6px;
+    }
+  }
+}
+
+.destinationInfoContainer {
+  width: 100%;
+  padding: 20px 15px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+
+  .destinationInfo {
+    display: flex;
+    font-size: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    svg {
+      margin-right: 8px;
+      font-size: 17px;
+      color: #555;
+    }
+
+    .hompageLinkContainer {
+      display: flex;
+      justify-content: flex-start;
+      width: calc(100% - 17px);
+
+      .destinationHomePage {
+        text-decoration: none;
+        color: var(--main-color);
+        white-space: normal;
+        text-overflow: ellipsis;
+        text-align: left;
+
+        line-height: 1.2;
+        width: 100%;
+        word-break: break-all;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+  }
 }
 
 .destinationOverview {
-  font-size: 18px;
-  padding: 10px 0;
-  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 15px 15px 25px;
+  color: #444;
+  box-sizing: border-box;
+  white-space: pre-line;
 }
 
 .scheduleModalButtonContainer {
   display: flex;
   justify-content: center;
-  padding: 30px 0;
-
+  padding: 0px 15px 30px;
+  box-sizing: border-box;
   width: 100%;
+  border-bottom: 1px solid #eee;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
 
-  #scheduleModalButton {
-    width: 200px;
-    height: 50px;
-
+  .scheduleModalButton {
+    width: 50%;
+    height: 45px;
     border: none;
-    display: inline-block;
-    margin: auto 5px;
-    padding: 5px 10px;
-    border-radius: 15px;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    cursor: pointer;
+
     text-decoration: none;
     font-weight: 600;
-    font-size: 17px;
-
-    background: var(--sub-1-color);
-    color: white;
+    font-size: 15px;
+    background: #fff;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    transition: all 0.3s;
 
     &:hover {
-      transform: scale(1.1);
-      cursor: pointer;
+      background-color: var(--main-color);
+      color: #fff;
     }
   }
 }
 
-/* 후순위 기능
-.detailsLikesButton {
-  background-color: #fff;
-  border: none;
-  font-size: 24px;
+//로딩 창 스타일
+.LoadingContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 
-  .detailsLikesUpButton {
-    cursor: pointer;
+  .destinationDetailsLoadingIcon {
+    animation: spin 1s infinite linear;
+    font-size: 80px;
+    margin-bottom: 20px;
+    color: var(--main-color);
   }
 
-  .detailsLikesCancelButton {
-    cursor: pointer;
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 }
-*/

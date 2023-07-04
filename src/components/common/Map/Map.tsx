@@ -1,18 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Map.module.scss';
-import {
-  MapPropsType,
-  specifiedCategoryDestinationsType
-} from '../../../types/DestinationListTypes';
-
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
+import { specifiedCategoryDestinationsType } from '../../../types/DestinationListTypes';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type MapPropsTypes = {
-  markersLocations: MapPropsType[];
+  markersLocations: specifiedCategoryDestinationsType[];
   setClickedDestination: React.Dispatch<
     React.SetStateAction<specifiedCategoryDestinationsType | null>
   >;
@@ -23,11 +15,33 @@ const DEFAULT_LOCATION = {
   LONGITUDE: 126.94951514124065
 };
 
+const NULL_DATA = {
+  TITLE: '금능포구',
+  MAPX: 126.22823779107965,
+  MAPY: 33.390051648123254
+};
+
 const { kakao } = window;
 
 function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
-  const [renderedMap, setRenderedMap] = useState<any>(null);
-  const [markers, setMarkers] = useState<any>(null);
+  const [renderedMap, setRenderedMap] = useState<kakao.maps.Map | null>(null);
+  const [markers, setMarkers] = useState<kakao.maps.Marker[] | null>(null);
+  const navigate = useNavigate();
+  const { search } = useLocation();
+
+  const setLocationToNullData = (
+    location: specifiedCategoryDestinationsType
+  ) => {
+    if (location?.title === NULL_DATA.TITLE) {
+      const newLocationData: specifiedCategoryDestinationsType = {
+        ...location
+      };
+      newLocationData['mapx'] = String(NULL_DATA.MAPX);
+      newLocationData['mapy'] = String(NULL_DATA.MAPY);
+      return newLocationData;
+    }
+    return location;
+  };
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -47,18 +61,25 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
     if (renderedMap === null) {
       return;
     } else {
-      const positions = markersLocations?.map(
-        (marker) =>
-          new kakao.maps.LatLng(Number(marker?.mapy), Number(marker?.mapx))
-      );
-      if (markers !== null) {
-        const removeMarkers = markers.map((marker: any) => marker.setMap(null));
-        setMarkers(removeMarkers);
+      const positions = markersLocations?.map((marker) => {
+        const InspectedMarker = setLocationToNullData(marker);
+        return {
+          title: InspectedMarker.title,
+          content: `<p>${InspectedMarker.title}</p>`,
+          latlng: new kakao.maps.LatLng(
+            Number(InspectedMarker?.mapy),
+            Number(InspectedMarker?.mapx)
+          )
+        };
+      });
+      if (markers) {
+        markers.forEach((marker: kakao.maps.Marker) => marker.setMap(null));
       }
       const newMarkers = positions.map(
         (position) =>
           new kakao.maps.Marker({
-            position,
+            title: position.title,
+            position: position.latlng,
             map: renderedMap
           })
       );
@@ -67,22 +88,30 @@ function Map({ markersLocations, setClickedDestination }: MapPropsTypes) {
 
       if (positions.length > 0) {
         const bounds = positions.reduce(
-          (bounds, latlng) => bounds.extend(latlng),
+          (bounds, position) => bounds.extend(position.latlng),
           new kakao.maps.LatLngBounds()
         );
-        renderedMap?.setBounds(bounds, 36, 32, 32, 900);
+        renderedMap?.setBounds(bounds, 36, 32, 32, 800);
       }
 
-      // markers.setMap(renderedMap);
-      // bounds.extend(position);
+      //이벤트 등록
+      for (let i = 0; i < positions.length; i++) {
+        kakao.maps.event.addListener(newMarkers[i], 'click', function () {
+          const markersTitle = newMarkers[i].getTitle();
+          const targetMarker = markersLocations.find(
+            (pos) => pos.title === markersTitle
+          );
 
-      // markers.map((marker: any) => {
-      //   kakao.maps.event.addListener(marker, 'click', function () {
-      //     setClickedDestination(marker);
-      //   });
-      // });
+          if (targetMarker) {
+            setClickedDestination(() => targetMarker);
+            navigate(`/destination/list/${targetMarker.id}${search}`);
+          }
+
+          return;
+        });
+      }
     }
-  }, [markersLocations]);
+  }, [markersLocations, renderedMap, setClickedDestination, search]);
 
   return (
     <>

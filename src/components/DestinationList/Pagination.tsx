@@ -1,7 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import styles from './Pagination.module.scss';
 import { specifiedCategoryDestinationsType } from '../../types/DestinationListTypes';
+import {
+  MdOutlineKeyboardArrowLeft,
+  MdOutlineKeyboardArrowRight,
+  MdOutlineKeyboardDoubleArrowLeft,
+  MdOutlineKeyboardDoubleArrowRight
+} from 'react-icons/md';
 
 type PaginationProps = {
   filteredDestinations: specifiedCategoryDestinationsType[] | [];
@@ -24,6 +30,7 @@ function Pagination({
 }: PaginationProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [page, setPage] = useState<number>(PAGES.START_INDEX_OF_PAGE);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const pageQueryParam = useMemo(() => {
     return searchParams.get('page');
@@ -56,11 +63,21 @@ function Pagination({
         lastDestinationIdx
       );
     });
-  }, [filteredDestinations, firstDestinationIdx, lastDestinationIdx]);
+  }, [
+    filteredDestinations,
+    firstDestinationIdx,
+    lastDestinationIdx,
+    setSlicedDestinations
+  ]);
 
   useEffect(() => {
     setPage(() => pageNumber);
   }, [pageNumber]);
+
+  // 중간에 페이지가 바뀌면 초기화
+  useEffect(() => {
+    setPage(() => PAGES.START_INDEX_OF_PAGE);
+  }, [totalPages]);
 
   const handlePageQueryChange = (targetPageNumber: number) => {
     setPage(() => targetPageNumber);
@@ -87,81 +104,100 @@ function Pagination({
     );
   }, [page]);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(clickTimeoutRef.current as NodeJS.Timeout);
+    };
+  }, []);
+
   const handlePreviousPageClick = () => {
-    if (page > 1) {
-      handlePageQueryChange(page - PAGES.PAGES_TO_SKIP);
-    }
+    clearTimeout(clickTimeoutRef.current as NodeJS.Timeout);
+    clickTimeoutRef.current = setTimeout(() => {
+      if (page > 1) {
+        handlePageQueryChange(page - PAGES.PAGES_TO_SKIP);
+      }
+    }, 150);
   };
 
   const handlePageClick = (pageNumber: number) => {
-    handlePageQueryChange(pageNumber);
+    clearTimeout(clickTimeoutRef.current as NodeJS.Timeout);
+    clickTimeoutRef.current = setTimeout(() => {
+      handlePageQueryChange(pageNumber);
+    }, 150);
   };
 
   const handleNextPageClick = () => {
-    if (page < totalPages) {
-      handlePageQueryChange(page + PAGES.PAGES_TO_SKIP);
-    }
+    clearTimeout(clickTimeoutRef.current as NodeJS.Timeout);
+    clickTimeoutRef.current = setTimeout(() => {
+      if (page < totalPages) {
+        handlePageQueryChange(page + PAGES.PAGES_TO_SKIP);
+      }
+    }, 150);
   };
 
   const handleFirstPageClick = () => {
-    handlePageQueryChange(PAGES.START_INDEX_OF_PAGE);
+    clearTimeout(clickTimeoutRef.current as NodeJS.Timeout);
+    clickTimeoutRef.current = setTimeout(() => {
+      handlePageQueryChange(PAGES.START_INDEX_OF_PAGE);
+    }, 150);
   };
 
   const handleLastPageClick = () => {
-    handlePageQueryChange(totalPages);
+    clearTimeout(clickTimeoutRef.current as NodeJS.Timeout);
+    clickTimeoutRef.current = setTimeout(() => {
+      handlePageQueryChange(totalPages);
+    }, 150);
   };
 
   return (
     <div className={styles.paginationBar}>
-      <button onClick={handleFirstPageClick}>{`<<`}</button>
-      <button onClick={handlePreviousPageClick}>{`<`}</button>
+      <button onClick={handleFirstPageClick}>
+        <MdOutlineKeyboardDoubleArrowLeft />
+      </button>
+      <button onClick={handlePreviousPageClick}>
+        <MdOutlineKeyboardArrowLeft />
+      </button>
 
-      {pageNumbers
-        .slice(
-          slicePageIdx - PAGES.START_INDEX_OF_PAGE,
-          slicePageIdx +
-            PAGES.PAGES_TO_SHOW_IN_NAVBAR -
-            PAGES.START_INDEX_OF_PAGE
-        )
-        .map((pageNumber) =>
-          page === pageNumber ? (
-            <span
-              key={pageNumber}
-              className={styles.pageNumber}
-              id={styles.selected}
-            >
-              {pageNumber}
-            </span>
-          ) : (
-            <NavLink
-              to={
-                searchQueryParam !== null
-                  ? `?page=${pageNumber}&search=${searchQueryParam}`
-                  : `?page=${pageNumber}`
-              }
-              className={styles.pageNumber}
-              key={pageNumber}
-              onClick={() => handlePageClick(pageNumber)}
-            >
-              {pageNumber}
-            </NavLink>
+      <ul className={styles.pageNumbers}>
+        {pageNumbers
+          .slice(
+            slicePageIdx - PAGES.START_INDEX_OF_PAGE,
+            slicePageIdx +
+              PAGES.PAGES_TO_SHOW_IN_NAVBAR -
+              PAGES.START_INDEX_OF_PAGE
           )
-        )}
-      {pageNumbers
-        .slice(
-          slicePageIdx - PAGES.START_INDEX_OF_PAGE,
-          slicePageIdx +
-            PAGES.PAGES_TO_SHOW_IN_NAVBAR -
-            PAGES.START_INDEX_OF_PAGE
-        )
-        .includes(totalPages) ? (
-        <span></span>
-      ) : (
-        <span className={styles.reducedNumber}>...</span>
-      )}
+          .map((pageNumber) =>
+            page === pageNumber ? (
+              <li key={pageNumber}>
+                <span className={`${styles.pageNumber} ${styles.selected}`}>
+                  {pageNumber}
+                </span>
+              </li>
+            ) : (
+              <li key={pageNumber}>
+                <NavLink
+                  to={
+                    searchQueryParam !== null
+                      ? `?page=${pageNumber}&search=${searchQueryParam}`
+                      : `?page=${pageNumber}`
+                  }
+                  className={styles.pageNumber}
+                  key={pageNumber}
+                  onClick={() => handlePageClick(pageNumber)}
+                >
+                  {pageNumber}
+                </NavLink>
+              </li>
+            )
+          )}
+      </ul>
 
-      <button onClick={handleNextPageClick}>{`>`}</button>
-      <button onClick={handleLastPageClick}>{`>>`}</button>
+      <button onClick={handleNextPageClick}>
+        <MdOutlineKeyboardArrowRight />
+      </button>
+      <button onClick={handleLastPageClick}>
+        <MdOutlineKeyboardDoubleArrowRight />
+      </button>
     </div>
   );
 }

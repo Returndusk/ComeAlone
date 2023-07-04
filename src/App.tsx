@@ -11,11 +11,15 @@ import UserEdit from './pages/UserEdit';
 import DestinationList from './pages/DestinationList';
 import ScheduleDetail from './pages/ScheduleDetail';
 import ScheduleEdit from './pages/ScheduleEdit';
-import ScheduleList from './pages/ScheduleList';
+import LikesScheduleList from './pages/LikesScheduleLists';
+import RecentScheduleList from './pages/RecentScheduleLists';
+import LikedScheduleList from './pages/LikedScheduleLists';
 import MyScheduleList from './pages/MyScheduleList';
+import MyReview from './pages/MyReview';
 import Header from './components/common/Header/Header';
 import Footer from './components/common/Footer/Footer';
 import DestinationDetails from './components/DestinationList/DestinationDetails';
+import NotFound from './pages/NotFound';
 
 function App() {
   {
@@ -76,7 +80,22 @@ function App() {
               element={<DestinationDetails />}
             />
           </Route>
-          <Route path={ROUTER.SCHEDULE_LIST} element={<ScheduleList />} />
+          <Route
+            path={`${ROUTER.SCHEDULE_LIST}/likes`}
+            element={<LikesScheduleList />}
+          />
+          <Route
+            path={`${ROUTER.SCHEDULE_LIST}/recent`}
+            element={<RecentScheduleList />}
+          />
+          <Route
+            path={`${ROUTER.SCHEDULE_LIST}/liked`}
+            element={
+              <Auth required={true}>
+                <LikedScheduleList />
+              </Auth>
+            }
+          />
           <Route
             path={`${ROUTER.SCHEDULE_EDIT}/:scheduleId`}
             element={
@@ -97,6 +116,15 @@ function App() {
               </Auth>
             }
           />
+          <Route
+            path={ROUTER.MYREVIEW}
+            element={
+              <Auth required={true}>
+                <MyReview />
+              </Auth>
+            }
+          />
+          <Route path='*' element={<NotFound />} />
         </Routes>
         <Footer />
       </AuthProvider>

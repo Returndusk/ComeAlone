@@ -1,40 +1,50 @@
 .paginationBar {
-  margin: 15px 0 30px 0; //목적지 목록 div 박스 margin = 15px
-  justify-content: center;
+  margin: 20px 0 30px 0;
   display: flex;
+  justify-content: center;
+  align-items: center;
 
   button {
     display: flex;
     justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
 
     position: relative;
     border: none;
-    display: inline-block;
-    margin: auto 5px;
-    padding: 5px 10px;
-    border-radius: 15px;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 17px;
+    border-radius: 3px;
+    margin: 0px 3px;
+    padding: 0;
 
-    background: #ccc;
-    color: white;
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+    background-color: #fff;
+    cursor: pointer;
 
     &:hover {
-      letter-spacing: 2px;
-      transform: scale(1.1);
-      cursor: pointer;
+      background-color: var(--main-color);
+      color: #fff;
+    }
+
+    svg {
+      font-size: 20px;
     }
   }
 }
 
+.pageNumbers {
+  display: flex;
+  margin: 0px 10px;
+}
+
 .pageNumber {
-  color: var(--sub-1-color);
   text-decoration: none;
   text-align: center;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  padding: 5px 10px;
 
   display: flex;
   position: relative;
@@ -42,18 +52,10 @@
   align-items: center;
 
   &:hover {
-    letter-spacing: 2px;
-    transform: scale(1.1);
-    cursor: pointer;
+    color: var(--main-color);
   }
 
-  & + & {
-    margin-left: 5px;
+  &.selected {
+    color: var(--main-color);
   }
-}
-
-#selected {
-  position: relative;
-  font-weight: bold;
-  color: #000;
 }

@@ -1,46 +1,29 @@
 .filterContainer {
   display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
   flex-direction: column;
   box-sizing: border-box;
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .searchContainer {
   display: flex;
   position: relative;
   justify-content: center;
-  width: 550px;
-  z-index: 1000;
-  background-color: #fff;
+  width: 100%;
+  padding: 15px 0px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
 
-  padding: 30px 0 15px 0; // categoryContainer의 padding과 동일
-}
-
-#inputBar {
-  display: flex;
-  flex-grow: 1;
-  border-radius: 12px;
-  border: 1px solid #c6cfe0;
-  padding: 10px;
-  padding-left: 20px;
-  padding-right: 50px;
-
-  min-height: 15px;
-  width: 290px;
-  max-width: 420px;
-  background: #fff;
-
-  font-size: 15px;
-  z-index: 1;
-
-  & ::placeholder {
-    font: 20px #ecf2ff;
-    text-align: center;
-    padding-right: 20px;
-  }
-
-  &:focus {
-    border: 1px solid #82878f;
-    outline: none;
+  button[type='submit'] {
+    padding-right: 0px;
   }
 }
 

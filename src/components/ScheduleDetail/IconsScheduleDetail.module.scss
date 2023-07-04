@@ -1,41 +1,41 @@
 .iconsContainer {
+  grid-row: 4;
+  grid-column: 1/4;
   justify-self: self-end;
-  align-self: self-start;
+  align-self: center;
   font-size: 26px;
 
-  #likesDisabled {
+  button {
+    display: flex;
+    align-items: flex-end;
     border: 0;
     background-color: transparent;
-    font-size: 26px;
-    color: rgb(231, 49, 49);
+    font-size: 14px;
+    // color: rgb(231, 49, 49);
+    color: #555;
+    font-family: 'Noto Sans KR';
+    font-weight: 500;
+    margin-bottom: 10px;
+
+    svg {
+      font-size: 26px;
+      color: #ff5b5b;
+    }
+  }
+
+  #likesDisabled {
     cursor: not-allowed;
 
     #likesIcon {
       margin: 0 5px 0 0;
-      font-size: 20px;
     }
   }
 
   #likes {
-    border: 0;
-    background-color: transparent;
-    font-size: 26px;
-    color: rgb(231, 49, 49);
     cursor: pointer;
 
     #likesIcon {
       margin: 0 5px 0 0;
-      font-size: 20px;
-    }
-  }
-
-  #reviewNumber {
-    font-size: 26px;
-    color: rgb(75, 74, 74);
-
-    #reviewNumberIcon {
-      margin: 0 5px 0 20px;
-      font-size: 20px;
     }
   }
 }

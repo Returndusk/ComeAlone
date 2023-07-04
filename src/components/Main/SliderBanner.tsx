@@ -1,10 +1,43 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './SliderBanner.module.scss';
 import { SliderBannerProps, Destination } from '../../types/SliderBannerTypes';
+import { SlArrowRight, SlArrowLeft } from 'react-icons/sl';
+
+interface NextArrowProps {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+interface Coordinates {
+  x: number;
+  y: number;
+}
+
+function NextArrow({ onClick }: NextArrowProps) {
+  return (
+    <button
+      className={`${styles.arrowBtn} ${styles.nextBtn}`}
+      onClick={onClick}
+    >
+      <SlArrowRight />
+    </button>
+  );
+}
+
+function PrevArrow({ onClick }: NextArrowProps) {
+  return (
+    <button
+      className={`${styles.arrowBtn} ${styles.prevBtn}`}
+      onClick={onClick}
+    >
+      <SlArrowLeft />
+    </button>
+  );
+}
 
 function SliderBanner({
   settings,
@@ -30,11 +63,18 @@ function SliderBanner({
     slidesToShow: 3,
     slidesToScroll: 3,
     autoplay: true,
-    autoplaySpeed: 5000
+    autoplaySpeed: 5000,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />
   };
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [mouseDownPoint, setMouseDownPoint] = useState<Coordinates | null>(
+    null
+  );
+  const [mouseUpPoint, setMouseUpPoint] = useState<Coordinates | null>(null);
 
+  const navigate = useNavigate();
   const categoryMapping: { [key: number]: string } = {
     12: '관광지',
     14: '문화시설',
@@ -64,14 +104,44 @@ function SliderBanner({
 
   const finalSettings = { ...defaultSettings, ...settings };
 
-  const handleBannerClick = (data: Destination): void => {
-    if (urlTemplate) {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    setMouseDownPoint({
+      x: event.clientX,
+      y: event.clientY
+    });
+  };
+
+  const handleMouseUp = (event: React.MouseEvent<HTMLDivElement>) => {
+    setMouseUpPoint({
+      x: event.clientX,
+      y: event.clientY
+    });
+  };
+
+  const isCoordinatesEqual = (point1: Coordinates, point2: Coordinates) => {
+    const threshold = 5;
+    return (
+      Math.abs(point1.x - point2.x) < threshold &&
+      Math.abs(point1.y - point2.y) < threshold
+    );
+  };
+
+  const handleBannerClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    data: Destination
+  ) => {
+    if (
+      urlTemplate &&
+      mouseDownPoint &&
+      mouseUpPoint &&
+      isCoordinatesEqual(mouseDownPoint, mouseUpPoint)
+    ) {
       const url = urlTemplate.replace(/{(\w+)}/g, (match, key) => {
         return String(data[key] || '');
       });
 
       if (url) {
-        window.location.href = url;
+        navigate(url);
       }
     }
   };
@@ -91,13 +161,15 @@ function SliderBanner({
             className={`${styles.box} ${
               boxClassName && styles[boxClassName] ? styles[boxClassName] : ''
             }`}
-            onClick={() => handleBannerClick(destination)}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onClick={(event) => handleBannerClick(event, destination)}
           >
             <div
-              className={`${styles.imageContainer} ${
+              className={`${
                 imageContainerClassName && styles[imageContainerClassName]
                   ? styles[imageContainerClassName]
-                  : ''
+                  : styles.imageContainer
               }`}
             >
               <img
@@ -110,15 +182,14 @@ function SliderBanner({
                 alt={String(destination[titleProperty]) || ''}
               ></img>
               {showCategory && destination.destination_category_id && (
-                <div
+                <span
                   className={`${styles.category} ${
                     styles['category-' + destination.destination_category_id]
                   }`}
                 >
                   {categoryMapping[Number(destination.destination_category_id)]}
-                </div>
+                </span>
               )}
-
               {showTitleAndOverview && (
                 <div
                   className={`${styles.text} ${
@@ -130,14 +201,8 @@ function SliderBanner({
                   <h3>{String(destination[titleProperty])}</h3>
                   <p>
                     {destination[overviewProperty] &&
-                    typeof destination[overviewProperty] === 'string'
-                      ? (destination[overviewProperty] as string).length > 20
-                        ? (destination[overviewProperty] as string).slice(
-                            0,
-                            62
-                          ) + '...'
-                        : destination[overviewProperty]
-                      : String(destination[overviewProperty])}
+                      typeof destination[overviewProperty] === 'string' &&
+                      String(destination[overviewProperty])}
                   </p>
                 </div>
               )}

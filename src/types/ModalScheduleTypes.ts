@@ -1,5 +1,3 @@
-// import { MyScheduleCardType } from './ScheduleTypes';
-
 export type ModalMyScheduleType = {
   schedule_id: number;
   title: string;
@@ -9,6 +7,7 @@ export type ModalMyScheduleType = {
   created_at: string;
   destinations: string[][];
   destinationIds: number[][];
+  image: string;
 };
 
 export type MyScheduleListType = ModalMyScheduleType[];
@@ -28,6 +27,7 @@ export type AddToScheduleModalType = {
   scheduleId: number;
   destinations: string[][];
   destinationIds: number[][];
+
   // onDestinationUpdate: (updatedDestination: string[]) => void;
   // updatedDestinations: string[][];
 };

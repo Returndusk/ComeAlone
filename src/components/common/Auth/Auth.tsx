@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthState } from '../../../contexts/AuthContext';
 import ROUTER from '../../../constants/Router';
 
@@ -9,6 +9,7 @@ type AuthProps = {
 };
 
 function Auth({ children, required }: AuthProps) {
+  const location = useLocation();
   const navigate = useNavigate();
   const {
     authState: { isLoggedIn }
@@ -21,10 +22,15 @@ function Auth({ children, required }: AuthProps) {
         navigate(ROUTER.LOGIN);
       } else if (!required && isLoggedIn) {
         //로그인 유저 접근 제한
-        navigate(ROUTER.MAIN);
+        if (!location.state) {
+          navigate(ROUTER.MAIN);
+        } else {
+          //로그인 후 이전 페이지로 이동
+          navigate(location.state.prevUrl);
+        }
       }
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate, required]);
 
   return <>{children}</>;
 }

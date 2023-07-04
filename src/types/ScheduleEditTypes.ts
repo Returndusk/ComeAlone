@@ -1,6 +1,19 @@
-import { Dispatch, SetStateAction } from 'react';
 import { IScheduleDetail } from './ScheduleDetailTypes';
-import { MapWithWaypointsPropsType } from './DestinationListTypes';
+
+export type ScheduleEditFetchedType = Pick<
+  IScheduleDetail,
+  | 'userId'
+  | 'title'
+  | 'summary'
+  | 'startDate'
+  | 'endDate'
+  | 'duration'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'destinations'
+  | 'image'
+  | 'status'
+>;
 
 export type DateInfoType = Pick<
   IScheduleDetail,
@@ -8,44 +21,18 @@ export type DateInfoType = Pick<
 >;
 
 export type DateSelectionType = {
-  startDate?: Date | undefined;
-  endDate?: Date | undefined;
-  key?: string | undefined;
-};
-
-export type ScheduleEditFetchedType = Pick<
-  IScheduleDetail,
-  | 'title'
-  | 'summary'
-  | 'nickname'
-  | 'startDate'
-  | 'endDate'
-  | 'duration'
-  | 'createdAt'
-  | 'destinations'
-  | 'image'
-  | 'status'
->;
-
-export type ScheduleEditPublicStatusPropsType = {
-  updatedStatus: string;
-  onStatusUpdate: Dispatch<SetStateAction<string>>;
+  startDate: Date;
+  endDate: Date;
+  key: string;
 };
 
 export type ScheduleEditInfoType = Pick<IScheduleDetail, 'createdAt'> & {
   updatedTitle: string;
   updatedSummary: string;
+  createdAt: Date;
+  updatedAt: Date;
   onTitleUpdate: (title: string) => void;
   onSummaryUpdate: (title: string) => void;
-};
-
-export type ScheduleEditDestinationListType = {
-  updatedDestinationList: MapWithWaypointsPropsType[][];
-  checkedDayIndex: number;
-  onDestinationListUpdate: Dispatch<
-    SetStateAction<MapWithWaypointsPropsType[][]>
-  >;
-  onCheckedDayIndexUpdate: Dispatch<SetStateAction<number>>;
 };
 
 export type ScheduleEditSubmitType = {
@@ -57,5 +44,5 @@ export type ScheduleEditSubmitType = {
   end_date: string;
   status: string;
   image: string;
-  destinations: (number | undefined)[][];
+  destinations: number[][];
 };

@@ -5,12 +5,26 @@
   transform: translate(-50%, -50%);
   width: 700px;
   height: 480px;
-  padding: 20px;
-  border-radius: 20px;
+  padding: 24px 20px;
+  border-radius: 10px;
   background-color: #ffffff;
 
   p {
     font-size: 20px;
+    letter-spacing: 1px;
+    color: #666;
+    font-weight: 500;
+    font-size: 1em;
+    text-align: center;
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 25px;
+    color: #555;
   }
 
   .durationEditModalDate {
@@ -18,8 +32,15 @@
   }
 
   .durationEditModalConfirm {
+    all: unset;
+    cursor: pointer;
     position: absolute;
     top: 90%;
-    left: 90%;
+    left: 89%;
+    padding: 10px 20px;
+    background-color: var(--main-color);
+    color: #ffffff;
+    border-radius: 5px;
+    font-size: 14px;
   }
 }

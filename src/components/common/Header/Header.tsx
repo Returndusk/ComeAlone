@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import { BiCalendar, BiUserCircle } from 'react-icons/bi';
-import { Link as RouterLink } from 'react-router-dom';
-import { Menu, MenuItem, IconButton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, MenuItem } from '@mui/material';
 import Weather from './Weather';
 import styles from './Header.module.scss';
 import { useAuthState } from '../../../contexts/AuthContext';
 import { Cookies } from 'react-cookie';
 import AlertModal from '../Alert/AlertModal';
+import { AiOutlineCalendar } from 'react-icons/ai';
+import Avatar from '@mui/material/Avatar';
+import Router from '../../../constants/Router';
 
 function Header() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isActive, setIsActive] = useState(false);
+  const isFloat = location.pathname === '/';
   const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLElement) | null>(
     null
   );
@@ -42,64 +48,139 @@ function Header() {
     handleClose();
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const isActiveHeight = window.scrollY > 0;
+      if (isActiveHeight !== isActive) {
+        setIsActive((prev) => !prev);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isActive]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
-    <div className={styles.layout}>
+    <header
+      className={`${styles.layout} 
+      ${isFloat ? (isActive ? styles.active : styles.float) : ''}
+        `}
+    >
       <div className={styles.body}>
         <div className={styles.layoutLeft}>
-          <RouterLink to='/' className={styles.logo}>
+          <RouterLink to={Router.MAIN} className={styles.logo}>
             혼자옵서예
           </RouterLink>
           <nav>
             <ul>
-              <RouterLink to='/destination/list'>목적지</RouterLink>
-              <RouterLink to='/schedule/list'>여행일정</RouterLink>
+              <li>
+                <RouterLink to={Router.DESTINATION_LIST}>목적지</RouterLink>
+              </li>
+              <li>
+                <RouterLink to={`${Router.SCHEDULE_LIST}/likes`}>
+                  여행일정
+                </RouterLink>
+              </li>
             </ul>
           </nav>
         </div>
         <div className={styles.layoutRight}>
           <Weather />
-          {authState.isLoggedIn && (
+          {authState.isLoggedIn && authState.user && (
             <>
-              <RouterLink to='/myschedule/list'>
-                <BiCalendar className={styles.calendar} />
-              </RouterLink>
               <div className={styles.auth}>
-                <IconButton onClick={handleUserIconClick}>
-                  <BiUserCircle className={styles.userIcon} />
-                </IconButton>
+                <button
+                  title='내 일정'
+                  onClick={() => navigate(Router.MYSCHEDULE_LIST)}
+                >
+                  <AiOutlineCalendar />
+                </button>
+
+                <button onClick={handleUserIconClick}>
+                  {authState.user.profile_image ? (
+                    <Avatar
+                      src={authState.user.profile_image}
+                      alt={authState.user.nickname}
+                      className={styles.Avatar}
+                    />
+                  ) : (
+                    <Avatar className={styles.Avatar}>
+                      {authState.user.nickname[0]}
+                    </Avatar>
+                  )}
+                </button>
                 <Menu
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
+                  disableScrollLock={true}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right'
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
                 >
                   <MenuItem
-                    onClick={handleClose}
-                    component={RouterLink}
-                    to='/mypage'
+                    style={{
+                      fontSize: '14px',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
+                    onClick={() => {
+                      navigate(Router.MYPAGE);
+                      handleClose();
+                    }}
                   >
                     마이페이지
                   </MenuItem>
-                  <MenuItem onClick={handleLogoutButtonClick}>
+                  <MenuItem
+                    style={{
+                      fontSize: '14px',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
+                    onClick={() => {
+                      navigate(Router.MYREVIEW);
+                      handleClose();
+                    }}
+                  >
+                    나의 리뷰
+                  </MenuItem>
+                  <MenuItem
+                    style={{
+                      fontSize: '14px',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
+                    onClick={handleLogoutButtonClick}
+                  >
                     로그아웃
                   </MenuItem>
                 </Menu>
               </div>
             </>
           )}
-          {!authState.isLoggedIn && (
+          {authState.isLoggedIn === false && (
             <div className={styles.auth}>
-              <RouterLink to='/login'>
+              <RouterLink to={Router.LOGIN}>
                 <span>로그인</span>
               </RouterLink>
               {' | '}
-              <RouterLink to='/register'>
+              <RouterLink to={Router.REGISTER}>
                 <span>회원 가입</span>
               </RouterLink>
             </div>
           )}
           {showLogoutModal && (
             <AlertModal
-              message='로그아웃하시겠습니까?'
+              message='로그아웃 하시겠습니까?'
               onConfirm={handleLogoutConfirm}
               onCancel={handleLogoutCancel}
               showCancelButton={true}
@@ -107,7 +188,7 @@ function Header() {
           )}
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 

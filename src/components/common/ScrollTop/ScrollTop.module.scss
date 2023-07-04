@@ -6,14 +6,8 @@
 }
 
 .scrollTopButton {
-  width: fit-content;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  border: none;
-  background-color: #000;
-  color: #fff;
-  opacity: 0.1;
-  font-size: 50px;
-  font-weight: 700;
+  color: black;
+  opacity: 0.3;
+  font-size: 70px;
   transition: transform 0.5s;
 }

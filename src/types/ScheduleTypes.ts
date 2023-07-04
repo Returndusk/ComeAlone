@@ -15,6 +15,7 @@ interface Schedule {
   destination_count: number;
   likes_count: number;
   likes: { id: string }[];
+  comments_count: number;
 }
 
 export type ScheduleCardType = Pick<
@@ -32,6 +33,7 @@ export type ScheduleCardType = Pick<
   | 'destination_count'
   | 'likes_count'
   | 'likes'
+  | 'comments_count'
 >;
 
 export type MyScheduleCardType = Pick<

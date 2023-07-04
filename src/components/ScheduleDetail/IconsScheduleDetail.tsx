@@ -1,84 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './IconsScheduleDetail.module.scss';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthState } from '../../contexts/AuthContext';
 import { Tooltip } from '@mui/material';
-import { FaRegHeart, FaHeart, FaCommentAlt } from 'react-icons/fa';
-import { IconsScheduleDetailType } from '../../types/ScheduleDetailTypes';
+import { FaRegHeart, FaHeart } from 'react-icons/fa';
+import { ScheduleDetailIconsType } from '../../types/ScheduleDetailTypes';
+import AlertModal from '../common/Alert/AlertModal';
+import ROUTER from '../../constants/Router';
 
 function IconsScheduleDetail({
   userId,
   doesUserLike,
   likesCount,
-  reviewsCount,
   onUserLike
-}: IconsScheduleDetailType) {
-  const { authState } = useAuthState();
-  const { isLoggedIn } = authState;
-  const loggedInUserId = authState.user?.id;
+}: ScheduleDetailIconsType & { onUserLike: () => void }) {
+  const navigate = useNavigate();
+  const currentUrl = useLocation().pathname;
+  const isLoggedIn: boolean = useAuthState().authState.isLoggedIn as boolean;
+  const loggedInUserId: string = useAuthState().authState.user?.id as string;
+  const [showIsLoggedInModal, setShowIsLoggedInModal] =
+    useState<boolean>(false);
 
-  if (!isLoggedIn) {
-    return (
-      <div className={styles.iconsContainer}>
-        <Tooltip title='좋아요 하시려면 로그인해주세요.' placement='top'>
-          <button
-            id={styles.likesDisabled}
-            onClick={() => {
-              return;
-            }}
-          >
-            <FaRegHeart id={styles.likesIcon} />
-            {likesCount}
-          </button>
-        </Tooltip>
-        <span id={styles.reviewNumber}>
-          <FaCommentAlt id={styles.reviewNumberIcon} />
-          {reviewsCount}
-        </span>
-      </div>
-    );
-  }
+  const handleUserLike = () => {
+    if (!isLoggedIn) {
+      setShowIsLoggedInModal(true);
 
-  if (userId === loggedInUserId) {
-    return (
-      <div className={styles.iconsContainer}>
-        <Tooltip title='자신의 일정에는 좋아요할 수 없습니다.' placement='top'>
-          <button
-            id={styles.likesDisabled}
-            onClick={() => {
-              return;
-            }}
-          >
-            <FaRegHeart id={styles.likesIcon} />
-            {likesCount}
-          </button>
-        </Tooltip>
-        <span id={styles.reviewNumber}>
-          <FaCommentAlt id={styles.reviewNumberIcon} />
-          {reviewsCount}
-        </span>
-      </div>
-    );
-  }
+      return;
+    }
 
-  return (
+    onUserLike();
+  };
+
+  return userId === loggedInUserId ? (
     <div className={styles.iconsContainer}>
-      <button
-        id={styles.likes}
-        onClick={() => {
-          onUserLike();
-        }}
-      >
+      <Tooltip title='자신의 일정에는 좋아요할 수 없습니다.' placement='top'>
+        <button id={styles.likesDisabled}>
+          <FaRegHeart id={styles.likesIcon} />
+          좋아요 {likesCount}개
+        </button>
+      </Tooltip>
+    </div>
+  ) : (
+    <div className={styles.iconsContainer}>
+      <button id={styles.likes} onClick={handleUserLike}>
         {doesUserLike ? (
           <FaHeart id={styles.likesIcon} />
         ) : (
           <FaRegHeart id={styles.likesIcon} />
         )}
-        {likesCount}
+        좋아요 {likesCount}개
       </button>
-      <span id={styles.reviewNumber}>
-        <FaCommentAlt id={styles.reviewNumberIcon} />
-        {reviewsCount}
-      </span>
+      {showIsLoggedInModal && (
+        <AlertModal
+          title='로그인이 필요합니다.'
+          message='로그인하시겠습니까?'
+          onConfirm={() =>
+            navigate(ROUTER.LOGIN, { state: { prevUrl: currentUrl } })
+          }
+          onCancel={() => setShowIsLoggedInModal(false)}
+          showTitle={true}
+          showCancelButton={true}
+        />
+      )}
     </div>
   );
 }

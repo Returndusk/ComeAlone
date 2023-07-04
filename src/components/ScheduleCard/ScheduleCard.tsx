@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './ScheduleCard.module.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ScheduleCardType } from '../../types/ScheduleTypes';
-import { FaHeart, FaRegHeart, FaRegDotCircle } from 'react-icons/fa';
+import { FaHeart, FaRegDotCircle, FaCommentAlt } from 'react-icons/fa';
 import { useAuthState } from '../../contexts/AuthContext';
 import ROUTER from '../../constants/Router';
 import tokenInstance from '../../apis/tokenInstance';
@@ -10,16 +10,20 @@ import AlertModal from '../common/Alert/AlertModal';
 
 type ScheduleCardProps = { schedule: ScheduleCardType };
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
+const INITIAL_LIKES_COUNT = 0;
 
 function ScheduleCard({ schedule }: ScheduleCardProps) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [likeCount, setLikeCount] = useState<number>(0);
+  const [likeCount, setLikeCount] = useState<number>(INITIAL_LIKES_COUNT);
+  const [showFetchLikeAlertModal, setShowFetchLikeAlertModal] =
+    useState<boolean>(false);
   const [showLikeAlertModal, setShowLikeAlertModal] = useState<boolean>(false);
   const [showLoginAlertModal, setShowLoginAlertModal] =
     useState<boolean>(false);
   const { authState } = useAuthState();
   const isLoggedIn = authState.isLoggedIn;
   const navigate = useNavigate();
+  const location = useLocation().pathname;
 
   const fetchLike = useCallback(async () => {
     try {
@@ -30,7 +34,7 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
       setIsLiked(is_liked);
       setLikeCount(likes_count_of_schedule);
     } catch (error) {
-      console.log(error);
+      setShowFetchLikeAlertModal(true);
     }
   }, [schedule.schedule_id]);
 
@@ -68,9 +72,13 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
     setShowLikeAlertModal(false);
   }
 
+  function handleFetchLikeConfirm() {
+    setShowFetchLikeAlertModal(false);
+  }
+
   function handleLoginConfirm() {
     setShowLoginAlertModal(false);
-    navigate(ROUTER.LOGIN);
+    navigate(ROUTER.LOGIN, { state: { prevUrl: location } });
   }
 
   function handleLoginCancel() {
@@ -86,25 +94,39 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
         <div className={styles.scheduleCardContent}>
           <div className={styles.scheduleContent}>
             <div className={styles.scheduleText}>
-              <div className={styles.scheduleTitle}>
-                {schedule.title ? schedule.title : '여행 이름'}
-              </div>
-              <div>{schedule.summary ? schedule.summary : '여행 소개'}</div>
+              <div className={styles.scheduleTitle}>{schedule.title}</div>
+              <div>{schedule.summary}</div>
               <div>
-                {schedule.duration - 1}박 {schedule.duration}일
+                {schedule.duration > 1
+                  ? `${schedule.duration - 1}박 ${schedule.duration}일`
+                  : '당일치기'}
               </div>
               <div>작성자 : {schedule.user.nickname}</div>
             </div>
-            <div className={styles.like}>
-              <div
-                className={styles.likeIcon}
-                onClick={(e) => {
-                  handleLike(e);
-                }}
-              >
-                {isLiked ? <FaHeart /> : <FaRegHeart />}
+            <div className={styles.icon}>
+              <div className={styles.like}>
+                <div
+                  className={styles.likeIcon}
+                  onClick={(e) => {
+                    handleLike(e);
+                  }}
+                >
+                  {isLiked ? (
+                    <FaHeart className={styles.isLiked} />
+                  ) : (
+                    <FaHeart />
+                  )}
+                </div>
+                <div className={styles.likesCount}>
+                  {isLoggedIn ? likeCount : schedule.likes_count}
+                </div>
               </div>
-              {isLoggedIn ? likeCount : schedule.likes_count}
+              <div className={styles.comment}>
+                <FaCommentAlt className={styles.commentIcon} />
+                <div className={styles.commentsCount}>
+                  {schedule.comments_count}
+                </div>
+              </div>
             </div>
           </div>
           <div className={styles.scheduleDestination}>
@@ -135,16 +157,18 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
             </div>
           </div>
           <img
-            src={
-              schedule.image
-                ? schedule.image
-                : 'https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg'
-            }
+            src={schedule.image}
             className={styles.image}
             alt='일정 배경 사진'
           />
         </div>
       </Link>
+      {showFetchLikeAlertModal && (
+        <AlertModal
+          message='일정의 좋아요 정보를 불러올 수 없습니다.'
+          onConfirm={handleFetchLikeConfirm}
+        />
+      )}
       {showLikeAlertModal && (
         <AlertModal
           message='자신의 일정에는 좋아요를 누를 수 없습니다.'
@@ -153,9 +177,11 @@ function ScheduleCard({ schedule }: ScheduleCardProps) {
       )}
       {showLoginAlertModal && (
         <AlertModal
-          message='로그인이 필요합니다.'
+          title='로그인이 필요합니다.'
+          message='로그인하시겠습니까?'
           onConfirm={handleLoginConfirm}
           onCancel={handleLoginCancel}
+          showTitle={true}
           showCancelButton={true}
         />
       )}

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styles from './UserEditForm.module.scss';
-import { UserInfoValues, UserInfoErrors } from './UserEditTypes';
+import { UserInfoValues, UserInfoErrors } from './UserEditForm';
 import TextField from '@mui/material/TextField';
 import {
   FormControlLabel,
@@ -83,12 +83,23 @@ function UserInfo({
             value={values.nickname}
             onChange={handleChange}
             size='small'
+            sx={{
+              '& label.Mui-focused': { color: '#ef6d00' },
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#fe9036',
+                  borderWidth: '1px'
+                }
+              }
+            }}
           />
           <button
             type='button'
             onClick={handleCheckNickname}
-            className={!isNicknameNew ? styles.disabled : ''}
-            disabled={!isNicknameNew}
+            className={
+              !isNicknameNew || errors.nickname !== '' ? styles.disabled : ''
+            }
+            disabled={!isNicknameNew || errors.nickname !== ''}
           >
             중복확인
           </button>
@@ -111,6 +122,15 @@ function UserInfo({
           onChange={handleChange}
           size='small'
           style={{ width: '100%' }}
+          sx={{
+            '& label.Mui-focused': { color: '#ef6d00' },
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': {
+                borderColor: '#fe9036',
+                borderWidth: '1px'
+              }
+            }
+          }}
         />
         {!errors.newPassword && (
           <p className={styles.msg}>
@@ -132,6 +152,15 @@ function UserInfo({
           onChange={handleChange}
           size='small'
           style={{ width: '100%' }}
+          sx={{
+            '& label.Mui-focused': { color: '#ef6d00' },
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': {
+                borderColor: '#fe9036',
+                borderWidth: '1px'
+              }
+            }
+          }}
         />
         {errors.passwordConfirm && (
           <p className={styles.errMsg}>{errors.passwordConfirm}</p>
@@ -148,13 +177,37 @@ function UserInfo({
         >
           <FormControlLabel
             value='남성'
-            control={<Radio size='small' />}
+            control={
+              <Radio
+                size='small'
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(254, 203, 161, 0.2)'
+                  },
+                  '&.Mui-checked': {
+                    color: '#fe9036'
+                  }
+                }}
+              />
+            }
             label='남성'
             checked={values.gender === '남성'}
           />
           <FormControlLabel
             value='여성'
-            control={<Radio size='small' />}
+            control={
+              <Radio
+                size='small'
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(254, 203, 161, 0.2)'
+                  },
+                  '&.Mui-checked': {
+                    color: '#fe9036'
+                  }
+                }}
+              />
+            }
             label='여성'
             checked={values.gender === '여성'}
           />
@@ -172,6 +225,12 @@ function UserInfo({
           onChange={handleBirthDateChange}
           style={{
             width: 'calc(100% / 3)'
+          }}
+          sx={{
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#fe9036',
+              borderWidth: '1px'
+            }
           }}
         >
           {birthDateOptions.years.map((year) => (
@@ -192,6 +251,12 @@ function UserInfo({
             width: 'calc(100% / 3 - 5px)',
             marginLeft: '5px'
           }}
+          sx={{
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#fe9036',
+              borderWidth: '1px'
+            }
+          }}
         >
           {birthDateOptions.months.map((month) => (
             <MenuItem key={month} value={month}>
@@ -210,6 +275,12 @@ function UserInfo({
           style={{
             width: 'calc(100% / 3 - 5px)',
             marginLeft: '5px'
+          }}
+          sx={{
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#fe9036',
+              borderWidth: '1px'
+            }
           }}
         >
           {birthDateOptions.days.map((day) => (
@@ -231,7 +302,19 @@ function UserInfo({
           value={values.phoneNumber}
           onChange={handleChange}
           size='small'
+          inputProps={{
+            maxLength: 13
+          }}
           style={{ width: '100%' }}
+          sx={{
+            '& label.Mui-focused': { color: '#ef6d00' },
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': {
+                borderColor: '#fe9036',
+                borderWidth: '1px'
+              }
+            }
+          }}
         />
         {!errors.phoneNumber && <p className={styles.msg}>하이픈(-) 포함</p>}
         {errors.phoneNumber && (

@@ -1,14 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  CategoryListType,
   DestinationsType,
   specifiedCategoryDestinationsType
 } from '../../types/DestinationListTypes';
 import Destinations from './Destinations';
-import {
-  getAllCategoryList,
-  getDestinationListByTitleAndCategoryId
-} from '../../apis/destinationList';
+import { getDestinationListByTitleAndCategoryId } from '../../apis/destinationListAPI';
 import styles from './Category.module.scss';
 
 type CategoryPropsTypes = {
@@ -30,6 +26,10 @@ const CATEGORIES_ID = new Map([
   [39, '음식점']
 ]);
 
+const DATA_LOADING_MESSAGE = {
+  CATEGORY_LOADING: '카테고리 정보를 로딩 중입니다.'
+};
+
 const CATEGORIES_ID_LIST = Array.from(CATEGORIES_ID.keys());
 
 function Category({
@@ -44,51 +44,25 @@ function Category({
   ]);
   const [filteredDestinations, setFilteredDestinations] = useState<
     specifiedCategoryDestinationsType[] | []
-  >([]); // 랭킹데이터랑 일반 데이터랑 type이 달라서 타입에러 -> 일반 데이터로 임시 대체(API 변동 시 수정)
-  const [filteredCount, setFilteredCount] = useState<number | null>(null);
-  const [categoryList, setCategoryList] = useState<CategoryListType[] | null>(
-    null
-  );
-
-  const getAllCategoryData = useCallback(async () => {
-    const res = await getAllCategoryList();
-    const categoryListData = res?.data;
-    setCategoryList(() => categoryListData);
-    return;
-  }, []);
-
-  useEffect(() => {
-    getAllCategoryData();
-  }, [getAllCategoryData]);
-
-  const categoryIdList = useMemo(() => {
-    if (categoryList !== null) {
-      return categoryList?.map((categoryPair) => {
-        return categoryPair.id;
-      });
-    }
-  }, [categoryList]);
+  >([]);
+  const [isSelectedAll, setIsSelectedAll] = useState<boolean>(true);
+  const [isTotalDataNone, setIsTotalDataNone] = useState<boolean>(false);
 
   //카테고리 id => name 변환 함수
   const changeCategoryIdIntoName = useCallback(
     (destinationList: DestinationsType[]) => {
       const specifiedCatogory = destinationList?.map((el) => {
-        const categoryPair = categoryList?.find(
-          (category) => category?.id === el?.category_id
-        );
-
-        return { ...el, category_name: categoryPair?.name ?? '' }; //예외처리 다시 수정
+        const categoryName =
+          CATEGORIES_ID.get(el.category_id) ??
+          DATA_LOADING_MESSAGE.CATEGORY_LOADING;
+        return { ...el, category_name: categoryName };
       });
       return specifiedCatogory;
     },
-    [categoryList]
+    [CATEGORIES_ID]
   );
 
-  //체크박스 로직
-  const isSelectedAll = useMemo(() => {
-    return selectedCategory?.length === categoryList?.length;
-  }, [selectedCategory]);
-
+  // 필터 해제
   const removeCategoryFromSelectedCategoryList = (targetCategoryId: number) => {
     const subSelectedCategory =
       selectedCategory?.filter(
@@ -97,12 +71,14 @@ function Category({
     setSelectedCategory([...subSelectedCategory]);
   };
 
+  //필터 추가
   const addCategoryToSelectedCategoryList = (targetCategoryId: number) => {
     if (selectedCategory !== null) {
       return setSelectedCategory([...selectedCategory, targetCategoryId]);
     }
   };
 
+  //카테고리 클릭(전체 X)
   const handleCategoryClick: React.MouseEventHandler<HTMLButtonElement> = (
     e
   ) => {
@@ -110,34 +86,38 @@ function Category({
     const { value } = e.target as HTMLButtonElement;
     const targetCategoryId = Number(value);
 
+    if (isSelectedAll) {
+      setIsSelectedAll(false);
+      const newSelectedCategory = [targetCategoryId];
+      setSelectedCategory(newSelectedCategory);
+      return;
+    }
+
     selectedCategory.includes(targetCategoryId)
       ? removeCategoryFromSelectedCategoryList(targetCategoryId)
       : addCategoryToSelectedCategoryList(targetCategoryId);
-    setIsLoading(false);
+
     return;
   };
-
-  useEffect(() => {
-    console.log(selectedCategory);
-  }, [selectedCategory]);
 
   const handleAllClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     setIsLoading(true);
-    isSelectedAll
-      ? setSelectedCategory([])
-      : setSelectedCategory(categoryIdList ?? []); //오류가능성
-    setIsLoading(false);
+    setIsSelectedAll(true);
+    setSelectedCategory([...CATEGORIES_ID_LIST]);
+
     return;
   };
 
   useEffect(() => {
-    const debouncer = setTimeout(() => {
-      console.log('로딩 중입니다.');
-    }, 400);
+    if (isLoading) {
+      const debouncer = setTimeout(() => {
+        setIsLoading(false);
+      }, 150);
 
-    return () => {
-      clearTimeout(debouncer);
-    };
+      return () => {
+        clearTimeout(debouncer);
+      };
+    }
   }, [isLoading]);
 
   //필터링 로직(유저 검색 O/X 분기)
@@ -146,7 +126,6 @@ function Category({
       return;
     }
     if (!isUserSearched) {
-      setIsLoading(true);
       const categorizedRankingDestinations =
         rankedDestinations?.filter((destination) => {
           return selectedCategory.includes(destination?.category_id);
@@ -154,83 +133,85 @@ function Category({
       setFilteredDestinations(() =>
         changeCategoryIdIntoName(categorizedRankingDestinations)
       );
-      setFilteredCount(() => categorizedRankingDestinations.length);
-      setIsLoading(false);
     }
     return;
-  }, [selectedCategory, rankedDestinations]);
+  }, [selectedCategory, rankedDestinations, isUserSearched]);
 
   const getCategorizedSearchingData = useCallback(async () => {
-    if (selectedCategory.length <= 0) {
-      return;
+    const res = await getDestinationListByTitleAndCategoryId(
+      selectedCategory,
+      searchQueryParam
+    );
+    const totalData = res?.data.total_count;
+    if (totalData === 0) {
+      setIsTotalDataNone(true);
     }
-    if (isUserSearched) {
-      const res = await getDestinationListByTitleAndCategoryId(
-        selectedCategory,
-        searchQueryParam
-      );
-      const categorizedSearchingDestinationsList = res?.data.destinations;
-      setFilteredDestinations(() =>
-        changeCategoryIdIntoName(categorizedSearchingDestinationsList)
-      );
-      setFilteredCount(() => categorizedSearchingDestinationsList.length);
-    }
+    const categorizedSearchingDestinationsList = res?.data.destinations;
+    setFilteredDestinations(() =>
+      changeCategoryIdIntoName(categorizedSearchingDestinationsList)
+    );
     return;
-  }, [selectedCategory, searchQueryParam]);
+  }, [
+    selectedCategory,
+    searchQueryParam,
+    setFilteredDestinations,
+    isUserSearched
+  ]);
 
   useEffect(() => {
     setIsLoading(true);
     getCategorizedSearchingData();
-    setIsLoading(false);
-  }, [getCategorizedSearchingData]);
+    return () => setIsTotalDataNone(false); //체크하기
+  }, [getCategorizedSearchingData, setIsLoading, isUserSearched]);
+
+  useEffect(() => {
+    setIsSelectedAll(true);
+  }, [searchQueryParam, setIsSelectedAll]);
 
   return (
     <>
-      {isLoading ? (
-        <div className={styles.IsLoadingContainer}>로딩 중..</div>
-      ) : (
-        <>
-          <section className={styles.categoryWrapper}>
-            <div className={styles.categoryContainer}>
-              <button
-                onClick={handleAllClick}
-                className={
-                  isSelectedAll
-                    ? styles.activeSelectedAllButton
-                    : styles.selectedAllButton
-                }
-                disabled={isLoading}
-              >
-                전체
-              </button>
-              {categoryIdList?.map((categoryId, index) => (
-                <button
-                  key={index}
-                  value={categoryId}
-                  onClick={handleCategoryClick}
-                  disabled={isLoading}
-                  className={
-                    selectedCategory?.includes(categoryId)
-                      ? styles.activeSelectedButton
-                      : styles.selectedButton
-                  }
-                >
-                  {categoryList?.find(
-                    (categoryPair) => categoryPair.id === categoryId
-                  )?.name ?? ''}
-                </button>
-              ))}
-            </div>
-          </section>
-          <div className={styles.filteredCounterWraper}>
-            <p id={styles.filteredCounter}>{`전체ㆍ${filteredCount}`}</p>
-          </div>
-          <Destinations
-            filteredDestinations={filteredDestinations}
-            isLoading={isLoading}
-          />
-        </>
-      )}
+      <section className={styles.categoryWrapper}>
+        <div className={styles.categoryContainer}>
+          <button
+            onClick={handleAllClick}
+            id={
+              isSelectedAll
+                ? styles.activeSelectedAllButton
+                : styles.selectedAllButton
+            }
+            disabled={isLoading}
+          >
+            전체
+          </button>
+
+          {CATEGORIES_ID_LIST?.map((categoryId, index) => (
+            <button
+              key={index}
+              value={categoryId}
+              onClick={handleCategoryClick}
+              disabled={isLoading}
+              className={
+                selectedCategory?.includes(categoryId)
+                  ? styles.activeSelectedButton
+                  : styles.selectedButton
+              }
+              id={
+                isSelectedAll
+                  ? styles[`Category-${categoryId}`]
+                  : selectedCategory?.includes(categoryId)
+                  ? styles[`activeCategory-${categoryId}`]
+                  : styles[`Category-${categoryId}`]
+              }
+            >
+              {CATEGORIES_ID.get(categoryId)}
+            </button>
+          ))}
+        </div>
+      </section>
+      <Destinations
+        filteredDestinations={filteredDestinations}
+        isTotalDataNone={isTotalDataNone}
+      />
     </>
   );
 }
